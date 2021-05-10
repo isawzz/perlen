@@ -1,0 +1,23 @@
+{
+  "name": "chat00",
+  "version": "1.0.0",
+  "description": "starter for npm node js socket.io",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "multi"
+  },
+  "keywords": [
+    "node",
+    "socket.io"
+  ],
+  "author": "isawzz",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.1",
+    "socket.io": "^4.0.2"
+  }
+}
