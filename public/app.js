@@ -14,7 +14,24 @@ const loginWindow = document.getElementById('login');
 
 const messages = []; // { author, date, content, type }
 
+//Connect to socket.io - automatically tries to connect on same port app was served from
 var socket = io();
+
+socket.on('message', message => {
+	//Update type of message based on username
+	console.log('received message',message)
+	if (message.type !== messageTypes.LOGIN) {
+		if (message.author === username) {
+			message.type = messageTypes.RIGHT;
+		} else {
+			message.type = messageTypes.LEFT;
+		}
+	}
+
+	messages.push(message);
+	displayMessages();
+	chatWindow.scrollTop = chatWindow.scrollHeight;//scroll to the bottom
+});
 
 const createMessageHTML = message => {
 	if (message.type === messageTypes.LOGIN) {
@@ -28,7 +45,7 @@ const createMessageHTML = message => {
 		}">
 		<div class="message-details flex">
 			<p class="flex-grow-1 message-author">${message.author}</p>
-			<p class="message-date">${formatDate(message.date)}</p>
+			<p class="message-date">${message.date}</p>
 		</div>
 		<p class="message-content">${message.content}</p>
 	</div>
@@ -44,24 +61,10 @@ const displayMessages = () => {
 
 sendBtn.addEventListener('click', e => {
 	e.preventDefault();
-	if (!messageInput.value) {
-		return console.log('Invalid input');
-	}
-
-	const message = {
-		author: username,
-		date: new Date(),
-		content: messageInput.value
-	};
-
-	messages.push(message);
-	displayMessages();
-
-	//scroll to the bottom
-	chatWindow.scrollTop = chatWindow.scrollHeight;
-
-	//clear input
-	messageInput.value = '';
+	if (!messageInput.value) { return console.log('must supply a message'); }
+	const message = { author: username, date: formatDate(new Date()), content: messageInput.value };
+	sendMessage(message);
+	messageInput.value = '';//clear input
 });
 
 loginBtn.addEventListener('click', e => {
@@ -72,10 +75,13 @@ loginBtn.addEventListener('click', e => {
 
 	//set the username and create logged in message
 	username = usernameInput.value;
-	messages.push({ author: username, type: messageTypes.LOGIN });
-	displayMessages();
+	sendMessage({ author: username, type: messageTypes.LOGIN });
 
 	//show chat window and hide login
 	loginWindow.classList.add('hidden');
 	chatWindow.classList.remove('hidden');
 });
+
+sendMessage = message => {
+	socket.emit('message', message);
+};
