@@ -2602,12 +2602,21 @@ function toNoun(s) { return capitalize(s.toLowerCase()); }
 
 function formatDate(d) {
 	//usage: formatDate(new Date(2010, 7, 5);
-	if (nundef(d)) d=Date.now();
+	if (nundef(d)) d = Date.now();
 	let ye = new Intl.DateTimeFormat('en', { year: 'numeric' }).format(d);
 	let mo = new Intl.DateTimeFormat('en', { month: 'short' }).format(d);
 	let da = new Intl.DateTimeFormat('en', { day: '2-digit' }).format(d);
 	return `${da}-${mo}-${ye}`;
 }
+function formatDate1(d) {
+	const date = isdef(d)?d:new Date();
+	const month = ('0' + date.getMonth()).slice(0, 2);
+	const day = date.getDate();
+	const year = date.getFullYear();
+	const dateString = `${month}/${day}/${year}`;
+	return dateString;
+}
+
 function format2Digits(i) { return (i < 10) ? "0" + i : i; }
 function msNow() { return Date.now(); }
 function msToTime(ms) {

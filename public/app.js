@@ -62,7 +62,7 @@ const displayMessages = () => {
 sendBtn.addEventListener('click', e => {
 	e.preventDefault();
 	if (!messageInput.value) { return console.log('must supply a message'); }
-	const message = { author: username, date: formatDate(new Date()), content: messageInput.value };
+	const message = { author: username, date: formatDate1(new Date()), content: messageInput.value };
 	sendMessage(message);
 	messageInput.value = '';//clear input
 });
