@@ -10,8 +10,12 @@ app.get('/', (req, res) => { res.sendFile(path.join(__dirname, +'public/index.ht
 io.on('connection', (socket) => { 
 	console.log('a user connected');
 	socket.on('disconnect', ()=>{
-		console.log('user disconnected!')
-	}) 
+		console.log('user disconnected!');
+	}); 
+	socket.on('message', message =>{
+		console.log('message',message);
+		io.emit('message',message); //broadcast message to everryone connected!
+	});
 });
 http.listen(3000, () => { console.log('listening on port 3000'); });
 
