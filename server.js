@@ -17,7 +17,7 @@ io.on('connection', (socket) => {
 		io.emit('message',message); //broadcast message to everryone connected!
 	});
 });
-http.listen(process.env.PORT, () => { console.log('listening on port 3000'); });
+http.listen(process.env.PORT||3000, () => { console.log('listening on port 3000'); });
 
 
 
