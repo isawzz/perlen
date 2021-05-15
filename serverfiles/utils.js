@@ -4,7 +4,7 @@ module.exports = {
 	toYamlFile,
 	convertPerlen,
 }
-const yaml = require('js-yaml');
+const yaml = require('yaml');
 const fs = require('fs');
 const base = require('../public/BASE/base.js');
 
@@ -20,7 +20,7 @@ function makeid(length) {
 function fromYamlFile(path) {
 	try {
 		let fileContents = fs.readFileSync(path);
-		let data = yaml.load(fileContents);
+		let data = yaml.parse(fileContents);
 		//console.log('data',data);
 		return data;
 	} catch (e) {
@@ -29,7 +29,7 @@ function fromYamlFile(path) {
 	}
 }
 function toYamlFile(data, path) {
-	let yamlStr = yaml.dump(data);
+	let yamlStr = yaml.stringify(data);
 	console.log('?')
 	fs.writeFileSync(path, yamlStr, 'utf8');
 }
