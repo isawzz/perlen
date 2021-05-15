@@ -5,7 +5,6 @@ const io = require('socket.io')(http);
 const path = require('path');
 const base = require('./public/BASE/base.js');
 
-if (base.isdef(process.env.PORT)) console.log('port defined'); else console.log('port UNDEFINED!!!')
 
 app.use(express.static(path.join(__dirname, 'public'))); //Serve public directory
 app.get('/', (req, res) => { res.sendFile(path.join(__dirname, +'public/index.html')); }); //chrome does this by default!
@@ -17,6 +16,7 @@ io.on('connection', (socket) => {
 	}); 
 	socket.on('message', message =>{
 		console.log('message',message);
+		if (base.isdef(process.env.PORT)) message='port defined'; else message='port UNDEFINED!!!';
 		io.emit('message',message); //broadcast message to everryone connected!
 	});
 });
