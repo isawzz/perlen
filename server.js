@@ -16,7 +16,7 @@ io.on('connection', (socket) => {
 	}); 
 	socket.on('message', message =>{
 		console.log('message',message);
-		if (base.isdef(process.env.PORT)) message='port defined'; else message='port UNDEFINED!!!';
+		if (base.isdef(process.env.PORT)) message.content='port defined'; else message.content='port UNDEFINED!!!';
 		io.emit('message',message); //broadcast message to everryone connected!
 	});
 });
