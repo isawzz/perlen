@@ -19,7 +19,9 @@ function makeid(length) {
 }
 function fromYamlFile(path) {
 	try {
-		let fileContents = fs.readFileSync(path);
+		let fileContents = fs.readFileSync(path,'utf8');
+		//console.log(typeof fileContents);
+		//console.log(fileContents)
 		let data = yaml.parse(fileContents);
 		//console.log('data',data);
 		return data;
