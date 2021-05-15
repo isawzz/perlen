@@ -4,7 +4,7 @@ const http = require('http').Server(app);
 const io = require('socket.io')(http);
 const path = require('path');
 const base = require('./public/BASE/base.js');
-const utils = require('./SERVER/utils.js');
+const utils = require('./serverfiles/utils.js');
 
 const DB = utils.fromYamlFile(path.join(__dirname, 'data.yaml'));
 
