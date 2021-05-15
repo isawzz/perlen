@@ -10,7 +10,7 @@ const sendBtn = document.getElementById('sendBtn');
 let username = '';
 const usernameInput = document.getElementById('usernameInput');
 const loginBtn = document.getElementById('loginBtn');
-const loginWindow = document.getElementById('login');
+const loginWindow = mBy('login');
 
 const messages = []; // { author, date, content, type }
 
