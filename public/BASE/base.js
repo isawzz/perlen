@@ -2922,6 +2922,14 @@ function getUID(pref = '') {
 function resetUIDs() { UIDCounter = 0; }
 //#endregion
 
+//#region functions to be used in node.js:
+if(this && typeof module == "object" && module.exports && this === module.exports) {
+	module.exports = { 
+		isdef, nundef, jsCopy, copyKeys,
+		randomNumber,
+		choose,chooseRandom
+	};
+}
 
 
 
