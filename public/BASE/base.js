@@ -1,4 +1,4 @@
-//region m
+//#region m
 function mAppend(d, child) { d.appendChild(child); }
 function mBackground(bg, fg) { mStyleX(document.body, { bg: bg, fg: fg }); }
 
@@ -17,15 +17,6 @@ function mButton(caption, handler, dParent, styles, classes) {
 function mBy(id) { return document.getElementById(id); }
 function mCenterCenterFlex(d) { mCenterFlex(d, true, true, true); }
 function mCenterFlexNowrap(d) { mCenterFlex(d, true, true, false); }
-function mFlexWrap(d) { mFlex(d, 'w'); }
-function mFlex(d, or = 'h') {
-	d.style.display = 'flex';
-	d.style.flexFlow = (or == 'v' ? 'column' : 'row') + ' ' + (or == 'w' ? 'wrap' : 'nowrap');
-	// d.style.alignItems = 'stretch';
-	// d.style.alignContent = 'stretch';
-	// d.style.justiifyItems = 'stretch';
-	// d.style.justifyContent = 'stretch';
-}
 function mCenterFlex(d, hCenter = true, vCenter = false, wrap = true) {
 	let styles = { display: 'flex' };
 	if (hCenter) styles['justify-content'] = 'center';
@@ -38,6 +29,7 @@ function mCreate(tag, styles, id) { let d = document.createElement(tag); if (isd
 function mDestroy(elem) { if (isString(elem)) elem = mById(elem); purge(elem); } // elem.parentNode.removeChild(elem); }
 function mDiv(dParent = null, styles, id, inner) { let d = mCreate('div'); if (dParent) mAppend(dParent, d); if (isdef(styles)) mStyleX(d, styles); if (isdef(id)) d.id = id; if (isdef(inner)) d.innerHTML = inner; return d; }
 function mDiv100(dParent, styles, id) { let d = mDiv(dParent, styles, id); mSize(d, 100, 100, '%'); return d; }
+function mDover(dParent) { let d = mDiv(dParent); mIfNotRelative(dParent); mStyleX(d, { position: 'absolute', w: '100%', h: '100%' }); return d; }
 function mEditableOnEdited(id, dParent, label, initialVal, onEdited, onOpening) {
 	let inp = mEditableInput(dParent, label, initialVal);
 	inp.id = id;
@@ -62,6 +54,15 @@ function mEditableInput(dParent, label, val) {
 	mAppend(dui, labelElem);
 	mAppend(dui, elem);
 	return elem;
+}
+function mFlexWrap(d) { mFlex(d, 'w'); }
+function mFlex(d, or = 'h') {
+	d.style.display = 'flex';
+	d.style.flexFlow = (or == 'v' ? 'column' : 'row') + ' ' + (or == 'w' ? 'wrap' : 'nowrap');
+	// d.style.alignItems = 'stretch';
+	// d.style.alignContent = 'stretch';
+	// d.style.justiifyItems = 'stretch';
+	// d.style.justifyContent = 'stretch';
 }
 function mGap(d, gap) { mText('_', d, { fg: 'transparent', fz: gap, h: gap, w: '100%' }); }
 function mHasClass(el, className) {
@@ -94,8 +95,18 @@ function miAddLabel(item, styles) {
 	}
 	return d;
 }
-function mDover(dParent) { let d = mDiv(dParent); mIfNotRelative(dParent); mStyleX(d, { position: 'absolute', w: '100%', h: '100%' }); return d; }
 function mIfNotRelative(d) { if (nundef(d.style.position)) d.style.position = 'relative'; }
+function mImage(){return mImg(...arguments);}
+function mImg(path, dParent, styles, classes) {
+	//console.log('_______________',path)
+	let d = mCreate('img');
+	d.src = path;
+	mAppend(dParent, d);
+	if (isdef(styles)) mStyleX(d, styles);
+	if (isdef(classes)) mClass(d, classes);
+	return d;
+	//<img src="kiwi.svg" alt="Kiwi standing on oval"></img>
+}
 function mInner(html, dParent, styles) { dParent.innerHTML = html; if (isdef(styles)) mStyleX(dParent, styles); }
 function mInsert(dParent, el, index = 0) { dParent.insertBefore(el, dParent.childNodes[index]); }
 function mInsertAfter(dParent, el, index = 0) { dParent.insertAfter(el, dParent.childNodes[index]); }
@@ -283,25 +294,6 @@ function mStyleX(elem, styles, unit = 'px') {
 		}
 	}
 }
-function mText(text, dParent, styles, classes) {
-	let d = mDiv(dParent);
-	if (!isEmpty(text)) d.innerHTML = text;
-	if (isdef(styles)) mStyleX(d, styles);
-	if (isdef(classes)) mClass(d, classes);
-	return d;
-}
-function mTitledDiv(title, dParent, outerStyles = {}, innerStyles = {}, id) {
-	let d = mDiv(dParent, outerStyles);
-	let dTitle = mDiv(d);
-	dTitle.innerHTML = title;
-	innerStyles.w = '100%';
-	innerStyles.h = outerStyles.h - getRect(dTitle).h;
-	let dContent = mDiv(d, innerStyles, id);
-	return dContent;
-}
-function mMoveChild(dParent, fromIndex, toIndex) {
-
-}
 function mSwap(obj1, obj2) {
 	// save the location of obj2
 	var parent2 = obj2.parentNode;
@@ -323,6 +315,22 @@ function mSwap(obj1, obj2) {
 			parent2.appendChild(obj1);
 		}
 	}
+}
+function mText(text, dParent, styles, classes) {
+	let d = mDiv(dParent);
+	if (!isEmpty(text)) d.innerHTML = text;
+	if (isdef(styles)) mStyleX(d, styles);
+	if (isdef(classes)) mClass(d, classes);
+	return d;
+}
+function mTitledDiv(title, dParent, outerStyles = {}, innerStyles = {}, id) {
+	let d = mDiv(dParent, outerStyles);
+	let dTitle = mDiv(d);
+	dTitle.innerHTML = title;
+	innerStyles.w = '100%';
+	innerStyles.h = outerStyles.h - getRect(dTitle).h;
+	let dContent = mDiv(d, innerStyles, id);
+	return dContent;
 }
 function mTitledMessageDiv(title, dParent, id, outerStyles = {}, contentStyles = {}, titleStyles = {}, messageStyles = {}, titleOnTop = true) {
 	let d = mDiv(dParent, outerStyles, id);
@@ -2055,6 +2063,11 @@ function firstCond(arr, func) {
 		if (func(a)) return a;
 
 	}
+	return null;
+}
+function firstCondDict(dict, func) {
+	//return first elem that fulfills condition
+	for (const k in dict) { if (func(dict[k])) return k; }
 	return null;
 }
 function firstCondDictKeys(dict, func) {

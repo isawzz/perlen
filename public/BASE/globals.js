@@ -1,7 +1,8 @@
 //#region server and client
 const PORT = 3333;
-const SERVERURL = 'http://localhost:'+PORT;
-//const SERVERURL = 'https://part4limitless.herokuapp.com/';
+var USESOCKETS=true;
+//const SERVERURL = 'http://localhost:'+PORT;
+const SERVERURL = 'https://part4limitless.herokuapp.com/';
 const DEFAULTUSERNAME = 'random'; // random | nil | gul | ma
 
 var C52, Syms, SymKeys, KeySets, Categories, ByGroupSubgroup, Dictionary, WordP; //, CatSets, SymbolDict, SInfo;

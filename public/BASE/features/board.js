@@ -1,3 +1,4 @@
+
 //board utilities
 var StateDict = {};
 var EmptyFunc = x => nundef(x) || x == ' ';
@@ -322,6 +323,74 @@ class Board {
 	}
 }
 
+class Board2D {
+	constructor(rows, cols, dParent, cellStyles, boardStyles, handler) {
+		cellStyles = this.cellStyles = isdef(cellStyles) ? cellStyles : { margin: 4, w: 150, h: 150, bg: 'white', fg: 'black' };
+		boardStyles = this.boardStyles = isdef(boardStyles) ? boardStyles : { bg: 'silver', fg: 'black' };
+		this.rows = rows;
+		this.cols = cols;
+		this.dParent = dParent;
+		//let dGridParent = this.dGridParent = mDiv(dParent,{bg:'green'});
+		let dBoard = this.dBoard = mDiv(dParent);//, boardStyles);
+		let items = this.items = this.fill(dBoard, this.rows, this.cols, null, cellStyles);
+	}
+	fill(d, rows, cols, items, cellStyles) {
+		if (nundef(items)) items = [];
+		clearElement(d);
+		mStyleX(d, { display: 'grid', 'grid-template-columns': cols });
+		for (let i = 0; i < rows * cols; i++) {
+			let item = items[i];
+			if (isdef(item)) {
+				let d1 = iDiv(item);
+				if (isdef(d1)) mAppend(d, iDiv(item));
+				else {
+					d1 = mDiv(d, cellStyles); iAdd(item, { div: d1 }); mAppend(d, d1);
+				}
+			} else {
+				let [r, c] = iToRowCol(i);
+				item = { row: r, col: c, index: i };
+				let d1 = mDiv(d, cellStyles); iAdd(item, { div: d1 }); mAppend(d, d1);
+			}
+			mStyleX(iDiv(item), cellStyles);
+			items.push(item)
+		}
+		return items;
+	}
+	get(ir, c) {
+		if (isdef(c)) {
+			// interpret as row,col
+			let idx = ir * this.cols + c;
+			return this.items[idx];
+		} else {
+			//interpret as index
+			return this.items[ir];
+		}
+	}
+	getState() {
+		return this.items.map(x => x.label);
+	}
+	setState(arr, colors) {
+
+		if (isEmpty(arr)) return;
+		if (isList(arr[0])) { arr = arrFlatten(arr); }
+
+		for (let i = 0; i < arr.length; i++) {
+			let item = this.items[i];
+			let val = arr[i];
+			if (!EmptyFunc(val)) {
+				addLabel(item, val, { fz: 60, fg: colors[val] });
+			} else item.label = val;
+			//item.label = arr[i];
+
+		}
+	}
+	clear() {
+		for (const item of this.items) {
+			let dLabel = iLabel(item);
+			if (isdef(dLabel)) { removeLabel(item); item.label = null; }
+		}
+	}
+}
 
 
 

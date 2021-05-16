@@ -17,17 +17,12 @@
   Update: 5/8/2021
   Wala Tags: 'kollektiv, macht'
 - Name: Wer will mitspielen 'Endzeit'
+  path: endzeit
   Created: 5/7/2021
   Fe Tags: ''
   Ma Tags: blue avian
   Update: 5/8/2021
   Wala Tags: 'endzeit, leben, spiel'
-- Name: Zukunftsszenarien
-  Created: 5/8/2021
-  Fe Tags: ''
-  Ma Tags: future
-  Update: 5/8/2021
-  Wala Tags: 'kollektiv, nicht wissen, zeit'
 - Name: Blockchain
   Created: 5/7/2021
   Fe Tags: ''
@@ -35,6 +30,7 @@
   Update: 5/8/2021
   Wala Tags: 'entwicklung, gromgorr, informatik, macht'
 - Name: Alles steigt aus der Quelle auf und fällt in sie zurück
+  path: alles steigt aus der quelle
   Created: 4/29/2021
   Fe Tags: 'abstract, deep metaphysics'
   Ma Tags: 'flavor, lense, start'
@@ -59,6 +55,7 @@
   Update: 5/8/2021
   Wala Tags: 'elementaria, struktur'
 - Name: Große Seuche
+  path: grosse seuche
   Created: 4/30/2021
   Fe Tags: 'critical, culture, darkness, history, technology'
   Ma Tags: 'signpost, trap'
@@ -197,12 +194,14 @@
   Update: 5/7/2021
   Wala Tags: 'entwicklung, struktur'
 - Name: Kollektivismus
+  path: collectivism
   Created: 4/29/2021
   Fe Tags: 'social interaction, utility function'
   Ma Tags: communication
   Update: 5/7/2021
   Wala Tags: 'kollektiv, struktur'
 - Name: Emergenz
+  path: emergence
   Created: 4/29/2021
   Fe Tags: 'emergence, social interaction'
   Ma Tags: ''

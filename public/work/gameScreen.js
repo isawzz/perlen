@@ -7,12 +7,21 @@ function initGame(username, io) {
 	show('dGameScreen');
 	setTitle('Glasperlenspiel');
 	setSubtitle('logged in as ma');
-	setBackgroundColor(GREEN); mStyleX(document.body, { opacity: 1 });
+	let bg=randomColor(); setBackgroundColor(bg); mStyleX(document.body, { opacity: 1 });
+	mStyleX(dHeader, { bg: colorDarker(bg) });
+	mStyleX(dSubtitle, { fg: colorLighter(bg) });
 	initTable(); initSidebar(); initAux(); initScore();
-	mStyleX(dHeader, { bg: colorDarker(GREEN) });
-	mStyleX(dSubtitle, { fg: colorLighter(GREEN) });
 
-	_start();
+	waitUntilPerlen();
+
+}
+
+function waitUntilPerlen(){
+	if (nundef(Perlen)) { return TOMain = setTimeout(waitUntilPerlen, 200); }
+	else {
+		clearTimeout(TOMain)
+		_start();
+	}
 
 }
 

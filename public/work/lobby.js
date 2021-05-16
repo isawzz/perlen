@@ -39,6 +39,8 @@ function autoGameScreen(){
 }
 function initGameScreen() {
 
+	console.log('IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII!!!!!!!!!!')
+
 	hide('dMainContent');hide('dHeader');show('dButtons');
 	show('dGameScreen'); 
 
