@@ -5,51 +5,113 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<meta http-equiv="X-UA-Compatible" content="ie=edge" />
 		<title>Quick Chat</title>
-		<link rel="icon" type="image/svg+xml" href="./favicon.svg" />
-		<link rel="stylesheet" href="./BASE/old.css" />
-		<link rel="stylesheet" href="./app.css" />
+		<link
+			rel="stylesheet"
+			href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
+			integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk"
+			crossorigin="anonymous"
+		/>
+		<link rel="icon" type="image/svg+xml" href="./assets/svg/favicon.svg" />
+		<script src="./alibs/numbers.js"></script>
+		<script src="./alibs/math.js"></script>
+		<script src="./alibs/jsyaml.js"></script>
+
+		<!-- jquery is needed for chessBoard!!!! -->
+		<script src="./alibs/jquery-3.6.0.min.js"></script>
+		<link rel="stylesheet" href="./alibs/chessBoard/css/chessboard.min.css" />
+		<script src="./alibs/chessBoard/js/chessboard.min.js"></script>
+
+		<script src="./alibs/chess.js"></script>
+
+		<link rel="stylesheet" href="./assets/fonts/fonts.css" />
+		<!-- <link rel="stylesheet" href="./BASE/old.css">
+		<link rel="stylesheet" href="./yzy/new.css"> -->
+		<link rel="stylesheet" href="./BASE/base.css"> 
+
 		<script src="./BASE/globals.js"></script>
+
 		<script src="./BASE/base.js"></script>
 	</head>
 
 	<body>
-		<div id="appContainer" class="flex-column">
-			<header>
-				<div class="container1 flex-column flex-center">
-					<h1>Quick Chat</h1>
-					<p class="light-text">The easiest way to get your message across.</p>
-				</div>
-			</header>
+		<div id="dHeader" style="background-color: var(--dark-blue); padding-top: 10px">
+			<!-- <button id="navButton" style="display: none; position: absolute; margin: 10px; padding: 20px">Play!</button> -->
+			<div id='dTempleLobby' style="display: none; position: absolute; margin: 10px; padding: 20px" onclick='onClickTempleLobby()'>🏛️</div>
+			<!-- <button id="lobbyBtn" style="display:none;position:absolute;right:0px;margin:10px;padding:20px">Lobby!</button> -->
+			<div class="flex-column flex-center">
+				<h1 id="hTitle">Welcome to the Game</h1>
+				<p id="dSubtitle" class="light-text">*** Glasperlenspiel ***</p>
+			</div>
+		</div>
 
-			<div id="mainContent" class="container1 flex-grow-1 flex-column">
-				<section id="login">
-					<h2 class="text-center">Get Started</h2>
-					<form id="loginForm" class="flex">
-						<input type="text" name="username" id="usernameInput" placeholder="username" class="flex-grow-1" />
-						<button id="loginBtn">Chat!</button>
-					</form>
-				</section>
+		<div id="dMainContent" style="background-color: var(--primary-blue)">
+			<div id="dLogin">
+				<h2 class="text-center">Login</h2>
+				<form id="loginForm" class="flex" style="margin-top: 20px">
+					<input type="text" name="username" id="usernameInput" placeholder="username" class="flex-grow-1" />
+					<button id="loginBtn">Go!</button>
+				</form>
+			</div>
 
-				<section id="chat" class="flex-grow-1 flex-column hidden">
-					<div id="messagesList" class="flex-grow-1">
-						<!-- #region example message -->
-						<!-- <div class="message message-left">
+			<div id="dMenu" style="display: none"></div>
+
+			<section id="dLobby" style='display:none;color:black' class="flex-grow-1 flex-column">
+				<div id="messagesList" class="flex-grow-1">
+					<!-- #region example message -->
+					<!-- <div class="message message-left">
 							<div class="message-details flex">
 								<p class="flex-grow-1 message-author">James Quick</p>
 								<p class="message-date">April 7th 11:50pm</p>
 							</div>
 							<p class="message-content">Lorem ipsum dolor amet wolf pabst lo-fi beard meditation etsy austin health goth.</p>
 						</div> -->
-						<!-- #endregion -->
-					</div>
-					<form id="messageForm" class="flex" autocomplete="off">
-						<input type="text" name="message" id="messageInput" class="flex-grow-1" autocomplete="false" />
-						<button id="sendBtn">Send</button>
-					</form>
-				</section>
+					<!-- #endregion -->
+				</div>
+				<form id="messageForm" class="flex" autocomplete="off">
+					<input type="text" name="message" id="messageInput" class="flex-grow-1" autocomplete="false" />
+					<button id="sendBtn">Send</button>
+				</form>
+			</section>
+		</div>
+
+		<div id="dGameScreen" style="display: none" class="flex-grow-1 flex">
+			<!-- <div id="md" style="height:100%;width:100%;background:green"> -->
+			<div id="sidebar"></div>
+			<div id="rightSide">
+				<div id="table" class="flexWrap"></div>
 			</div>
 		</div>
+		<div id='dAux' style='font-size:14px;display:none;text-align:center'></div>
+		<div id='dButtons'>
+			<div id='dGo' onclick='onClickGo()' style='display:none;'>PLAY!</div>
+			<div id='dComputer' onclick='onClickComputer()' style='display:none;'>🖥️</div>
+			<div id='dCalibrate' onclick='onClickCalibrate()' style='display:none;'>⚖️</div>
+			<div id='dGear' onclick='onClickGear()'>⚙️</div>
+			<div id='dTemple' onclick='onClickTemple()'>🏛️</div>
+			<button id='dummy' style='width:0px;padding:0;margin:0;border:none;outline:none;background-color:transparent;color:transparent'>dummy
+		</div>
+
 		<script src='https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js'></script>
-		<script src="app.js"></script>
+		<script src="./base/features/areas.js"></script>
+		<script src="./base/features/audio.js"></script>
+		<script src="./base/features/badges.js"></script>
+		<script src="./base/features/banner.js"></script>
+		<script src="./base/features/dbStub.js"></script>
+		<script src="./base/features/keys.js"></script>
+		<script src="./base/features/markers.js"></script>
+		<script src="./base/features/menu.js"></script>
+		<script src="./base/features/speech.js"></script>
+		<script src="./base/features/settings.js"></script>
+		<script src="./base/features/time.js"></script>
+		<script src="./base/features/ui.js"></script>
+		<script src="./work/lobby.js"></script>
+		<script src="./work/login.js"></script>
+		<script src="./work/socket.js"></script>
+		<script src="./work/users.js"></script>
+		<script src="./work/assets.js"></script>
+
+		<script src="./start.js"></script>
+		<script src="testClient.js"></script>
+
 	</body>
 </html>

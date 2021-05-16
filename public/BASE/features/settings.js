@@ -5,11 +5,13 @@ class SettingsClass {
 		this.u = userObject;
 		//console.log('settings:',this.o,this.u);
 		this.dParent = dParent;
+		//console.log('settings screen',this.dParent)
 	}
 	//#region settings ui
 
 	createSettingsUi(dParent) {
 		dParent = valf(dParent,this.dParent);
+		console.log('settings screen',dParent)
 		clearElement(dParent);
 		this.list = [];
 		let ttag = 'h2';
