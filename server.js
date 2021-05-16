@@ -3,6 +3,7 @@ const app = express();
 const http = require('http').Server(app);
 const path = require('path');
 const base = require('./public/BASE/base.js');
+const { PORT } = require('./public/BASE/globals.js');
 const utils = require('./serverfiles/utils.js');
 
 const DB = utils.fromYamlFile(path.join(__dirname, 'data.yaml'));
@@ -11,16 +12,7 @@ const DB = utils.fromYamlFile(path.join(__dirname, 'data.yaml'));
 app.use(express.static(path.join(__dirname, 'public'))); //Serve public directory
 app.get('/', (req, res) => { res.sendFile(path.join(__dirname, +'public/index.html')); }); //chrome does this by default!
 
-// const io = require('socket.io')(http);
-const io = require('socket.io')(http, {
-	cors: {
-			origin: "http://localhost:4444",
-			methods: ["GET", "POST"],
-			transports: ['websocket', 'polling'],
-			credentials: true
-	},
-	allowEIO3: true
-});
+const io = require('socket.io')(http);
 io.on('connection', (socket) => { 
 	console.log('a user connected');
 	socket.on('disconnect', ()=>{
@@ -28,13 +20,13 @@ io.on('connection', (socket) => {
 	}); 
 	socket.on('message', message =>{
 		console.log('message',message);
-		let port = process.env.PORT||3001;
-		message.content=', port '+port;
+		let port = process.env.PORT||PORT;
+		message.content='port '+port+', ';
 		message.content += DB.games.gAbacus.friendly;
 		io.emit('message',message); //broadcast message to everryone connected!
 	});
 });
-http.listen(process.env.PORT||3001, () => { console.log('listening on port 3001'); });
+http.listen(process.env.PORT||PORT, () => { console.log('listening on port '+PORT); });
 
 
 

@@ -15,7 +15,7 @@ const loginWindow = mBy('login');
 const messages = []; // { author, date, content, type }
 
 //Connect to socket.io - automatically tries to connect on same port app was served from
-var socket = io();
+var socket = io(SERVERURL);
 
 socket.on('message', message => {
 	//Update type of message based on username
