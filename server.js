@@ -6,10 +6,9 @@ const base = require('./public/BASE/base.js');
 const { PORT } = require('./public/BASE/globals.js');
 const utils = require('./serverfiles/utils.js');
 
-
-
 const DB = utils.fromYamlFile(path.join(__dirname, 'data.yaml'));
-console.log('DB',DB);
+const Perlen = utils.fromYamlFile(path.join(__dirname, 'public/assets/games/perlen/perlen.yaml'));
+//console.log('perlen',Perlen);
 
 
 app.use(express.static(path.join(__dirname, 'public'))); //Serve public directory

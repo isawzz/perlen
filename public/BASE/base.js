@@ -512,10 +512,6 @@ var ZMax = 0;
 function iZMax(n) { if (isdef(n)) ZMax = n; ZMax += 1; return ZMax; }
 //#endregion
 
-//#region opt
-
-//#endregion
-
 //#region ani
 var MyEasing = 'cubic-bezier(1,-0.03,.86,.68)';
 function aMove(d, dSource, dTarget, callback, offset, ms, easing, fade) {

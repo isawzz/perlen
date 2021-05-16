@@ -16,8 +16,7 @@ function initTable(rect) {
 function initSidebar() {
 	let dParent = mBy('sidebar');
 	clearElement(dParent);
-	dLeiste = mDiv(dParent);
-	mStyleX(dLeiste, { 'min-width':70, 'max-height': '100vh', display: 'flex', 'flex-flow': 'column wrap' });
+	dLeiste = mDiv(dParent,{ 'min-width':70, 'max-height': '100vh', display: 'flex', 'flex-flow': 'column wrap' },'dLeiste');
 }
 function initAux() {
 	dAux = mBy('dAux');
@@ -73,5 +72,6 @@ function initLineBottom() {
 //#endregion
 
 function setTitle(s) { mBy('hTitle').innerHTML = s; }
+function setSubtitle(s) { mBy('dSubtitle').innerHTML = s; }
 
 

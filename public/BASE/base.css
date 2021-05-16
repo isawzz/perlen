@@ -8,6 +8,7 @@
 	--primary-text: #212121;
 	--secondary-text: #757575;
 	--light-gray: #bdbdbd;
+	--header-height: 90px;
 }
 /* #endregion */
 
@@ -1189,7 +1190,7 @@ div {
 
 /* #region dPreGame */
 #dHeader {
-	height: 110px;
+	height: var(--header-height);
 	background-color: var(--dark-blue);
 	width: calc( 100% -  0px );
 	color: white;

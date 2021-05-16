@@ -3,7 +3,7 @@ function autoLogin(username) {
 	dSubtitle.innerHTML='logged in as '+username;
 	initSocket();
 	hide(dLogin);
-	initLobby(username);
+	initGame(username);
 }
 function initLogin() {
 	show(dLogin); hide(dLobby); hide(dGameScreen);

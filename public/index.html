@@ -31,16 +31,23 @@
 		<script src="./BASE/globals.js"></script>
 
 		<script src="./BASE/base.js"></script>
+		<script src="./BASE/game.js"></script>
 	</head>
 
-	<body>
+	<body style="opacity:0">
 		<div id="dHeader" style="background-color: var(--dark-blue); padding-top: 10px">
-			<!-- <button id="navButton" style="display: none; position: absolute; margin: 10px; padding: 20px">Play!</button> -->
-			<div id='dTempleLobby' style="display: none; position: absolute; margin: 10px; padding: 20px" onclick='onClickTempleLobby()'>🏛️</div>
-			<!-- <button id="lobbyBtn" style="display:none;position:absolute;right:0px;margin:10px;padding:20px">Lobby!</button> -->
+			<div id='dButtons'>
+				<div id='dGo' onclick='onClickGo()' style='display:none;'>PLAY!</div>
+				<div id='dComputer' onclick='onClickComputer()' style='display:none;'>🖥️</div>
+				<div id='dCalibrate' onclick='onClickCalibrate()' style='display:none;'>⚖️</div>
+				<div id='dGear' onclick='onClickGear()'>⚙️</div>
+				<div id='dTemple' onclick='onClickTemple()'>🏛️</div>
+				<button id='dummy' style='width:0px;padding:0;margin:0;border:none;outline:none;background-color:transparent;color:transparent'>dummy
+			</div>
+				<div id='dTempleLobby' style="display: none; position: absolute; margin: 10px; padding: 20px" onclick='onClickTempleLobby()'>🏛️</div>
 			<div class="flex-column flex-center">
-				<h1 id="hTitle">Welcome to the Game</h1>
-				<p id="dSubtitle" class="light-text">*** Glasperlenspiel ***</p>
+				<h2 id="hTitle">Welcome to the Game</h2>
+				<p id="dSubtitle" style='margin-top:-5px' class="light-text">*** Glasperlenspiel ***</p>
 			</div>
 		</div>
 
@@ -82,28 +89,26 @@
 			</div>
 		</div>
 		<div id='dAux' style='font-size:14px;display:none;text-align:center'></div>
-		<div id='dButtons'>
-			<div id='dGo' onclick='onClickGo()' style='display:none;'>PLAY!</div>
-			<div id='dComputer' onclick='onClickComputer()' style='display:none;'>🖥️</div>
-			<div id='dCalibrate' onclick='onClickCalibrate()' style='display:none;'>⚖️</div>
-			<div id='dGear' onclick='onClickGear()'>⚙️</div>
-			<div id='dTemple' onclick='onClickTemple()'>🏛️</div>
-			<button id='dummy' style='width:0px;padding:0;margin:0;border:none;outline:none;background-color:transparent;color:transparent'>dummy
-		</div>
 
 		<script src='https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js'></script>
 		<script src="./BASE/features/areas.js"></script>
 		<script src="./BASE/features/audio.js"></script>
 		<script src="./BASE/features/badges.js"></script>
 		<script src="./BASE/features/banner.js"></script>
+		<script src="./BASE/features/board.js"></script>
 		<script src="./BASE/features/dbStub.js"></script>
 		<script src="./BASE/features/keys.js"></script>
 		<script src="./BASE/features/markers.js"></script>
 		<script src="./BASE/features/menu.js"></script>
+		<script src="./BASE/features/scoring.js"></script>
 		<script src="./BASE/features/speech.js"></script>
 		<script src="./BASE/features/settings.js"></script>
 		<script src="./BASE/features/time.js"></script>
 		<script src="./BASE/features/ui.js"></script>
+		<script src="./work/cardGame.js"></script>
+		<script src="./work/onClick.js"></script>
+		<script src="./work/testing.js"></script>
+		<script src="./work/gameScreen.js"></script>
 		<script src="./work/lobby.js"></script>
 		<script src="./work/login.js"></script>
 		<script src="./work/socket.js"></script>
