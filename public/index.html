@@ -36,14 +36,6 @@
 
 	<body style="opacity:0">
 		<div id="dHeader" style="background-color: var(--dark-blue); padding-top: 10px">
-			<div id='dButtons'>
-				<div id='dGo' onclick='onClickGo()' style='display:none;'>PLAY!</div>
-				<div id='dComputer' onclick='onClickComputer()' style='display:none;'>🖥️</div>
-				<div id='dCalibrate' onclick='onClickCalibrate()' style='display:none;'>⚖️</div>
-				<div id='dGear' onclick='onClickGear()'>⚙️</div>
-				<div id='dTemple' onclick='onClickTemple()'>🏛️</div>
-				<button id='dummy' style='width:0px;padding:0;margin:0;border:none;outline:none;background-color:transparent;color:transparent'>dummy
-			</div>
 				<div id='dTempleLobby' style="display: none; position: absolute; margin: 10px; padding: 20px" onclick='onClickTempleLobby()'>🏛️</div>
 			<div class="flex-column flex-center">
 				<h2 id="hTitle">Welcome to the Game</h2>
@@ -89,6 +81,14 @@
 			</div>
 		</div>
 		<div id='dAux' style='font-size:14px;display:none;text-align:center'></div>
+		<div id='dButtons'>
+			<div id='dGo' onclick='onClickGo()' style='display:none;'>PLAY!</div>
+			<div id='dComputer' onclick='onClickComputer()' style='display:none;'>🖥️</div>
+			<div id='dCalibrate' onclick='onClickCalibrate()' style='display:none;'>⚖️</div>
+			<div id='dGear' onclick='onClickGear()' style='display:none;'>⚙️</div>
+			<div id='dTemple' onclick='onClickTemple()' style='display:none;'>🏛️</div>
+			<button id='dummy' style='width:0px;padding:0;margin:0;border:none;outline:none;background-color:transparent;color:transparent'>dummy
+		</div>
 
 		<script src='https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js'></script>
 		<script src="./BASE/features/areas.js"></script>
@@ -111,6 +111,7 @@
 		<script src="./work/gameScreen.js"></script>
 		<script src="./work/lobby.js"></script>
 		<script src="./work/login.js"></script>
+		<script src="./work/perlen.js"></script>
 		<script src="./work/socket.js"></script>
 		<script src="./work/users.js"></script>
 		<script src="./work/assets.js"></script>

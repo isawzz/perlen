@@ -26,7 +26,7 @@ function initLobby(username) {
 			if (GENERATE_EMPTY_MESSAGES) messageInput.value = 'hallo';
 			else return console.log('must supply a message');
 		}
-		const message = { author: username, date: formatDate1(new Date()), content: messageInput.value };
+		const message = { author: username, date: formatDate(new Date()), content: messageInput.value };
 		console.log('sending message', message)
 		sendMsg(message);
 		messageInput.value = '';//clear input

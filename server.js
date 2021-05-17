@@ -10,6 +10,7 @@ const DB = utils.fromYamlFile(path.join(__dirname, 'data.yaml'));
 const Perlen = utils.fromYamlFile(path.join(__dirname, 'public/assets/games/perlen/perlen.yaml'));
 //console.log('perlen',Perlen);
 
+//utils.listFiles(Perlen);
 
 app.use(express.static(path.join(__dirname, 'public'))); //Serve public directory
 app.get('/', (req, res) => { res.sendFile(path.join(__dirname, +'public/index.html')); }); //chrome does this by default!

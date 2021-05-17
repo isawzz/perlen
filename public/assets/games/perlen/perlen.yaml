@@ -1,233 +1,971 @@
 - Name: Fear
   Created: 5/8/2021
-  Fe Tags: ''
-  Ma Tags: 'fear, krampf, trap'
+  Fe Tags: ""
+  Ma Tags: fear, krampf, trap
   Update: 5/8/2021
-  Wala Tags: 'angst, gefühl'
+  Wala Tags: angst, gefühl
+  path: fear
 - Name: Maximize Agency
   Created: 4/24/2021
-  Fe Tags: 'causality, history, processing information'
-  Ma Tags: 'collectivism, openness'
+  Fe Tags: causality, history, processing information
+  Ma Tags: collectivism, openness
   Update: 5/8/2021
-  Wala Tags: 'umsicht, vielfalt, wirklichkeit'
+  Wala Tags: umsicht, vielfalt, wirklichkeit
+  path: maximize agency
 - Name: Rechts Links
   Created: 5/8/2021
-  Fe Tags: ''
-  Ma Tags: 'control, propaganda'
+  Fe Tags: ""
+  Ma Tags: control, propaganda
   Update: 5/8/2021
-  Wala Tags: 'kollektiv, macht'
+  Wala Tags: kollektiv, macht
+  path: rechts links
 - Name: Wer will mitspielen 'Endzeit'
-  path: endzeit
+  path: zeit
   Created: 5/7/2021
-  Fe Tags: ''
+  Fe Tags: ""
   Ma Tags: blue avian
   Update: 5/8/2021
-  Wala Tags: 'endzeit, leben, spiel'
+  Wala Tags: endzeit, leben, spiel
 - Name: Blockchain
   Created: 5/7/2021
-  Fe Tags: ''
-  Ma Tags: ''
+  Fe Tags: ""
+  Ma Tags: ""
   Update: 5/8/2021
-  Wala Tags: 'entwicklung, gromgorr, informatik, macht'
+  Wala Tags: entwicklung, gromgorr, informatik, macht
+  path: blockchain
 - Name: Alles steigt aus der Quelle auf und fällt in sie zurück
   path: alles steigt aus der quelle
   Created: 4/29/2021
-  Fe Tags: 'abstract, deep metaphysics'
-  Ma Tags: 'flavor, lense, start'
+  Fe Tags: abstract, deep metaphysics
+  Ma Tags: flavor, lense, start
   Update: 5/8/2021
-  Wala Tags: 'fundamentalia, quelle, vielfalt'
+  Wala Tags: fundamentalia, quelle, vielfalt
 - Name: Vertreibung aus dem Paradies
   Created: 4/29/2021
-  Fe Tags: 'adversarial, conservative, culture, darkness, psychology'
-  Ma Tags: 'guilt, longing, nostalgie, past'
+  Fe Tags: adversarial, conservative, culture, darkness, psychology
+  Ma Tags: guilt, longing, nostalgie, past
   Update: 5/8/2021
-  Wala Tags: 'denken, entwicklung, entwurzelung, leben'
+  Wala Tags: denken, entwicklung, entwurzelung, leben
+  path: vertreibung aus dem paradies
 - Name: AI
   Created: 4/30/2021
-  Fe Tags: 'future, technology'
-  Ma Tags: 'future, yang'
+  Fe Tags: future, technology
+  Ma Tags: future, yang
   Update: 5/8/2021
-  Wala Tags: 'entwicklung, gromgorr, methode, struktur'
+  Wala Tags: entwicklung, gromgorr, methode, struktur
 - Name: Struktur
   Created: 4/29/2021
-  Fe Tags: ''
-  Ma Tags: 'form, patterns'
+  Fe Tags: ""
+  Ma Tags: form, patterns
   Update: 5/8/2021
-  Wala Tags: 'elementaria, struktur'
+  Wala Tags: elementaria, struktur
+  path: struktur
 - Name: Große Seuche
   path: grosse seuche
   Created: 4/30/2021
-  Fe Tags: 'critical, culture, darkness, history, technology'
-  Ma Tags: 'signpost, trap'
+  Fe Tags: critical, culture, darkness, history, technology
+  Ma Tags: signpost, trap
   Update: 5/8/2021
-  Wala Tags: 'angst, bruch, leben'
+  Wala Tags: angst, bruch, leben
 - Name: Neoliberalismus
   Created: 5/2/2021
-  Fe Tags: ''
-  Ma Tags: ''
+  Fe Tags: ""
+  Ma Tags: ""
   Update: 5/8/2021
-  Wala Tags: 'geld, geschichte, stimmung'
+  Wala Tags: geld, geschichte, stimmung
+  path: neoliberalismus
 - Name: Argument
   Created: 4/30/2021
-  Fe Tags: 'processing information, social interaction'
+  Fe Tags: processing information, social interaction
   Ma Tags: communication
   Update: 5/8/2021
-  Wala Tags: 'elementaria, methode'
+  Wala Tags: elementaria, methode
+  path: argument
 - Name: Consensus Building
   Created: 4/30/2021
-  Fe Tags: ''
+  Fe Tags: ""
   Ma Tags: communication
   Update: 5/8/2021
-  Wala Tags: 'entwicklung, kollektiv, macht, methode'
+  Wala Tags: entwicklung, kollektiv, macht, methode
+  path: consensus building
 - Name: Vorurteil
   Created: 4/30/2021
-  Fe Tags: 'culture, history, processing information'
-  Ma Tags: 'bias, culture, meinung, werte'
+  Fe Tags: culture, history, processing information
+  Ma Tags: bias, culture, meinung, werte
   Update: 5/8/2021
-  Wala Tags: 'angst, dazu gehören, macht, meinung'
+  Wala Tags: angst, dazu gehören, macht, meinung
+  path: vorurteil
 - Name: Geld
   Created: 4/30/2021
-  Fe Tags: ''
-  Ma Tags: 'adversarial, trap, verantwortung'
+  Fe Tags: ""
+  Ma Tags: adversarial, trap, verantwortung
   Update: 5/7/2021
-  Wala Tags: 'geld, kollektiv, methode'
+  Wala Tags: geld, kollektiv, methode
+  path: geld
 - Name: Überleben
   Created: 4/29/2021
-  Fe Tags: 'control, goal, utility function'
-  Ma Tags: ''
+  Fe Tags: control, goal, utility function
+  Ma Tags: ""
   Update: 5/7/2021
-  Wala Tags: 'leben, zeit'
+  Wala Tags: leben, zeit
+  path: überleben
 - Name: Uncertainty
   Created: 4/30/2021
-  Fe Tags: ''
-  Ma Tags: ''
+  Fe Tags: ""
+  Ma Tags: ""
   Update: 5/7/2021
-  Wala Tags: 'bruch, entwicklung, fundamentalia'
+  Wala Tags: bruch, entwicklung, fundamentalia
+  path: uncertainty
 - Name: Das große rote Megaphon
   Created: 4/29/2021
-  Fe Tags: 'processing information, sharing ideas'
-  Ma Tags: 'cancer, competition, propaganda'
+  Fe Tags: processing information, sharing ideas
+  Ma Tags: cancer, competition, propaganda
   Update: 5/7/2021
-  Wala Tags: 'kollektiv, medien, meinung'
+  Wala Tags: kollektiv, medien, meinung
+  path: rot
 - Name: Der schwarze Drachen TOD
   Created: 4/29/2021
-  Fe Tags: 'adversarial, culture, darkness, technology, time'
-  Ma Tags: 'bias, control, fear'
+  Fe Tags: adversarial, culture, darkness, technology, time
+  Ma Tags: bias, control, fear
   Update: 5/7/2021
   Wala Tags: leben
+  path: schwarz
 - Name: Werte
   Created: 5/1/2021
-  Fe Tags: ''
+  Fe Tags: ""
   Ma Tags: flavors
   Update: 5/7/2021
-  Wala Tags: 'elementaria, kollektiv, moral'
+  Wala Tags: elementaria, kollektiv, moral
+  path: werte
 - Name: Historical Time Dilation
   Created: 4/24/2021
-  Fe Tags: 'history, technology, time'
-  Ma Tags: 'fiction, flexibel'
+  Fe Tags: history, technology, time
+  Ma Tags: fiction, flexibel
   Update: 5/7/2021
-  Wala Tags: 'spezielle perspektive, zeit'
+  Wala Tags: spezielle perspektive, zeit
+  path: historical time dilation
 - Name: Mit blutigen Augen in die Welt schauen
   Created: 4/29/2021
-  Fe Tags: 'conservative, critical, darkness'
-  Ma Tags: 'schmerz, wille'
+  Fe Tags: conservative, critical, darkness
+  Ma Tags: schmerz, wille
   Update: 5/7/2021
-  Wala Tags: 'schrecken, sturheit, wahrnehmung'
+  Wala Tags: schrecken, sturheit, wahrnehmung
+  path: mit blutigen augen in die welt schauen
 - Name: Der eiserne Vorhang
   Created: 5/1/2021
-  Fe Tags: ''
+  Fe Tags: ""
   Ma Tags: control
   Update: 5/7/2021
-  Wala Tags: 'bruch, geschichte, macht'
+  Wala Tags: bruch, geschichte, macht
+  path: der eiserne vorhang
 - Name: Observe Act Experiment
   Created: 4/29/2021
-  Fe Tags: 'control, framework, processing information'
+  Fe Tags: control, framework, processing information
   Ma Tags: structure
   Update: 5/7/2021
-  Wala Tags: 'methode, wahrnehmung'
+  Wala Tags: methode, wahrnehmung
+  path: observe act experiment
 - Name: flavors of joy
   Created: 5/4/2021
-  Fe Tags: ''
-  Ma Tags: 'death, flavors, life, questionmark'
+  Fe Tags: ""
+  Ma Tags: death, flavors, life, questionmark
   Update: 5/7/2021
-  Wala Tags: 'gefühl, optimismus, stimmung'
+  Wala Tags: gefühl, optimismus, stimmung
+  path: flavors of joy
 - Name: Machtspiel
   Created: 4/24/2021
-  Fe Tags: 'adversarial, psychology, social interaction'
-  Ma Tags: ''
+  Fe Tags: adversarial, psychology, social interaction
+  Ma Tags: ""
   Update: 5/7/2021
-  Wala Tags: 'macht, spezielle perspektive'
+  Wala Tags: macht, spezielle perspektive
+  path: machtspiel
 - Name: Krieg Vater aller Dinge
   Created: 4/29/2021
-  Fe Tags: 'adversarial, control, history'
-  Ma Tags: 'kampf, kralle, krampf'
+  Fe Tags: adversarial, control, history
+  Ma Tags: kampf, kralle, krampf
   Update: 5/7/2021
-  Wala Tags: 'entwicklung, kollektiv, macht'
+  Wala Tags: entwicklung, kollektiv, macht
+  path: krieg vater aller dinge
 - Name: Immer bessere Werkzeuge
   Created: 4/29/2021
-  Fe Tags: 'control, knowledge, technology'
-  Ma Tags: 'future, lego, yang'
+  Fe Tags: control, knowledge, technology
+  Ma Tags: future, lego, yang
   Update: 5/7/2021
-  Wala Tags: 'entwicklung, optimismus'
+  Wala Tags: entwicklung, optimismus
+  path: immer bessere werkzeuge
 - Name: Das mehrstöckige Haus
   Created: 4/29/2021
-  Fe Tags: 'hierarchy, social interaction'
+  Fe Tags: hierarchy, social interaction
   Ma Tags: flavors
   Update: 5/7/2021
   Wala Tags: wahrnehmung
+  path: das mehrstöckige haus
 - Name: Egoless
   Created: 4/29/2021
-  Fe Tags: 'blue avian, psychology'
-  Ma Tags: 'flavor, lense, start'
+  Fe Tags: blue avian, psychology
+  Ma Tags: flavor, lense, start
   Update: 5/7/2021
-  Wala Tags: 'fundamentalia, quelle, wahrnehmung'
+  Wala Tags: fundamentalia, quelle, wahrnehmung
+  path: egoless
 - Name: Zeit
   Created: 4/30/2021
-  Fe Tags: 'culture, future, time'
-  Ma Tags: 'mind, spaltung'
+  Fe Tags: culture, future, time
+  Ma Tags: mind, spaltung
   Update: 5/7/2021
-  Wala Tags: 'elementaria, zeit'
+  Wala Tags: elementaria, zeit
 - Name: Noosphäre
   Created: 4/29/2021
-  Fe Tags: ''
+  Fe Tags: ""
   Ma Tags: ominous
   Update: 5/7/2021
-  Wala Tags: 'entwicklung, struktur'
+  Wala Tags: entwicklung, struktur
+  path: noosphäre
 - Name: Kollektivismus
   path: collectivism
   Created: 4/29/2021
-  Fe Tags: 'social interaction, utility function'
+  Fe Tags: social interaction, utility function
   Ma Tags: communication
   Update: 5/7/2021
-  Wala Tags: 'kollektiv, struktur'
+  Wala Tags: kollektiv, struktur
 - Name: Emergenz
   path: emergence
   Created: 4/29/2021
-  Fe Tags: 'emergence, social interaction'
-  Ma Tags: ''
+  Fe Tags: emergence, social interaction
+  Ma Tags: ""
   Update: 5/7/2021
   Wala Tags: entwicklung
 - Name: Individualismus
   Created: 4/29/2021
-  Fe Tags: 'social interaction, utility function'
-  Ma Tags: ''
+  Fe Tags: social interaction, utility function
+  Ma Tags: ""
   Update: 5/7/2021
-  Wala Tags: 'ich, meinung'
+  Wala Tags: ich, meinung
+  path: individualismus
 - Name: Optimismus
   Created: 4/30/2021
   Fe Tags: psychology
-  Ma Tags: 'fearlessness, yang'
+  Ma Tags: fearlessness, yang
   Update: 5/7/2021
-  Wala Tags: 'spezielle perspektive, stimmung'
+  Wala Tags: spezielle perspektive, stimmung
+  path: optimismus
 - Name: Pessimismus
   Created: 4/30/2021
   Fe Tags: psychology
-  Ma Tags: 'yielding, yin'
+  Ma Tags: yielding, yin
   Update: 5/7/2021
-  Wala Tags: 'spezielle perspektive, stimmung'
+  Wala Tags: spezielle perspektive, stimmung
+  path: pessimismus
 - Name: Fe Metaphysik
   Created: 4/29/2021
-  Fe Tags: 'abstract, deep metaphysics, knowledge'
-  Ma Tags: 'flavor, lense, start'
+  Fe Tags: abstract, deep metaphysics, knowledge
+  Ma Tags: flavor, lense, start
   Update: 5/4/2021
-  Wala Tags: 'entwicklung, fundamentalia'
+  Wala Tags: entwicklung, fundamentalia
+  path: fe metaphysik
+- path: aktie
+  Name: Aktie
+  Update: 04/16/2021
+  Created: 04/16/2021
+  Fe Tags: ""
+  Wala Tags: ""
+  Ma Tags: ""
+- path: alchemie
+  Name: Alchemie
+  Update: 04/16/2021
+  Created: 04/16/2021
+  Fe Tags: ""
+  Wala Tags: ""
+  Ma Tags: ""
+- path: alt-right
+  Name: Alt-right
+  Update: 04/16/2021
+  Created: 04/16/2021
+  Fe Tags: ""
+  Wala Tags: ""
+  Ma Tags: ""
+- path: angkor wat
+  Name: Angkor wat
+  Update: 04/16/2021
+  Created: 04/16/2021
+  Fe Tags: ""
+  Wala Tags: ""
+  Ma Tags: ""
+- path: archetyp
+  Name: Archetyp
+  Update: 04/16/2021
+  Created: 04/16/2021
+  Fe Tags: ""
+  Wala Tags: ""
+  Ma Tags: ""
+- path: bildung
+  Name: Ausbildung
+  Update: 04/16/2021
+  Created: 04/16/2021
+  Fe Tags: ""
+  Wala Tags: ""
+  Ma Tags: ""
+- path: begeisterung
+  Name: Begeisterung
+  Update: 04/16/2021
+  Created: 04/16/2021
+  Fe Tags: ""
+  Wala Tags: ""
+  Ma Tags: ""
+- path: blau
+  Name: Blau
+  Update: 04/16/2021
+  Created: 04/16/2021
+  Fe Tags: ""
+  Wala Tags: ""
+  Ma Tags: ""
+- path: buddhismus
+  Name: Buddhismus
+  Update: 04/16/2021
+  Created: 04/16/2021
+  Fe Tags: ""
+  Wala Tags: ""
+  Ma Tags: ""
+- path: böses will und gutes schafft
+  Name: Böses will und gutes schafft
+  Update: 04/16/2021
+  Created: 04/16/2021
+  Fe Tags: ""
+  Wala Tags: ""
+  Ma Tags: ""
+- path: kultur
+  Name: Cafehauskultur
+  Update: 04/16/2021
+  Created: 04/16/2021
+  Fe Tags: ""
+  Wala Tags: ""
+  Ma Tags: ""
+- path: cafehauskultur_alt
+  Name: Cafehauskultur_alt
+  Update: 04/16/2021
+  Created: 04/16/2021
+  Fe Tags: ""
+  Wala Tags: ""
+  Ma Tags: ""
+- path: christentum
+  Name: Christentum
+  Update: 04/16/2021
+  Created: 04/16/2021
+  Fe Tags: ""
+  Wala Tags: ""
+  Ma Tags: ""
+- path: cia
+  Name: Cia
+  Update: 04/16/2021
+  Created: 04/16/2021
+  Fe Tags: ""
+  Wala Tags: ""
+  Ma Tags: ""
+- path: collectivism
+  Name: Collectivism
+  Update: 04/16/2021
+  Created: 04/16/2021
+  Fe Tags: ""
+  Wala Tags: ""
+  Ma Tags: ""
+- path: culture wars
+  Name: Culture wars
+  Update: 04/16/2021
+  Created: 04/16/2021
+  Fe Tags: ""
+  Wala Tags: ""
+  Ma Tags: ""
+- path: dark ages
+  Name: Dark ages
+  Update: 04/16/2021
+  Created: 04/16/2021
+  Fe Tags: ""
+  Wala Tags: ""
+  Ma Tags: ""
+- path: das leben ein film
+  Name: Das leben ein film
+  Update: 04/16/2021
+  Created: 04/16/2021
+  Fe Tags: ""
+  Wala Tags: ""
+  Ma Tags: ""
+- path: demokratie
+  Name: Demokratie
+  Update: 04/16/2021
+  Created: 04/16/2021
+  Fe Tags: ""
+  Wala Tags: ""
+  Ma Tags: ""
+- path: deutsch
+  Name: Deutsch
+  Update: 04/16/2021
+  Created: 04/16/2021
+  Fe Tags: ""
+  Wala Tags: ""
+  Ma Tags: ""
+- path: diktatur
+  Name: Diktatur
+  Update: 04/16/2021
+  Created: 04/16/2021
+  Fe Tags: ""
+  Wala Tags: ""
+  Ma Tags: ""
+- path: diskussion
+  Name: Diskussion
+  Update: 04/16/2021
+  Created: 04/16/2021
+  Fe Tags: ""
+  Wala Tags: ""
+  Ma Tags: ""
+- path: emergence
+  Name: Emergence
+  Update: 04/16/2021
+  Created: 04/16/2021
+  Fe Tags: ""
+  Wala Tags: ""
+  Ma Tags: ""
+- path: english
+  Name: English
+  Update: 04/16/2021
+  Created: 04/16/2021
+  Fe Tags: ""
+  Wala Tags: ""
+  Ma Tags: ""
+- path: erziehung
+  Name: Erziehung
+  Update: 04/16/2021
+  Created: 04/16/2021
+  Fe Tags: ""
+  Wala Tags: ""
+  Ma Tags: ""
+- path: european theatre
+  Name: European theatre
+  Update: 04/16/2021
+  Created: 04/16/2021
+  Fe Tags: ""
+  Wala Tags: ""
+  Ma Tags: ""
+- path: evolution
+  Name: Evolution
+  Update: 04/16/2021
+  Created: 04/16/2021
+  Fe Tags: ""
+  Wala Tags: ""
+  Ma Tags: ""
+- path: faschismus
+  Name: Faschismus
+  Update: 04/16/2021
+  Created: 04/16/2021
+  Fe Tags: ""
+  Wala Tags: ""
+  Ma Tags: ""
+- path: fpö
+  Name: Fpö
+  Update: 04/16/2021
+  Created: 04/16/2021
+  Fe Tags: ""
+  Wala Tags: ""
+  Ma Tags: ""
+- path: gelb
+  Name: Gelb
+  Update: 04/16/2021
+  Created: 04/16/2021
+  Fe Tags: ""
+  Wala Tags: ""
+  Ma Tags: ""
+- path: geschichte
+  Name: Geschichte
+  Update: 04/16/2021
+  Created: 04/16/2021
+  Fe Tags: ""
+  Wala Tags: ""
+  Ma Tags: ""
+- path: gier
+  Name: Gier
+  Update: 04/16/2021
+  Created: 04/16/2021
+  Fe Tags: ""
+  Wala Tags: ""
+  Ma Tags: ""
+- path: grosse seuche
+  Name: Grosse seuche
+  Update: 04/16/2021
+  Created: 04/16/2021
+  Fe Tags: ""
+  Wala Tags: ""
+  Ma Tags: ""
+- path: grün
+  Name: Grün
+  Update: 04/16/2021
+  Created: 04/16/2021
+  Fe Tags: ""
+  Wala Tags: ""
+  Ma Tags: ""
+- path: gutes will und böses schafft
+  Name: Gutes will und böses schafft
+  Update: 04/16/2021
+  Created: 04/16/2021
+  Fe Tags: ""
+  Wala Tags: ""
+  Ma Tags: ""
+- path: handwerk
+  Name: Handwerk
+  Update: 04/16/2021
+  Created: 04/16/2021
+  Fe Tags: ""
+  Wala Tags: ""
+  Ma Tags: ""
+- path: hinduismus
+  Name: Hinduismus
+  Update: 04/16/2021
+  Created: 04/16/2021
+  Fe Tags: ""
+  Wala Tags: ""
+  Ma Tags: ""
+- path: idee
+  Name: Idee
+  Update: 04/16/2021
+  Created: 04/16/2021
+  Fe Tags: ""
+  Wala Tags: ""
+  Ma Tags: ""
+- path: immigration
+  Name: Immigration
+  Update: 04/16/2021
+  Created: 04/16/2021
+  Fe Tags: ""
+  Wala Tags: ""
+  Ma Tags: ""
+- path: industrie
+  Name: Industrie
+  Update: 04/16/2021
+  Created: 04/16/2021
+  Fe Tags: ""
+  Wala Tags: ""
+  Ma Tags: ""
+- path: investition
+  Name: Investition
+  Update: 04/16/2021
+  Created: 04/16/2021
+  Fe Tags: ""
+  Wala Tags: ""
+  Ma Tags: ""
+- path: islam
+  Name: Islam
+  Update: 04/16/2021
+  Created: 04/16/2021
+  Fe Tags: ""
+  Wala Tags: ""
+  Ma Tags: ""
+- path: jäger und sammler
+  Name: Jäger und sammler
+  Update: 04/16/2021
+  Created: 04/16/2021
+  Fe Tags: ""
+  Wala Tags: ""
+  Ma Tags: ""
+- path: kalter krieg
+  Name: Kalter krieg
+  Update: 04/16/2021
+  Created: 04/16/2021
+  Fe Tags: ""
+  Wala Tags: ""
+  Ma Tags: ""
+- path: kampfbegriff
+  Name: Kampfbegriff
+  Update: 04/16/2021
+  Created: 04/16/2021
+  Fe Tags: ""
+  Wala Tags: ""
+  Ma Tags: ""
+- path: katalysator weltsicht
+  Name: Katalysator weltsicht
+  Update: 04/16/2021
+  Created: 04/16/2021
+  Fe Tags: ""
+  Wala Tags: ""
+  Ma Tags: ""
+- path: kind
+  Name: Kind
+  Update: 04/16/2021
+  Created: 04/16/2021
+  Fe Tags: ""
+  Wala Tags: ""
+  Ma Tags: ""
+- path: klassisches chinesisch
+  Name: Klassisches chinesisch
+  Update: 04/16/2021
+  Created: 04/16/2021
+  Fe Tags: ""
+  Wala Tags: ""
+  Ma Tags: ""
+- path: kollektiventscheidung
+  Name: Kollektiventscheidung
+  Update: 04/16/2021
+  Created: 04/16/2021
+  Fe Tags: ""
+  Wala Tags: ""
+  Ma Tags: ""
+- path: komplex
+  Name: Komplex
+  Update: 04/16/2021
+  Created: 04/16/2021
+  Fe Tags: ""
+  Wala Tags: ""
+  Ma Tags: ""
+- path: koreanisch
+  Name: Koreanisch
+  Update: 04/16/2021
+  Created: 04/16/2021
+  Fe Tags: ""
+  Wala Tags: ""
+  Ma Tags: ""
+- path: kreativität
+  Name: Kreativität
+  Update: 04/16/2021
+  Created: 04/16/2021
+  Fe Tags: ""
+  Wala Tags: ""
+  Ma Tags: ""
+- path: kriegstote
+  Name: Kriegstote
+  Update: 04/16/2021
+  Created: 04/16/2021
+  Fe Tags: ""
+  Wala Tags: ""
+  Ma Tags: ""
+- path: kriegszerstörung
+  Name: Kriegszerstörung
+  Update: 04/16/2021
+  Created: 04/16/2021
+  Fe Tags: ""
+  Wala Tags: ""
+  Ma Tags: ""
+- path: kunst
+  Name: Kunst
+  Update: 04/16/2021
+  Created: 04/16/2021
+  Fe Tags: ""
+  Wala Tags: ""
+  Ma Tags: ""
+- path: landwirtschaft
+  Name: Landwirtschaft
+  Update: 04/16/2021
+  Created: 04/16/2021
+  Fe Tags: ""
+  Wala Tags: ""
+  Ma Tags: ""
+- path: lone wolves
+  Name: Lone wolves
+  Update: 04/16/2021
+  Created: 04/16/2021
+  Fe Tags: ""
+  Wala Tags: ""
+  Ma Tags: ""
+- path: moderne
+  Name: Moderne
+  Update: 04/16/2021
+  Created: 04/16/2021
+  Fe Tags: ""
+  Wala Tags: ""
+  Ma Tags: ""
+- path: monarchie
+  Name: Monarchie
+  Update: 04/16/2021
+  Created: 04/16/2021
+  Fe Tags: ""
+  Wala Tags: ""
+  Ma Tags: ""
+- path: mutter
+  Name: Mutter
+  Update: 04/16/2021
+  Created: 04/16/2021
+  Fe Tags: ""
+  Wala Tags: ""
+  Ma Tags: ""
+- path: natur
+  Name: Natur
+  Update: 04/16/2021
+  Created: 04/16/2021
+  Fe Tags: ""
+  Wala Tags: ""
+  Ma Tags: ""
+- path: nazi
+  Name: Nazi
+  Update: 04/16/2021
+  Created: 04/16/2021
+  Fe Tags: ""
+  Wala Tags: ""
+  Ma Tags: ""
+- path: neutraler begriff
+  Name: Neutraler begriff
+  Update: 04/16/2021
+  Created: 04/16/2021
+  Fe Tags: ""
+  Wala Tags: ""
+  Ma Tags: ""
+- path: wissen
+  Name: Nicht wissen
+  Update: 04/16/2021
+  Created: 04/16/2021
+  Fe Tags: ""
+  Wala Tags: ""
+  Ma Tags: ""
+- path: oligarchie
+  Name: Oligarchie
+  Update: 04/16/2021
+  Created: 04/16/2021
+  Fe Tags: ""
+  Wala Tags: ""
+  Ma Tags: ""
+- path: orange
+  Name: Orange
+  Update: 04/16/2021
+  Created: 04/16/2021
+  Fe Tags: ""
+  Wala Tags: ""
+  Ma Tags: ""
+- path: pflanze
+  Name: Pflanze
+  Update: 04/16/2021
+  Created: 04/16/2021
+  Fe Tags: ""
+  Wala Tags: ""
+  Ma Tags: ""
+- path: political correctness 01
+  Name: Political correctness 01
+  Update: 04/16/2021
+  Created: 04/16/2021
+  Fe Tags: ""
+  Wala Tags: ""
+  Ma Tags: ""
+- path: political correctness 02
+  Name: Political correctness 02
+  Update: 04/16/2021
+  Created: 04/16/2021
+  Fe Tags: ""
+  Wala Tags: ""
+  Ma Tags: ""
+- path: rassismus 01
+  Name: Rassismus 01
+  Update: 04/16/2021
+  Created: 04/16/2021
+  Fe Tags: ""
+  Wala Tags: ""
+  Ma Tags: ""
+- path: rassismus 02
+  Name: Rassismus 02
+  Update: 04/16/2021
+  Created: 04/16/2021
+  Fe Tags: ""
+  Wala Tags: ""
+  Ma Tags: ""
+- path: religion
+  Name: Religion
+  Update: 04/16/2021
+  Created: 04/16/2021
+  Fe Tags: ""
+  Wala Tags: ""
+  Ma Tags: ""
+- path: rohstoff
+  Name: Rohstoff
+  Update: 04/16/2021
+  Created: 04/16/2021
+  Fe Tags: ""
+  Wala Tags: ""
+  Ma Tags: ""
+- path: rolle
+  Name: Rolle
+  Update: 04/16/2021
+  Created: 04/16/2021
+  Fe Tags: ""
+  Wala Tags: ""
+  Ma Tags: ""
+- path: schatten
+  Name: Schatten
+  Update: 04/16/2021
+  Created: 04/16/2021
+  Fe Tags: ""
+  Wala Tags: ""
+  Ma Tags: ""
+- path: schock
+  Name: Schock
+  Update: 04/16/2021
+  Created: 04/16/2021
+  Fe Tags: ""
+  Wala Tags: ""
+  Ma Tags: ""
+- path: seher
+  Name: Seher
+  Update: 04/16/2021
+  Created: 04/16/2021
+  Fe Tags: ""
+  Wala Tags: ""
+  Ma Tags: ""
+- path: spanisch
+  Name: Spanisch
+  Update: 04/16/2021
+  Created: 04/16/2021
+  Fe Tags: ""
+  Wala Tags: ""
+  Ma Tags: ""
+- path: spiritualität
+  Name: Spiritualität
+  Update: 04/16/2021
+  Created: 04/16/2021
+  Fe Tags: ""
+  Wala Tags: ""
+  Ma Tags: ""
+- path: sprache
+  Name: Sprache
+  Update: 04/16/2021
+  Created: 04/16/2021
+  Fe Tags: ""
+  Wala Tags: ""
+  Ma Tags: ""
+- path: stern
+  Name: Stern
+  Update: 04/16/2021
+  Created: 04/16/2021
+  Fe Tags: ""
+  Wala Tags: ""
+  Ma Tags: ""
+- path: taoismus
+  Name: Taoismus
+  Update: 04/16/2021
+  Created: 04/16/2021
+  Fe Tags: ""
+  Wala Tags: ""
+  Ma Tags: ""
+- path: the great reset
+  Name: The great reset
+  Update: 04/16/2021
+  Created: 04/16/2021
+  Fe Tags: ""
+  Wala Tags: ""
+  Ma Tags: ""
+- path: tier
+  Name: Tier
+  Update: 04/16/2021
+  Created: 04/16/2021
+  Fe Tags: ""
+  Wala Tags: ""
+  Ma Tags: ""
+- path: verschwörungstheorie
+  Name: Verschwörungstheorie
+  Update: 04/16/2021
+  Created: 04/16/2021
+  Fe Tags: ""
+  Wala Tags: ""
+  Ma Tags: ""
+- path: violett
+  Name: Violett
+  Update: 04/16/2021
+  Created: 04/16/2021
+  Fe Tags: ""
+  Wala Tags: ""
+  Ma Tags: ""
+- path: wald
+  Name: Wald
+  Update: 04/16/2021
+  Created: 04/16/2021
+  Fe Tags: ""
+  Wala Tags: ""
+  Ma Tags: ""
+- path: weiss
+  Name: Weiss
+  Update: 04/16/2021
+  Created: 04/16/2021
+  Fe Tags: ""
+  Wala Tags: ""
+  Ma Tags: ""
+- path: weltkrieg I
+  Name: Weltkrieg I
+  Update: 04/16/2021
+  Created: 04/16/2021
+  Fe Tags: ""
+  Wala Tags: ""
+  Ma Tags: ""
+- path: weltkrieg II
+  Name: Weltkrieg II
+  Update: 04/16/2021
+  Created: 04/16/2021
+  Fe Tags: ""
+  Wala Tags: ""
+  Ma Tags: ""
+- path: why do you need to drag him in
+  Name: Why do you need to drag him in
+  Update: 04/16/2021
+  Created: 04/16/2021
+  Fe Tags: ""
+  Wala Tags: ""
+  Ma Tags: ""
+- path: wissensverlust
+  Name: Wissensverlust
+  Update: 04/16/2021
+  Created: 04/16/2021
+  Fe Tags: ""
+  Wala Tags: ""
+  Ma Tags: ""
+- path: wissenswirtschaft
+  Name: Wissenswirtschaft
+  Update: 04/16/2021
+  Created: 04/16/2021
+  Fe Tags: ""
+  Wala Tags: ""
+  Ma Tags: ""
+- path: woke
+  Name: Woke
+  Update: 04/16/2021
+  Created: 04/16/2021
+  Fe Tags: ""
+  Wala Tags: ""
+  Ma Tags: ""
+- path: wut
+  Name: Wut
+  Update: 04/16/2021
+  Created: 04/16/2021
+  Fe Tags: ""
+  Wala Tags: ""
+  Ma Tags: ""
+- path: yang
+  Name: Yang
+  Update: 04/16/2021
+  Created: 04/16/2021
+  Fe Tags: ""
+  Wala Tags: ""
+  Ma Tags: ""
+- path: yin
+  Name: Yin
+  Update: 04/16/2021
+  Created: 04/16/2021
+  Fe Tags: ""
+  Wala Tags: ""
+  Ma Tags: ""
+- path: zeiträume
+  Name: Zeiträume
+  Update: 04/16/2021
+  Created: 04/16/2021
+  Fe Tags: ""
+  Wala Tags: ""
+  Ma Tags: ""
+- path: zeitzyklen
+  Name: Zeitzyklen
+  Update: 04/16/2021
+  Created: 04/16/2021
+  Fe Tags: ""
+  Wala Tags: ""
+  Ma Tags: ""
+- path: zen
+  Name: Zen
+  Update: 04/16/2021
+  Created: 04/16/2021
+  Fe Tags: ""
+  Wala Tags: ""
+  Ma Tags: ""
+- path: zukunftsszenarien
+  Name: Zukunftsszenarien
+  Update: 04/16/2021
+  Created: 04/16/2021
+  Fe Tags: ""
+  Wala Tags: ""
+  Ma Tags: ""

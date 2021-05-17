@@ -20,6 +20,7 @@ function bNei(arr, idx, rows, cols, includeDiagonals = true) {
 	return nei;
 
 }
+function iFromRowCol(row,col, rows, cols) { return row*cols+col; }
 function iToRowCol(idx, rows, cols) { let c = idx % cols; let r = (idx - c) / rows; return [r, c]; }
 function bCheck(r, c, rows, cols) { return r >= 0 && r < rows && c >= 0 && c < cols ? r * cols + c : null; }
 function bNeiDir(arr, idx, dir, rows, cols, includeDiagonals = true) {

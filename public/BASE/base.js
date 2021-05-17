@@ -96,7 +96,7 @@ function miAddLabel(item, styles) {
 	return d;
 }
 function mIfNotRelative(d) { if (nundef(d.style.position)) d.style.position = 'relative'; }
-function mImage(){return mImg(...arguments);}
+function mImage() { return mImg(...arguments); }
 function mImg(path, dParent, styles, classes) {
 	//console.log('_______________',path)
 	let d = mCreate('img');
@@ -2070,6 +2070,7 @@ function firstCondDict(dict, func) {
 	for (const k in dict) { if (func(dict[k])) return k; }
 	return null;
 }
+function firstCondDictKey() { return firstCondDictKeys(...arguments); }
 function firstCondDictKeys(dict, func) {
 	//return first elem that fulfills condition
 	for (const k in dict) { if (func(k)) return k; }
@@ -2609,7 +2610,7 @@ function toNoun(s) { return capitalize(s.toLowerCase()); }
 
 //#region time and date
 
-function formatDate(d) {
+function formatDate1(d) {
 	//usage: formatDate(new Date(2010, 7, 5);
 	if (nundef(d)) d = Date.now();
 	let ye = new Intl.DateTimeFormat('en', { year: 'numeric' }).format(d);
@@ -2617,8 +2618,8 @@ function formatDate(d) {
 	let da = new Intl.DateTimeFormat('en', { day: '2-digit' }).format(d);
 	return `${da}-${mo}-${ye}`;
 }
-function formatDate1(d) {
-	const date = isdef(d)?d:new Date();
+function formatDate(d) {
+	const date = isdef(d) ? d : new Date();
 	const month = ('0' + date.getMonth()).slice(0, 2);
 	const day = date.getDate();
 	const year = date.getFullYear();
@@ -2932,11 +2933,15 @@ function resetUIDs() { UIDCounter = 0; }
 //#endregion
 
 //#region functions to be used in node.js:
-if(this && typeof module == "object" && module.exports && this === module.exports) {
-	module.exports = { 
-		isdef, nundef, jsCopy, copyKeys,
-		randomNumber,
-		choose,chooseRandom
+if (this && typeof module == "object" && module.exports && this === module.exports) {
+	module.exports = {
+		allNumbers, capitalize, choose, chooseRandom, copyKeys,
+		firstCond, firstCondDictKey, formatDate,
+		isdef, jsCopy,
+		nundef, randomNumber,
+
+		stringBefore, stringAfter, stringAfterLast,
+
 	};
 }
 
