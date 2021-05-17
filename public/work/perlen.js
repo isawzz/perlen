@@ -6,7 +6,7 @@ class GPerlen {
 
 		[this.perlenItems, this.board] = createPerlenAndFields(dParent, perlenItems);
 
-		console.log(this.board)
+		//console.log(this.board)
 
 		this.activateDD();
 
@@ -29,14 +29,14 @@ class GPerlen {
 	}
 	add(perle, field) {
 		//what if this perle is on a different field? should I clone it then? NO
-		console.log('addto field', field);
+		//console.log('addto field', field);
 		addItemToField(perle, field, dTable);
 	}
 	onDropPerle(source, target, isCopy = false) {
 		let dSource = iDiv(source);
 		let dTarget = iDiv(target);
 
-		console.log('drop!', '\nperle', source, '\nfield', target, isCopy);
+		//console.log('drop!', '\nperle', source, '\nfield', target, isCopy);
 		//was soll jetzt passieren?
 		if (!isCopy) {
 			this.remove(source);

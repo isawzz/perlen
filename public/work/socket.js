@@ -12,6 +12,7 @@ function initSocket() {
 //sending
 function sendMsg(data) { sendProcess('msg', data); Socket.emit('msg', { data: data }); }
 function sendLogin(msg) { sendProcess('login', msg); Socket.emit('login', { data: msg }); }
+function sendFilename(msg) { sendProcess('filename', msg); Socket.emit('filename', { msg }); }
 
 //receiving
 function handleInit(data) {
@@ -20,7 +21,7 @@ function handleInit(data) {
 }
 function handleUserJoined(data){
 	//dieses msg soll haben: username und id, message
-	console.log('received userJoined data:',data);
+	//console.log('received userJoined data:',data);
 	handleMessage(data.msg);
 
 
@@ -30,15 +31,15 @@ function handleDB(data) {
 	receiveProcess('DB', data);
 	DB = data.DB;
 	U = data.userdata;
-	console.log('DB', DB, 'U', U)
+	//console.log('DB', DB, 'U', U)
 }
 function handleMessage(data) {
-	console.log('________________ received', data)
+	//console.log('________________ received', data)
 	if (isdef(data.data)) data=data.data;
 	receiveProcess('msg', data);
 	//data=JSON.parse(data);
 	//console.log('msg from server:', data);
-	console.log('===>received message', data.author, U.username)
+	//console.log('===>received message', data.author, U.username)
 	//if (data.type !== messageTypes.LOGIN) {
 
 	if (isString(data)) {
@@ -96,13 +97,14 @@ function handleGameState(state) {
 
 //helpers: keeping track of messages!
 var MessageCounter = 0;
+
 function sendProcess(type, data) {
 	MessageCounter++;
-	console.log('#' + MessageCounter, 'send', type, data)
+	//console.log('#' + MessageCounter, 'send', type, data)
 }
 function receiveProcess(type, data) {
 	MessageCounter++;
-	console.log('#' + MessageCounter, 'receive', type, data)
+	//console.log('#' + MessageCounter, 'receive', type, data)
 }
 
 

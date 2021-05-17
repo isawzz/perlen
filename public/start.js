@@ -12,7 +12,46 @@ function _start() {
 	// let dColumns = mDiv(null, { bg: 'green', display: 'inline-flex', w: 500, h: 20 });
 	// mInsert(dBoard, dColumns)
 
+	ddImageSetGlobals();
+
 }
+
+// function enableDDImages() {
+// 	var dropbox = dTable;
+
+// 	dropbox.addEventListener('dragenter', noopHandler, false);
+// 	dropbox.addEventListener('dragexit', noopHandler, false);
+// 	dropbox.addEventListener('dragover', noopHandler, false);
+// 	dropbox.addEventListener('drop', drop, false);
+
+// }
+// function noopHandler(evt) {
+// 	evt.stopPropagation();
+// 	evt.preventDefault();
+// }
+// function drop(evt) {
+// 	evt.stopPropagation();
+// 	evt.preventDefault();
+// 	var imageUrl = evt.dataTransfer.getData('url');//dataTransfer.getData('url');
+// 	console.log('url',imageUrl)
+// 	//let img = mImg(imageUrl,dTable,{w:70,h:70});
+// 	//alert(imageUrl);
+// }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 function canAct() { return true; }
 
 function mPath(p) {
@@ -41,9 +80,9 @@ function collectPerlen(board) {
 	return perlen;
 }
 function addItemToField(item, field, dRemoved) {
-	let prev=field.item;
+	let prev = field.item;
 	if (isdef(prev) && isdef(dRemoved)) {
-		mAppend(dRemoved,iDiv(prev));
+		mAppend(dRemoved, iDiv(prev));
 	}
 	let dField = iDiv(field);
 	item.row = field.row;
@@ -74,7 +113,7 @@ function insertGridRow(board, rBefore) {
 	G.activateDD();
 }
 function removeGridColumn(board, cBefore) {
-	if (board.cols<=2) return;
+	if (board.cols <= 2) return;
 	let perlen = collectPerlen(board);
 	let fieldItems = createFields2(board, board.rows, board.cols - 1);
 	for (const p of perlen) {
@@ -84,7 +123,7 @@ function removeGridColumn(board, cBefore) {
 	G.activateDD();
 }
 function removeGridRow(board, rBefore) {
-	if (board.rows<=2) return;
+	if (board.rows <= 2) return;
 	let perlen = collectPerlen(board);
 	let fieldItems = createFields2(board, board.rows - 1, board.cols);
 	for (const p of perlen) {
@@ -96,13 +135,13 @@ function removeGridRow(board, rBefore) {
 
 function createPerlenAndFields(dParent, perlenItems) {
 	perlenItems.map(x => x.path = mPath(x));
-	console.log(perlenItems); console.log(dParent); console.assert(dLineTableMiddle == dParent);
+	//console.log(perlenItems); console.log(dParent); console.assert(dLineTableMiddle == dParent);
 
 	let dp = mDiv(dParent, { display: 'inline-block' });
 	let d1 = mDiv(dp, { display: 'inline-block' });
 	let rows = 4, cols = 5;
 
-	mLinebreak(dParent,25);
+	mLinebreak(dParent, 25);
 	for (let i = 0; i < perlenItems.length; i++) {
 		let x = mImg(perlenItems[i].path, dParent, { w: 70, h: 70 });
 		iAdd(perlenItems[i], { div: x });
@@ -137,7 +176,7 @@ function createFields2(board, rows, cols, sz = 100) {
 		for (let c = 0; c < cols; c++) {
 			let h = r == 0 ? 20 : sz;
 			let w = c == 0 ? 20 : sz;
-			let bg = r==0&&c==0?'transparent':(r == 0 || c == 0) ? '#00000040' : 'white';
+			let bg = r == 0 && c == 0 ? 'transparent' : (r == 0 || c == 0) ? '#00000040' : 'white';
 			let i = r * cols + c;
 			let d1 = iDiv(board);
 			let dItem = mDiv(d1, { display: 'inline-block', h: h, w: w, bg: bg, margin: 2 });

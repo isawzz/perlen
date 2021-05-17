@@ -5,6 +5,9 @@ const path = require('path');
 const base = require('./public/BASE/base.js');
 const { PORT } = require('./public/BASE/globals.js');
 const utils = require('./serverfiles/utils.js');
+var fs = require('fs');
+var lastFilename;
+var formidable = require('formidable');
 
 const DB = utils.fromYamlFile(path.join(__dirname, 'data.yaml'));
 const Perlen = utils.fromYamlFile(path.join(__dirname, 'public/assets/games/perlen/perlen.yaml'));
@@ -14,6 +17,32 @@ const Perlen = utils.fromYamlFile(path.join(__dirname, 'public/assets/games/perl
 
 app.use(express.static(path.join(__dirname, 'public'))); //Serve public directory
 app.get('/', (req, res) => { res.sendFile(path.join(__dirname, +'public/index.html')); }); //chrome does this by default!
+
+app.post('/imageUpload', function (req, res) {
+	console.log('haaaaaaaaaaaaaaaaaaaaaaaa');
+	var form = new formidable.IncomingForm();
+	form.parse(req, function (err, fields, files) {
+		//console.log('files', files);
+		var oldpath = files.image.path;
+		var newpath = './public/assets/games/perlen/new/' + lastFilename + '.png';// + files.filetoupload.name;
+		fs.rename(oldpath, newpath, function (err) {
+			if (err) throw err;
+			res.write('File uploaded and moved!');
+			res.end();
+		});
+		if (lastFilename == 'dasSterben') return;
+		Perlen.push({
+			Name: lastFilename,
+			path: lastFilename,
+			Update: base.formatDate(),
+			Created:base.formatDate(),
+			"Fe Tags":'',
+			"Wala Tags":'',
+			"Ma Tags":''
+		});
+		utils.toYamlFile(Perlen,path.join(__dirname, 'public/assets/games/perlen/perlen.yaml'));
+	});
+});
 
 //new code:
 const { initUserManager, handleConnected, handleDisconnected, handleLogin, handleMessage, handleCreateGame, handleJoinGame, handleMove } = require('./serverfiles/userManager.js');
@@ -27,6 +56,7 @@ io.on('connection', client => {
 	client.on('createGame', x => handleCreateGame(client, x));
 	client.on('joinGame', x => handleJoinGame(client, x));
 	client.on('move', x => handleMove(client, x));
+	client.on('filename', x => { lastFilename = x.msg; });
 });
 
 //old code:
@@ -46,7 +76,7 @@ io.on('connection', client => {
 // });
 
 
-http.listen(process.env.PORT||PORT, () => { console.log('listening on port '+PORT); });
+http.listen(process.env.PORT || PORT, () => { console.log('listening on port ' + PORT); });
 
 
 
