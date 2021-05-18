@@ -1,4 +1,3 @@
-const { isdef } = require("../base");
 
 //#region init UI
 function initTable(rect,startingAt=0) {
