@@ -36,7 +36,11 @@
 
 	<body style="opacity:0">
 		<div id="dHeader" style="background-color: var(--dark-blue); padding-top: 10px">
-				<div id='dTempleLobby' style="display: none; position: absolute; margin: 10px; padding: 20px" onclick='onClickTempleLobby()'>🏛️</div>
+			<div id='dTempleLobby' style="display: none; position: absolute; margin: 10px; padding: 20px" onclick='onClickTempleLobby()'>🏛️</div>
+			<div id='dButtonsRight' style="position: absolute; right:0px; padding:10px; display:flex">
+				<div id='dHelpButton'  onclick='show("dHelpWindow");' class='toolbarButtonClass'>🪔</div>
+				<div id='dColorButton' onclick='setNewBackgroundColor();' class='toolbarButtonClass'>🎨</div>
+				</div>
 			<div class="flex-column flex-center">
 				<h2 id="hTitle">Welcome to the Game</h2>
 				<p id="dSubtitle" style='margin-top:-5px' class="light-text">*** Glasperlenspiel ***</p>
@@ -88,6 +92,24 @@
 			<div id='dGear' onclick='onClickGear()' style='display:none;'>⚙️</div>
 			<div id='dTemple' onclick='onClickTemple()' style='display:none;'>🏛️</div>
 			<button id='dummy' style='width:0px;padding:0;margin:0;border:none;outline:none;background-color:transparent;color:transparent'>dummy
+		</div>
+		<div id='dHelpWindow' style="display:none;font-size:16px;background:dimgray;width:320px;position:fixed;right:20px;top:20px;padding:10px;border-radius:10px">
+			<h4>Keyboard Shortcuts:</h4>
+			<p>Shift+Click on table header: insert row/col</p>
+			<p>Ctrl+Click on table header: remove row/col</p>
+			<p>Ctrl+Hover over perle: magnify</p>
+			<br />
+			<h4>Perlen Editor:</h4>
+			<p>Doubleclick left sidebar: open editor</p>
+			<p>Top Area: DragDrop image from eg. image search or click to browse</p>
+			<p>Name Input: Enter description (also used as filename)</p>
+			<p>Click Save to add new Glasperle to collection</p>
+			<p>Click clear to clear Area and Input</p>
+			<p> (known BUG! DD does not work without clear first!)</p>
+			<p>Press close (bottom) to close editor</p>
+			<div style='text-align:center'>
+				<button style="margin-top:10px;padding:4px 14px" class="buttonClass" onclick="hide('dHelpWindow');">close</button>
+			</div>
 		</div>
 
 		<script src='https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js'></script>

@@ -7,15 +7,15 @@ var SZ_UPLOAD_CANVAS = 200;
 
 function closeLeiste() {
 	//ev.stopPropagation();
-	console.log('closing!');
+	//console.log('closing!');
 	let d = mBy('dLeiste');
 	//purge(d);
 	clearElement(d);
-	console.log(d);
+	//console.log(d);
 	//clearElement(d);
 	//d.style.display='none';
 
-	setTimeout(() => mBy('sidebar').ondblclick = createPerlenEditor, 1000);
+	// setTimeout(() => mBy('sidebar').ondblclick = createPerlenEditor, 1000);
 	//mBy('sidebar').onclick = openLeiste;
 }
 function createPerlenEditor() {

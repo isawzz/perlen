@@ -6,7 +6,7 @@ function _start() {
 	if (STARTED) { console.log('REENTRACE PROBLEM!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!'); return; }
 	STARTED = true;
 
-	G = new GPerlen(dTable, 52);
+	G = new GPerlen(dTable, 30);
 	window.onkeydown = keyDownHandler;
 	window.onkeyup = keyUpHandler;
 
@@ -17,7 +17,8 @@ function _start() {
 	// let dColumns = mDiv(null, { bg: 'green', display: 'inline-flex', w: 500, h: 20 });
 	// mInsert(dBoard, dColumns)
 
-	createPerlenEditor();
+	mBy('sidebar').ondblclick = createPerlenEditor;
+	//createPerlenEditor();
 
 }
 function canAct() { return true; }

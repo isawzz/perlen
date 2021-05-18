@@ -8,19 +8,22 @@ function initGame(username, io) {
 	setTitle('Glasperlenspiel');
 	setSubtitle('logged in as ma');
 
-	let bg=randomColor(); 
-	//bg = 'rgb(192,96,6)';
-	BaseColor = bg;	HeaderColor = colorDarker(BaseColor);
-	setBackgroundColor(bg); mStyleX(document.body, { opacity: 1 });
-	mStyleX(dHeader, { bg: HeaderColor });
-	mStyleX(dSubtitle, { fg: colorLighter(bg) });
-	initTable(null,2); initSidebar(); initAux(); initScore();
+	setNewBackgroundColor();
+	mStyleX(document.body, { opacity: 1 });
+	initTable(null, 2); initSidebar(); initAux(); initScore();
 
 	waitUntilPerlen();
 
 }
-
-function waitUntilPerlen(){
+function setNewBackgroundColor() {
+	let bg = randomDarkColor();
+	//bg = 'rgb(192,96,6)';
+	BaseColor = bg; HeaderColor = colorDarker(BaseColor);
+	setBackgroundColor(bg);
+	mStyleX(dHeader, { bg: HeaderColor });
+	mStyleX(dSubtitle, { fg: colorLighter(bg) });
+}
+function waitUntilPerlen() {
 	if (nundef(Perlen)) { return TOMain = setTimeout(waitUntilPerlen, 200); }
 	else {
 		clearTimeout(TOMain)

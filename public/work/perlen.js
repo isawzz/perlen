@@ -62,10 +62,14 @@ function onEnterPerle(perle) {
 }
 function onExitPerle() { if (IsControlKeyDown) iMagnifyCancel(); }
 function keyUpHandler(ev) {
+	//ev.preventDefault();
+	//var keyCode = ev.keyCode || ev.which;
+	//console.log('keyCode',keyCode,'ev.key',ev.key);
 	if (ev.key == 'Control') {
 		IsControlKeyDown = false;
 		iMagnifyCancel();
 	}
+	//else if (keyCode == 112) { show('dHelpWindow'); }
 }
 function keyDownHandler(ev) {
 

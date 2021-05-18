@@ -2429,6 +2429,20 @@ function randomHslaColor(s = 100, l = 70, a = 1) {
 	var hue = Math.round(Math.random() * 360);
 	return hslToHslaString(hue, s, l, a);
 }
+function randomDarkColor() {
+	let s = '#';
+	for (let i = 0; i < 3; i++) {
+		s += chooseRandom([0,1,2,3,4,5,6,7])+chooseRandom(['f', 'c', '9', '6', '3', '0']);
+	}
+	return s;
+}
+function randomLightColor() {
+	let s = '#';
+	for (let i = 0; i < 3; i++) {
+		s += chooseRandom(['A','B','C','D','E','F'])+chooseRandom(['f', 'c', '9', '6', '3', '0']);
+	}
+	return s;
+}
 function randomHexColor() {
 	let s = '#';
 	for (let i = 0; i < 6; i++) {
