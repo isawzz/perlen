@@ -74,18 +74,35 @@ function initLineBottom() {
 
 //#region MAGNIFY
 var MAGNIFIER_IMAGE;
-function mMagnify(img, path) {
+function mMagnify(img, item) {
+	let path = item.path;
 	if (isdef(MAGNIFIER_IMAGE) && MAGNIFIER_IMAGE.src == path) {
 		console.log('schon offen!!!')
 		return;
 	}
-	let center = getCenter(img);
-	//console.log('center', center);
-	let img1 = MAGNIFIER_IMAGE = mImg(path, document.body, { position: 'absolute',left:0,top:0 });
+
+	let imgSize = 514,fontSize=24;
+	let [w,h,fz]=[imgSize,imgSize+fontSize+10,fontSize];
+	let dPresent=MAGNIFIER_IMAGE = mDiv(document.body, { bg:HeaderColor, position: 'absolute',left:0,top:0,w:w,h:h });
+	let d=dPresent; //mDiv(dPresent);
+	let dText = mText(item.Name,d,{color:'white',fz:fz});
+	let dImage = mDiv(d,{rounding:'50%',w:w,h:w});
+	mCenterCenterFlex(dImage);
+	let img1 = mImg(path, dImage,{});
+
+	//let dPresent = mDiv(document.body, { bg:HeaderColor, rounding:'50%', position: 'absolute',left:0,top:0,w:512,h:512 });
+	//mContainer(dPresent);
+	// let img1 = mImg(path, dPresent,{});
+	mCenterCenterFlex(dPresent);
+
+	// let img1 = MAGNIFIER_IMAGE = mImg(path, document.body, { position: 'absolute',left:0,top:0 });
+
 }
 function mCancelMagnify(img, path) {
 	if (isdef(MAGNIFIER_IMAGE)) {MAGNIFIER_IMAGE.remove(); MAGNIFIER_IMAGE=null;}
 }
+function iMagnify(perle){mMagnify(null,perle);}
+function iMagnifyCancel(){mCancelMagnify();}
 //#endregion
 
 function setTitle(s) { mBy('hTitle').innerHTML = s; }

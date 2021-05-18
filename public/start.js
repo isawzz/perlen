@@ -1,10 +1,15 @@
 
 var STARTED = false;
+
+
 function _start() {
 	if (STARTED) { console.log('REENTRACE PROBLEM!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!'); return; }
 	STARTED = true;
 
-	G = new GPerlen(dTable, 3);
+	G = new GPerlen(dTable, 52);
+	window.onkeydown = keyDownHandler;
+	window.onkeyup = keyUpHandler;
+
 	// let rect = getRect(dBoard);
 	// console.log(rect)
 	// let dGrid = dBoard.children[0];
@@ -37,11 +42,11 @@ function addItemToBoard(p, board, r, c) {
 	let field = board.fields[iFromRowCol(r, c, rows, cols)];
 	addItemToField(p, field, dTable);
 }
-function createPerle(perle, dParent, sz = 64, wf = 1.3, hf = 0.4, useNewImage=false) {
+function createPerle(perle, dParent, sz = 64, wf = 1.3, hf = 0.4, useNewImage = false) {
 
-	let d = makePerleDiv(perle, 
-		{ wmin: sz + 4, h: sz * (1 + hf) + 4 }, 
-		{ w: sz, h: sz }, { wmax: sz * wf, hmax: sz * hf, fz: sz / 6 }, 
+	let d = makePerleDiv(perle,
+		{ wmin: sz + 4, h: sz * (1 + hf) + 4 },
+		{ w: sz, h: sz }, { wmax: sz * wf, hmax: sz * hf, fz: sz / 6 },
 		'b', true, null, useNewImage);
 	mAppend(dParent, d);
 	return d;
@@ -178,7 +183,7 @@ function createPerle2Broken(perle, dParent, styles) {
 	let d = mDiv(dParent, { display: 'flex', 'flex-direction': 'column' });
 	mCenterFlex(d);
 	let x = mImg(perle.path, d, styles);
-	x.onmouseenter = (ev) => { if (ev.ctrlKey) mMagnify(x, perle.path); }
+	x.onmouseenter = (ev) => { if (ev.ctrlKey) mMagnify(x, perle); }
 	x.onmouseleave = () => mCancelMagnify(x, perle.path);
 	let t = mText(perle.Name, d, {});
 	iAdd(perle, { div: d, img: x, text: t });
@@ -186,7 +191,7 @@ function createPerle2Broken(perle, dParent, styles) {
 }
 function createPerle1W(perle, dParent, styles) {
 	let x = mImg(perle.path, dParent, styles);
-	x.onmouseenter = (ev) => { if (ev.ctrlKey) mMagnify(x, perle.path); }
+	x.onmouseenter = (ev) => { if (ev.ctrlKey) mMagnify(x, perle); }
 	x.onmouseleave = () => mCancelMagnify(x, perle.path);
 	iAdd(perle, { div: x });
 	return x;

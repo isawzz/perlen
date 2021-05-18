@@ -221,8 +221,9 @@ function makePerleDiv(item, outerStyles, imgStyles, labelStyles, labelPos = null
 		x = mImg(item.path, dOuter, imgStyles);
 	}
 	if (magnify) {
-		x.onmouseenter = (ev) => { if (ev.ctrlKey) mMagnify(x, item.path); }
-		x.onmouseleave = () => mCancelMagnify(x, item.path);
+
+		x.onmouseenter = ev=>onEnterPerle(item,ev); // (ev) => { if (ev.ctrlKey) mMagnify(x, item); }
+		x.onmouseleave = ev=>onExitPerle(item,ev); //() => mCancelMagnify(x, item.path);
 	}
 
 	if (labelPos[0] == 'b') dLabel = mText(item.label, dOuter, labelStyles);
@@ -230,6 +231,7 @@ function makePerleDiv(item, outerStyles, imgStyles, labelStyles, labelPos = null
 
 	if (isdef(handler)) dOuter.onclick = ev => handler(ev, item);
 
+	item.type = 'perle';	dOuter.id = iRegister(item);
 	iAdd(item, { div: dOuter, dLabel: dLabel, dImg: x });
 
 	return dOuter;

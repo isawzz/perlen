@@ -1,3 +1,75 @@
+//newest
+function handleDrop(e) {
+	e.preventDefault();
+	e.stopPropagation();
+	var dt = e.dataTransfer;
+	var files = dt.files;
+
+	if (files.length) { handleFiles(files); }
+	else {
+		var html = dt.getData('text/html');
+		let match = html && /\bsrc="?([^"\s]+)"?\s*/.exec(html);
+		let url = match && match[1];
+		if (url) { uploadImageFromURL(url); return; }
+	}
+
+	function uploadImageFromURL(url) {
+		var img = NEWLY_CREATED_IMAGE = new Image;
+		var c = mBy('canvas1');
+		img.onload = () => {
+			cropImageCorrectly(img);
+
+
+			// c.toBlob(function (blob) {        // get content as PNG blob
+
+			// 	// call our main function
+			// 	handleFiles([blob]);
+
+			// }, "image/png");
+		};
+		img.onerror = function () { alert("Error in uploading"); }
+		img.crossOrigin = "";              // if from different origin
+		img.src = url; //"http://upload.wikimedia.org/wikipedia/commons/thumb/4/47/PNG_transparency_demonstration_1.png/280px-PNG_transparency_demonstration_1.png";
+
+		// let clone = img.cloneNode();
+		// let sz = 64;
+		// let d = mDiv(dTable, { rounding: '50%', w: sz, h: sz, display: 'inline', bg: 'red', padding: 10 });
+		// mAppend(d, clone);
+		// mAppend(d,clone);
+
+		let html = `
+		<div style='display:inline;width:64px;height:64px;fz:12px;text-align:center;'>
+		<div class="image-cropper img2">
+			<img src="${url}" width=64 height=64 style='border-radius:50%' />
+		</div>
+		Mozart
+		</div>
+	`;
+
+	let elem = createElementFromHTML(html);
+	let perle = {
+		Name: name,
+		path: name,
+		Update: formatDate(),
+		Created: formatDate(),
+		"Fe Tags": '',
+		"Wala Tags": '',
+		"Ma Tags": ''
+	};
+	Perlen.push(perle);
+	iAdd(perle,{div:elem});
+
+		elem.onmouseenter = (ev) => { if (ev.ctrlKey) mMagnify(elem, 'mozart'); }
+		elem.onmouseleave = () => mCancelMagnify();
+		// add to dd pool!
+		elem.onmousedown = (ev) => ddStart(ev, perle, false, true);
+		mAppend(dTable, elem);
+		// setTimeout(() => createPerle(perle, dTable, 64, 1.3, .4, true), 1000);
+	
+	}
+}
+
+//____________
 
 var dropRegion;// = document.getElementById("drop-region");// where files are dropped + file selector is opened
 var imagePreviewRegion;// = document.getElementById("image-preview");	// where images are previewed

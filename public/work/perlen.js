@@ -53,6 +53,44 @@ class GPerlen {
 
 }
 
+//#region key handlers, mouse enter exit perle handlerrs
+function onEnterPerle(perle) {
+	if (IsControlKeyDown){
+		iMagnify(perle);
+	}
+}
+function onExitPerle(){if (IsControlKeyDown) iMagnifyCancel();}
+function keyUpHandler(ev) {
+	if (IsControlKeyDown && ev.key == 'Control') {
+		IsControlKeyDown = false;
+		iMagnifyCancel();
+	}
+}
+function keyDownHandler(ev) {
+
+	if (!IsControlKeyDown && ev.key == 'Control') {
+		IsControlKeyDown = true;
+		let elements = document.querySelectorAll( ":hover" );
+		//console.log('elements under mouse',elements);
+		for(const el of elements){
+			let id=el.id;
+			if (isdef(id) && isdef(Items[id]) && Items[id].type=='perle') iMagnify(Items[id]);
+
+		}
+		//check if perle is under mouse!
+	}
+}
+
+
+
+
+
+
+
+
+
+
+
 //#region fitText code 
 function simpleFit(text,wmax,hmax,fz){
 	let sz={h:10000};

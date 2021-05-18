@@ -9,9 +9,10 @@ function initGame(username, io) {
 	setSubtitle('logged in as ma');
 
 	let bg=randomColor(); 
-	bg = 'rgb(192,96,6)';
+	//bg = 'rgb(192,96,6)';
+	BaseColor = bg;	HeaderColor = colorDarker(BaseColor);
 	setBackgroundColor(bg); mStyleX(document.body, { opacity: 1 });
-	mStyleX(dHeader, { bg: colorDarker(bg) });
+	mStyleX(dHeader, { bg: HeaderColor });
 	mStyleX(dSubtitle, { fg: colorLighter(bg) });
 	initTable(null,2); initSidebar(); initAux(); initScore();
 
