@@ -13,7 +13,7 @@ class GPerlen {
 
 	}
 	activateDD() {
-		enableDD(this.perlenItems, this.board.fields.filter(x=>x.row>0&&x.col>0), this.onDropPerle.bind(this), false);
+		enableDD(this.perlenItems, this.board.fields.filter(x => x.row > 0 && x.col > 0), this.onDropPerle.bind(this), false);
 	}
 	clone(perle) {
 		let clone = {};
@@ -55,29 +55,32 @@ class GPerlen {
 
 //#region key handlers, mouse enter exit perle handlerrs
 function onEnterPerle(perle) {
-	if (IsControlKeyDown){
+	if (IsControlKeyDown) {
 		iMagnify(perle);
 	}
 }
-function onExitPerle(){if (IsControlKeyDown) iMagnifyCancel();}
+function onExitPerle() { if (IsControlKeyDown) iMagnifyCancel(); }
 function keyUpHandler(ev) {
-	if (IsControlKeyDown && ev.key == 'Control') {
+	if (ev.key == 'Control') {
 		IsControlKeyDown = false;
 		iMagnifyCancel();
 	}
 }
 function keyDownHandler(ev) {
 
-	if (!IsControlKeyDown && ev.key == 'Control') {
+	if (IsControlKeyDown && MAGNIFIER_IMAGE) return;
+	if (!MAGNIFIER_IMAGE && ev.key == 'Control') {
 		IsControlKeyDown = true;
-		let elements = document.querySelectorAll( ":hover" );
+		let elements = document.querySelectorAll(":hover");
 		//console.log('elements under mouse',elements);
-		for(const el of elements){
-			let id=el.id;
-			if (isdef(id) && isdef(Items[id]) && Items[id].type=='perle') iMagnify(Items[id]);
+		//check if perle is under mouse!
+		for (const el of elements) {
+			let id = el.id;
+			if (isdef(id) && isdef(Items[id]) && Items[id].type == 'perle') {
+				iMagnify(Items[id]); return;
+			}
 
 		}
-		//check if perle is under mouse!
 	}
 }
 
@@ -92,13 +95,13 @@ function keyDownHandler(ev) {
 
 
 //#region fitText code 
-function simpleFit(text,wmax,hmax,fz){
-	let sz={h:10000};
-	while(sz.h>hmax && fz>8){
-		sz=getSizeWithStyles(text,{w:wmax,fz:fz});
-		fz-=1;
+function simpleFit(text, wmax, hmax, fz) {
+	let sz = { h: 10000 };
+	while (sz.h > hmax && fz > 8) {
+		sz = getSizeWithStyles(text, { w: wmax, fz: fz });
+		fz -= 1;
 	}
-	sz.fz=fz;
+	sz.fz = fz;
 	return sz; //returns {w,h,fz}
 }
 
