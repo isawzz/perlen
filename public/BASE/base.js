@@ -108,6 +108,15 @@ function mImg(path, dParent, styles, classes) {
 	//<img src="kiwi.svg" alt="Kiwi standing on oval"></img>
 }
 function mInner(html, dParent, styles) { dParent.innerHTML = html; if (isdef(styles)) mStyleX(dParent, styles); }
+function mInput(label, value, dParent, styles, id) {
+	let inp = createElementFromHTML(`<input type="text" class="input" value="${value}" />`);
+	let labelui = createElementFromHTML(`<label>${label}</label>`);
+	mAppend(dParent, labelui);
+	mAppend(labelui, inp);
+	if (isdef(styles)) mStyleX(labelui, styles);
+	if (isdef(id)) inp.id=id;
+	return inp;
+}
 function mInsert(dParent, el, index = 0) { dParent.insertBefore(el, dParent.childNodes[index]); }
 function mInsertAfter(dParent, el, index = 0) { dParent.insertAfter(el, dParent.childNodes[index]); }
 function mLinebreakNew(d, gap) { mGap(d, gap); }
@@ -320,6 +329,25 @@ function mText(text, dParent, styles, classes) {
 	let d = mDiv(dParent);
 	if (!isEmpty(text)) d.innerHTML = text;
 	if (isdef(styles)) mStyleX(d, styles);
+	if (isdef(classes)) mClass(d, classes);
+	return d;
+}
+function mTextFit(text, { wmax, hmax }, dParent, styles, classes) {
+	//mTextFit(label,maxchars,maxlines, d, textStyles, ['truncate']);
+	let d = mDiv(dParent);
+	if (!isEmpty(text)) d.innerHTML = text;
+
+	//console.log('_______',wmax,hmax)
+	if (nundef(styles) && (isdef(wmax) || isdef(hmax))) {
+		styles = {};
+	}
+	if (isdef(wmax)) styles.width = wmax;
+	if (isdef(hmax)) styles.height = hmax;
+
+	//console.log('_',text,styles)
+
+	if (isdef(styles)) mStyleX(d, styles);
+
 	if (isdef(classes)) mClass(d, classes);
 	return d;
 }
@@ -2912,7 +2940,8 @@ function purge(elem) {
 		}
 	}
 	elem.remove(); //elem.parentNode.removeChild(elem);
-} function show(elem, isInline = false) {
+} 
+function show(elem, isInline = false) {
 	if (isString(elem)) elem = document.getElementById(elem);
 	if (isSvg(elem)) {
 		elem.setAttribute('style', 'visibility:visible');

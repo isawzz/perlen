@@ -1,3 +1,4 @@
+
 //#region syms item + div + dPic + dLabel
 function addLabels(items, lang = 'E', luc = 'c') {
 	for (const item of items) {
@@ -177,13 +178,62 @@ function modifyColorkey(item) {
 	applyColorkey(item);
 }
 function makeItemDivs(items, options) { for (let i = 0; i < items.length; i++) { makeItemDiv(items[i], options) } }
-function makeItemHintable(item){
-	let d=iDiv(item);
-	let dov=mDiv100(d);
+function makeItemHintable(item) {
+	let d = iDiv(item);
+	let dov = mDiv100(d);
 	let rect = getRect(d);
-	mStyleX(dov,{position:'absolute',w:rect.w,h:rect.h})
-	iAdd(item,{overlay:dov});
+	mStyleX(dov, { position: 'absolute', w: rect.w, h: rect.h })
+	iAdd(item, { overlay: dov });
 	dov.style.userSelect = 'none';
+}
+function makePerleDiv(item, outerStyles, imgStyles, labelStyles, labelPos = null, magnify = true, handler = null, useNewImage = false) {
+	//labelPos null,'top','bottom'
+
+	let defOuterStyles = {
+		display: 'inline-flex', 'flex-direction': 'column',
+		'justify-content': 'center', 'align-items': 'center', 'vertical-align': 'top',
+		padding: 0, box: true
+	};
+	addKeys(defOuterStyles, outerStyles);
+
+	let dOuter = mCreate('div', outerStyles);
+
+	if (labelPos && nundef(item.label)) {
+		item.label = item.Name;
+	}
+
+	let dLabel;
+	let [w, h, fz] = [labelStyles.wmax, labelStyles.hmax, labelStyles.fz];
+	let sz = simpleFit(item.label, w, h, fz);
+	//console.log(sz);
+	labelStyles = sz; //dLabel
+	dLabel = mTextFit(item.label, { wmax: w, hmax: h }, null, labelStyles);//,['truncate']);
+
+	if (labelPos[0] == 't') dLabel = mText(item.label, dOuter, labelStyles);
+	// if (labelPos[0] == 't') { mAppend(dOuter,dLabel); }// = mText(item.label, dOuter, labelStyles); }
+
+	let x;
+	if (useNewImage) {
+		console.log('hhhhhhhhhhhhhhhhhhhh')
+		x = mAppend(dOuter, NEWLY_CREATED_IMAGE);
+		mStyleX(x, imgStyles);
+	} else {
+		x = mImg(item.path, dOuter, imgStyles);
+	}
+	if (magnify) {
+		x.onmouseenter = (ev) => { if (ev.ctrlKey) mMagnify(x, item.path); }
+		x.onmouseleave = () => mCancelMagnify(x, item.path);
+	}
+
+	if (labelPos[0] == 'b') dLabel = mText(item.label, dOuter, labelStyles);
+	// if (labelPos[0] == 'b') { mAppend(dOuter,dLabel); }//{ dLabel = mText(item.label, dOuter, labelStyles); }
+
+	if (isdef(handler)) dOuter.onclick = ev => handler(ev, item);
+
+	iAdd(item, { div: dOuter, dLabel: dLabel, dImg: x });
+
+	return dOuter;
+
 }
 function makeItemDiv(item, options) {
 
@@ -233,12 +283,12 @@ function newItemSelection(item, items, onSelectSelected = null) {
 	else if (onSelectSelected && selectedItem) { onSelectSelected(item); }
 	toggleItemSelection(item);
 }
-function modLabel(item,newLabel,styles){
+function modLabel(item, newLabel, styles) {
 	//assumes that this item already has a label!
 	let dLabel = iLabel(item);
 	//console.log(dLabel,newLabel,styles)
-	dLabel.innerHTML=newLabel;
-	mStyleX(dLabel,styles);
+	dLabel.innerHTML = newLabel;
+	mStyleX(dLabel, styles);
 	item.label = newLabel;
 	return dLabel;
 }

@@ -1317,16 +1317,25 @@ p{
 	text-align: center;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
 /* #endregion chat */
+
+.image-cropper {
+  width: 64px;
+  height: 64px;
+  position: relative;
+  overflow: hidden;
+  border-radius: 50%;
+}
+.img2 {
+  display: inline;
+  margin: 0 auto;
+}
+.img1 {
+  display: inline;
+  margin: 0 auto;
+	transform: scale(.3);
+	width: 200px;
+	height: 200px;
+  /* height: 100%; */
+  /* width: auto; */
+}

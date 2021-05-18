@@ -13,7 +13,7 @@ function initGame(username, io) {
 	setBackgroundColor(bg); mStyleX(document.body, { opacity: 1 });
 	mStyleX(dHeader, { bg: colorDarker(bg) });
 	mStyleX(dSubtitle, { fg: colorLighter(bg) });
-	initTable(); initSidebar(); initAux(); initScore();
+	initTable(null,2); initSidebar(); initAux(); initScore();
 
 	waitUntilPerlen();
 

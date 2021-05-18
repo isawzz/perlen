@@ -19,12 +19,11 @@ app.use(express.static(path.join(__dirname, 'public'))); //Serve public director
 app.get('/', (req, res) => { res.sendFile(path.join(__dirname, +'public/index.html')); }); //chrome does this by default!
 
 app.post('/imageUpload', function (req, res) {
-	console.log('haaaaaaaaaaaaaaaaaaaaaaaa');
 	var form = new formidable.IncomingForm();
 	form.parse(req, function (err, fields, files) {
 		//console.log('files', files);
 		var oldpath = files.image.path;
-		var newpath = './public/assets/games/perlen/new/' + lastFilename + '.png';// + files.filetoupload.name;
+		var newpath = './public/assets/games/perlen/perlen/' + lastFilename + '.png';// + files.filetoupload.name;
 		fs.rename(oldpath, newpath, function (err) {
 			if (err) throw err;
 			res.write('File uploaded and moved!');
