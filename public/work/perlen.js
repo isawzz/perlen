@@ -56,6 +56,7 @@ class GPerlen {
 //#region key handlers, mouse enter exit perle handlerrs
 function onEnterPerle(perle) {
 	if (IsControlKeyDown) {
+		//if (MAGNIFIER_IMAGE) iMagnifyCancel();
 		iMagnify(perle);
 	}
 }

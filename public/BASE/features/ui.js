@@ -1,3 +1,4 @@
+const { isdef } = require("../base");
 
 //#region init UI
 function initTable(rect,startingAt=0) {
@@ -79,7 +80,7 @@ function mMagnify(img, item) {
 	if (isdef(MAGNIFIER_IMAGE) && MAGNIFIER_IMAGE.src == path) {
 		console.log('schon offen!!!')
 		return;
-	}
+	}else if (isdef(MAGNIFIER_IMAGE)) mCancelMagnify();
 
 	let imgSize = 514,fontSize=24;
 	let [w,h,fz]=[imgSize,imgSize+fontSize+10,fontSize];
