@@ -12,20 +12,28 @@ function initSocket() {
 	Socket.on('userLeft', handleUserLeft);
 	Socket.on('userMessage',handleUserMessage);
 
-	// Socket.on('gameState', handleGameState);
+	Socket.on('initialPool',handleInitialPool); //skip for now!
+
+	Socket.on('gameState', handleGameState);
+
 	// Socket.on('gameOver', handleGameOver);
 	// Socket.on('gameCode', handleGameCode);
 	// Socket.on('unknownCode', handleUnknownCode);
 	// Socket.on('tooManyPlayers', handleTooManyPlayers);
 }
+
+//#region done!
 function handleUserJoined(data) {
-	if (VerboseSocket) console.log('received userJoined data:',data);
+	logClientReceive('userJoined', data)
+	// if (VerboseSocket) console.log('received userJoined data:',data);
 }
 function handleUserLeft(data) {
-	if (VerboseSocket) console.log('received userLeft data:',data);
+	logClientReceive('userLeft', data)
+	// if (VerboseSocket) console.log('received userLeft data:',data);
 }
 function handleUserMessage(data) {
-	if (VerboseSocket) console.log('received user message:',data);
+	logClientReceive('userMessage', data)
+	// if (VerboseSocket) console.log('received user message:',data);
 }
 
 //sending
@@ -41,10 +49,10 @@ function logClientReceive(type, data) {
 	MessageCounter++;
 	if (VerboseSocket) console.log('#' + MessageCounter, 'receive', type, data)
 }
+//#endregion
 
 
-
-
+//#region old stuff!-----------------------------
 //receiving
 function handleInitialPosition(data) {
 	console.log('initial position:', data);
@@ -109,10 +117,6 @@ const displayMessages = () => {
 
 
 
-function handleGameState(state) {
-	state = JSON.parse(state); console.log(state);
-	//presentState
-}
 
 function handleGameOver(data) {
   if (!gameActive) {
@@ -142,6 +146,6 @@ function handleTooManyPlayers() {
   reset();
   alert('This game is already in progress');
 }
-
+//#endregion
 
 

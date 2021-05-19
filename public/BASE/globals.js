@@ -1,8 +1,8 @@
 //#region server and client
 const PORT = 3333;
 const USERNAME_SELECTION = 'random'; // random | local | nil | gul | ma ...
-JUST_PERLEN_GAME=true;
-
+const JUST_PERLEN_GAME = true;
+const SKIP_INITIAL_SELECT = true;
 var USESOCKETS = true;
 const SERVERURL = 'http://localhost:' + PORT;
 // const SERVERURL = 'https://part4limitless.herokuapp.com/';
@@ -41,6 +41,8 @@ var Socket;
 //#endregion
 
 //#region color constants
+var NiceBaseColors = ['#791900']
+
 var ColorNames; //see base.js colors
 const BLUE = '#4363d8';
 const BLUEGREEN = '#004054';
@@ -243,8 +245,7 @@ const BoyNames = ['Aaron', 'Ariel', 'Billy', 'Cayley', 'Erik',
 if (this && typeof module == "object" && module.exports && this === module.exports) {
 	module.exports = {
 		PORT,
-		DB,
-		G, GC, Perlen, C52,
+		SKIP_INITIAL_SELECT,
 	};
 }
 //#endregion

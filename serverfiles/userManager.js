@@ -14,7 +14,7 @@ module.exports = {
 const utils = require('./utils.js');
 const base = require('../public/BASE/base.js');
 //const perlenGame = require('./perlenGame.js')
-var Verbose = true;
+var Verbose = false;
 var NumConnected = 0;
 var MaxId = 1;
 var io;

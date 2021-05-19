@@ -2907,7 +2907,7 @@ function isEmpty(arr) {
 function isLetter(s) { return /^[a-zA-Z]$/i.test(s); }
 function isList(arr) { return Array.isArray(arr); }
 function isLiteral(x) { return isString(x) || isNumber(x); }
-function isNumber(x) { return x == 0 || x != ' ' && !isNaN(+x); }
+function isNumber(x) { return isdef(x) && (x == 0 || x != ' ' && !isNaN(+x)); }
 function isSingleDigit(s) { return /^[0-9]$/i.test(s); }
 function isString(param) { return typeof param == 'string'; }
 function isSvg(elem) { return startsWith(elem.constructor.name, 'SVG'); }
@@ -2991,7 +2991,7 @@ if (this && typeof module == "object" && module.exports && this === module.expor
 		firstCond, firstCondDictKey, formatDate,
 		isdef, jsCopy,
 		nundef, 
-		range, randomNumber,
+		range, randomNumber, removeInPlace,
 		stringBefore, stringAfter, stringAfterLast,
 
 	};

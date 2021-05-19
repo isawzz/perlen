@@ -6,7 +6,7 @@ function _start() {
 	if (STARTED) { console.log('REENTRACE PROBLEM!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!'); return; }
 	STARTED = true;
 
-	G = new GPerlen(dTable, 30);
+	G = new GPerlen(dTable, 5,2,2);
 	window.onkeydown = keyDownHandler;
 	window.onkeyup = keyUpHandler;
 
@@ -23,19 +23,6 @@ function _start() {
 }
 function canAct() { return true; }
 
-function addItemToField(item, field, dRemoved) {
-	let prev = field.item;
-	if (isdef(prev) && isdef(dRemoved)) {
-		mAppend(dRemoved, iDiv(prev));
-	}
-	let dField = iDiv(field);
-	item.row = field.row;
-	item.col = field.col;
-	item.field = field;
-	field.item = item;
-	mAppend(dField, iDiv(item));
-
-}
 function addItemToBoard(p, board, r, c) {
 	let rows = board.rows;
 	let cols = board.cols;
@@ -52,13 +39,13 @@ function createPerle(perle, dParent, sz = 64, wf = 1.3, hf = 0.4, useNewImage = 
 	mAppend(dParent, d);
 	return d;
 }
-function createPerlenAndFields(dParent, perlenItems) {
+function createPerlenAndFields(dParent, perlenItems,rows,cols) {
 	perlenItems.map(x => x.path = mPath(x));
 	//console.log(perlenItems); console.log(dParent); console.assert(dLineTableMiddle == dParent);
 
 	let dp = mDiv(dParent, { display: 'inline-block' });
 	let d1 = mDiv(dp, { display: 'inline-block' });
-	let rows = 4, cols = 5;
+	// let rows = 4, cols = 5;
 
 	mLinebreak(dParent, 25);
 	for (let i = 0; i < perlenItems.length; i++) {
@@ -74,37 +61,6 @@ function createPerlenAndFields(dParent, perlenItems) {
 	//	let board = new Board2D(5,5,dTable,{w:100,h:100,bg:'white',margin:3}	);
 	return [perlenItems, board];
 }
-function createFields(board, rows, cols, sz = 104) {
-	let fieldItems = [];
-	clearElement(iDiv(board));
-	for (let r = 0; r < rows; r++) {
-		for (let c = 0; c < cols; c++) {
-			let h = r == 0 ? 20 : sz;
-			let w = c == 0 ? 20 : sz;
-			let bg = r == 0 && c == 0 ? 'transparent' : (r == 0 || c == 0) ? '#00000040' : '#ffffff60';
-			let i = r * cols + c;
-			let d1 = iDiv(board);
-			let dItem = mDiv(d1, { display: 'inline-block', h: h, w: w, bg: bg, margin: 2 });
-			mCenterCenterFlex(dItem)
-			let f = { div: dItem, index: i, row: r, col: c };
-			fieldItems.push(f);
-
-			let isColumnRegulator = r == 0 && c != 0;
-			let isRowRegulator = c == 0 && r != 0;
-			if (isColumnRegulator) {
-				dItem.onclick = (ev) => { if (ev.shiftKey) insertGridColumn(board, c); else if (ev.ctrlKey) removeGridColumn(board, c); }
-			} else if (isRowRegulator) {
-				dItem.onclick = (ev) => { if (ev.shiftKey) insertGridRow(board, c); else if (ev.ctrlKey) removeGridRow(board, c); }
-			}
-		}
-	}
-	board.fields = fieldItems;
-	board.rows = rows;
-	board.cols = cols;
-	mStyleX(iDiv(board), { display: 'inline-grid', 'grid-template-columns': `repeat(${cols}, auto)` })
-	return fieldItems;
-}
-
 
 
 
@@ -125,45 +81,6 @@ function perlenTest00() {
 	console.log('name', name);
 	let path = './assets/games/perlen/perlen/alles steigt aus der quelle.png';
 	let x = mImg(path, dTable, { w: 100, h: 100 });
-}
-function collectPerlen(board) {
-	let perlen = [];
-	for (const f of board.fields) {
-		if (isdef(f.item)) perlen.push(f.item);
-	}
-	return perlen;
-}
-function insertGridColumn(board, cBefore) {
-	let perlen = collectPerlen(board);
-	fieldItems = createFields(board, board.rows, board.cols + 1);
-	for (const p of perlen) { addItemToBoard(p, board, p.row, p.col <= cBefore ? p.col : p.col + 1); }
-	G.activateDD();
-}
-function insertGridRow(board, rBefore) {
-	let perlen = collectPerlen(board);
-	let fieldItems = createFields(board, board.rows + 1, board.cols);
-	for (const p of perlen) { addItemToBoard(p, board, p.row <= rBefore ? p.row : p.row + 1, p.col); }
-	G.activateDD();
-}
-function removeGridColumn(board, cBefore) {
-	if (board.cols <= 2) return;
-	let perlen = collectPerlen(board);
-	let fieldItems = createFields(board, board.rows, board.cols - 1);
-	for (const p of perlen) {
-		addItemToBoard(p, board, p.row, p.col <= cBefore ? p.col : p.col - 1);
-		let hasBeenRemoved = nundef(p.field); if (hasBeenRemoved) { mAppend(dTable, iDiv(p)); }
-	}
-	G.activateDD();
-}
-function removeGridRow(board, rBefore) {
-	if (board.rows <= 2) return;
-	let perlen = collectPerlen(board);
-	let fieldItems = createFields(board, board.rows - 1, board.cols);
-	for (const p of perlen) {
-		addItemToBoard(p, board, p.row <= rBefore ? p.row : p.row - 1, p.col);
-		let hasBeenRemoved = nundef(p.field); if (hasBeenRemoved) { mAppend(dTable, iDiv(p)); }
-	}
-	G.activateDD();
 }
 
 

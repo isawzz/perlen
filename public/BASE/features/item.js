@@ -188,6 +188,7 @@ function makeItemHintable(item) {
 }
 function makePerleDiv(item, outerStyles, imgStyles, labelStyles, labelPos = null, magnify = true, handler = null, useNewImage = false) {
 	//labelPos null,'top','bottom'
+	//console.log('MMMMMMMMMMMMMMMMMMMMMMMMMMM',magnify)
 
 	let defOuterStyles = {
 		display: 'inline-flex', 'flex-direction': 'column',
@@ -214,7 +215,7 @@ function makePerleDiv(item, outerStyles, imgStyles, labelStyles, labelPos = null
 
 	let x;
 	if (useNewImage) {
-		console.log('hhhhhhhhhhhhhhhhhhhh')
+		//console.log('hhhhhhhhhhhhhhhhhhhh')
 		x = mAppend(dOuter, NEWLY_CREATED_IMAGE);
 		mStyleX(x, imgStyles);
 	} else {

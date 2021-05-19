@@ -50,7 +50,7 @@ const userman = require('./serverfiles/userManager.js');
 const simple = require('./serverfiles/perlen.js');
 const io = require('socket.io')(http);
 userman.initUserManager(io, DB);
-simple.initPerlenGame(Perlen)
+simple.initPerlenGame(io,Perlen)
 io.on('connection', client => {
 
 	//connection and login: userManager
@@ -60,6 +60,9 @@ io.on('connection', client => {
 	client.on('userMessage', x => userman.handleUserMessage(client, x)); //broadcast user left: userManager
 
 	client.on('startOrJoinPerlen', x=>simple.handleStartOrJoin(client,x));
+	client.on('movePerle', x=>simple.handleMovePerle(client,x));
+	client.on('placePerle', x=>simple.handlePlacePerle(client,x));
+	client.on('relayout', x=>simple.handleRelayout(client,x));
 
 	// //messaging in lobby: userManager
 	// client.on('msg', x => handleMessage(client, x));

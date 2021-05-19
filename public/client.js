@@ -38,7 +38,7 @@ function establishUsername(username) {
 //1. server sends client id => client sends login/username
 function fakeInitSocket() {	ClientId = '12345'; fakeLogin(Username);}
 function handleClientIdSendLogin(data){
-	console.log('handleClientId data received:',data);
+	//console.log('handleClientId data received:',data);
 	ClientId = data.clientId;
 	sendLogin(Username);
 }
@@ -51,7 +51,7 @@ async function fakeLogin(username){
 	enterLobby();
 }
 function handleDB(data) {
-	console.log('handleDB data received:',data);
+	//console.log('handleDB data received:',data);
 	DB = data.DB;
 	setUserData(Username);
 	enterLobby();

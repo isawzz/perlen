@@ -1,11 +1,11 @@
 
 class GPerlen {
-	constructor(dParent, N) {
-
+	constructor(dParent, N=20,rows=4,cols=6) {
+		this.N=N;this.rows=rows,this.cols=cols;
 		let perlenItems = isdef(N) ? choose(Perlen, N) : Perlen;
 		//perlenItems[0] = Perlen[0];
 
-		[this.perlenItems, this.board] = createPerlenAndFields(dParent, perlenItems);
+		[this.perlenItems, this.board] = createPerlenAndFields(dParent, perlenItems,rows,cols);
 
 		//console.log(this.board)
 
@@ -15,6 +15,10 @@ class GPerlen {
 	activateDD() {
 		enableDD(this.perlenItems, this.board.fields.filter(x => x.row > 0 && x.col > 0), this.onDropPerle.bind(this), false);
 	}
+	sendRelayout(){
+		
+	}
+
 	clone(perle) {
 		let clone = {};
 		copyKeys(perle, clone, { live: true, div: true });
