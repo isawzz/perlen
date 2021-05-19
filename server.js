@@ -50,6 +50,7 @@ const userman = require('./serverfiles/userManager.js');
 const simple = require('./serverfiles/perlen.js');
 const io = require('socket.io')(http);
 userman.initUserManager(io, DB);
+simple.initPerlenGame(Perlen)
 io.on('connection', client => {
 
 	//connection and login: userManager

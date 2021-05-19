@@ -2990,8 +2990,8 @@ if (this && typeof module == "object" && module.exports && this === module.expor
 		allNumbers, capitalize, choose, chooseRandom, copyKeys,
 		firstCond, firstCondDictKey, formatDate,
 		isdef, jsCopy,
-		nundef, randomNumber,
-
+		nundef, 
+		range, randomNumber,
 		stringBefore, stringAfter, stringAfterLast,
 
 	};
