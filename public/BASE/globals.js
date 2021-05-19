@@ -1,10 +1,14 @@
 //#region server and client
 const PORT = 3333;
+const NGROK = null; //'http://849aec381695.ngrok.io/'; // MUSS / am ende!!! 
+const HEROKU = null;
+const SERVERURL = NGROK ? NGROK : HEROKU? 'https://part4limitless.herokuapp.com/':'http://localhost:' + PORT + '/';
+
+var USESOCKETS = true;
 const USERNAME_SELECTION = 'random'; // random | local | nil | gul | ma ...
 const JUST_PERLEN_GAME = true;
 const SKIP_INITIAL_SELECT = true;
-var USESOCKETS = true;
-const SERVERURL = 'http://localhost:' + PORT;
+//const SERVERURL = 'http://localhost:' + PORT;
 // const SERVERURL = 'https://part4limitless.herokuapp.com/';
 
 

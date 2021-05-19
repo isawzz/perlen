@@ -1,5 +1,5 @@
 function www(){
-	console.log('dims',G.rows,G.cols,'\nboard',G.boardArr,'\npool',G.poolArr)
+	//console.log('dims',G.rows,G.cols,'\nboard',G.boardArr,'\npool',G.poolArr)
 }
 function simplestPerlenGame() {
 	hide('dMainContent');
@@ -32,6 +32,7 @@ function sendStartOrJoinPerlenGame() {
 	Socket.emit('startOrJoinPerlen', data); 
 	window.onkeydown = keyDownHandler;
 	window.onkeyup = keyUpHandler;
+	mBy('sidebar').ondblclick = createPerlenEditor;
 	G=new SimpleClass();
 }
 //skip next 2 steps!
@@ -42,22 +43,23 @@ function sendInitialPool(){}
 
 function handleGameState(data) {
 	logClientReceive('gameState', data);
+	console.log('data',data)
 	G.presentGameState(data);
 }
 function sendPlacePerle(perle,field){
-	console.log('===> PLACE')
+	//console.log('===> PLACE')
 	let data = {iPerle:perle.index,iField:field.index,username:Username};
 	logClientSend('placePerle',data);
 	Socket.emit('placePerle',data);
 }
 function sendMovePerle(perle,field){
-	console.log('hallo sending move')
+	//console.log('hallo sending move')
 	let data = {iPerle:perle.index,iField:field.index,username:Username};
 	logClientSend('movePerle',data);
 	Socket.emit('movePerle',data);
 }
 function sendRelayout(rows,cols,boardArr,poolArr){
-	console.log('hallo sending relayout');www();
+	//console.log('hallo sending relayout');www();
 	let data = {rows:rows,cols:cols,boardArr:boardArr,poolArr:poolArr,username:Username};
 	logClientSend('relayout',data);
 	Socket.emit('relayout',data);

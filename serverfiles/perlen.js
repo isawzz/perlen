@@ -6,7 +6,7 @@ module.exports = {
 const base = require('../public/BASE/base.js');
 const { SKIP_INITIAL_SELECT } = require('../public/BASE/globals.js');
 
-const N=5; // number of perlen im spiel!!!!
+const N=50; // number of perlen im spiel!!!!
 const ROWS=2;
 const COLS=2;
 var Perlen;

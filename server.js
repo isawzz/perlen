@@ -1,6 +1,7 @@
 //#region prelim
 const express = require('express');
 const app = express();
+const cors = require('cors');
 const http = require('http').Server(app);
 const path = require('path');
 const base = require('./public/BASE/base.js');
@@ -15,9 +16,18 @@ const Perlen = utils.fromYamlFile(path.join(__dirname, 'public/assets/games/perl
 //console.log('perlen',Perlen);
 
 //utils.listFiles(Perlen);
-
+app.all('/*', function(req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "X-Requested-With");
+  next();
+});
 app.use(express.static(path.join(__dirname, 'public'))); //Serve public directory
-app.get('/', (req, res) => { res.sendFile(path.join(__dirname, +'public/index.html')); }); //chrome does this by default!
+app.use(cors());
+app.get('/', (req, res) => { 
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "X-Requested-With");
+	res.sendFile(path.join(__dirname, +'public/index.html')); 
+}); //chrome does this by default!
 
 app.post('/imageUpload', function (req, res) {
 	var form = new formidable.IncomingForm();
@@ -48,7 +58,14 @@ app.post('/imageUpload', function (req, res) {
 
 const userman = require('./serverfiles/userManager.js');
 const simple = require('./serverfiles/perlen.js');
-const io = require('socket.io')(http);
+//const io = require('socket.io')(http);
+
+const io = require('socket.io')(http, {
+	cors: {
+			origins: ['http://localhost:'+PORT]
+	}
+});
+
 userman.initUserManager(io, DB);
 simple.initPerlenGame(io,Perlen)
 io.on('connection', client => {

@@ -12,7 +12,7 @@ class SimpleClass {
 	}
 	presentGameState(data) {
 		clearElement(this.dParent);
-		//console.log('in simple!', data);
+		console.log('in simple!', data.state);
 		copyKeys(data.state, this);
 		console.log('_______ PRESENT:');www();
 
@@ -33,6 +33,8 @@ class SimpleClass {
 
 		showPerlenPool(this.pool, dParent);
 
+		console.log('perlen',allePerlen)
+		console.log('boardArr',this.boardArr)
 		populateBoard(this.board, this.boardArr, allePerlen);
 
 		this.activateDD();
@@ -58,14 +60,14 @@ class SimpleClass {
 		let [boardArr,pRemoved] = perlenToArrays(this.board,perlen);
 	  pRemoved.map(x=>this.poolArr.push(x));
 		this.boardArr = boardArr;
-		console.log('===>RELAYOUT');
-		console.log('boardArr',this.boardArr);
-		console.log('poolArr',this.poolArr);
+		//console.log('===>RELAYOUT');
+		//console.log('boardArr',this.boardArr);
+		//console.log('poolArr',this.poolArr);
 		//console.log('===>RELAYOUT all',this.allePerlenItems.length);
 		let notOnField = this.allePerlenItems.filter(x=>x.field==null);
 		//console.log('===>RELAYOUT pool',notOnField.length);
 		let poolArr2 = notOnField.map(x=>x.index);
-		console.log('poolArr2',poolArr2);
+		//console.log('poolArr2',poolArr2);
 		sendRelayout(this.board.rows,this.board.cols,this.boardArr,this.poolArr);
 
 	}
