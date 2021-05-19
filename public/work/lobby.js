@@ -28,11 +28,11 @@ function initLobby(username) {
 		}
 		const message = { author: username, date: formatDate(new Date()), content: messageInput.value };
 		console.log('sending message', message)
-		sendMsg(message);
+		sendUserMessage(message);
 		messageInput.value = '';//clear input
 	};
 
-	//sendBtn.onclick = sendMsg('hallo hallo hallo');
+	//sendBtn.onclick = sendUserMessage('hallo hallo hallo');
 }
 function autoGameScreen(){
 	

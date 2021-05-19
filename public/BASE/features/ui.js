@@ -107,5 +107,14 @@ function iMagnifyCancel(){mCancelMagnify();}
 
 function setTitle(s) { mBy('hTitle').innerHTML = s; }
 function setSubtitle(s) { mBy('dSubtitle').innerHTML = s; }
+function setNewBackgroundColor(bg) {
+	if (nundef(bg)) bg = randomDarkColor();
+	//bg = 'rgb(192,96,6)';
+	BaseColor = bg; HeaderColor = colorDarker(BaseColor);
+	setBackgroundColor(bg);
+	mStyleX(dHeader, { bg: HeaderColor });
+	mStyleX(dSubtitle, { fg: colorLighter(bg) });
+	localStorage.setItem('BaseColor', BaseColor);
+}
 
 

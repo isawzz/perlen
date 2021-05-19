@@ -1,5 +1,8 @@
 node_modules
 stages
+_stages
+_trash.js
 package-lock.json
-
+z.js
+zTrash.js
 

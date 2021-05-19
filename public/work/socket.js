@@ -1,42 +1,59 @@
+//#region prelim
 const messageTypes = { LEFT: 'left', RIGHT: 'right', LOGIN: 'login' };
 const messages = []; // { author, date, content, type }
+const VerboseSocket = false;
 
 function initSocket() {
 	Socket = io(SERVERURL);
-	Socket.on('init', handleInit);
-	Socket.on('db', handleDB)
-	Socket.on('msg', handleMessage);
+	Socket.on('clientId', handleClientIdSendLogin);
+	Socket.on('db', handleDB);
+
 	Socket.on('userJoined', handleUserJoined);
-	Socket.on('gameState', handleGameState);
+	Socket.on('userLeft', handleUserLeft);
+	Socket.on('userMessage',handleUserMessage);
+
+	// Socket.on('gameState', handleGameState);
+	// Socket.on('gameOver', handleGameOver);
+	// Socket.on('gameCode', handleGameCode);
+	// Socket.on('unknownCode', handleUnknownCode);
+	// Socket.on('tooManyPlayers', handleTooManyPlayers);
 }
+function handleUserJoined(data) {
+	if (VerboseSocket) console.log('received userJoined data:',data);
+}
+function handleUserLeft(data) {
+	if (VerboseSocket) console.log('received userLeft data:',data);
+}
+function handleUserMessage(data) {
+	if (VerboseSocket) console.log('received user message:',data);
+}
+
 //sending
-function sendMsg(data) { sendProcess('msg', data); Socket.emit('msg', { data: data }); }
-function sendLogin(msg) { sendProcess('login', msg); Socket.emit('login', { data: msg }); }
-function sendFilename(msg) { sendProcess('filename', msg); Socket.emit('filename', { msg }); }
+function sendUserMessage(data) { logClientSend('userMessage', data); Socket.emit('userMessage', { data: data }); }
+function sendFilename(msg) { logClientSend('filename', msg); Socket.emit('filename', { msg }); }
+
+//helpers: keeping track of messages!
+function logClientSend(type, data) {
+	MessageCounter++;
+	if (VerboseSocket) console.log('#' + MessageCounter, 'send', type, data)
+}
+function logClientReceive(type, data) {
+	MessageCounter++;
+	if (VerboseSocket) console.log('#' + MessageCounter, 'receive', type, data)
+}
+
+
+
 
 //receiving
-function handleInit(data) {
-	receiveProcess('init', data);
-	//console.log('init from server:', data);
-}
-function handleUserJoined(data){
-	//dieses msg soll haben: username und id, message
-	//console.log('received userJoined data:',data);
-	handleMessage(data.msg);
-
-
+function handleInitialPosition(data) {
+	console.log('initial position:', data);
 }
 //this message arrives after sendLogin: got data, start chatting!
-function handleDB(data) {
-	receiveProcess('DB', data);
-	DB = data.DB;
-	U = data.userdata;
-	//console.log('DB', DB, 'U', U)
-}
 function handleMessage(data) {
 	//console.log('________________ received', data)
-	if (isdef(data.data)) data=data.data;
-	receiveProcess('msg', data);
+	if (isdef(data.data)) data = data.data;
+	logClientReceive('userMessage', data);
 	//data=JSON.parse(data);
 	//console.log('msg from server:', data);
 	//console.log('===>received message', data.author, U.username)
@@ -90,23 +107,41 @@ const displayMessages = () => {
 	messagesList.innerHTML = messagesHTML;
 };
 
+
+
 function handleGameState(state) {
 	state = JSON.parse(state); console.log(state);
 	//presentState
 }
 
-//helpers: keeping track of messages!
-var MessageCounter = 0;
+function handleGameOver(data) {
+  if (!gameActive) {
+    return;
+  }
+  data = JSON.parse(data);
 
-function sendProcess(type, data) {
-	MessageCounter++;
-	//console.log('#' + MessageCounter, 'send', type, data)
-}
-function receiveProcess(type, data) {
-	MessageCounter++;
-	//console.log('#' + MessageCounter, 'receive', type, data)
+  gameActive = false;
+
+  if (data.winner === playerNumber) {
+    alert('You Win!');
+  } else {
+    alert('You Lose :(');
+  }
 }
 
+function handleGameCode(gameCode) {
+  gameCodeDisplay.innerText = gameCode;
+}
+
+function handleUnknownCode() {
+  reset();
+  alert('Unknown Game Code')
+}
+
+function handleTooManyPlayers() {
+  reset();
+  alert('This game is already in progress');
+}
 
 
 

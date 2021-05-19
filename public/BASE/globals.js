@@ -1,18 +1,34 @@
 //#region server and client
 const PORT = 3333;
-var USESOCKETS=true;
-//const SERVERURL = 'http://localhost:'+PORT;
-const SERVERURL = 'https://part4limitless.herokuapp.com/';
-const DEFAULTUSERNAME = 'random'; // random | nil | gul | ma
+const USERNAME_SELECTION = 'random'; // random | local | nil | gul | ma ...
+JUST_PERLEN_GAME=true;
+
+var USESOCKETS = true;
+const SERVERURL = 'http://localhost:' + PORT;
+// const SERVERURL = 'https://part4limitless.herokuapp.com/';
+
+
+
+// --- testing ---
+// var AUTOLOGIN = true;
+
+// *** PRODUCTION ***
+// var AUTOLOGIN = false;
+// var USESOCKETS = true;
+
+
+const CLEAR_LOCAL_STORAGE = false;
 
 var C52, Syms, SymKeys, KeySets, Categories, ByGroupSubgroup, Dictionary, WordP; //, CatSets, SymbolDict, SInfo;
-var DB, U, Live, G, Username;
+var DB, U, Live, G, Username, ClientId;
+var MessageCounter = 0;
+
 var Pictures, Goal, Selected, Score, TO, TOMain, TOTrial, TOList, IsAnswerCorrect, QContextCounter = 0;
 var uiActivated, aiActivated, auxOpen, GameTimer, STOPAUS = false;
 var Settings, SettingsList, SettingsChanged, SelectedMenuKey; //var G, T, P, U, User, ????? , G...Game, T...Table, U...Userdata
 var Daat = {}, DA = {}, Items;
 var Players, PlayerOnTurn, GC, GameCounter;
-var Perlen, BaseColor,HeaderColor,IsControlKeyDown=false;
+var Perlen, BaseColor, HeaderColor, IsControlKeyDown = false;
 
 var BestMinusScore = Infinity, BestMinusState, BestPlusScore = -Infinity, BestPlusState;
 var F_END, F_MOVES, F_APPLYMOVE, F_UNDOMOVE, F_EVAL, DMAX, MAXIMIZER, MINIMIZER, SelectedMove, CANCEL_AI;
@@ -235,8 +251,7 @@ if (this && typeof module == "object" && module.exports && this === module.expor
 
 //#region config
 var START_IN_MENU = false;
-var USE_LOCAL_STORAGE = false; 
-const CLEAR_LOCAL_STORAGE = false;
+var USE_LOCAL_STORAGE = false;
 var USE_ADDONS = false;
 //#endregion
 
