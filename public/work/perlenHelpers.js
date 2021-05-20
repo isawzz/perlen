@@ -6,11 +6,28 @@ function showEmptyPerlenBoard(rows, cols, dParent) {
 	return board;
 }
 
-function showPerlenPool(perlenItems, dParent) {
-	for (let i = 0; i < perlenItems.length; i++) {
-		let ui = createPerle(perlenItems[i], dParent, 64, 1.3, .4);
+function showPerlen(pool,boardArr,poolArr,board,dParent){
+	for (let i = 0; i < poolArr.length; i++) {
+		let ui = createPerle(pool[poolArr[i]], dParent, 64, 1.3, .4);
 	}
-	return perlenItems;
+	for (let i = 0; i < boardArr.length; i++) {
+		let iPerle = boardArr[i];
+		if (iPerle == null) continue;
+		let item = pool[iPerle];
+		let field = board.fields[i];
+		item.row = field.row;
+		item.col = field.col;
+		item.field = field;
+		field.item = item;
+		let ui = createPerle(item, iDiv(field), 64, 1.3, .4);
+	}
+}
+
+function showPerlenPool(pool, poolArr, dParent) {
+	for (let i = 0; i < poolArr.length; i++) {
+		let ui = createPerle(pool[poolArr[i]], dParent, 64, 1.3, .4);
+	}
+	return poolArr;
 }
 
 function populateBoard(board, state, perlenItems) {
@@ -23,7 +40,7 @@ function populateBoard(board, state, perlenItems) {
 		if (isNumber(iPerle)) {
 			let perle = perlenItems[iPerle];
 			let field = board.fields[iField];
-			addItemToField(perle, field, true);
+			addItemToField(perle, field, null);
 		}
 	}
 }
@@ -48,6 +65,7 @@ function addItemToField(item, field, dRemoved) {
 	item.col = field.col;
 	item.field = field;
 	field.item = item;
+	//console.log(item,field,dField,iDiv(item))
 	mAppend(dField, iDiv(item));
 
 }

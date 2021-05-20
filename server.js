@@ -80,7 +80,7 @@ io.on('connection', client => {
 	client.on('movePerle', x=>simple.handleMovePerle(client,x));
 	client.on('placePerle', x=>simple.handlePlacePerle(client,x));
 	client.on('relayout', x=>simple.handleRelayout(client,x));
-
+	client.on('reset',x=>simple.handleReset(client,x))
 	// //messaging in lobby: userManager
 	// client.on('msg', x => handleMessage(client, x));
 

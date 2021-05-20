@@ -2993,7 +2993,7 @@ if (this && typeof module == "object" && module.exports && this === module.expor
 		nundef, 
 		range, randomNumber, removeInPlace,
 		stringBefore, stringAfter, stringAfterLast,
-
+		valf,
 	};
 }
 

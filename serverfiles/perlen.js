@@ -1,29 +1,43 @@
 module.exports = {
 	initPerlenGame,
-	handleStartOrJoin,
-	handleMovePerle, handlePlacePerle,handleRelayout,
+	handleStartOrJoin, handleReset,
+	handleMovePerle, handlePlacePerle, handleRelayout,
 }
 const base = require('../public/BASE/base.js');
 const { SKIP_INITIAL_SELECT } = require('../public/BASE/globals.js');
 
-const N=50; // number of perlen im spiel!!!!
-const ROWS=2;
-const COLS=2;
+var N = 40; // number of perlen im spiel!!!!
+const ROWS = 4;
+const COLS = 6;
 var Perlen;
 var State = {};
 var io;
 var G = {};
-function initPerlenGame(IO, perlen) {
-	io = IO;
-	Perlen = perlen;
-	let rows = ROWS, cols = COLS;
+function initState(x = {}) {
+	let pool = base.jsCopy(Perlen);
+	let [rows, cols] = [base.valf(x.rows, ROWS), base.valf(x.cols, COLS)];
 	let board = new Array(rows * cols);
-	let pool = Perlen;
-	pool = base.choose(Perlen, N);
+	pool = base.choose(Perlen, base.valf(x.N, N));
 	let n = pool.length;
 	console.log('==>there are ', n, 'perlen');
 	for (let i = 0; i < pool.length; i++) { pool[i].index = i };
-	State = { rows: rows, cols: cols, poolArr: base.range(0, n - 1), boardArr: board, pool: pool, players: [] };
+	State = {
+		rows: rows, cols: cols,
+		poolArr: base.range(0, n - 1),
+		boardArr: board,
+		pool: pool,
+		players: [], //unused
+	};
+}
+function initPerlenGame(IO, perlen) {
+	io = IO;
+	Perlen = perlen;
+	initState();
+}
+function handleReset(client, x) {
+	console.log('handleReset', x)
+	initState(x);
+	io.emit('gameState', { state: State, username: x.username });
 }
 function handleStartOrJoin(client, x) {
 	let username = x;
@@ -43,40 +57,79 @@ function handlePlacePerle(client, x) {
 	let iPerle = x.iPerle;
 	let iField = x.iField;
 	let username = x.username;
-	let perle = base.firstCond(Perlen, x => x.index == iPerle);
+	let perle = base.firstCond(State.pool, x => x.index == iPerle);
 
 	//update board state!
 	//das hier ist nur wenn von pool zu board moved!
 	let poolArr = State.poolArr;
 	base.removeInPlace(poolArr, iPerle);
+	if (base.isdef(x.displaced)) {
+		// console.log('DDDDDDDDDDDDDDDDDDIS')
+		poolArr.unshift(x.displaced);
+	}
 	let boardArr = State.boardArr;
 	boardArr[iField] = iPerle;
-
-	io.emit('gameState', { state: { boardArr: State.boardArr, poolArr: State.poolArr }, username: username, msg: 'user ' + username + ' placed ' + perle.Name + ' to field ' + iField });
+	State.poolArr = poolArr;
+	State.boardArr = boardArr;
+	io.emit('gameState',
+		{
+			state: {
+				rows: State.rows,
+				cols: State.cols,
+				boardArr: State.boardArr,
+				poolArr: State.poolArr
+			}, username: username, msg: 'user ' + username + ' placed ' + perle.Name + ' to field ' + iField
+		});
 
 }
 function handleMovePerle(client, x) {
 	let iPerle = x.iPerle;
-	let iField = x.iField;
+	let iFrom = x.iFrom;
+	let iTo = x.iTo;
 	let username = x.username;
-	let perle = base.firstCond(Perlen, x => x.index == iPerle);
+	let perle = base.firstCond(State.pool, x => x.index == iPerle);
 
 	//update board state!
 	let boardArr = State.boardArr;
-	let iPerleOnBoard = base.firstCond(boardArr, x => x == iPerle);
-	boardArr[iPerleOnBoard] = null;
-	boardArr[iField] = iPerle;
+	boardArr[iFrom] = null;
+	boardArr[iTo] = iPerle;
 
-	io.emit('gameState', { state: { boardArr: State.boardArr, poolArr: State.poolArr }, username: username, msg: 'user ' + username + ' moved ' + perle.Name + ' to field ' + iField });
+	State.boardArr = boardArr;
+
+	if (base.isdef(x.displaced)) {
+		// console.log('DDDDDDDDDDDDDDDDDDIS')
+		State.poolArr.unshift(x.displaced);
+	}
+
+
+	io.emit('gameState',
+		{
+			state: {
+				rows: State.rows,
+				cols: State.cols,
+				boardArr: State.boardArr,
+				poolArr: State.poolArr,
+			}, username: username, msg: 'user ' + username + ' placed ' + perle.Name + ' to field ' + iTo
+		});
+
+	// io.emit('gameState', { state: { boardArr: State.boardArr, poolArr: State.poolArr }, username: username, msg: 'user ' + username + ' moved ' + perle.Name + ' to field ' + iField });
 
 }
 function handleRelayout(client, x) {
 	//update board state!
-	State.boardArr=x.boardArr;
+	State.boardArr = x.boardArr;
 	State.poolArr = x.poolArr;
-	State.rows=x.rows;
-	State.cols=x.cols;
-	io.emit('gameState', { state: { boardArr: x.boardArr, poolArr: x.poolArr, rows: x.rows, cols: x.cols,  }, username: x.username, msg: 'user ' + x.username + ' modified board'});
+	State.rows = x.rows;
+	State.cols = x.cols;
+	io.emit('gameState',
+		{
+			state: {
+				boardArr: x.boardArr,
+				poolArr: x.poolArr,
+				rows: x.rows,
+				cols: x.cols,
+			}, username: x.username, msg: 'user ' + x.username + ' modified board'
+		});
 
 }
 
