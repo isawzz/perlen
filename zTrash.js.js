@@ -1,4 +1,64 @@
-class GPerl{
+function www() {
+	//console.log('dims',G.rows,G.cols,'\nboard',G.boardArr,'\npool',G.poolArr)
+}
+function showPerlenPool(pool, poolArr, dParent) {
+	for (let i = 0; i < poolArr.length; i++) {
+		let ui = createPerle(pool[poolArr[i]], dParent, 64, 1.3, .4);
+	}
+	return poolArr;
+}
+
+function populateBoard(board, state, perlenItems) {
+	//console.log('board', board);
+	//wie komm ich jetzt auf die fields?
+	for (let i = 0; i < state.length; i++) {
+		let iPerle = state[i];
+		let iField = i;
+		//console.log('iPerle',iPerle,state)
+		if (isNumber(iPerle)) {
+			let perle = perlenItems[iPerle];
+			let field = board.fields[iField];
+			addItemToField(perle, field, null);
+		}
+	}
+}
+
+class GSimPerl{
+	sendRelayout(perlen) {
+		// was muss ich jetzt senden?
+		//was hat sich veraendert?
+		let [boardArr, pRemoved] = perlenToArrays(this.board, perlen);
+		pRemoved.map(x => this.poolArr.push(x));
+		this.boardArr = boardArr;
+		//console.log('===>RELAYOUT');
+		//console.log('boardArr',this.boardArr);
+		//console.log('poolArr',this.poolArr);
+		//console.log('===>RELAYOUT all',this.allePerlenItems.length);
+		let notOnField = this.allePerlenItems.filter(x => x.field == null);
+		//console.log('===>RELAYOUT pool',notOnField.length);
+		let poolArr2 = notOnField.map(x => x.index);
+		//console.log('poolArr2',poolArr2);
+		sendRelayout(this.board.rows, this.board.cols, this.boardArr, this.poolArr);
+
+	}
+	onDropPerleSimple(source, target) {
+		let displaced = null;
+		if (isdef(target.item)) {
+			let p = target.item;
+			removeItemFromField(p);
+			displaced = p;
+		}
+		if (isdef(source.field)) {
+			let f = source.field;
+			removeItemFromField(source); //sollte nicht mehr brauchen!
+			addItemToField(source, target, null);
+			sendMovePerle(source, f, target, displaced);
+		} else {
+			addItemToField(source, target, null);
+			sendPlacePerle(source, target, displaced);
+		}
+
+	}
 	initialPool(pool) {
 		let perlenItems = this.pool = pool;
 		perlenItems.map(x => x.path = mPath(x));

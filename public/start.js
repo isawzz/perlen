@@ -30,6 +30,20 @@ function addItemToBoard(p, board, r, c) {
 	let field = board.fields[iFromRowCol(r, c, rows, cols)];
 	addItemToField(p, field, dTable);
 }
+function addItemToField(item, field, dRemoved) {
+	let prev = field.item;
+	if (isdef(prev) && isdef(dRemoved)) {
+		mAppend(dRemoved, iDiv(prev));
+	}
+	let dField = iDiv(field);
+	item.row = field.row;
+	item.col = field.col;
+	item.field = field;
+	field.item = item;
+	//console.log(item,field,dField,iDiv(item))
+	mAppend(dField, iDiv(item));
+
+}
 function createPerle(perle, dParent, sz = 64, wf = 1.3, hf = 0.4, useNewImage = false) {
 
 	let d = makePerleDiv(perle,

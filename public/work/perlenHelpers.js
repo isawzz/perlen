@@ -1,73 +1,13 @@
-function showEmptyPerlenBoard(rows, cols, dParent) {
-	let dp = mDiv(dParent, { display: 'inline-block' });
-	let d1 = mDiv(dp, { display: 'inline-block' });
-	let board = { rows: rows, cols: cols, div: d1 };
-	createFields(board, rows, cols);
-	return board;
-}
-
-function showPerlen(pool,boardArr,poolArr,board,dParent){
-	for (let i = 0; i < poolArr.length; i++) {
-		let ui = createPerle(pool[poolArr[i]], dParent, 64, 1.3, .4);
-	}
-	for (let i = 0; i < boardArr.length; i++) {
-		let iPerle = boardArr[i];
-		if (iPerle == null) continue;
-		let item = pool[iPerle];
-		let field = board.fields[i];
-		item.row = field.row;
-		item.col = field.col;
-		item.field = field;
-		field.item = item;
-		let ui = createPerle(item, iDiv(field), 64, 1.3, .4);
-	}
-}
-
-function showPerlenPool(pool, poolArr, dParent) {
-	for (let i = 0; i < poolArr.length; i++) {
-		let ui = createPerle(pool[poolArr[i]], dParent, 64, 1.3, .4);
-	}
-	return poolArr;
-}
-
-function populateBoard(board, state, perlenItems) {
-	//console.log('board', board);
-	//wie komm ich jetzt auf die fields?
-	for (let i = 0; i < state.length; i++) {
-		let iPerle = state[i];
-		let iField = i;
-		//console.log('iPerle',iPerle,state)
-		if (isNumber(iPerle)) {
-			let perle = perlenItems[iPerle];
-			let field = board.fields[iField];
-			addItemToField(perle, field, null);
-		}
-	}
-}
 
 //#region helpers
-function perlenToArrays(b,plist){
-	let [rows,cols]=[b.rows,b.cols];
-	let boardArr=new Array(rows*cols),pRemoved=[];
-	for(const p of plist){
-		if (p.field == null) {pRemoved.push(p.index);delete p.col;delete p.row;}
-		else boardArr[p.row*b.cols+p.col]=p.index;
+function perlenToArrays(b, plist) {
+	let [rows, cols] = [b.rows, b.cols];
+	let boardArr = new Array(rows * cols), pRemoved = [];
+	for (const p of plist) {
+		if (p.field == null) { pRemoved.push(p.index); delete p.col; delete p.row; }
+		else boardArr[p.row * b.cols + p.col] = p.index;
 	}
-	return [boardArr,pRemoved];
-}
-function addItemToField(item, field, dRemoved) {
-	let prev = field.item;
-	if (isdef(prev) && isdef(dRemoved)) {
-		mAppend(dRemoved, iDiv(prev));
-	}
-	let dField = iDiv(field);
-	item.row = field.row;
-	item.col = field.col;
-	item.field = field;
-	field.item = item;
-	//console.log(item,field,dField,iDiv(item))
-	mAppend(dField, iDiv(item));
-
+	return [boardArr, pRemoved];
 }
 function removeItemFromField(item) {
 	let field = item.field;
@@ -77,48 +17,139 @@ function removeItemFromField(item) {
 		iDiv(item).remove;
 	}
 }
-function createFields(board, rows, cols, sz = 104) {
-	let fieldItems = [];
-	clearElement(iDiv(board));
-	for (let r = 0; r < rows; r++) {
-		for (let c = 0; c < cols; c++) {
-			let h = r == 0 ? 20 : sz;
-			let w = c == 0 ? 20 : sz;
-			let bg = r == 0 && c == 0 ? 'transparent' : (r == 0 || c == 0) ? '#00000040' : '#ffffff60';
-			let i = r * cols + c;
-			let d1 = iDiv(board);
-			let dItem = mDiv(d1, { display: 'inline-block', h: h, w: w, bg: bg, margin: 2 });
-			mCenterCenterFlex(dItem)
-			let f = { div: dItem, index: i, row: r, col: c };
-			fieldItems.push(f);
-
-			let isColumnRegulator = r == 0 && c != 0;
-			let isRowRegulator = c == 0 && r != 0;
-			if (isColumnRegulator) {
-				dItem.onclick = (ev) => { if (ev.shiftKey) insertGridColumn(board, c); else if (ev.ctrlKey) removeGridColumn(board, c); }
-			} else if (isRowRegulator) {
-				dItem.onclick = (ev) => { if (ev.shiftKey) insertGridRow(board, r); else if (ev.ctrlKey) removeGridRow(board, r); }
-			}
-		}
-	}
-	board.fields = fieldItems;
-	board.rows = rows;
-	board.cols = cols;
-	mStyleX(iDiv(board), { display: 'inline-grid', 'grid-template-columns': `repeat(${cols}, auto)` })
-	return fieldItems;
-}
 function collectPerlen(board) {
 	let perlen = [];
 	for (const f of board.fields) {
-		if (isdef(f.item)) { perlen.push(f.item); f.item.field = null; }
+		let perle = f.item;
+		if (nundef(perle)) continue;
+		perlen.push(perle); perle.field = perle.row = perle.col = null;
 	}
 	return perlen;
+}
+function reduceBoard(board,rNew,cNew,iInsert){
+	let [boardArrOld, rOld, cOld] = [board.fields.map(x => isdef(x.item) ? x.item.index : null), board.rows, board.cols];
+
+	//logging!
+	let oldState = { boardArr: boardArrOld, poolArr: [], rows: rOld, cols: cOld };
+	console.log('old state:');
+	logState(oldState);
+	let perlen = collectPerlen(board);
+	console.log('perlen', perlen.map(x => x.index));
+
+	fieldItems = createFields(board, board.rows, board.cols + 1);
+	//jetzt muss ich den neuen boardArr machen!
+	let rest=[];
+	let boardArrNew = new Array(rNew * cNew);
+	for (let r = 0; r < rNew; r++) {
+		for (let c = 0; c < cNew; c++) {
+			let i = iFromRowCol(r, c, rNew, cNew);
+			let x=(rOld!=rNew)?r:c;
+			if (x < iInsert) {
+				let iOld = iFromRowCol(r, c, rOld, cOld);
+				boardArrNew[i] = boardArrOld[iOld];
+			}
+			else if (x == iInsert) boardArrNew[i] = null;
+			else {
+				let [ir,ic]=(rOld!=rNew)?[r-1,c]:[r,c-1];
+
+				let iOld = iFromRowCol(ir, ic, rOld, cOld);
+				boardArrNew[i] = boardArrOld[iOld];
+				console.log('TRANFER!!!', boardArrOld[iOld]);
+			}
+		}
+	}
+	sendRelayout(rNew, cNew, boardArrNew, G.poolArr);//this.board.rows, this.board.cols, this.boardArr, this.poolArr);
+}
+function expandBoard(board,rNew,cNew,iInsert){
+	let [boardArrOld, rOld, cOld] = [board.fields.map(x => isdef(x.item) ? x.item.index : null), board.rows, board.cols];
+
+	//logging!
+	let oldState = { boardArr: boardArrOld, poolArr: [], rows: rOld, cols: cOld };
+	console.log('old state:');
+	logState(oldState);
+	let perlen = collectPerlen(board);
+	console.log('perlen', perlen.map(x => x.index));
+
+	fieldItems = createFields(board, board.rows, board.cols + 1);
+	//jetzt muss ich den neuen boardArr machen!
+	let rest=[];
+	let boardArrNew = new Array(rNew * cNew);
+	for (let r = 0; r < rNew; r++) {
+		for (let c = 0; c < cNew; c++) {
+			let i = iFromRowCol(r, c, rNew, cNew);
+			let x=(rOld!=rNew)?r:c;
+			if (x < iInsert) {
+				let iOld = iFromRowCol(r, c, rOld, cOld);
+				boardArrNew[i] = boardArrOld[iOld];
+			}
+			else if (x == iInsert) boardArrNew[i] = null;
+			else {
+				let [ir,ic]=(rOld!=rNew)?[r-1,c]:[r,c-1];
+
+				let iOld = iFromRowCol(ir, ic, rOld, cOld);
+				boardArrNew[i] = boardArrOld[iOld];
+				console.log('TRANFER!!!', boardArrOld[iOld]);
+			}
+		}
+	}
+	sendRelayout(rNew, cNew, boardArrNew, G.poolArr);//this.board.rows, this.board.cols, this.boardArr, this.poolArr);
+}
+function insertColNew(board, cClick) {
+	let iInsert = cClick + 1;
+	console.log('insert col after', cClick)
+	expandBoard(board,board.rows,board.cols+1,iInsert);
+}
+function insertRowNew(board, cClick) {
+	let iInsert = cClick + 1;
+	console.log('insert row after', cClick)
+	expandBoard(board,board.rows+1,board.cols,iInsert);
+}
+
+
+
+
+
+
+function insertColNew1W(board, cClick) {
+	let iInsert = cClick + 1;
+	let [boardArrOld, rOld, cOld] = [board.fields.map(x => isdef(x.item) ? x.item.index : null), board.rows, board.cols];
+	let oldState = { boardArr: boardArrOld, poolArr: [], rows: rOld, cols: cOld };
+	console.log('old state:');
+	logState(oldState);
+
+	console.log('insert col after', cClick)
+	let perlen = collectPerlen(board);
+	console.log('perlen', perlen.map(x => x.index));
+	fieldItems = createFields(board, board.rows, board.cols + 1);
+	//jetzt muss ich den neuen boardArr machen!
+	let [rNew, cNew, rest] = [board.rows, board.cols, []];
+	let boardArrNew = new Array(rNew * cNew);
+	for (let r = 0; r < rNew; r++) {
+		for (let c = 0; c < cNew; c++) {
+			let i = iFromRowCol(r, c, rNew, cNew);
+			if (c < iInsert) {
+				let iOld = iFromRowCol(r, c, rOld, cOld);
+				boardArrNew[i] = boardArrOld[iOld];
+			}
+			else if (c == iInsert) boardArrNew[i] = null;
+			else {
+				let iOld = iFromRowCol(r, c - 1, rOld, cOld);
+				boardArrNew[i] = boardArrOld[iOld];
+				console.log('TRANFER!!!', boardArrOld[iOld]);
+			}
+		}
+	}
+	sendRelayout(rNew, cNew, boardArrNew, G.poolArr);//this.board.rows, this.board.cols, this.boardArr, this.poolArr);
 }
 function insertGridColumn(board, cBefore) {
 	console.log('insert col after', cBefore)
 	let perlen = collectPerlen(board);
+	console.log('perlen', perlen.map(x => x.index));
 	fieldItems = createFields(board, board.rows, board.cols + 1);
-	for (const p of perlen) { addItemToBoard(p, board, p.row, p.col <= cBefore ? p.col : p.col + 1); }
+	for (const p of perlen) {
+
+		addItemToBoard(p, board, p.row, p.col <= cBefore ? p.col : p.col + 1);
+	}
 	G.activateDD();
 	G.sendRelayout(perlen);
 }

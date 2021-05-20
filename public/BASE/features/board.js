@@ -256,8 +256,9 @@ function boardToNode(state) {
 	}
 	return res;
 }
-function printState(state) {
+function printState(state,cols) {
 	//console.log('___________',state)
+	if (nundef(cols)) cols=G.cols;
 	let formattedString = '';
 	state.forEach((cell, index) => {
 		formattedString += isdef(cell) ? ` ${cell == '0' ? ' ' : cell} |` : '   |';
@@ -272,6 +273,18 @@ function printState(state) {
 	});
 	console.log('%c' + formattedString, 'color: #6d4e42;font-size:10px');
 	console.log();
+}
+function toBoardString(arr,rows,cols){
+	let s='\n';
+	for(let r=0;r<rows;r++){
+		for(let c=0;c<cols;c++){
+			let item = arr[r*cols+c];
+
+			s+=''+(nundef(item)?'_':item)+' ';
+		}
+		s+='\n';
+	}
+	return s;
 }
 function bCreateEmpty(rows, cols) { return new Array(rows * cols).fill(null); }
 

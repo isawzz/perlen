@@ -1,6 +1,3 @@
-function www() {
-	//console.log('dims',G.rows,G.cols,'\nboard',G.boardArr,'\npool',G.poolArr)
-}
 function simplestPerlenGame() {
 	hide('dMainContent');
 	show('dGameScreen');
@@ -60,8 +57,9 @@ function sendPlacePerle(perle, field,dis) {
 	Socket.emit('placePerle', data);
 }
 function sendRelayout(rows, cols, boardArr, poolArr) {
-	//console.log('hallo sending relayout');www();
-	let data = { rows: rows, cols: cols, boardArr: boardArr, poolArr: poolArr, username: Username };
+	//console.log('hallo sending relayout');
+	let data = { rows: rows, cols: cols, boardArr: boardArr, username: Username };
+	if (isdef(poolArr)) data.poolArr=poolArr;
 	logClientSend('relayout', data);
 	Socket.emit('relayout', data);
 }
