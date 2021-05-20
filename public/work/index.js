@@ -53,11 +53,11 @@ function cancelNewPerle() {
 	clearElement('dLeiste');
 	createPerlenEditor();
 }
-function cropImageCorrectly(img) {
+function cropImageCorrectly(img,mindCorners=false) {
 	let sz = SZ_UPLOAD_CANVAS;
 	let canvas = mBy('canvas1');
-	let cw, ch, iw, ih, fw, fh, f, padw, padh, padmin = sz * .1;
-	cw = ch = sz; //canvas.width = 200;// img.width;	ch = canvas.height = 200; //img.height;
+	let cw, ch, iw, ih, fw, fh, f, padw, padh, padmin = mindCorners? sz * .1:0;
+	cw = ch = sz; 
 	iw = img.naturalWidth;     // update canvas size to match image
 	ih = img.naturalHeight;
 	fw = cw / iw;

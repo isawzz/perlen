@@ -2,6 +2,24 @@
 //board utilities
 var StateDict = {};
 var EmptyFunc = x => nundef(x) || x == ' ';
+
+function bGetCol(arr, icol, rows, cols) {
+	let iStart = icol;
+	let res = [];
+	for (let i = iStart; i < iStart + (cols * rows); i+=cols) res.push(arr[i]);
+	return res;
+}
+function bGetRow(arr, irow, rows, cols) {
+	let iStart = irow * cols;
+	let arrNew = arr.slice(iStart, iStart + cols);
+
+	let res = [];
+	for (let i = iStart; i < iStart + cols; i++) res.push(arr[i]);
+
+	console.assert(sameList(arrNew, res), 'NOOOOOO');
+	return res;
+}
+
 function bNei(arr, idx, rows, cols, includeDiagonals = true) {
 	let nei = [];
 	//ang tile ist 0,0
@@ -20,7 +38,7 @@ function bNei(arr, idx, rows, cols, includeDiagonals = true) {
 	return nei;
 
 }
-function iFromRowCol(row,col, rows, cols) { return row*cols+col; }
+function iFromRowCol(row, col, rows, cols) { return row * cols + col; }
 function iToRowCol(idx, rows, cols) { let c = idx % cols; let r = (idx - c) / rows; return [r, c]; }
 function bCheck(r, c, rows, cols) { return r >= 0 && r < rows && c >= 0 && c < cols ? r * cols + c : null; }
 function bNeiDir(arr, idx, dir, rows, cols, includeDiagonals = true) {
@@ -256,9 +274,9 @@ function boardToNode(state) {
 	}
 	return res;
 }
-function printState(state,cols) {
+function printState(state, cols) {
 	//console.log('___________',state)
-	if (nundef(cols)) cols=G.cols;
+	if (nundef(cols)) cols = G.cols;
 	let formattedString = '';
 	state.forEach((cell, index) => {
 		formattedString += isdef(cell) ? ` ${cell == '0' ? ' ' : cell} |` : '   |';
@@ -274,15 +292,15 @@ function printState(state,cols) {
 	console.log('%c' + formattedString, 'color: #6d4e42;font-size:10px');
 	console.log();
 }
-function toBoardString(arr,rows,cols){
-	let s='\n';
-	for(let r=0;r<rows;r++){
-		for(let c=0;c<cols;c++){
-			let item = arr[r*cols+c];
+function toBoardString(arr, rows, cols) {
+	let s = '\n';
+	for (let r = 0; r < rows; r++) {
+		for (let c = 0; c < cols; c++) {
+			let item = arr[r * cols + c];
 
-			s+=''+(nundef(item)?'_':item)+' ';
+			s += '' + (nundef(item) ? '_' : item) + ' ';
 		}
-		s+='\n';
+		s += '\n';
 	}
 	return s;
 }
@@ -407,6 +425,23 @@ class Board2D {
 }
 
 
+function boardTestGetRow() {
+	let arr = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11];
+	let [rows, cols] = [6, 2];
+	for (let i = 0; i < rows; i++) {
+		let x = bGetRow(arr, i, rows, cols);
+		console.log('arr', toBoardString(arr, rows, cols), 'row', i, x);
+	}
+}
+
+function boardTestGetCol() {
+	let arr = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11];
+	let [rows, cols] = [3,4];
+	for (let i = 0; i < cols; i++) {
+		let x = bGetCol(arr, i, rows, cols);
+		console.log('arr', toBoardString(arr, rows, cols), 'col', i, x);
+	}
+}
 
 
 

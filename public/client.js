@@ -1,6 +1,9 @@
 onload = start();
 
 async function start() {
+
+	//boardTestGetCol(); return; //boardTestGetRow();	return;
+
 	//body is initially hidden!!!
 	loadAssets('./assets/'); //await loadAssets('./assets/'); //use this when starting in game!
 
@@ -21,9 +24,9 @@ function openLogin() {
 		e.preventDefault();
 		if (!usernameInput.value) { return console.log('Must supply a username'); }
 		let username = usernameInput.value;
-		
+
 		username = username.toLowerCase();
-		
+
 		localStorage.setItem('username', username);
 		establishUsername(username);
 	};
@@ -36,8 +39,8 @@ function establishUsername(username) {
 	if (USESOCKETS) { initSocket(); } else { fakeInitSocket(username); }
 }
 //1. server sends client id => client sends login/username
-function fakeInitSocket() {	ClientId = '12345'; fakeLogin(Username);}
-function handleClientIdSendLogin(data){
+function fakeInitSocket() { ClientId = '12345'; fakeLogin(Username); }
+function handleClientIdSendLogin(data) {
 	//console.log('handleClientId data received:',data);
 	ClientId = data.clientId;
 	sendLogin(Username);
@@ -45,7 +48,7 @@ function handleClientIdSendLogin(data){
 function sendLogin(username) { logClientSend('login', username); Socket.emit('login', { data: username }); }
 
 //2. server sends DB => client sets DB
-async function fakeLogin(username){ 
+async function fakeLogin(username) {
 	DB = await route_path_yaml_dict('./assets/data.yaml');
 	setUserData(username);
 	enterLobby();
@@ -56,12 +59,12 @@ function handleDB(data) {
 	setUserData(Username);
 	enterLobby();
 }
-function setUserData(username){
-	if (nundef(DB.users[username])){
+function setUserData(username) {
+	if (nundef(DB.users[username])) {
 		U = DB.users[username] = jsCopy(DB.users.guest0);
 		U.id = U.name = U.username = Username = username;
 		//neuen user anlegen?nein!
-	}else{
+	} else {
 		U = DB.users[username]; U.name = U.username = Username = U.id;
 	}
 }
@@ -69,9 +72,9 @@ function setUserData(username){
 //eine neue table createn, eine table joinen, ...
 //at this point, got logged in, can proceed to lobby or to game?
 //3. enter lobby
-function enterLobby(){
+function enterLobby() {
 	console.assert(isdef(DB) && isdef(U), 'ENTERLOBBY DB U NOT CORRECT!!!')
-	if (JUST_PERLEN_GAME){
+	if (JUST_PERLEN_GAME) {
 		simplestPerlenGame();
 	}
 }

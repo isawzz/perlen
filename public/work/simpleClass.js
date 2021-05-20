@@ -1,9 +1,9 @@
-var VerboseSimpleClass = true;
+var VerboseSimpleClass = false;
 class SimpleClass {
 	constructor() { this.dParent = dTable; }
 	presentGameState(data) {
 
-		let state = data.state; console.log('___________'); logState(state); copyKeys(state, this); let dParent = this.dParent;
+		let state = data.state; logState(state); copyKeys(state, this); let dParent = this.dParent;
 
 		clearElement(dParent);
 
@@ -81,9 +81,9 @@ function createFields(board, rows, cols, sz = 104) {
 			let isColumnRegulator = r == 0 && c != 0;
 			let isRowRegulator = c == 0 && r != 0;
 			if (isColumnRegulator) {
-				dItem.onclick = (ev) => { if (ev.shiftKey) insertColNew(board, c); else if (ev.ctrlKey) removeGridColumn(board, c); }
+				dItem.onclick = (ev) => { if (ev.shiftKey) insertColNew(board, c); else if (ev.ctrlKey) removeColNew(board, c); }
 			} else if (isRowRegulator) {
-				dItem.onclick = (ev) => { if (ev.shiftKey) insertRowNew(board, r); else if (ev.ctrlKey) removeGridRow(board, r); }
+				dItem.onclick = (ev) => { if (ev.shiftKey) insertRowNew(board, r); else if (ev.ctrlKey) removeRowNew(board, r); }
 			}
 		}
 	}
@@ -93,9 +93,9 @@ function createFields(board, rows, cols, sz = 104) {
 	mStyleX(iDiv(board), { display: 'inline-grid', 'grid-template-columns': `repeat(${cols}, auto)` })
 	return fieldItems;
 }
-
 function logState(state) {
 	if (VerboseSimpleClass) {
+		console.log('___________'); 
 		let [rows, cols, boardArr, poolArr] = [state.rows, state.cols, state.boardArr, state.poolArr];
 		let bar = boardArrReduced(boardArr, rows, cols);
 		let sBoard = toBoardString(bar, rows-1, cols-1);

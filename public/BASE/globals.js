@@ -1,7 +1,7 @@
 //#region server and client
 const PORT = 3333;
 const NGROK = null; //'http://849aec381695.ngrok.io/'; // MUSS / am ende!!! 
-const HEROKU = null;
+const HEROKU = true;
 const SERVERURL = NGROK ? NGROK : HEROKU? 'https://part4limitless.herokuapp.com/':'http://localhost:' + PORT + '/';
 
 var USESOCKETS = true;
