@@ -38,6 +38,9 @@
 
 	<body style="opacity:0">
 		<div id="dHeader" style="background-color: var(--dark-blue); padding-top: 10px">
+			<div id='dButtonsLeft' style="position: absolute; left:0px; padding:10px; display:flex">
+				<div id='dResetButton'  onclick='onClickReset()' class='toolbarButtonClass'>♻️</div>
+			</div>
 			<div id='dTempleLobby' style="display: none; position: absolute; margin: 10px; padding: 20px" onclick='onClickTempleLobby()'>🏛️</div>
 			<div id='dButtonsRight' style="position: absolute; right:0px; padding:10px; display:flex">
 				<div id='dHelpButton'  onclick='show("dHelpWindow");' class='toolbarButtonClass'>🪔</div>

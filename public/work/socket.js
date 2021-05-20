@@ -37,6 +37,7 @@ function handleUserMessage(data) {
 }
 
 //sending
+function sendReset() { logClientSend('reset', Username); Socket.emit('reset', { Username }); }
 function sendUserMessage(data) { logClientSend('userMessage', data); Socket.emit('userMessage', { data: data }); }
 function sendFilename(msg) { logClientSend('filename', msg); Socket.emit('filename', { msg }); }
 

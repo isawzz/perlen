@@ -1,3 +1,9 @@
+
+function onClickReset(){
+	sendReset();
+}
+
+//************* old code **************** */
 function onClickFreezer2(ev) {
 	clearTable(); mRemoveClass(mBy('freezer2'), 'aniSlowlyAppear'); hide('freezer2'); auxOpen = false;
 	startUnit();
