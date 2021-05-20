@@ -5,7 +5,7 @@ const HEROKU = true;
 const SERVERURL = NGROK ? NGROK : HEROKU? 'https://part4limitless.herokuapp.com/':'http://localhost:' + PORT + '/';
 
 var USESOCKETS = true;
-const USERNAME_SELECTION = 'random'; // random | local | nil | gul | ma ...
+const USERNAME_SELECTION = 'local'; // random | local | nil | gul | ma ...
 const JUST_PERLEN_GAME = true;
 const SKIP_INITIAL_SELECT = true;
 //const SERVERURL = 'http://localhost:' + PORT;
