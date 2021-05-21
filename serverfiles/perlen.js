@@ -174,6 +174,14 @@ function handleImage(client, x) {
 		console.log('ERROR:', error);
 	}
 }
+
+var MessageCounter = 0;
+var Verbose = true;
+function log() { if (Verbose) console.log('perlen: ', ...arguments); }
+function logBroadcast(type) { MessageCounter++; log('#' + MessageCounter, 'broadcast ' + type); }
+function logSend(type) { MessageCounter++; log('#' + MessageCounter, 'send ' + type); }
+function logReceive(type) { MessageCounter++; log('#' + MessageCounter, 'receive ' + type); }
+
 function decodeBase64Image(dataString) {
 	var matches = dataString.match(/^data:([A-Za-z-+\/]+);base64,(.+)$/);
 	var response = {};
@@ -187,11 +195,3 @@ function decodeBase64Image(dataString) {
 
 	return response;
 }
-
-
-var MessageCounter = 0;
-var Verbose = true;
-function log() { if (Verbose) console.log('perlen: ', ...arguments); }
-function logBroadcast(type) { MessageCounter++; log('#' + MessageCounter, 'broadcast ' + type); }
-function logSend(type) { MessageCounter++; log('#' + MessageCounter, 'send ' + type); }
-function logReceive(type) { MessageCounter++; log('#' + MessageCounter, 'receive ' + type); }

@@ -10,9 +10,7 @@ const utils = require('./serverfiles/utils.js');
 
 const DB = utils.fromYamlFile(path.join(__dirname, 'data.yaml'));
 const Perlen = utils.fromYamlFile(path.join(__dirname, 'public/assets/games/perlen/perlen.yaml'));
-//console.log('perlen',Perlen);
 
-//utils.listFiles(Perlen);
 app.all('/*', function (req, res, next) {
 	res.header("Access-Control-Allow-Origin", "*");
 	res.header("Access-Control-Allow-Headers", "X-Requested-With");
@@ -26,25 +24,10 @@ app.get('/', (req, res) => {
 	res.sendFile(path.join(__dirname, +'public/index.html'));
 }); //chrome does this by default!
 
-// 		Perlen.push({
-// 			Name: lastFilename,
-// 			path: lastFilename,
-// 			Update: base.formatDate(),
-// 			Created: base.formatDate(),
-// 			"Fe Tags": '',
-// 			"Wala Tags": '',
-// 			"Ma Tags": ''
-// 		});
-// 		utils.toYamlFile(Perlen, path.join(__dirname, 'public/assets/games/perlen/perlen.yaml'));
-// 	});
-// });
-
 //#endregion
 
 const userman = require('./serverfiles/userManager.js');
 const simple = require('./serverfiles/perlen.js');
-//const io = require('socket.io')(http);
-
 const io = require('socket.io')(http, {
 	cors: {
 		origins: ['http://localhost:' + PORT]
@@ -68,20 +51,6 @@ io.on('connection', client => {
 	client.on('reset', x => simple.handleReset(client, x))
 
 	client.on('image',x=>simple.handleImage(client,x));
-	// //messaging in lobby: userManager
-	// client.on('msg', x => handleMessage(client, x));
-
-	// //game creation/joining: userManager
-	// client.on('createGame', x => handleCreateGame(client, x));
-	// client.on('joinGame', x => handleJoinGame(client, x));
-
-	// //game play: das jeweilige game!
-	// client.on('gameState', x => handleGameStateUpdate(client, x));
-	// client.on('gameState', x => handleGameStateRequest(client, x));
-	// client.on('move', x => handleMove(client, x));
-
-	//file IO (eg., save new perle)
-	client.on('filename', x => { lastFilename = x.msg; });
 
 });
 

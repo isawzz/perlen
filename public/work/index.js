@@ -1,7 +1,4 @@
-
-//var dropRegion;// = document.getElementById("drop-region");// where files are dropped + file selector is opened
 var imagePreviewRegion;// = document.getElementById("image-preview");	// where images are previewed
-//var fakeInput, inputPerlenName;
 
 function closeLeiste() {
 	//ev.stopPropagation();
