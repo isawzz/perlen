@@ -1,9 +1,7 @@
 
-var dropRegion;// = document.getElementById("drop-region");// where files are dropped + file selector is opened
+//var dropRegion;// = document.getElementById("drop-region");// where files are dropped + file selector is opened
 var imagePreviewRegion;// = document.getElementById("image-preview");	// where images are previewed
-var fakeInput, inputPerlenName;
-var urlNewImage;
-var SZ_UPLOAD_CANVAS = 200;
+//var fakeInput, inputPerlenName;
 
 function closeLeiste() {
 	//ev.stopPropagation();
@@ -18,18 +16,18 @@ function closeLeiste() {
 	// setTimeout(() => mBy('sidebar').ondblclick = createPerlenEditor, 1000);
 	//mBy('sidebar').onclick = openLeiste;
 }
-function createPerlenEditor() {
+function createPerlenEditor1W() {
 	let sz = SZ_UPLOAD_CANVAS;
 	//show('dLeiste')
 	let d = mBy('dLeiste');
 	//clearElement(d);
 	mText('drop image:', d, { w: sz, align: 'left' });
 	imagePreviewRegion = mDiv(d, { w: sz, h: sz, bg: '#ffffff80' }, 'image-preview');
-	fakeInput = document.createElement("input");
+	let fakeInput = document.createElement("input");
 	fakeInput.type = "file";
 	fakeInput.accept = "image/*";
 	fakeInput.multiple = true;
-	dropRegion = imagePreviewRegion;
+	let dropRegion = imagePreviewRegion;
 	dropRegion.onclick = () => fakeInput.click();
 	fakeInput.onchange = () => { var files = fakeInput.files; handleFiles(files); };
 	dropRegion.ondragenter = dropRegion.ondragleave = dropRegion.ondragover = preventDefault;
@@ -38,7 +36,7 @@ function createPerlenEditor() {
 	mAppend(imagePreviewRegion, canvas);
 	canvas.id = 'canvas1';
 	canvas.width = sz; canvas.height = sz;
-	inputPerlenName = mInput('Name:', '', d, { matop: 10, align: 'left' }, 'inputPerlenName');
+	let inputPerlenName = mInput('Name:', '', d, { matop: 10, align: 'left' }, 'inputPerlenName');
 	mStyleX(inputPerlenName, { w: sz, border: 'none' });
 	let dbuttons = mDiv(d);
 	mButton('save', onClickSavePerle, dbuttons, { w: 80, h: 25 }, ['buttonClass']);
@@ -46,18 +44,14 @@ function createPerlenEditor() {
 	mButton('close', () => closeLeiste(), d, { position: 'absolute', w: 200, h: 25, bottom: 5 }, ['buttonClass']);
 }
 function cancelNewPerle() {
-	// //hier muss man dann die neue perle zu dem pool dazugeben!
-	// mBy('canvas1').getContext("2d").clearRect(0,0,SZ_UPLOAD_CANVAS,SZ_UPLOAD_CANVAS);
-	// inputPerlenName.value='';
-	// console.log('perle wird addiert',inputPerlenName.value);
-	clearElement('dLeiste');
+	clearElement(mBy('dLeiste'));
 	createPerlenEditor();
 }
-function cropImageCorrectly(img,mindCorners=false) {
+function cropImageCorrectly(img, mindCorners = false) {
 	let sz = SZ_UPLOAD_CANVAS;
 	let canvas = mBy('canvas1');
-	let cw, ch, iw, ih, fw, fh, f, padw, padh, padmin = mindCorners? sz * .1:0;
-	cw = ch = sz; 
+	let cw, ch, iw, ih, fw, fh, f, padw, padh, padmin = mindCorners ? sz * .1 : 0;
+	cw = ch = sz;
 	iw = img.naturalWidth;     // update canvas size to match image
 	ih = img.naturalHeight;
 	fw = cw / iw;
@@ -113,7 +107,7 @@ function drawColoredCircle(canvas, sz, color, stroke = 'black') {
 function getBackgroundColor(img, ctx) {
 	ctx.drawImage(img, 0, 0);
 	var p = ctx.getImageData(1, 1, 1, 1).data;
-	console.log('p', p)
+	//console.log('p', p)
 	let rgb = `rgb(${p[0]},${p[1]},${p[2]})`;
 	let color = anyColorToStandardString(rgb);
 	return color;
@@ -124,17 +118,20 @@ function getCanvasPixelColor(c, x, y) {
 	var hex = "#" + ("000000" + rgbToHex(p[0], p[1], p[2])).slice(-6);
 	console.log('pixel', coord, 'has color', hex);
 }
-function handleDrop(e) {
+function handleDrop1W(e) {
 	e.preventDefault();
 	e.stopPropagation();
 	var dt = e.dataTransfer;
 	var files = dt.files;
+	console.log('dt', dt)
+	console.log('files', files)
 
 	if (files.length) { handleFiles(files); }
 	else {
 		var html = dt.getData('text/html');
 		let match = html && /\bsrc="?([^"\s]+)"?\s*/.exec(html);
 		let url = match && match[1];
+		console.log('html', html, '\nmatch', match, '\nurl', url);
 		if (url) { uploadImageFromURL(url); return; }
 	}
 
@@ -151,11 +148,11 @@ function handleDrop(e) {
 	}
 }
 
-function addPerleToGame(url,name){
+function addPerleToGame(url, name) {
 
-		// let clone = img.cloneNode();		// let sz = 64;		// let d = mDiv(dTable, { rounding: '50%', w: sz, h: sz, display: 'inline', bg: 'red', padding: 10 });		// mAppend(d,clone);
+	// let clone = img.cloneNode();		// let sz = 64;		// let d = mDiv(dTable, { rounding: '50%', w: sz, h: sz, display: 'inline', bg: 'red', padding: 10 });		// mAppend(d,clone);
 
-		let html = `
+	let html = `
 		<div style='display:inline;width:64px;height:93px;font-size:10px;text-align:center;'>
 			<div class="image-cropper img2">
 				<img src="${urlNewImage}" width=64 height=64 style='border-radius:50%' />
@@ -164,43 +161,55 @@ function addPerleToGame(url,name){
 		</div>
 		`;
 
-		let elem = createElementFromHTML(html);
-		let perle = {
-			Name: name,
-			path: name,
-			Update: formatDate(),
-			Created: formatDate(),
-			"Fe Tags": '',
-			"Wala Tags": '',
-			"Ma Tags": ''
-		};
-		Perlen.push(perle);
+	let elem = createElementFromHTML(html);
+	let perle = {
+		Name: name,
+		path: name,
+		Update: formatDate(),
+		Created: formatDate(),
+		"Fe Tags": '',
+		"Wala Tags": '',
+		"Ma Tags": ''
+	};
+	Perlen.push(perle);
 
-		perle.type = 'perle';	elem.id = iRegister(perle);
-		iAdd(perle, { div: elem });
+	perle.type = 'perle'; elem.id = iRegister(perle);
+	iAdd(perle, { div: elem });
 
-		elem.onmouseenter = ev=>onEnterPerle(perle,ev); // (ev) => { if (ev.ctrlKey) mMagnify(x, item); }
-		elem.onmouseleave = ev=>onExitPerle(perle,ev); //() => mCancelMagnify(x, item.path);
+	elem.onmouseenter = ev => onEnterPerle(perle, ev); // (ev) => { if (ev.ctrlKey) mMagnify(x, item); }
+	elem.onmouseleave = ev => onExitPerle(perle, ev); //() => mCancelMagnify(x, item.path);
 
-		// elem.onmouseenter = (ev) => { if (ev.ctrlKey) mMagnify(elem, perle); }
-		// elem.onmouseleave = () => mCancelMagnify();
-		// add to dd pool!
-		elem.onmousedown = (ev) => ddStart(ev, perle, false, true);
-		mAppend(dTable, elem);
-		// setTimeout(() => createPerle(perle, dTable, 64, 1.3, .4, true), 1000);
+	// elem.onmouseenter = (ev) => { if (ev.ctrlKey) mMagnify(elem, perle); }
+	// elem.onmouseleave = () => mCancelMagnify();
+	// add to dd pool!
+	elem.onmousedown = (ev) => ddStart(ev, perle, false, true);
+	mAppend(dTable, elem);
+	// setTimeout(() => createPerle(perle, dTable, 64, 1.3, .4, true), 1000);
 
 
 
 }
-function onClickSavePerle() {
+function onClickSavePerle1W() {
 
-	let name = inputPerlenName.value;
+	let name = mBy('inputPerlenName').value;
 	let c = mBy('canvas1');
 	if (!isEmpty(name)) {
 		c.toBlob(function (blob) { handleFiles([blob], name); }, "image/png");
-		addPerleToGame(urlNewImage,name);
+		//addPerleToGame(urlNewImage,name);
 	}
 
+}
+function uploadImageFromURL(url) {
+	console.log('...loading image from ', url);
+	var img = NEWLY_CREATED_IMAGE = new Image;
+	var c = mBy('canvas1');
+	img.onload = () => {
+		cropImageCorrectly(img);
+	};
+	img.onerror = function () { alert("Error in uploading"); }
+	img.crossOrigin = "Anonymous";              // if from different origin
+	img.src = url; //"http://upload.wikimedia.org/wikipedia/commons/thumb/4/47/PNG_transparency_demonstration_1.png/280px-PNG_transparency_demonstration_1.png";
+	urlNewImage = url;
 }
 
 function handleFiles(files, name) {

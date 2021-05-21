@@ -37,20 +37,6 @@ class SimpleClass {
 
 	}
 }
-function addPerle(item, field) {
-	let prev = field.item;
-	if (isdef(prev) && isdef(dRemoved)) {
-		mAppend(dRemoved, iDiv(prev));
-	}
-	let dField = iDiv(field);
-	item.row = field.row;
-	item.col = field.col;
-	item.field = field;
-	field.item = item;
-	//console.log(item,field,dField,iDiv(item))
-	mAppend(dField, iDiv(item));
-
-}
 function boardArrReduced(boardArr, rows, cols) {
 	let res = [];
 	for (let r = 1; r < rows; r++) {
@@ -92,6 +78,14 @@ function createFields(board, rows, cols, sz = 104) {
 	board.cols = cols;
 	mStyleX(iDiv(board), { display: 'inline-grid', 'grid-template-columns': `repeat(${cols}, auto)` })
 	return fieldItems;
+}
+function createPerle(perle, dParent, sz = 64, wf = 1.3, hf = 0.4, useNewImage = false) {
+	let d = makePerleDiv(perle,
+		{ wmin: sz + 4, h: sz * (1 + hf) + 4 },
+		{ w: sz, h: sz }, { wmax: sz * wf, hmax: sz * hf, fz: sz / 6 },
+		'b', true, null, useNewImage);
+	mAppend(dParent, d);
+	return d;
 }
 function logState(state) {
 	if (VerboseSimpleClass) {

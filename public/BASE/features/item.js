@@ -214,8 +214,10 @@ function makePerleDiv(item, outerStyles, imgStyles, labelStyles, labelPos = null
 	// if (labelPos[0] == 't') { mAppend(dOuter,dLabel); }// = mText(item.label, dOuter, labelStyles); }
 
 	let x;
+	imgStyles.rounding='50%';
 	if (useNewImage) {
 		//console.log('hhhhhhhhhhhhhhhhhhhh')
+		imgStyles.rounding='50%';
 		x = mAppend(dOuter, NEWLY_CREATED_IMAGE);
 		mStyleX(x, imgStyles);
 	} else {

@@ -44,15 +44,6 @@ function addItemToField(item, field, dRemoved) {
 	mAppend(dField, iDiv(item));
 
 }
-function createPerle(perle, dParent, sz = 64, wf = 1.3, hf = 0.4, useNewImage = false) {
-
-	let d = makePerleDiv(perle,
-		{ wmin: sz + 4, h: sz * (1 + hf) + 4 },
-		{ w: sz, h: sz }, { wmax: sz * wf, hmax: sz * hf, fz: sz / 6 },
-		'b', true, null, useNewImage);
-	mAppend(dParent, d);
-	return d;
-}
 function createPerlenAndFields(dParent, perlenItems,rows,cols) {
 	perlenItems.map(x => x.path = mPath(x));
 	//console.log(perlenItems); console.log(dParent); console.assert(dLineTableMiddle == dParent);

@@ -9,6 +9,9 @@ function simplestPerlenGame() {
 	mStyleX(document.body, { opacity: 1 });
 	initTable(null, 2); initSidebar(); initAux(); initScore();
 
+	if (PERLEN_EDITOR_OPEN_AT_START) createPerlenEditor();
+
+
 	if (!USESOCKETS) waitUntilPerlen();
 	else { sendStartOrJoinPerlenGame(); }
 

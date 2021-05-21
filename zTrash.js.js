@@ -1,3 +1,17 @@
+function addPerle(item, field) {
+	let prev = field.item;
+	if (isdef(prev) && isdef(dRemoved)) {
+		mAppend(dRemoved, iDiv(prev));
+	}
+	let dField = iDiv(field);
+	item.row = field.row;
+	item.col = field.col;
+	item.field = field;
+	field.item = item;
+	//console.log(item,field,dField,iDiv(item))
+	mAppend(dField, iDiv(item));
+
+}
 function www() {
 	//console.log('dims',G.rows,G.cols,'\nboard',G.boardArr,'\npool',G.poolArr)
 }

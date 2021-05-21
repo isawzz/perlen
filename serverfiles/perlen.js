@@ -1,9 +1,13 @@
 module.exports = {
 	initPerlenGame,
 	handleStartOrJoin, handleReset,
-	handleMovePerle, handlePlacePerle, handleRelayout,
+	handleMovePerle, handlePlacePerle, handleRelayout, handleImage,
 }
 const base = require('../public/BASE/base.js');
+const fs = require('fs');
+const path = require('path');
+const utils = require('./utils.js');
+
 const { SKIP_INITIAL_SELECT } = require('../public/BASE/globals.js');
 
 var N = 50; // number of perlen im spiel!!!!
@@ -132,6 +136,58 @@ function handleRelayout(client, x) {
 		});
 
 }
+function handleImage(client, x) {
+	try {
+		let isTesting = x.filename == 'aaa';
+		let fname;
+		if (isTesting) {
+			fname = path.join(__dirname, x.filename + '.png');
+			console.log('...fake saving file', fname); return;
+		}
+		let filename = x.filename.toLowerCase();
+		fname = path.join(__dirname, '../public/assets/games/perlen/perlen/' + x.filename + '.png')
+		let imgData = decodeBase64Image(x.data);
+		fs.writeFile(fname, imgData.data,
+			function () {
+				console.log('...images saved:', fname);
+			});
+		// add perle!
+		let perle = {
+			Name: filename,
+			path: filename,
+			Update: base.formatDate(),
+			Created: base.formatDate(),
+			"Fe Tags": '',
+			"Wala Tags": '',
+			"Ma Tags": ''
+		};
+		Perlen.push(perle);
+		utils.toYamlFile(Perlen, path.join(__dirname, '../public/assets/games/perlen/perlen.yaml'));		
+		State.pool.push(perle);
+		perle.index=State.pool.length-1;
+		State.poolArr.push(perle.index);
+
+		io.emit('gameState', { state: State, username: x.username });
+
+	}
+	catch (error) {
+		console.log('ERROR:', error);
+	}
+}
+function decodeBase64Image(dataString) {
+	var matches = dataString.match(/^data:([A-Za-z-+\/]+);base64,(.+)$/);
+	var response = {};
+
+	if (matches.length !== 3) {
+		return new Error('Invalid input string');
+	}
+
+	response.type = matches[1];
+	response.data = Buffer.from(matches[2], 'base64');
+
+	return response;
+}
+
 
 var MessageCounter = 0;
 var Verbose = true;

@@ -1,15 +1,29 @@
 //#region server and client
 const PORT = 3333;
-const NGROK = null; //'http://849aec381695.ngrok.io/'; // MUSS / am ende!!! 
-const HEROKU = true;
-const SERVERURL = NGROK ? NGROK : HEROKU? 'https://part4limitless.herokuapp.com/':'http://localhost:' + PORT + '/';
+
+// *** deploy to heroku ***
+// const NGROK = false; //'http://849aec381695.ngrok.io/'; // MUSS / am ende!!! 
+// const HEROKU = true;
+// const USERNAME_SELECTION = 'local'; // random | local | nil | gul | ma ...
+
+//*** testing */:
+const NGROK = false; //'http://849aec381695.ngrok.io/'; // MUSS / am ende!!! 
+const HEROKU = false;
+const USERNAME_SELECTION = 'random'; // random | local | nil | gul | ma ...
+
+// *** deploy to ngrok/localtunnel MAYBE NOT NEEDED!!!!!!!!!!! ***
+// const NGROK = SET; //'http://849aec381695.ngrok.io/'; // MUSS / am ende!!! 
+// const HEROKU = true;
+// const USERNAME_SELECTION = 'local'; // random | local | nil | gul | ma ...
 
 var USESOCKETS = true;
-const USERNAME_SELECTION = 'local'; // random | local | nil | gul | ma ...
 const JUST_PERLEN_GAME = true;
 const SKIP_INITIAL_SELECT = true;
-//const SERVERURL = 'http://localhost:' + PORT;
-// const SERVERURL = 'https://part4limitless.herokuapp.com/';
+const PERLEN_EDITOR_OPEN_AT_START = true;
+
+const SERVERURL = NGROK ? NGROK : HEROKU? 'https://part4limitless.herokuapp.com/':'http://localhost:' + PORT + '/';
+
+
 
 
 
