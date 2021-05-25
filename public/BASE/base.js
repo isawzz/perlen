@@ -576,6 +576,138 @@ function aRotate(d, ms) { return d.animate({ transform: `rotate(360deg)` }, ms);
 function aRotateAccel(d, ms) { return d.animate({ transform: `rotate(1200deg)` }, { easing: 'cubic-bezier(.72, 0, 1, 1)', duration: ms }); }
 //#endregion
 
+//#region _SVG/g shapes
+const SHAPEFUNCS = {
+	'circle': agCircle,
+	'hex': agHex,
+	'rect': agRect,
+}
+function agColoredShape(g, shape, w, h, color) {
+	//console.log(shape)
+	SHAPEFUNCS[shape](g, w, h);
+	gBg(g, color);
+}
+function agShape(g, shape, w, h, color, rounding) {
+	let sh = gShape(shape, w, h, color, rounding);
+	g.appendChild(sh);
+	return sh;
+}
+function gShape(shape, w = 20, h = 20, color = 'green', rounding) {
+	//console.log(shape)
+	let el = gG();
+	if (nundef(shape)) shape = 'rect';
+	if (shape != 'line') agColoredShape(el, shape, w, h, color);
+	else gStroke(el, color, w); //agColoredLine(el, w, color);
+
+	if (isdef(rounding) && shape == 'rect') {
+		let r = el.children[0];
+		gRounding(r, rounding);
+		//console.log(rounding,r);
+		// r.setAttribute('rx', rounding); // rounding kann ruhig in % sein!
+		// r.setAttribute('ry', rounding);
+	}
+
+	return el;
+}
+
+function gCreate(tag) { return document.createElementNS('http://www.w3.org/2000/svg', tag); }
+function gPos(g, x, y) { g.style.transform = `translate(${x}px, ${y}px)`; }
+function gSize(g, w, h, shape = null, iChild = 0) {
+	//console.log(getTypeOf(g))
+	let el = (getTypeOf(g) != 'g') ? g : g.children[iChild];
+	let t = getTypeOf(el);
+	//console.log('g', g, '\ntype of g child', el, 'is', t);
+	switch (t) {
+		case 'rect': el.setAttribute('width', w); el.setAttribute('height', h); el.setAttribute('x', -w / 2); el.setAttribute('y', -h / 2); break;
+		case 'ellipse': el.setAttribute('rx', w / 2); el.setAttribute('ry', h / 2); break;
+		default:
+			if (shape) {
+				switch (shape) {
+					case 'hex': let pts = size2hex(w, h); el.setAttribute('points', pts); break;
+				}
+			}
+	}
+	return el;
+}
+function gBg(g, color) { g.setAttribute('fill', color); }
+function gFg(g, color, thickness) { g.setAttribute('stroke', color); if (thickness) g.setAttribute('stroke-width', thickness); }
+function gRounding(r, rounding) {
+	//let r = el.children[0];
+	//console.log(rounding,r);
+	r.setAttribute('rx', rounding); // rounding kann ruhig in % sein!
+	r.setAttribute('ry', rounding);
+
+}
+function gStroke(g, color, thickness) { g.setAttribute('stroke', color); if (thickness) g.setAttribute('stroke-width', thickness); }
+function gSvg() { return gCreate('svg'); } //document.createElementNS('http://www.w3.org/2000/svg', 'svg'); }
+function gG() { return gCreate('g'); }// document.createElementNS('http://www.w3.org/2000/svg', 'g'); }
+function gHex(w, h) { let pts = size2hex(w, h); return gPoly(pts); }
+function gPoly(pts) { let r = gCreate('polygon'); if (pts) r.setAttribute('points', pts); return r; }
+function gRect(w, h) { let r = gCreate('rect'); r.setAttribute('width', w); r.setAttribute('height', h); r.setAttribute('x', -w / 2); r.setAttribute('y', -h / 2); return r; }
+function gEllipse(w, h) { let r = gCreate('ellipse'); r.setAttribute('rx', w / 2); r.setAttribute('ry', h / 2); return r; }
+function gLine(x1, y1, x2, y2) { let r = gCreate('line'); r.setAttribute('x1', x1); r.setAttribute('y1', y1); r.setAttribute('x2', x2); r.setAttribute('y2', y2); return r; }
+
+function gCanvas(area, w, h, color, originInCenter = true) {
+	let dParent = mBy(area);
+	let div = stage3_prepContainer(dParent);
+	div.style.width = w + 'px';
+	div.style.height = h + 'px';
+
+	let svg = gSvg();
+	let style = `margin:0;padding:0;position:absolute;top:0px;left:0px;width:100%;height:100%;`
+	svg.setAttribute('style', style);
+	mColor(svg, color);
+	div.appendChild(svg);
+
+	let g = gG();
+	if (originInCenter) g.style.transform = "translate(50%, 50%)";
+	svg.appendChild(g);
+
+	return g;
+
+}
+
+function agCircle(g, sz) { let r = gEllipse(sz, sz); g.appendChild(r); return r; }
+function agEllipse(g, w, h) { let r = gEllipse(w, h); g.appendChild(r); return r; }
+function agHex(g, w, h) { let pts = size2hex(w, h); return agPoly(g, pts); }
+function agPoly(g, pts) { let r = gPoly(pts); g.appendChild(r); return r; }
+function agRect(g, w, h) { let r = gRect(w, h); g.appendChild(r); return r; }
+function agLine(g, x1, y1, x2, y2) { let r = gLine(x1, y1, x2, y2); g.appendChild(r); return r; }
+function agG(g) { let g1 = gG(); g.appendChild(g1); return g1; }
+//function agSvgg(d) { let svg = gSvg(); agG(svg); d.appendChild(svg); return g; }
+function aSvg(dParent) {
+	if (!dParent.style.position) dParent.style.position = 'relative';
+
+	let svg1 = gSvg();
+	//console.log(svg1)
+	svg1.setAttribute('width', '100%');
+	svg1.setAttribute('height', '100%');
+	let style = 'margin:0;padding:0;position:absolute;top:0px;left:0px;';
+	svg1.setAttribute('style', style);
+	dParent.appendChild(svg1);
+
+	return svg1;
+}
+function aSvgg(dParent, originInCenter = true) {
+	if (!dParent.style.position) dParent.style.position = 'relative';
+
+	let svg1 = gSvg();
+	//console.log(svg1)
+	svg1.setAttribute('width', '100%');
+	svg1.setAttribute('height', '100%');
+	let style = 'margin:0;padding:0;position:absolute;top:0px;left:0px;';
+	svg1.setAttribute('style', style);
+	dParent.appendChild(svg1);
+
+	let g1 = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+	svg1.appendChild(g1);
+	if (originInCenter) { g1.style.transform = "translate(50%, 50%)"; } //works!
+
+	return g1;
+
+}
+//endregion
+
 //#region color
 var colorDict = null; //for color names, initialized when calling anyColorToStandardStyle first time
 function anyColorToStandardString(cAny, a, allowHsl = false) {
@@ -1704,6 +1836,176 @@ function getFunctionsNameThatCalledThisFunction() {
 }
 //#endregion
 
+//#region geo helpers
+function toRadian(deg) { return deg * 2 * Math.PI / 360; }
+function correctPolys(polys, approx = 10) {
+	//console.log('citySize', citySize, 'approx', approx);
+	let clusters = [];
+	for (const p of polys) {
+		//console.log(p.map(pt => '(' + pt.x + ',' + pt.y + ') ').toString());
+		for (const pt of p) {
+			let found = false;
+			for (const cl of clusters) {
+				for (const v of cl) {
+					let dx = Math.abs(v.x - pt.x);
+					let dy = Math.abs(v.y - pt.y);
+					//console.log('diff', dx, dy);
+					if (dx < approx && dy < approx) {
+						//console.log('FOUND X!!!', dx,dy);
+						cl.push(pt);
+						found = true;
+						break;
+					}
+				}
+				if (found) break;
+			}
+			if (!found) {
+				//make new cluster with this point
+				clusters.push([pt]);
+			}
+		}
+	}
+
+	//now all points of all polys are in clusters
+	//go through clusters, computer mean for all points in a clusters
+	let vertices = [];
+	for (const cl of clusters) {
+		let sumx = 0;
+		let sumy = 0;
+		let len = cl.length;
+		for (const pt of cl) {
+			sumx += pt.x;
+			sumy += pt.y;
+		}
+		vertices.push({ x: Math.round(sumx / len), y: Math.round(sumy / len) });
+	}
+
+	for (const p of polys) {
+		for (const pt of p) {
+			let found = false;
+			for (const v of vertices) {
+				let dx = Math.abs(v.x - pt.x);
+				let dy = Math.abs(v.y - pt.y);
+				if (dx < approx && dy < approx) {
+					if (dx != 0 || dy != 0) {
+						pt.x = v.x;
+						pt.y = v.y;
+					}
+					found = true;
+				}
+				if (found) break;
+			}
+			if (!found) {
+				//make new cluster with this point
+				error('point not found in vertices!!! ' + pt.x + ' ' + pt.y);
+			}
+		}
+	}
+	return vertices;
+}
+function dSquare(pos1, pos2) {
+	let dx = pos1.x - pos2.x;
+	dx *= dx;
+	let dy = pos1.y - pos2.y;
+	dy *= dy;
+	return dx + dy;
+}
+function distance(x1, y1, x2, y2) { return Math.sqrt(dSquare({ x: x1, y: y1 }, { x: x2, y: y2 })); }
+function size2hex(w = 100, h = 0, x = 0, y = 0) {
+	//returns sPoints for polygon svg
+	//from center of poly and w (possibly h), calculate hex poly points and return as string!
+	//TODO: add options to return as point list!
+	//if h is omitted, a regular hex of width w is produced
+	//starting from N:
+	let hexPoints = [{ X: 0.5, Y: 0 }, { X: 1, Y: 0.25 }, { X: 1, Y: 0.75 }, { X: 0.5, Y: 1 }, { X: 0, Y: 0.75 }, { X: 0, Y: 0.25 }];
+
+	if (h == 0) {
+		h = (2 * w) / 1.73;
+	}
+	return polyPointsFrom(w, h, x, y, hexPoints);
+}
+function size2triup(w = 100, h = 0, x = 0, y = 0) {
+	//returns sPoints for polygon svg starting from N:
+	let triPoints = [{ X: 0.5, Y: 0 }, { X: 1, Y: 1 }, { X: 0, Y: 1 }];
+	if (h == 0) { h = w; }
+	return polyPointsFrom(w, h, x, y, triPoints);
+
+}
+function size2tridown(w = 100, h = 0, x = 0, y = 0) {
+	//returns sPoints for polygon svg starting from N:
+	let triPoints = [{ X: 1, Y: 0 }, { X: 0.5, Y: 1 }, { X: 0, Y: 0 }];
+	if (h == 0) { h = w; }
+	return polyPointsFrom(w, h, x, y, triPoints);
+
+}
+function getCirclePoints(rad, n, disp = 0) {
+	let pts = [];
+	let i = 0;
+	let da = 360 / n;
+	let angle = disp;
+	while (i < n) {
+		let px = rad * Math.cos(toRadian(angle));
+		let py = rad * Math.sin(toRadian(angle));
+		pts.push({ X: px, Y: py });
+		angle += da;
+		i++;
+	}
+	return pts;
+}
+
+function polyPointsFrom(w, h, x, y, pointArr) {
+
+	x -= w / 2;
+	y -= h / 2;
+
+	let pts = pointArr.map(p => [p.X * w + x, p.Y * h + y]);
+	let newpts = [];
+	for (const p of pts) {
+		newp = { X: p[0], Y: Math.round(p[1]) };
+		newpts.push(newp);
+	}
+	pts = newpts;
+	let sPoints = pts.map(p => '' + p.X + ',' + p.Y).join(' '); //'0,0 100,0 50,80',
+	//testHexgrid(x, y, pts, sPoints);
+	return sPoints;
+}
+function getPoly(offsets, x, y, w, h) {
+	//, modulo) {
+	let poly = [];
+	for (let p of offsets) {
+		let px = Math.round(x + p[0] * w); //  %modulo;
+		//px -= px%modulo;
+		//if (px % modulo != 0) px =px % modulo; //-= 1;
+		let py = Math.round(y + p[1] * h); //%modulo;
+		//py -= py%modulo;
+		//if (py % modulo != 0) py -= 1;
+		poly.push({ x: px, y: py });
+	}
+	return poly;
+}
+function getHexPoly(x, y, w, h) {
+	// returns hex poly points around center x,y
+	let hex = [[0, -0.5], [0.5, -0.25], [0.5, 0.25], [0, 0.5], [-0.5, 0.25], [-0.5, -0.25]];
+	return getPoly(hex, x, y, w, h);
+}
+function getQuadPoly(x, y, w, h) {
+	// returns hex poly points around center x,y
+	q = [[0.5, -0.5], [0.5, 0.5], [-0.5, 0.5], [-0.5, -0.5]];
+	return getPoly(q, x, y, w, h);
+}
+function getTriangleUpPoly(x, y, w, h) {
+	// returns hex poly points around center x,y
+	let triup = [[0, -0.5], [0.5, 0.5], [-0.5, 0.5]];
+	return getPoly(triup, x, y, w, h);
+}
+function getTriangleDownPoly(x, y, w, h) {
+	// returns hex poly points around center x,y
+	let tridown = [[-0.5, 0.5], [0.5, 0.5], [-0.5, 0.5]];
+	return getPoly(tridown, x, y, w, h);
+}
+
+//#endregion
+
 //#region loading DB, yaml, json, text
 async function dbInit(appName, dir = '../DATA/') {
 	let users = await route_path_yaml_dict(dir + 'users.yaml');
@@ -2542,12 +2844,7 @@ function fromUmlaut(w) {
 	let whites = res1.whites;
 
 	let common = findCommonPrefix(req1, answer1);
-	//now find common prefix
-	//console.log(req1, answer1, 'common prefix is',common);
 
-	//the real address is label
-	//let aReal = label;
-	//whites
 	let nletters = common.length;
 	let ireal = 0;
 	let icompact = 0;
@@ -2830,7 +3127,68 @@ function evToClosestId(ev) {
 	return elem.id;
 }
 function findParentWithId(elem) { while (elem && !elem.id) { elem = elem.parentNode; } return elem; }
+function findAncestorElemWithParentOfType(el, type) {
+	while (el && el.parentNode) {
+		let t = getTypeOf(el);
+		let tParent = getTypeOf(el.parentNode);
+		//console.log('el', t, tParent, 'el.id', el.id, 'parentNode.id', el.parentNode.id);
+		if (tParent == type) break;
+		el = el.parentNode;
+	}
+	return el;
 
+}
+function findAncestorElemOfType(el, type) {
+	while (el) {
+		let t = getTypeOf(el);
+		if (t == type) break;
+		el = el.parentNode;
+	}
+	return el;
+
+}
+function findDescendantWithId(id, parent) {
+	if (parent.id == id) return parent;
+	let children = arrChildren(parent);
+	if (isEmpty(children)) return null;
+	for (const ch of children) {
+		let res = findDescendantWithId(id, ch);
+		if (res) return res;
+	}
+	return null;
+}
+function findChildWithId(id, parentElem) {
+	testHelpers(parentElem);
+	let children = arrChildren(parentElem);
+	for (const ch of children) {
+		if (ch.id == id) return ch;
+	}
+	return null;
+}
+function findChildWithClass(className, parentElem) {
+	testHelpers(parentElem);
+	let children = arrChildren(parentElem);
+	for (const ch of children) {
+		//console.log('....findChildWithClass', ch, ch.classList, className)
+		if (ch.classList.includes(className)) return ch;
+	}
+	return null;
+}
+function findChildOfType(type, parentElem) {
+	let children = arrChildren(parentElem);
+	for (const ch of children) {
+		if (getTypeOf(ch) == type) return ch;
+	}
+	return null;
+}
+function findChildrenOfType(type, parentElem) {
+	let children = arrChildren(parentElem);
+	let res = [];
+	for (const ch of children) {
+		if (getTypeOf(ch) == type) res.push(ch);
+	}
+	return res;
+}
 function hasWhiteSpace(s) { return /\s/g.test(s); }
 function hide(elem) {
 	if (isString(elem)) elem = document.getElementById(elem);
@@ -2987,7 +3345,8 @@ function resetUIDs() { UIDCounter = 0; }
 //#region functions to be used in node.js:
 if (this && typeof module == "object" && module.exports && this === module.exports) {
 	module.exports = {
-		allNumbers, capitalize, choose, chooseRandom, copyKeys,
+		allNumbers, arrTake, capitalize, choose, chooseRandom, copyKeys,
+		dict2list,
 		firstCond, firstCondDictKey, formatDate,
 		isdef, jsCopy,
 		nundef, 

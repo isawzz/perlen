@@ -1,5 +1,5 @@
 module.exports = {
-	initPerlenGame,
+	addPerle, initPerlenGame,
 	handleStartOrJoin, handleReset,
 	handleMovePerle, handlePlacePerle, handleRelayout, handleImage,
 }
@@ -13,7 +13,7 @@ const { SKIP_INITIAL_SELECT } = require('../public/BASE/globals.js');
 var N = 50; // number of perlen im spiel!!!!
 const ROWS = 4;
 const COLS = 4;
-var Perlen;
+var Perlen, PerlenDict;
 var State = {};
 var io;
 var G = {};
@@ -22,6 +22,12 @@ function initState(x = {}) {
 	let [rows, cols] = [base.valf(x.rows, ROWS), base.valf(x.cols, COLS)];
 	let board = new Array(rows * cols);
 	pool = base.choose(Perlen, base.valf(x.N, N));
+
+	//add specific perlen to set!
+	//console.log('pool',pool[0],PerlenDict.playful)
+	//pool[0]=PerlenDict.playful;
+	//pool[1]=PerlenDict.carelessness;
+
 	let n = pool.length;
 	console.log('==>there are ', n, 'perlen');
 	for (let i = 0; i < pool.length; i++) { pool[i].index = i };
@@ -33,9 +39,10 @@ function initState(x = {}) {
 		players: [], //unused
 	};
 }
-function initPerlenGame(IO, perlen) {
+function initPerlenGame(IO, perlen, perlenDict) {
 	io = IO;
-	Perlen = perlen;
+	Perlen = perlen; //base.arrTake(perlen,perlen.length-10);
+	PerlenDict = perlenDict;
 	initState();
 }
 function handleReset(client, x) {
@@ -150,29 +157,38 @@ function handleImage(client, x) {
 		fs.writeFile(fname, imgData.data,
 			function () {
 				console.log('...images saved:', fname);
+				addPerle(filename);		// add perle!
 			});
-		// add perle!
-		let perle = {
-			Name: filename,
-			path: filename,
-			Update: base.formatDate(),
-			Created: base.formatDate(),
-			"Fe Tags": '',
-			"Wala Tags": '',
-			"Ma Tags": ''
-		};
-		Perlen.push(perle);
-		utils.toYamlFile(Perlen, path.join(__dirname, '../public/assets/games/perlen/perlen.yaml'));		
-		State.pool.push(perle);
-		perle.index=State.pool.length-1;
-		State.poolArr.push(perle.index);
-
-		io.emit('gameState', { state: State, username: x.username });
-
 	}
 	catch (error) {
 		console.log('ERROR:', error);
 	}
+}
+
+function addPerle(filename) {
+	console.log('adding perle for', filename)
+	// if (lastFilename == 'dasSterben') return;
+	let perle = {
+		Name: filename,
+		path: filename,
+		Update: base.formatDate(),
+		Created: base.formatDate(),
+		"Fe Tags": '',
+		"Wala Tags": '',
+		"Ma Tags": ''
+	};
+	PerlenDict[filename] = perle;
+
+	//utils.toYamlFile(PerlenDict, path.join(__dirname, '../zPerlenDict.yaml'));
+	utils.toYamlFile(PerlenDict, path.join(__dirname, '../public/assets/games/perlen/perlenDict.yaml'));
+	Perlen.push(perle);
+
+	// utils.toYamlFile(Perlen, path.join(__dirname, '../public/assets/games/perlen/perlen.yaml'));
+	State.pool.push(perle);
+	perle.index = State.pool.length - 1;
+	State.poolArr.push(perle.index);
+	io.emit('gameState', { state: State });
+
 }
 
 var MessageCounter = 0;

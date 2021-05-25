@@ -1,3 +1,281 @@
+async function startTesting() {
+	await loadAssets('./assets/'); //use this when starting in game!
+	DB = await route_path_yaml_dict('./data.yaml');
+
+	hide('dMainContent');
+	show('dGameScreen');
+	setTitle('*** Testing ***');
+	setSubtitle('logged in as ' + Username);
+
+	let color = USERNAME_SELECTION == 'local' ? localStorage.getItem('BaseColor') : null;
+	setNewBackgroundColor(color);
+	mStyleX(document.body, { opacity: 1 });
+	initTable(null, 2); initSidebar(); initAux(); initScore();
+	runTest();
+}
+function runTest() {
+	let w=window.innerWidth;
+	let sz=100;
+	let cols = math.floor(w/100);
+	let dBoard = mDiv(dTable);//,{bg:'green'});
+	mCenterFlex(dTable);
+	hexBoard(dBoard,5,cols-1,100);
+	//let fields = hexBoard(dTable);
+	//hexTest07();	//hexTest05(); //hexTest04(); //hexTest03(); //hexTest02();//hexTest01();//hexTest00();
+
+	//add hovering over hex!
+
+}
+function hexBoard(dParent,rows=13,cols=5,wHex=100) {
+	let hline = (wHex / .866) * .75;
+	dParent = mDiv(dParent, { position: 'relative', w: wHex * cols, h: hline * (rows + .5), display: 'inline-block' });
+	let hlist = [];
+	let xOffset = 0;//-20;
+	for (let r = 0; r < rows; r++) {
+		let curCols = r % 2 ? cols - 1 : cols;
+		let dx = r % 2 ? wHex / 2 : 0;
+		dx+=xOffset;
+		for (let c = 0; c < curCols; c++) {
+			let [dOuter,dInner] = oneHex(dParent, wHex, wHex, '#ffffff10');
+			mStyleX(dOuter, { position: 'absolute', left: dx + c * wHex, top: r * hline });
+			hlist.push(dInner);
+
+		}
+	}
+
+
+	function oneHex(dParent, w, h, bg) {
+		let d1 = mDiv(dParent, { w: w, h: h, display: 'inline', position: 'relative' });
+		let d2 = mDiv(d1, { w: w, h: h, display: 'inline', position: 'absolute', left: 0, top: 0 });
+		let g = aSvgg(d2);
+		let wgap = 8, hgap = 0;
+		let hex1 = agShape(g, 'hex', w - 2 * wgap, h - 2 * hgap, bg);
+		let offx = 16;
+		let offy = 20;
+		let d3 = mDiv(d1, { w: w, h: h, display: 'inline', position: 'absolute', left: 0, top: 0 });
+		let d4 = mDiv(d3, { left: `${offx / 2}%`, top: `${offy / 2}%`, w: `${100 - offx}%`, h: `${100 - offy}%`, rounding: '50%', display: 'inline', position: 'absolute' });
+		return [d1,d4];
+	}
+
+	return hlist;
+}
+function hexTest08(dParent,rows=13,cols=5,wHex=100) {
+	let hline = (wHex / .866) * .75;
+	dParent = mDiv(dParent, { position: 'relative', w: wHex * cols, h: hline * (rows + .5), display: 'inline-block' });
+	let hlist = [];
+	let xOffset = 0;//-20;
+	for (let r = 0; r < rows; r++) {
+		let curCols = r % 2 ? cols - 1 : cols;
+		let dx = r % 2 ? wHex / 2 : 0;
+		dx+=xOffset;
+		for (let c = 0; c < curCols; c++) {
+			let [dOuter,dInner] = oneHex(dParent, wHex, wHex, '#ffffff10');
+			mStyleX(dOuter, { position: 'absolute', left: dx + c * wHex, top: r * hline });
+			hlist.push(dInner);
+
+		}
+	}
+
+
+	function oneHex(dParent, w, h, bg) {
+		let d1 = mDiv(dParent, { w: w, h: h, display: 'inline', position: 'relative' });
+		let d2 = mDiv(d1, { w: w, h: h, display: 'inline', position: 'absolute', left: 0, top: 0 });
+		let g = aSvgg(d2);
+		let wgap = 8, hgap = 0;
+		let hex1 = agShape(g, 'hex', w - 2 * wgap, h - 2 * hgap, bg);
+		let offx = 16;
+		let offy = 20;
+		let d3 = mDiv(d1, { w: w, h: h, display: 'inline', position: 'absolute', left: 0, top: 0 });
+		let d4 = mDiv(d3, { left: `${offx / 2}%`, top: `${offy / 2}%`, w: `${100 - offx}%`, h: `${100 - offy}%`, rounding: '50%', display: 'inline', position: 'absolute' });
+		return [d1,d4];
+	}
+
+	return hlist;
+}
+
+function hexBoardNO(dParent, rows=3, cols=5, sz=100) {
+	let hline = (sz / .866) * .75;
+	dParent = mDiv(dParent, { position: 'relative', w: sz * cols, h: hline * (rows + .5), display: 'inline-block' });
+	let fields = [];
+	for (let r = 0; r < rows; r++) {
+		let curCols = r % 2 ? cols - 1 : cols;
+		let dx = r % 2 ? sz / 2 : 0;
+		for (let c = 0; c < curCols; c++) {
+			let [dOuter,dInner] = oneHex(dParent, sz, sz, 'yellow');
+			mStyleX(dOuter, { position: 'absolute', left: dx + c * sz, top: r * hline });
+			fields.push(dInner);
+		}
+		return fields;
+	}
+
+	function oneHex(dParent, w, h, bg) {
+		let d1 = mDiv(dParent, { w: w, h: h, display: 'inline', position: 'relative' });
+		let d2 = mDiv(d1, { w: w, h: h, display: 'inline', position: 'absolute', left: 0, top: 0 });
+		let g = aSvgg(d2);
+		let wgap = 8, hgap = 0;
+		let hex1 = agShape(g, 'hex', w - 2 * wgap, h - 2 * hgap, bg);
+		let offx = 16;
+		let offy = 20;
+		let d3 = mDiv(d1, { w: w, h: h, rounding: '50%', display: 'inline', position: 'absolute', left: 0, top: 0 });
+		let d4 = mDiv(d3, { left: `${offx / 2}%`, top: `${offy / 2}%`, w: `${100 - offx}%`, h: `${100 - offy}%`, rounding: '50%', bg: 'random', display: 'inline', position: 'absolute' });
+		return [d1,d4];
+	}
+
+}
+function hexTest07() {
+
+	//shape draw a hexagon on table
+	let dParent = dTable;
+	// dParent = mDiv(dTable, { bg: 'random', w: 500, h: 500 });
+	// mCenterFlex(dParent);
+	let rows = 4, cols = 5;
+	let whexBrut = 100;
+	let hline = (whexBrut / .866) * .75;
+	dParent = mDiv(dParent, { position: 'relative', w: whexBrut * cols, h: hline * (rows + .5), display: 'inline-block' });
+	let hlist = [];
+	for (let r = 0; r < rows; r++) {
+		let curCols = r % 2 ? cols - 1 : cols;
+		let dx = r % 2 ? whexBrut / 2 : 0;
+		for (let c = 0; c < curCols; c++) {
+			let h = oneHex(dParent, whexBrut, whexBrut, 'yellow');
+			mStyleX(h, { position: 'absolute', left: dx + c * whexBrut, top: r * hline });
+			hlist.push(h);
+
+		}
+	}
+
+
+	function oneHex(dParent, w, h, bg) {
+		let d1 = mDiv(dParent, { w: w, h: h, display: 'inline', position: 'relative' });
+
+		let d2 = mDiv(d1, { w: w, h: h, display: 'inline', position: 'absolute', left: 0, top: 0 });
+		let g = aSvgg(d2);
+		let wgap = 8, hgap = 0;
+		let hex1 = agShape(g, 'hex', w - 2 * wgap, h - 2 * hgap, bg);
+
+		let offx = 16;
+		let offy = 20;
+		let d3 = mDiv(d1, { w: w, h: h, rounding: '50%', display: 'inline', position: 'absolute', left: 0, top: 0 });
+		let d4 = mDiv(d3, { left: `${offx / 2}%`, top: `${offy / 2}%`, w: `${100 - offx}%`, h: `${100 - offy}%`, rounding: '50%', bg: 'random', display: 'inline', position: 'absolute' });
+
+		return d1;
+	}
+
+
+}
+function hexTest06() {
+
+	let sz = 200;
+	let d1 = mDiv(dTable, { w: sz, h: sz, bg: 'random', display: 'inline', position: 'relative' });
+
+	let d2 = mDiv(d1, { w: 200, h: 200, bg: 'random', display: 'inline', position: 'absolute', left: 0, top: 0 });
+	let g = aSvgg(d2);
+	let gap = 2;
+	let hex1 = agShape(g, 'hex', sz - 2 * gap, sz - 2 * gap, 'red');
+
+	let offx = 10;
+	let offy = 20;
+	let d3 = mDiv(d1, { w: 200, h: 200, rounding: '50%', display: 'inline', position: 'absolute', left: 0, top: 0 });
+	let d4 = mDiv(d3, { left: `${offx / 2}%`, top: `${offy / 2}%`, w: `${100 - offx}%`, h: `${100 - offy}%`, rounding: '50%', bg: 'random', display: 'inline', position: 'absolute' });
+
+	return d4;
+
+}
+function hexTest05() {
+	//shape draw a hexagon on table
+	let dParent = dTable;
+	// dParent = mDiv(dTable, { bg: 'random', w: 800, h: 500 });
+	// mCenterFlex(dParent);
+	let rows = 4, cols = 9;
+	let whexBrut = 100;
+	let hline = (whexBrut / .866) * .75;
+	dParent = mDiv(dParent, { position: 'relative', w: whexBrut * cols, h: hline * (rows + .5), display: 'inline-block' });
+	let hlist = [];
+	for (let r = 0; r < rows; r++) {
+		let curCols = r % 2 ? cols - 1 : cols;
+		let dx = r % 2 ? whexBrut / 2 : 0;
+		for (let c = 0; c < curCols; c++) {
+			let h = mHex05(dParent, whexBrut, 'yellow');
+			mStyleX(h, { position: 'absolute', left: dx + c * whexBrut, top: r * hline });
+			hlist.push(h);
+
+		}
+	}
+}
+function hexTest04() {
+	//shape draw a hexagon on table
+	let dParent = dTable;
+	// dParent = mDiv(dTable, { bg: 'random', w: 800, h: 500 });
+	// mCenterFlex(dParent);
+	let rows = 5, cols = 5;
+	let whexBrut = 100;
+	let hline = (whexBrut / .866) * .75;
+	dParent = mDiv(dParent, { position: 'relative', w: whexBrut * cols, h: hline * (rows + .5), display: 'inline-block' });
+	let hlist = [];
+	for (let r = 0; r < rows; r++) {
+		let curCols = r % 2 ? cols - 1 : cols;
+		let dx = r % 2 ? whexBrut / 2 : 0;
+		for (let c = 0; c < curCols; c++) {
+			let h = mHex04(dParent, whexBrut, 'yellow');
+			mStyleX(h, { position: 'absolute', left: dx + c * whexBrut, top: r * hline });
+			hlist.push(h);
+		}
+	}
+}
+function hexTest03() {
+	//shape draw a hexagon on table
+	let dParent = dTable;
+	dParent = mDiv(dTable, { bg: 'random', w: 800, h: 500 });
+	mCenterFlex(dParent);
+	let whexBrut = 100;
+	let hline = (whexBrut / .866) * .75;
+	dParent = mDiv(dParent, { position: 'relative', w: whexBrut * 4, h: 300, bg: 'violet', display: 'inline-block' });
+	let hlist = [];
+	for (let i = 0; i < 4; i++) {
+		let h = mHex03(dParent, whexBrut, 'yellow');
+		mStyleX(h, { position: 'absolute', left: i * whexBrut, top: 0 });
+		hlist.push(h);
+	}
+	for (let i = 0; i < 3; i++) {
+		let h = mHex03(dParent, whexBrut, 'yellow');
+		mStyleX(h, { position: 'absolute', left: whexBrut / 2 + i * whexBrut, top: hline });
+		hlist.push(h);
+	}
+}
+function hexTest02() {
+	//shape draw a hexagon on table
+	let dParent = dTable;
+	dParent = mDiv(dTable, { bg: 'random', w: 800, h: 500 });
+	mCenterFlex(dParent);
+	let whexBrut = 100;
+	dParent = mDiv(dParent, { position: 'relative', w: whexBrut * 4, h: 300, bg: 'violet', display: 'inline-block' });
+	let hlist = [];
+
+	for (let i = 0; i < 4; i++) {
+		let h = mHex02(dParent, whexBrut);
+		mStyleX(h, { position: 'absolute', left: i * whexBrut, top: 0 });
+		hlist.push(h);
+	}
+}
+function hexTest01() {
+	//shape draw a hexagon on table
+	let dParent = dTable;
+	let styles = { margin: 3 };
+	styles = { padding: 4 };
+	let h1 = mHex01(dParent, styles);
+	let h2 = mHex01(dParent, styles);
+
+}
+function hexTest00() {
+	//shape draw a hexagon on table
+	let dParent = dTable;
+	let styles = { margin: 3 };
+	styles = { padding: 4 };
+	let h1 = mHex00(dParent, styles);
+}
+
+
+//#region testing before perlen game
 //test areas
 function cardGameTest09() {
 	let state = {
@@ -34,8 +312,8 @@ function presentState1(state, areas) {
 	for (let i = 0; i < 2; i++) {
 		let cards = hands[i].iHand.items;
 		if (isEmpty(hands[i].arr)) continue;
-		console.log('cards',cards,'hands[i]',hands[i])
-		for (let j = 0; j < cards.length-1; j++) {
+		console.log('cards', cards, 'hands[i]', hands[i])
+		for (let j = 0; j < cards.length - 1; j++) {
 			Card52.turnFaceDown(cards[j]);
 		}
 	}
@@ -727,7 +1005,7 @@ function kriegTest06(game) {
 	game.load();//{ pl1: { name:'felix',hand: ['TH'], trick: [['2H']] }, pl2: { name:'max',hand: ['9C'], trick: [['2C']] } }); game.deck.sort(); //game.print_state();
 	// game.load({ pl1: { hand: ['TH', 'QH'], trick: [['QD']] }, pl2: { hand: ['TC', 'QC'], trick: [['KC']] }, deck:['AH','AC'] },);	game.deck.sort();game.print_state();
 	game.print_state('start:');
-	let front = new GKriegFront(130,dTable);
+	let front = new GKriegFront(130, dTable);
 	front.presentState(game.get_state(), dTable);
 	return;
 
@@ -753,7 +1031,7 @@ function kriegTest00UI() {
 	clearElement(dTable)
 	let back = new GKriegBack();
 	back.load({ pl1: { name: 'felix', hand: ['TH', 'KH'] }, pl2: { name: 'tom', hand: ['9C', 'QC'] } }); back.deck.sort(); back.print_state();
-	let front = new GKriegFront(130,dTable);
+	let front = new GKriegFront(130, dTable);
 	front.presentState(back.get_state(), dTable);
 
 	mLinebreak(dTable, 50);
@@ -774,7 +1052,7 @@ function kriegTest00UI_engine(back, front) {
 	mButton('Move!', () => kriegTest00UI_engine(back, front), dTable, { fz: 28, matop: 10, rounding: 10, padding: 16, border: 8 }, ['buttonClass']);
 }
 
-
+//#endregion
 
 
 

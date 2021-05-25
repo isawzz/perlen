@@ -1,4 +1,4 @@
-onload = start();
+onload = start(); // start || startTesting
 
 async function start() {
 
@@ -49,7 +49,7 @@ function sendLogin(username) { logClientSend('login', username); Socket.emit('lo
 
 //2. server sends DB => client sets DB
 async function fakeLogin(username) {
-	DB = await route_path_yaml_dict('./assets/data.yaml');
+	DB = await route_path_yaml_dict('./data.yaml');
 	setUserData(username);
 	enterLobby();
 }
@@ -79,3 +79,4 @@ function enterLobby() {
 	}
 }
 
+//=>von da geht es zu game (simplestPerlenGame.js mit simpleClass...)

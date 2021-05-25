@@ -2,14 +2,14 @@
 const PORT = 3333;
 
 // *** deploy to heroku ***
-const NGROK = false; //'http://849aec381695.ngrok.io/'; // MUSS / am ende!!! 
-const HEROKU = true;
-const USERNAME_SELECTION = 'local'; // random | local | nil | gul | ma ...
+// const NGROK = false; //'http://849aec381695.ngrok.io/'; // MUSS / am ende!!! 
+// const HEROKU = true;
+// const USERNAME_SELECTION = 'local'; // random | local | nil | gul | ma ...
 
 //*** testing */:
-// const NGROK = false; //'http://849aec381695.ngrok.io/'; // MUSS / am ende!!! 
-// const HEROKU = false;
-// const USERNAME_SELECTION = 'random'; // random | local | nil | gul | ma ...
+const NGROK = false; //'http://849aec381695.ngrok.io/'; // MUSS / am ende!!! 
+const HEROKU = false;
+const USERNAME_SELECTION = 'random'; // random | local | nil | gul | ma ...
 
 var USESOCKETS = true; //false ist wahtscheinlich broken!
 const JUST_PERLEN_GAME = true;
@@ -33,7 +33,7 @@ var Perlen, BaseColor, HeaderColor, IsControlKeyDown = false;
 
 var BestMinusScore = Infinity, BestMinusState, BestPlusScore = -Infinity, BestPlusState;
 var F_END, F_MOVES, F_APPLYMOVE, F_UNDOMOVE, F_EVAL, DMAX, MAXIMIZER, MINIMIZER, SelectedMove, CANCEL_AI;
-var DMM = {}, timit;
+var DMM = {}, timit, STARTED;
 
 //#endregion
 

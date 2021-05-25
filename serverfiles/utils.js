@@ -21,11 +21,12 @@ function makeid(length) {
 }
 function fromYamlFile(path) {
 	try {
+		//console.log('path',path)
 		let fileContents = fs.readFileSync(path, 'utf8');
 		//console.log(typeof fileContents);
 		//console.log(fileContents)
 		let data = yaml.parse(fileContents);
-		//console.log('data',data);
+		//console.log('data',typeof data,Object.keys(data),data['playful']);
 		return data;
 	} catch (e) {
 		console.log(e);
@@ -36,6 +37,19 @@ function toYamlFile(data, path) {
 	let yamlStr = yaml.stringify(data);
 	console.log('?')
 	fs.writeFileSync(path, yamlStr, 'utf8');
+}
+function toPngFile(data,path){
+	const fs = require('fs');
+	const fetch = require('node-fetch');
+	
+	const url = "https://www.something.com/.../image.jpg"
+	
+	async function download() {
+		const response = await fetch(url);
+		const buffer = await response.buffer();
+		fs.writeFile(`./image.jpg`, buffer, () => 
+			console.log('finished downloading!'));
+	}	
 }
 
 function convertPerlen(list) {
@@ -89,6 +103,7 @@ function listFiles(perlen) {
 			}
 		}
 		//save perlen in new file!
+		perlen.sort((a,b)=>a.path<b.path?-1:1);
 		toYamlFile(perlen,'./newPerlen.yaml');
 	});
 }

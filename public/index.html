@@ -7,12 +7,6 @@
 		<!-- <meta http-equiv="Cache-control" content="public"> -->
 		<meta http-equiv="Cache-Control" content="max-age: 31536000, no-cache, no-store, must-revalidate">
 		<title>Glasperlenspiel</title>
-		<link
-			rel="stylesheet"
-			href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
-			integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk"
-			crossorigin="anonymous"
-		/>
 		<link rel="icon" type="image/svg+xml" href="./assets/svg/favicon.svg" />
 		<script src="./alibs/numbers.js"></script>
 		<script src="./alibs/math.js"></script>
@@ -22,16 +16,21 @@
 		<script src="./alibs/jquery-3.6.0.min.js"></script>
 		<link rel="stylesheet" href="./alibs/chessBoard/css/chessboard.min.css" />
 		<script src="./alibs/chessBoard/js/chessboard.min.js"></script>
-
 		<script src="./alibs/chess.js"></script>
+		<!-- bootstrap is needed for perlen, jQuery needed for bootstrap? -->
+		<link rel="stylesheet" href="./alibs/bootstrap.min.css" />
+		<!-- <link
+			rel="stylesheet"
+			href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
+			integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk"
+			crossorigin="anonymous"
+		/> -->
+		<!-- <script type="text/javascript" src="https://js.live.net/v7.2/OneDrive.js"></script> -->
 
 		<link rel="stylesheet" href="./assets/fonts/fonts.css" />
-		<!-- <link rel="stylesheet" href="./BASE/old.css">
-		<link rel="stylesheet" href="./yzy/new.css"> -->
 		<link rel="stylesheet" href="./BASE/base.css"> 
 
 		<script src="./BASE/globals.js"></script>
-
 		<script src="./BASE/base.js"></script>
 		<script src="./BASE/game.js"></script>
 	</head>
@@ -40,6 +39,7 @@
 		<div id="dHeader" style="background-color: var(--dark-blue); padding-top: 10px">
 			<div id='dButtonsLeft' style="position: absolute; left:0px; padding:10px; display:flex">
 				<div id='dResetButton'  onclick='onClickReset()' class='toolbarButtonClass'>♻️</div>
+				<!-- <button onClick="launchOneDrivePicker()">OneDrive</button> -->
 			</div>
 			<div id='dTempleLobby' style="display: none; position: absolute; margin: 10px; padding: 20px" onclick='onClickTempleLobby()'>🏛️</div>
 			<div id='dButtonsRight' style="position: absolute; right:0px; padding:10px; display:flex">
@@ -117,7 +117,9 @@
 			</div>
 		</div>
 
+		<!-- <script src='../alibs/socket.io.js'></script> -->
 		<script src='https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js'></script>
+		
 		<script src="./BASE/features/areas.js"></script>
 		<script src="./BASE/features/audio.js"></script>
 		<script src="./BASE/features/badges.js"></script>
@@ -134,22 +136,17 @@
 		<script src="./BASE/features/time.js"></script>
 		<script src="./BASE/features/ui.js"></script>
 		<script src="./work/cardGame.js"></script>
-		<script src="./work/index.js"></script>
 		<script src="./work/onClick.js"></script>
 		<script src="./work/testing.js"></script>
-		<script src="./work/gameScreen.js"></script>
 		<script src="./work/fileUpload.js"></script>
 		<script src="./work/lobby.js"></script>
-		<!-- <script src="./work/login.js"></script> -->
-		<script src="./work/perlen.js"></script>
-		<script src="./work/perlenHelpers.js"></script>
-		<script src="./work/simpleClass.js"></script>
+		<script src="./work/shapes.js"></script>
 		<script src="./work/simplestPerlenGame.js"></script>
 		<script src="./work/socket.js"></script>
 		<script src="./work/users.js"></script>
 		<script src="./work/assets.js"></script>
 
-		<script src="./start.js"></script>
+		<!-- <script src="./start.js"></script> -->
 		<script src="./client.js"></script>
 
 	</body>

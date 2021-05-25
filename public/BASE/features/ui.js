@@ -17,7 +17,9 @@ function initTable(rect,startingAt=0) {
 function initSidebar() {
 	let dParent = mBy('sidebar');
 	clearElement(dParent);
-	dLeiste = mDiv(dParent,{ 'min-width':2, 'max-height': '100vh', display: 'flex', 'flex-flow': 'column wrap' },'dLeiste');
+	// mStyleX(dParent,{bg:colorLighter(BaseColor)});
+	// dLeiste = mDiv(dParent,{ 'min-width':2, 'max-height': '100vh', display: 'flex', 'flex-flow': 'column wrap' },'dLeiste');
+	dLeiste = mDiv(dParent,{ 'min-width':2, display: 'flex', 'flex-flow': 'column wrap' },'dLeiste');
 }
 function initAux() {
 	dAux = mBy('dAux');
@@ -114,6 +116,7 @@ function setNewBackgroundColor(bg) {
 	setBackgroundColor(bg);
 	mStyleX(dHeader, { bg: HeaderColor });
 	mStyleX(dSubtitle, { fg: colorLighter(bg) });
+	mStyleX(mBy('sidebar'), { bg: colorLighter(BaseColor,.125) });
 	localStorage.setItem('BaseColor', BaseColor);
 }
 
