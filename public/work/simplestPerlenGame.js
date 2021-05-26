@@ -11,14 +11,16 @@ class SimpleClass {
 
 		if (isdef(state.pool)) {
 			this.pool = state.pool;
+			console.log('POOL IS HERE!!!',this.pool)
 			this.perlenListeImSpiel = Object.values(this.pool);
+
 			for(const idx in this.pool){let p=this.pool[idx]; p.path = mPath(p);}
 		}
 
 		this.board = showEmptyPerlenBoard(this.rows, this.cols, dParent);
 		mLinebreak(dParent, 25);
 
-		//console.log('___________',Schritt,state.poolArr);
+		console.log('___________',Schritt,state,state.poolArr);
 		showPerlen(this.pool, this.boardArr, this.poolArr, this.board, dParent);
 		this.activateDD();
 
@@ -227,6 +229,7 @@ function logState(state) {
 	}
 }
 function showPerlen(perlenByIndex, boardArr, poolArr, board, dParent) {
+
 	for (let i = 0; i < poolArr.length; i++) {
 		let iPerle = poolArr[i];
 		perle = perlenByIndex[iPerle];

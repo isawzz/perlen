@@ -34,11 +34,13 @@ class GP1 {
 		this.initPlayerState(pl.id);
 		return pl;
 	}
-	addToByIndex(perle) {
+	addToPool(perle) {
 		let p = base.jsCopy(perle);
 		p.index = this.maxIndex;
 		this.maxIndex += 1;
 		this.byIndex[p.index] = p;
+		if (base.isdef(this.State.poolArr)) this.State.poolArr.push(p.index); //addToPoolArr(poolPerle.index);
+
 		return p;
 	}
 	boardLayoutChange(client, x) {
@@ -60,11 +62,37 @@ class GP1 {
 
 	}
 
-	emitGameStateIncludingPool(username) { this.io.emit('gameState', { state: this.State, username: username }); }
+	emitGameStateIncludingPool(client) {
+		let pl = this.players[client.id];
+		let username = pl.name;
+		console.log('sollte gameState emitten!',client.id);
+		console.log('this.state.players');
+		this.io.emit('gameState',
+			{
+				state: {
+					rows: this.State.rows,
+					cols: this.State.cols,
+					boardArr: this.State.boardArr,
+					poolArr: this.State.poolArr,
+					pool: this.State.byIndex,
+					players: this.State.players
+				},
+
+				username: username
+			});
+	}
+
 	getNumActivePlayers() { return this.state.players.length; }
 	getNumPlayers() { return Object.keys(this.players).length; }
 	getPlayerNames() { return this.State.players.map(x => x.name).join(','); }
 	getPlayerState(plid) { return base.firstCond(this.State.players, x => x.id == plid); }
+	getPerleByFilename(filename) {
+		for (const k in this.byIndex) {
+			let p = this.byIndex[k];
+			if (p.path == filename) return p;
+		}
+		return null;
+	}
 	getPerlenName(iPerle) { return this.byIndex[iPerle].Name; }
 	//BROKENgetState(keys){return base.isdef(keys)?partialObject(this.State,keys):this.State;}
 	getTurn() { return this.state.turn; }
@@ -75,6 +103,7 @@ class GP1 {
 		console.log('state', plState);
 		if (base.nundef(this.State.players)) this.State.players = [];
 		this.State.players.push(plState);
+		console.log('added player',pl.id)
 		return pl;
 	}
 	initPlayers() { this.State.players = []; for (const plid in this.players) { this.initPlayerState(plid); } }
@@ -86,8 +115,9 @@ class GP1 {
 		let keys = getRandomPerlenKeys(base.valf(settings.N, 50));
 		//keys[0]='playful';
 		//keys[1]='carelessness';
-		keys.map(x => this.addToByIndex(this.perlenDict[x]));
+		keys.map(x => this.addToPool(this.perlenDict[x]));
 
+		console.log('byIndex',keys);
 		this.State = {
 			rows: rows,
 			cols: cols,
@@ -96,6 +126,7 @@ class GP1 {
 			pool: byIndex,
 		};
 
+		this.initPlayers();
 		let n = keys.length;
 		console.log('==>there are ', n, 'perlen');
 	}
@@ -124,26 +155,26 @@ class GP1 {
 		if (plState) base.removeInPlace(this.State.players, plState);
 		console.log('player left: ', client.id, data);
 	}
-	playerMovesPerle(client,x){
+	playerMovesPerle(client, x) {
 		let iPerle = x.iPerle;
 		let iFrom = x.iFrom;
 		let iTo = x.iTo;
 		let username = x.username;
 		let perle = this.byIndex[iPerle];
-	
+
 		//update board state!
 		let boardArr = this.State.boardArr;
 		boardArr[iFrom] = null;
 		boardArr[iTo] = iPerle;
-	
+
 		this.State.boardArr = boardArr;
-	
+
 		if (base.isdef(x.displaced)) {
 			// console.log('DDDDDDDDDDDDDDDDDDIS')
 			this.State.poolArr.unshift(x.displaced);
 		}
-	
-	
+
+
 		this.io.emit('gameState',
 			{
 				state: {
@@ -153,11 +184,11 @@ class GP1 {
 					poolArr: this.State.poolArr,
 				}, username: username, msg: 'user ' + username + ' placed ' + perle.Name + ' to field ' + iTo
 			});
-	
+
 		// io.emit('gameState', { state: { boardArr: State.boardArr, poolArr: State.poolArr }, username: username, msg: 'user ' + username + ' moved ' + perle.Name + ' to field ' + iField });
-	
+
 	}
-	
+
 	playerPlacesPerle(client, x) {
 		let iPerle = x.iPerle;
 		let iField = x.iField;
@@ -215,7 +246,7 @@ class GP1 {
 }
 
 //#region interface
-function addPerle(filename) {
+function addPerle(filename,client) {
 	console.log('adding perle for', filename);
 	console.assert(filename == filename.toLowerCase(), 'FILENAME CASING!!!!')
 
@@ -228,15 +259,14 @@ function addPerle(filename) {
 
 	console.assert(base.isdef(perle), 'KEINE PERLE!!!!!!!!!!!!!! ' + filename);
 
-	let poolPerle = findPerleInStatePool(perle);
+	let poolPerle = G.getPerleByFilename(filename);
 	if (poolPerle == null) {
-		poolPerle = addToByIndex(perle);
-		addToPoolArr(poolPerle.index);
-		io.emit('gameState', { state: State });
+		poolPerle = G.addToPool(perle);
+		G.emitGameStateIncludingPool(client);		//io.emit('gameState', { state: State });		
 		if (savePerlen) { savePerlenDictToFile(); }
 	}
 	// if (perleNichtInStatePool(perle)) { emitPool = true; addToByIndex(perle); }
-	else { console.assert(base.isdef(State.pool[poolPerle.index]), 'SCHON IN STATE POOL!!! do nothing!'); }
+	else { console.assert(base.isdef(G.State.pool[poolPerle.index]), 'SCHON IN STATE POOL!!! do nothing!'); }
 }
 //BROKENfunction partialObject(o, keys) { let onew = {}; for (const k of keys) onew = o[k]; return onew; }
 function handleImage(client, x) {
@@ -253,7 +283,7 @@ function handleImage(client, x) {
 		fs.writeFile(fname, imgData.data,
 			function () {
 				console.log('...images saved:', fname);
-				addPerle(filename);		// add perle!
+				addPerle(filename, client);		// add perle!
 			});
 	}
 	catch (error) {
@@ -271,7 +301,7 @@ function initPerlenGame(IO, perlenDict) {
 	G = new GP1(IO, perlenDict);
 	console.log('players', G.players);
 }
-function handleMovePerle(client, x) { G.playerMovesPerle(client,x);}
+function handleMovePerle(client, x) { G.playerMovesPerle(client, x); }
 function handlePlayerLeft(client, x) { G.playerLeft(client, x); }
 function handlePlacePerle(client, x) { G.playerPlacesPerle(client, x); }
 function handleRelayout(client, x) { G.boardLayoutChange(client, x); }
@@ -279,7 +309,7 @@ function handleRemovePerle(client, x) { G.playerRemovesPerle(client, x); }
 function handleReset(client, x) {
 	console.log('handleReset', x)
 	G.initState(x);
-	G.emitGameStateIncludingPool(x.username);
+	G.emitGameStateIncludingPool(client);
 
 }
 function handleStartOrJoin(client, x) { G.playerJoins(client, x); }
