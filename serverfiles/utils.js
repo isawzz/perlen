@@ -35,7 +35,7 @@ function fromYamlFile(path) {
 }
 function toYamlFile(data, path) {
 	let yamlStr = yaml.stringify(data);
-	console.log('?')
+	//console.log('?')
 	fs.writeFileSync(path, yamlStr, 'utf8');
 }
 function toPngFile(data,path){

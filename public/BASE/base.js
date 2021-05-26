@@ -1658,8 +1658,16 @@ function addDDSource(source, isCopy = true, clearTarget = false) {
 	let d = iDiv(source);
 	d.onmousedown = (ev) => ddStart(ev, source, isCopy, clearTarget);
 }
-function enableDD(sources, targets, dropHandler, isCopy, clearTarget) {
-	DDInfo = { sources: sources, targets: targets, dropHandler: dropHandler };
+function addDDTarget(target, isCopy = true, clearTarget = false) {
+	DDInfo.targets.push(target);
+	target.isCopy = isCopy;
+	target.clearTarget = clearTarget;
+	// let d = iDiv(target);
+	// d.onmousedown = (ev) => ddStart(ev, source, isCopy, clearTarget);
+}
+function enableDD(sources, targets, dropHandler, isCopy, clearTarget, dragStartHandler) {
+	//console.log('isCopy',isCopy,'startH',dragStartHandler)
+	DDInfo = { sources: sources, targets: targets, dropHandler: dropHandler, dragStartHandler };
 	let sourceDivs = sources.map(x => iDiv(x));
 	for (let i = 0; i < sources.length; i++) {
 		let source = sources[i];
@@ -1668,11 +1676,12 @@ function enableDD(sources, targets, dropHandler, isCopy, clearTarget) {
 	}
 }
 function ddStart(ev, source, isCopy = true, clearTarget = false) {
-	if (!canAct()) return;
+	if (!canAct() || isdef(DDInfo.dragStartHandler) && !DDInfo.dragStartHandler(source)) return;
 	ev.preventDefault();
-
+	ev.stopPropagation();
 	//console.log('ev',ev,'source',source);
 
+	//if (isdef(DDInfo.dragStartHandler)) DDInfo.dragStartHandler(source);
 	DDInfo.source = source;
 	let d = iDiv(source);
 	var clone = DragElem = DDInfo.clone = d.cloneNode(true);
@@ -1702,15 +1711,16 @@ function onReleaseClone(ev) {
 	let source = DDInfo.source;
 	let dSource = iDiv(source);
 	let dropHandler = DDInfo.dropHandler;
+	//let success
 	for (const target of DDInfo.targets) {
 		let dTarget = iDiv(target);
 		if (els.includes(dTarget)) {
 			//if (DragElem.clearTarget) clearElement(dTarget);
 			if (isdef(dropHandler)) {
 				dropHandler(source, target, DragElem.isCopy, DragElem.clearTarget);
-			} else console.log('dropped', source, 'on', target);
-			//console.log('yes, we are over',dTarget);
-			// dTarget.innerHTML = DragElem.innerHTML;
+			} 
+			//console.log('dropped', source.name, 'on target', target);
+			break; //as soon as found a target, stop looking for more targets!
 
 		}
 	}

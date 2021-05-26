@@ -8,15 +8,10 @@ async function loadAssets(path) {
 	SymKeys = Object.keys(Syms);
 	ByGroupSubgroup = await localOrRoute('gsg', path + 'symGSG.yaml');
 	WordP = await route_path_yaml_dict(path + 'math/allWP.yaml');
-	Perlen = await route_path_yaml_dict(path+'games/perlen/perlenDict.yaml');
-	//console.log('glasPerlen', glasPerlen);
-	//DB = await route_path_yaml_dict('./data.yaml');
-	//console.assert(isdef(DB));
 
 	Speech = new SpeechAPI('E');
 	KeySets = getKeySets();
 	TOMan = new TimeoutManager();
-	//console.log('*** assets loaded')
 }
 
 

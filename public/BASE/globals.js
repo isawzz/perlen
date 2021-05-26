@@ -14,7 +14,7 @@ const USERNAME_SELECTION = 'random'; // random | local | nil | gul | ma ...
 var USESOCKETS = true; //false ist wahtscheinlich broken!
 const JUST_PERLEN_GAME = true;
 const SKIP_INITIAL_SELECT = true;
-const PERLEN_EDITOR_OPEN_AT_START = true;
+const PERLEN_EDITOR_OPEN_AT_START = false;
 
 const SERVERURL = NGROK ? NGROK : HEROKU? 'https://part4limitless.herokuapp.com/':'http://localhost:' + PORT + '/';
 
@@ -29,7 +29,7 @@ var uiActivated, aiActivated, auxOpen, GameTimer, STOPAUS = false;
 var Settings, SettingsList, SettingsChanged, SelectedMenuKey; //var G, T, P, U, User, ????? , G...Game, T...Table, U...Userdata
 var Daat = {}, DA = {}, Items;
 var Players, PlayerOnTurn, GC, GameCounter;
-var Perlen, BaseColor, HeaderColor, IsControlKeyDown = false;
+var PerlenDict, BaseColor, HeaderColor, IsControlKeyDown = false;
 
 var BestMinusScore = Infinity, BestMinusState, BestPlusScore = -Infinity, BestPlusState;
 var F_END, F_MOVES, F_APPLYMOVE, F_UNDOMOVE, F_EVAL, DMAX, MAXIMIZER, MINIMIZER, SelectedMove, CANCEL_AI;

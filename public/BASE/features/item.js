@@ -199,9 +199,7 @@ function makePerleDiv(item, outerStyles, imgStyles, labelStyles, labelPos = null
 
 	let dOuter = mCreate('div', outerStyles);
 
-	if (labelPos && nundef(item.label)) {
-		item.label = item.Name;
-	}
+	if (labelPos && nundef(item.label)) { item.label = item.Name.toLowerCase(); }
 
 	let dLabel;
 	let [w, h, fz] = [labelStyles.wmax, labelStyles.hmax, labelStyles.fz];
@@ -214,10 +212,10 @@ function makePerleDiv(item, outerStyles, imgStyles, labelStyles, labelPos = null
 	// if (labelPos[0] == 't') { mAppend(dOuter,dLabel); }// = mText(item.label, dOuter, labelStyles); }
 
 	let x;
-	imgStyles.rounding='50%';
+	imgStyles.rounding = '50%';
 	if (useNewImage) {
 		//console.log('hhhhhhhhhhhhhhhhhhhh')
-		imgStyles.rounding='50%';
+		imgStyles.rounding = '50%';
 		x = mAppend(dOuter, NEWLY_CREATED_IMAGE);
 		mStyleX(x, imgStyles);
 	} else {
@@ -225,8 +223,8 @@ function makePerleDiv(item, outerStyles, imgStyles, labelStyles, labelPos = null
 	}
 	if (magnify) {
 
-		x.onmouseenter = ev=>onEnterPerle(item,ev); // (ev) => { if (ev.ctrlKey) mMagnify(x, item); }
-		x.onmouseleave = ev=>onExitPerle(item,ev); //() => mCancelMagnify(x, item.path);
+		x.onmouseenter = ev => onEnterPerle(item, ev); // (ev) => { if (ev.ctrlKey) mMagnify(x, item); }
+		x.onmouseleave = ev => onExitPerle(item, ev); //() => mCancelMagnify(x, item.path);
 	}
 
 	if (labelPos[0] == 'b') dLabel = mText(item.label, dOuter, labelStyles);
@@ -234,7 +232,7 @@ function makePerleDiv(item, outerStyles, imgStyles, labelStyles, labelPos = null
 
 	if (isdef(handler)) dOuter.onclick = ev => handler(ev, item);
 
-	item.type = 'perle';	dOuter.id = iRegister(item);
+	item.type = 'perle'; dOuter.id = iRegister(item);
 	iAdd(item, { div: dOuter, dLabel: dLabel, dImg: x });
 
 	return dOuter;

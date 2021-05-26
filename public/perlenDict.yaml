@@ -63,13 +63,14 @@ archetyp:
   Wala Tags: ""
   Ma Tags: ""
 argument:
-  Name: Argument
-  Created: 4/30/2021
-  Fe Tags: processing information, social interaction
-  Ma Tags: communication
-  Update: 5/8/2021
-  Wala Tags: elementaria, methode
+  Name: argument
   path: argument
+  Update: 04/25/2021
+  Created: 04/25/2021
+  Fe Tags: ""
+  Wala Tags: ""
+  Ma Tags: ""
+  index: 50
 ausbildung:
   path: ausbildung
   Name: Ausbildung
@@ -398,14 +399,6 @@ fear:
   Update: 5/8/2021
   Wala Tags: angst, gefühl
   path: fear
-fisch:
-  path: fisch
-  Name: Fisch
-  Update: 04/22/2021
-  Created: 04/22/2021
-  Fe Tags: ""
-  Wala Tags: ""
-  Ma Tags: ""
 flavors of joy:
   Name: flavors of joy
   Created: 5/4/2021
@@ -1313,8 +1306,8 @@ yin:
 zart:
   Name: zart
   path: zart
-  Update: 04/22/2021
-  Created: 04/22/2021
+  Update: 04/24/2021
+  Created: 04/24/2021
   Fe Tags: ""
   Wala Tags: ""
   Ma Tags: ""
@@ -1358,4 +1351,35 @@ zukunftsszenarien:
   Fe Tags: ""
   Wala Tags: ""
   Ma Tags: ""
-
+wintersonne:
+  Name: wintersonne
+  path: wintersonne
+  Update: 04/24/2021
+  Created: 04/24/2021
+  Fe Tags: ""
+  Wala Tags: ""
+  Ma Tags: ""
+alt-right.png:
+  Name: alt-right.png
+  path: alt-right.png
+  Update: 04/26/2021
+  Created: 04/26/2021
+  Fe Tags: ""
+  Wala Tags: ""
+  Ma Tags: ""
+ai.png:
+  Name: ai.png
+  path: ai.png
+  Update: 04/26/2021
+  Created: 04/26/2021
+  Fe Tags: ""
+  Wala Tags: ""
+  Ma Tags: ""
+bach.png:
+  Name: bach.png
+  path: bach.png
+  Update: 04/26/2021
+  Created: 04/26/2021
+  Fe Tags: ""
+  Wala Tags: ""
+  Ma Tags: ""

@@ -1,38 +1,51 @@
 var VerboseSimpleClass = false;
+var Schritt=0;
 class SimpleClass {
 	constructor() { this.dParent = dTable; }
 	presentGameState(data) {
 
+		Schritt+=1;
 		let state = data.state; logState(state); copyKeys(state, this); let dParent = this.dParent;
 
 		clearElement(dParent);
 
 		if (isdef(state.pool)) {
 			this.pool = state.pool;
-			this.pool.map(x => x.path = mPath(x));
+			this.perlenListeImSpiel = Object.values(this.pool);
+			for(const idx in this.pool){let p=this.pool[idx]; p.path = mPath(p);}
 		}
 
 		this.board = showEmptyPerlenBoard(this.rows, this.cols, dParent);
 		mLinebreak(dParent, 25);
 
+		//console.log('___________',Schritt,state.poolArr);
 		showPerlen(this.pool, this.boardArr, this.poolArr, this.board, dParent);
 		this.activateDD();
 
 	}
 	activateDD() {
-		enableDD(this.pool, this.board.fields.filter(x => x.row > 0 && x.col > 0), this.onDropPerleSimplest.bind(this), false);
+		enableDD(this.perlenListeImSpiel, this.board.fields.filter(x => x.row > 0 && x.col > 0), this.onDropPerleSimplest.bind(this), false, false, dragStartPreventionOnSidebarOpen);
+		addDDTarget({item:this.poolArr, div: this.dParent }, false, false);
 	}
 	onDropPerleSimplest(source, target) {
-		let displaced = null;
-		if (isdef(target.item)) {
-			let p = target.item;
-			displaced = p;
-		}
-		if (isdef(source.field)) {
-			let f = source.field;
-			sendMovePerle(source, f, target, displaced);
+		//console.log('dropHandler!',source,target)
+		if (target.item == this.poolArr) {
+			//console.log('===>perle',source,'needs to go back to pool!');
+			let f=source.field;
+			if (isdef(f)) sendRemovePerle(source,f);
 		} else {
-			sendPlacePerle(source, target, displaced);
+			let displaced = null;
+			if (isdef(target.item)) {
+				let p = target.item;
+				if (p == source) return;
+				displaced = p;
+			}
+			if (isdef(source.field)) {
+				let f = source.field;
+				sendMovePerle(source, f, target, displaced);
+			} else {
+				sendPlacePerle(source, target, displaced);
+			}
 		}
 
 	}
@@ -57,7 +70,7 @@ function simplestPerlenGame() {
 
 }
 function waitUntilPerlen() {
-	if (nundef(Perlen)) { return TOMain = setTimeout(waitUntilPerlen, 200); }
+	if (nundef(PerlenDict)) { return TOMain = setTimeout(waitUntilPerlen, 200); }
 	else {
 		clearTimeout(TOMain)
 		_start();
@@ -78,7 +91,6 @@ function sendStartOrJoinPerlenGame() {
 //skip next 2 steps!
 function handleInitialPool(data) {
 	logClientReceive('initialPool', data);
-	G.initialPool(data.state.pool);
 }
 function sendInitialPool() { }
 
@@ -90,20 +102,26 @@ function handleGameState(data) {
 }
 function sendMovePerle(perle, fFrom, fTo, dis) {
 	//console.log('===> PLACE')
-	let data = { iPerle: perle.index, iFrom: fFrom.index, iTo: fTo.index, displaced:isdef(dis)?dis.index:null, username: Username };
+	let data = { iPerle: perle.index, iFrom: fFrom.index, iTo: fTo.index, displaced: isdef(dis) ? dis.index : null, username: Username };
 	logClientSend('movePerle', data);
 	Socket.emit('movePerle', data);
 }
-function sendPlacePerle(perle, field,dis) {
+function sendRemovePerle(perle, fFrom) {
+	//console.log('===> PLACE')
+	let data = { iPerle: perle.index, iFrom: fFrom.index, username: Username };
+	logClientSend('removePerle', data);
+	Socket.emit('removePerle', data);
+}
+function sendPlacePerle(perle, field, dis) {
 	//console.log('hallo sending move')
-	let data = { iPerle: perle.index, iField: field.index, displaced:isdef(dis)?dis.index:null, username: Username };
+	let data = { iPerle: perle.index, iField: field.index, displaced: isdef(dis) ? dis.index : null, username: Username };
 	logClientSend('placePerle', data);
 	Socket.emit('placePerle', data);
 }
 function sendRelayout(rows, cols, boardArr, poolArr) {
 	//console.log('hallo sending relayout');
 	let data = { rows: rows, cols: cols, boardArr: boardArr, username: Username };
-	if (isdef(poolArr)) data.poolArr=poolArr;
+	if (isdef(poolArr)) data.poolArr = poolArr;
 	logClientSend('relayout', data);
 	Socket.emit('relayout', data);
 }
@@ -200,25 +218,25 @@ function createPerle(perle, dParent, sz = 64, wf = 1.3, hf = 0.4, useNewImage = 
 }
 function logState(state) {
 	if (VerboseSimpleClass) {
-		console.log('___________'); 
+		console.log('___________');
 		let [rows, cols, boardArr, poolArr] = [state.rows, state.cols, state.boardArr, state.poolArr];
 		let bar = boardArrReduced(boardArr, rows, cols);
-		let sBoard = toBoardString(bar, rows-1, cols-1);
+		let sBoard = toBoardString(bar, rows - 1, cols - 1);
 
 		console.log('board', sBoard, '\npoolArr', poolArr, '\ndims', rows - 1, 'x', cols - 1);
 	}
 }
-function showPerlen(pool, boardArr, poolArr, board, dParent) {
+function showPerlen(perlenByIndex, boardArr, poolArr, board, dParent) {
 	for (let i = 0; i < poolArr.length; i++) {
 		let iPerle = poolArr[i];
-		perle = pool[iPerle];
+		perle = perlenByIndex[iPerle];
 		perle.field = perle.row = perle.col = null;
 		let ui = createPerle(perle, dParent, 64, 1.3, .4);
 	}
 	for (let i = 0; i < boardArr.length; i++) {
 		let iPerle = boardArr[i];
 		if (iPerle == null) continue;
-		let perle = pool[iPerle];
+		let perle = perlenByIndex[iPerle];
 		let field = board.fields[i];
 		perle.row = field.row;
 		perle.col = field.col;
@@ -230,7 +248,7 @@ function showPerlen(pool, boardArr, poolArr, board, dParent) {
 function mPath(p) {
 	let pre = './assets/games/perlen/perlen/';
 	let post = '.png';
-	if (isdef(p.path)) return pre + p.path + post;
+	if (isdef(p.path)) return p.path[0]=='.'?p.path: pre + p.path + post;
 	let x = p.Name.toLowerCase();
 	x = replaceAll(x, "'", "");
 	//x = replaceAll(x, " ", "_");
@@ -243,7 +261,13 @@ function showEmptyPerlenBoard(rows, cols, dParent) {
 	createFields(board, rows, cols);
 	return board;
 }
-
+function dragStartPreventionOnSidebarOpen(){
+	if (isdef(mBy('drop-region'))) {
+		alert('please close sidebar (by DOUBLECLICK on it) before proceeding!');
+		return false;
+	}
+	return true;
+}
 
 
 

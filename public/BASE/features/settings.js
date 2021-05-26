@@ -180,3 +180,31 @@ class SettingsClass {
 
 }
 
+class PerlenSettings extends SettingsClass{
+	createSettingsUi(dParent) {
+		dParent = valf(dParent,this.dParent);
+		console.log('settings screen',dParent)
+		clearElement(dParent);
+		this.list = [];
+		let ttag = 'h2';
+		mAppend(dParent, createElementFromHTML(`<${ttag}>Settings for ${this.u.id}:</${ttag}>`));
+
+		let nGroupNumCommonAllGames = this.mInputGroup(dParent);
+		this.setzeEineZahl(nGroupNumCommonAllGames, 'samples', 25, ['samplesPerGame']);
+		this.setzeEineZahl(nGroupNumCommonAllGames, 'minutes', 1, ['minutesPerUnit']);
+		this.setzeEineZahl(nGroupNumCommonAllGames, 'correct streak', 5, ['incrementLevelOnPositiveStreak']);
+		this.setzeEineZahl(nGroupNumCommonAllGames, 'fail streak', 2, ['decrementLevelOnNegativeStreak']);
+		this.setzeEinOptions(nGroupNumCommonAllGames, 'show labels', ['toggle', 'always', 'never'], ['toggle', 'always', 'never'], 'toggle', ['pictureLabels']);
+		this.setzeEinOptions(nGroupNumCommonAllGames, 'language', ['E', 'D', 'S', 'F', 'C'], ['English', 'German', 'Spanish', 'French', 'Chinese'], 'E', ['language']);
+		this.setzeEinOptions(nGroupNumCommonAllGames, 'vocabulary', Object.keys(KeySets), Object.keys(KeySets), 'best25', ['vocab']);
+		this.setzeEineCheckbox(nGroupNumCommonAllGames, 'show time', false, ['showTime']);
+		this.setzeEineCheckbox(nGroupNumCommonAllGames, 'spoken feedback', true, ['spokenFeedback']);
+		this.setzeEineCheckbox(nGroupNumCommonAllGames, 'silent', false, ['silentMode']);
+		this.setzeEineCheckbox(nGroupNumCommonAllGames, 'switch game after level', false, ['switchGame']);
+		this.setzeEineZahl(nGroupNumCommonAllGames, 'trials', 3, ['trials']);
+		this.setzeEineCheckbox(nGroupNumCommonAllGames, 'show hint', true, ['showHint']);
+
+		//console.log('Settings', this.list)
+	}
+
+}

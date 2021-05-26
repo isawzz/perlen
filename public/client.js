@@ -74,9 +74,7 @@ function setUserData(username) {
 //3. enter lobby
 function enterLobby() {
 	console.assert(isdef(DB) && isdef(U), 'ENTERLOBBY DB U NOT CORRECT!!!')
-	if (JUST_PERLEN_GAME) {
-		simplestPerlenGame();
-	}
+	if (JUST_PERLEN_GAME) { simplestPerlenGame(); }
 }
 
 //=>von da geht es zu game (simplestPerlenGame.js mit simpleClass...)
