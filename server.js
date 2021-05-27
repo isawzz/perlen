@@ -51,8 +51,8 @@ io.on('connection', client => {
 	client.on('userMessage', x => userman.handleUserMessage(client, x)); //broadcast user left: userManager
 
 	//the following messages are handled by 'simple' (module or class)
-	client.on('addToPool', x => simple.handleImage(client, x, false));
-	client.on('image', x => simple.handleImage(client, x, true));
+	client.on('addToPool', x => simple.handleAddToPool(client, x));
+	client.on('image', x => simple.handleImage(client, x));
 	client.on('movePerle', x => simple.handleMovePerle(client, x));
 	client.on('placePerle', x => simple.handlePlacePerle(client, x));
 	client.on('relayout', x => simple.handleRelayout(client, x));

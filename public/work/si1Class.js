@@ -18,6 +18,9 @@ class SimpleClass1 {
 		this.State = state;
 		//let x=filterByKey(state,'rows,cols');
 		//console.log('x',x)
+		//console.log('PerlenDict',isdef(PerlenDict)?jsCopy(PerlenDict):'no perlenDict!!!');
+		if (isdef(data.perlenDict)) PerlenDict = data.perlenDict;
+
 
 		clearElement(dParent);
 

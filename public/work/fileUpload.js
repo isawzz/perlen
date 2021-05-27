@@ -231,8 +231,14 @@ function uploadFiles() {
 		let data = imgFile.data;
 		let filename = imgFile.name;
 
-		if (updateImages) Socket.emit('image', { data: data, filename: filename });
-		else Socket.emit('addToPool', { data: data, filename: filename });
+		//console.log('filename',filename);
+		let perlenName = stringBefore(filename,'.');
+
+		if (updateImages || !isdef(PerlenDict[perlenName])) Socket.emit('image', { data: data, filename: filename });
+		else {
+			console.log('JUST ADD TO POOL!!!!',perlenName)
+			Socket.emit('addToPool', { name: perlenName });
+		}
 
 	}
 	closePerlenEditor();

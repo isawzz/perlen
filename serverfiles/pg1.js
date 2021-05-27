@@ -143,9 +143,9 @@ class GP1 {
 
 		if (SKIP_INITIAL_SELECT) {
 			logSend('gameState');
-			client.emit('gameState', { state: this.State });
+			client.emit('gameState', { state: this.State, perlenDict: this.perlenDict });
 		} else {
-			let data = { state: this.State, instruction: 'pick your set of pearls!' };
+			let data = { state: this.State, perlenDict: this.perlenDict, instruction: 'pick your set of pearls!' };
 			client.emit('initialPool', data);// { state: { pool: State.pool }, instruction: 'pick your set!' });
 		}
 		this.io.emit('userMessage', {
@@ -300,7 +300,12 @@ function addIfNotInPool(client,filename) {
 	}
 	else { console.assert(base.isdef(G.State.pool[poolPerle.index]), 'ASSERT SCHON IN POOL NICHT IN POOL!!!'); }
 }
-function handleImage(client, x, override = false) {
+function handleAddToPool(client,x){
+		console.log('SHORTCUT!',x.name)
+		addIfNotInPool(client,x.name);
+
+}
+function handleImage(client, x) {
 	try {
 		let isTesting = x.filename == 'aaa';
 		let filename = base.stringBefore(x.filename, '.').toLowerCase();
@@ -308,20 +313,27 @@ function handleImage(client, x, override = false) {
 		let fullPath;
 		if (isTesting) { fullPath = path.join(__dirname, filename + '.png'); console.log('...fake saving file', fullPath); return; }
 
-		//zuerst stelle fest ob diese perle schon existiert!
-		if (override || perleNichtInPerlenDict(filename)) {
-			fullPath = path.join(__dirname, '../public/assets/games/perlen/perlen/' + filename + '.png')
-			let imgData = decodeBase64Image(x.data);
-			fs.writeFile(fullPath, imgData.data,
-				function () {
-					console.log('...images saved:', fullPath);
-					addPerle(filename, client);		// add perle!
-				});
-		} else {
-			//diese perle existiert schon! muss sie nur zu pool adden!!!
-			//console.log('haaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa')
-			addIfNotInPool(client,filename);
-		}
+		fullPath = path.join(__dirname, '../public/assets/games/perlen/perlen/' + filename + '.png')
+		let imgData = decodeBase64Image(x.data);
+		fs.writeFile(fullPath, imgData.data,
+			function () {
+				console.log('...images saved:', fullPath);
+				addPerle(filename, client);		// add perle!
+			});
+		// //zuerst stelle fest ob diese perle schon existiert!
+		// if (override || perleNichtInPerlenDict(filename)) {
+		// 	fullPath = path.join(__dirname, '../public/assets/games/perlen/perlen/' + filename + '.png')
+		// 	let imgData = decodeBase64Image(x.data);
+		// 	fs.writeFile(fullPath, imgData.data,
+		// 		function () {
+		// 			console.log('...images saved:', fullPath);
+		// 			addPerle(filename, client);		// add perle!
+		// 		});
+		// } else {
+		// 	//diese perle existiert schon! muss sie nur zu pool adden!!!
+		// 	//console.log('haaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa')
+		// 	addIfNotInPool(client,filename);
+		// }
 
 	}
 	catch (error) {
@@ -387,7 +399,7 @@ function savePerlenDictToFile() {
 
 module.exports = {
 	addPerle, initPerlenGame,
-	handleImage, handleInitialPoolDone, handleMovePerle, handlePlacePerle, handlePlayerLeft,
+	handleAddToPool, handleImage, handleInitialPoolDone, handleMovePerle, handlePlacePerle, handlePlayerLeft,
 	handleRelayout, handleRemovePerle, handleReset,
 	handleStartOrJoin, GP1,
 }
