@@ -217,10 +217,10 @@ function uploadFiles() {
 		let data = imgFile.data;
 		let filename = imgFile.name;
 		Socket.emit('image', { data: data, filename: filename });
-	
+
 	}
 	closePerlenEditor();
-
+	if (isdef(G)) G.checkInitialPoolDone();
 }
 
 function validateImage(image) {

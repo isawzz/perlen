@@ -1,7 +1,7 @@
 //#region prelim
 const messageTypes = { LEFT: 'left', RIGHT: 'right', LOGIN: 'login' };
 const messages = []; // { author, date, content, type }
-const VerboseSocket = false;
+const VerboseSocket = true;
 
 function initSocket() {
 	Socket = io(SERVERURL);

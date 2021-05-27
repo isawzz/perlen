@@ -274,6 +274,36 @@ function boardToNode(state) {
 	}
 	return res;
 }
+function printBoard(arr,rows,cols,reduced=true){
+	let arrR=boardArrReduced(arr,rows,cols);
+	let s=toBoardString(arrR);
+	console.log('board',s);
+}
+function boardArrReduced(boardArr, rows, cols) {
+	let res = [];
+	for (let r = 1; r < rows; r++) {
+		for (let c = 1; c < cols; c++) {
+			let i = iFromRowCol(r, c, rows, cols);
+
+			res.push(boardArr[i]);
+		}
+	}
+	return res;
+
+}
+// new version von printState:
+function toBoardString(arr, rows, cols) {
+	let s = '\n';
+	for (let r = 0; r < rows; r++) {
+		for (let c = 0; c < cols; c++) {
+			let item = arr[r * cols + c];
+
+			s += '' + (nundef(item) ? '_' : item) + ' ';
+		}
+		s += '\n';
+	}
+	return s;
+}
 function printState(state, cols) {
 	//console.log('___________',state)
 	if (nundef(cols)) cols = G.cols;
@@ -291,18 +321,6 @@ function printState(state, cols) {
 	});
 	console.log('%c' + formattedString, 'color: #6d4e42;font-size:10px');
 	console.log();
-}
-function toBoardString(arr, rows, cols) {
-	let s = '\n';
-	for (let r = 0; r < rows; r++) {
-		for (let c = 0; c < cols; c++) {
-			let item = arr[r * cols + c];
-
-			s += '' + (nundef(item) ? '_' : item) + ' ';
-		}
-		s += '\n';
-	}
-	return s;
 }
 function bCreateEmpty(rows, cols) { return new Array(rows * cols).fill(null); }
 

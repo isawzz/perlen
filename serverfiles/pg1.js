@@ -22,7 +22,7 @@ class GP1 {
 	addPlayer(client, x) {
 		let username = x;
 		let id = client.id;
-		console.log('adding player', id);
+		//console.log('adding player', id);
 		let pl = { id: id, client: client, name: username, username: username, arr: [] };
 		this.players[id] = pl;
 		this.initPlayerState(pl.id);
@@ -55,29 +55,27 @@ class GP1 {
 			});
 
 	}
-	emitPartialGameState(client){
+	emitPartialGameState(client) {
 
+	}
+	emitInitial(client) {
+		let pl = this.players[client.id];
+		let username = pl.name;
+		console.log('username', username);
+		if (SKIP_INITIAL_SELECT) {
+			logSend('gameState');
+			this.io.emit('gameState', { state: this.State, username: username });
+		} else {
+			let data = { state: this.State, instruction: 'pick your set of pearls!' };
+			this.io.emit('initialPool', data); // { state: this.State, username: username });
+			//client.emit('initialPool', data);// { state: { pool: State.pool }, instruction: 'pick your set!' });
+		}
 	}
 	emitGameStateIncludingPool(client) {
 		let pl = this.players[client.id];
 		let username = pl.name;
-		console.log('username',username);
-		// console.log('sollte gameState emitten!',client.id);
-		// console.log('this.state.players',this.State.players);
-		this.io.emit('gameState', { state: this.State, username:username });
-		// this.io.emit('gameState',
-		// 	{
-		// 		state: {
-		// 			rows: this.State.rows,
-		// 			cols: this.State.cols,
-		// 			boardArr: this.State.boardArr,
-		// 			poolArr: this.State.poolArr,
-		// 			pool: this.State.byIndex,
-		// 			players: this.State.players
-		// 		},
-
-		// 		username: username
-		// 	});
+		console.log('username', username);
+		this.io.emit('gameState', { state: this.State, username: username });
 	}
 
 	getNumActivePlayers() { return this.state.players.length; }
@@ -94,13 +92,15 @@ class GP1 {
 	getPerlenName(iPerle) { return this.byIndex[iPerle].Name; }
 	getTurn() { return this.state.turn; }
 	initPlayerState(plid) {
-		console.log('initPlayerState', plid)
+		//console.log('initPlayerState', plid)
 		let pl = this.players[plid];
-		let plState = { id: pl.id, name: pl.name, username: pl.username, arr: pl.arr };
-		console.log('state', plState);
+		pl.arr = [];
+		pl.isInitialized = false;
+		let plState = { id: pl.id, name: pl.name, username: pl.username, arr: pl.arr, isInitialized: pl.isInitializes };
+		//console.log('state', plState);
 		if (base.nundef(this.State.players)) this.State.players = [];
 		this.State.players.push(plState);
-		console.log('added player',pl.id)
+		//console.log('added player',pl.id)
 		return pl;
 	}
 	initPlayers() { this.State.players = []; for (const plid in this.players) { this.initPlayerState(plid); } }
@@ -109,7 +109,10 @@ class GP1 {
 
 		let [rows, cols] = [base.valf(settings.rows, 4), base.valf(settings.cols, 4)];
 		let board = new Array(rows * cols);
-		let keys = getRandomPerlenKeys(base.valf(settings.N, 50));
+
+		let numInitPerlen = SKIP_INITIAL_SELECT ? 50 : 10;
+
+		let keys = getRandomPerlenKeys(base.valf(settings.N, numInitPerlen));
 		//keys[0]='chillax';
 		//keys[1]='carelessness';
 		keys.map(x => this.addToPool(this.perlenDict[x]));
@@ -127,16 +130,23 @@ class GP1 {
 		let n = keys.length;
 		console.log('==>there are ', n, 'perlen');
 	}
+	initialPoolDone(client, x) {
+		let pl = this.players[client.id];
+		pl.isInitialized = true;
+		this.updatePlayerState(pl);
+	}
 	playerJoins(client, x) {
 		let pl = this.addPlayer(client, x);
-		console.log('hallo', x, 'starts or joins game!');
+		console.log('join:', pl.isInitialized);
+		//console.log('hallo', x, 'starts or joins game!');
+
 
 		if (SKIP_INITIAL_SELECT) {
 			logSend('gameState');
 			client.emit('gameState', { state: this.State });
 		} else {
-			let data = { state: State, instruction: 'pick your set of pearls!' };
-			client.emit('initialPool', { state: { pool: State.pool }, instruction: 'pick your set!' });
+			let data = { state: this.State, instruction: 'pick your set of pearls!' };
+			client.emit('initialPool', data);// { state: { pool: State.pool }, instruction: 'pick your set!' });
 		}
 		this.io.emit('userMessage', {
 			username: x,
@@ -150,7 +160,7 @@ class GP1 {
 		delete players[id];
 		let plState = this.getPlayerState(id);
 		if (plState) base.removeInPlace(this.State.players, plState);
-		console.log('player left: ', client.id, data);
+		//console.log('player left: ', client.id, data);
 	}
 	playerMovesPerle(client, x) {
 		let iPerle = x.iPerle;
@@ -229,6 +239,22 @@ class GP1 {
 		this.sendGameState(pl, newState, msg);
 	}
 
+	playerReset(client,x){
+		console.log('Reset!!!!', x);
+		this.initState(x);
+
+		//make sure initState has resetted ALL players to isInitialized = false!
+		console.log('playerstates',this.State.players);
+
+		this.emitInitial(client);
+		//console.log('...',G.State.poolArr)
+		//G.io.emit('gameState', { state: G.State });
+		//G.emitGameStateIncludingPool(client);
+	
+	}
+	sendInit(){
+
+	}
 	sendGameState(pl, newState, msg) {
 		let username = pl.username;
 
@@ -240,11 +266,15 @@ class GP1 {
 
 
 	}
+	updatePlayerState(pl) {
+		let plState = base.firstCond(this.State.players, x => x.id == pl.id);
+		plState.isInitialized = pl.isInitialized;
+	}
 }
 
 //#region interface
-function addPerle(filename,client) {
-	
+function addPerle(filename, client) {
+
 	//filename = base.stringBefore(filename,'.').toLowerCase();
 	console.log('==>adding perle for', filename);
 	console.assert(filename == filename.toLowerCase(), 'FILENAME CASING!!!!');
@@ -259,7 +289,7 @@ function addPerle(filename,client) {
 	console.assert(base.isdef(perle), 'KEINE PERLE!!!!!!!!!!!!!! ' + filename);
 
 	let poolPerle = G.getPerleByFilename(filename);
-	console.log('pool perle',poolPerle);
+	console.log('pool perle', poolPerle);
 	if (poolPerle == null) {
 		poolPerle = G.addToPool(perle);
 		G.emitGameStateIncludingPool(client);		//io.emit('gameState', { state: State });		
@@ -270,7 +300,7 @@ function addPerle(filename,client) {
 function handleImage(client, x) {
 	try {
 		let isTesting = x.filename == 'aaa';
-		let filename = base.stringBefore(x.filename,'.').toLowerCase();
+		let filename = base.stringBefore(x.filename, '.').toLowerCase();
 
 		let fullPath;
 		if (isTesting) {
@@ -290,26 +320,20 @@ function handleImage(client, x) {
 	}
 }
 function initPerlenGame(IO, perlenDict) {
-	console.log('hhhhhhhhhhhhhhhh');
+	//console.log('hhhhhhhhhhhhhhhh');
 	PerlenDict = perlenDict;
 	G = new GP1(IO, perlenDict);
-	console.log('players', G.players);
+	//console.log('players', G.players);
 }
 function handleMovePerle(client, x) { G.playerMovesPerle(client, x); }
 function handlePlayerLeft(client, x) { G.playerLeft(client, x); }
 function handlePlacePerle(client, x) { G.playerPlacesPerle(client, x); }
 function handleRelayout(client, x) { G.boardLayoutChange(client, x); }
 function handleRemovePerle(client, x) { G.playerRemovesPerle(client, x); }
-function handleReset(client, x) {
-	console.log('handleReset', x)
-	G.initState(x);
-	//console.log('...',G.State.poolArr)
-	//G.io.emit('gameState', { state: G.State });
-	G.emitGameStateIncludingPool(client);
-
-}
+function handleReset(client, x) { G.playerReset(client,x); }
 function handleStartOrJoin(client, x) { G.playerJoins(client, x); }
-//#endregion
+
+function handleInitialPoolDone(client, x) { G.initialPoolDone(client, x); }
 
 //#region helpers
 function addToPerlenDict(filename) {
@@ -345,22 +369,16 @@ function logSend(type) { MessageCounter++; log('#' + MessageCounter, 'send ' + t
 function logReceive(type) { MessageCounter++; log('#' + MessageCounter, 'receive ' + type); }
 function perleNichtInPerlenDict(filename) { return base.nundef(PerlenDict[filename]); }
 function savePerlenDictToFile() {
-	// let newDict = {};
-	// for (const k in PerlenDict) {
-	// 	let newPerle = jsCopy(PerlenDict[k]);
-	// 	delete newPerle.index;
-	// 	newDict[k] = newPerle;
-	// }
-
 	utils.toYamlFile(PerlenDict, path.join(__dirname, '../public/perlenDict.yaml'));
 }
 
+//#endregion
 
 
 
 module.exports = {
 	addPerle, initPerlenGame,
-	handleImage, handleMovePerle, handlePlacePerle, handlePlayerLeft,
+	handleImage, handleInitialPoolDone, handleMovePerle, handlePlacePerle, handlePlayerLeft,
 	handleRelayout, handleRemovePerle, handleReset,
 	handleStartOrJoin, GP1,
 }

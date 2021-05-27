@@ -2,21 +2,22 @@
 const PORT = 3333;
 
 // *** deploy to heroku ***
-const NGROK = false; //'http://849aec381695.ngrok.io/'; // MUSS / am ende!!! 
-const HEROKU = true;
-const USERNAME_SELECTION = 'local'; // random | local | nil | gul | ma ...
+// const NGROK = false; //'http://849aec381695.ngrok.io/'; // MUSS / am ende!!! 
+// const HEROKU = true;
+// const USERNAME_SELECTION = 'local'; // random | local | nil | gul | ma ...
 
 //*** testing */:
-// const NGROK = false; //'http://849aec381695.ngrok.io/'; // MUSS / am ende!!! 
-// const HEROKU = false;
-// const USERNAME_SELECTION = 'random'; // random | local | nil | gul | ma ...
+const NGROK = false; //'http://849aec381695.ngrok.io/'; // MUSS / am ende!!! 
+const HEROKU = false;
+const USERNAME_SELECTION = 'random'; // random | local | nil | gul | ma ...
 
 var USESOCKETS = true; //false ist wahtscheinlich broken!
 const JUST_PERLEN_GAME = true;
-const SKIP_INITIAL_SELECT = true;
+const SKIP_INITIAL_SELECT = false;
+
 const PERLEN_EDITOR_OPEN_AT_START = false;
 
-const SERVERURL = NGROK ? NGROK : HEROKU? 'https://part4limitless.herokuapp.com/':'http://localhost:' + PORT + '/';
+const SERVERURL = NGROK ? NGROK : HEROKU ? 'https://part4limitless.herokuapp.com/' : 'http://localhost:' + PORT + '/';
 
 const CLEAR_LOCAL_STORAGE = false;
 

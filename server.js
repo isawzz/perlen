@@ -11,7 +11,7 @@ const { PORT } = require('./public/BASE/globals.js');
 
 const utils = require('./serverfiles/utils.js');
 const userman = require('./serverfiles/userManager.js');
-const simple = require('./serverfiles/perlenClass.js');
+const simple = require('./serverfiles/pg1.js');
 
 const DB = utils.fromYamlFile(path.join(__dirname, 'public/data.yaml'));
 const PerlenDict = utils.fromYamlFile(path.join(__dirname, 'public/perlenDict.yaml'));
@@ -59,6 +59,7 @@ io.on('connection', client => {
 	client.on('reset', x => simple.handleReset(client, x))
 	client.on('startOrJoinPerlen', x => simple.handleStartOrJoin(client, x)); 
 
+	client.on('initialPoolDone', x => simple.handleInitialPoolDone(client, x)); 
 
 });
 
