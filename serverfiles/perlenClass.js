@@ -116,7 +116,7 @@ class GP1 {
 		let [rows, cols] = [base.valf(settings.rows, 4), base.valf(settings.cols, 4)];
 		let board = new Array(rows * cols);
 		let keys = getRandomPerlenKeys(base.valf(settings.N, 50));
-		keys[0]='chillax';
+		//keys[0]='chillax';
 		//keys[1]='carelessness';
 		keys.map(x => this.addToPool(this.perlenDict[x]));
 
