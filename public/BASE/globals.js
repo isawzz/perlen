@@ -48,6 +48,7 @@ var NiceBaseColors = ['#791900']
 var ColorNames; //see base.js colors
 const BLUE = '#4363d8';
 const BLUEGREEN = '#004054';
+const BRAUN = '#331606';
 const BROWN = '#96613d';
 const GREEN = '#3cb44b';
 const FIREBRICK = '#800000';
@@ -70,7 +71,9 @@ const ColorDict = {
 	BLUE: { c: '#4363d8', E: 'blue', D: 'blau' },
 	BLUEGREEN: { c: BLUEGREEN, E: 'bluegreen', D: 'blaugrün' },
 	blue1: { c: BLUE, E: 'blue', D: 'blau' },
+	BRAUN: { c: BRAUN, E: 'brown', D: 'braun' },
 	BROWN: { c: BROWN, E: 'brown', D: 'braun' },
+	brown: { c: BRAUN, E: 'brown', D: 'braun' },
 	deepyellow: { c: YELLOW3, E: 'yellow', D: 'gelb' },
 	FIREBRICK: { c: '#800000', E: 'darkred', D: 'rotbraun' },
 	gold: { c: 'gold', E: 'gold', D: 'golden' },

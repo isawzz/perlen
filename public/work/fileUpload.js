@@ -27,6 +27,8 @@ function createPerlenEditor() {
 	dropRegion.onclick = () => { fakeInput.click(); };
 	fakeInput.onchange = () => { var files = fakeInput.files; previewFiles(files); };
 
+
+
 }
 function createDropBox(dParent) {
 	let html = createElementFromHTML(
@@ -109,7 +111,9 @@ function previewFiles(files) {
 		}
 	}
 	//console
+
 	showUploadButton();
+	showUpdateImagesCheckbox();
 }
 function previewImageFromUrl(url) {
 	let prev = mBy('image-preview');
@@ -180,8 +184,15 @@ function previewImageFromFile(imgFile) {
 
 function showUploadButton() {
 	if (isdef(mBy('btnUpload'))) return;
-	let btn = mButton('upload', onClickUpload, mBy('dLeiste'), { w: 80, h: 25 }, ['buttonClass']);
+	let btn = mButton('upload', onClickUpload, mBy('dLeiste'), { matop:5, w: 80, h: 25 }, ['buttonClass']);
 	btn.id = 'btnUpload';
+
+}
+function showUpdateImagesCheckbox() {
+	let id='chkUpdateImages';
+	if (isdef(mBy(id))) return;
+
+	let btn = mCheckbox('update images', false, mBy('dLeiste'),  { maleft: 12, mabottom: 0, hmin:25 },id);
 
 }
 function showUploadInput() {
@@ -209,6 +220,9 @@ function uploadImage() {
 }
 function uploadFiles() {
 	//console.log('uploading files:', FilesToUpload);
+	let updateImages=mBy('chkUpdateImages').checked;
+	console.log('updateImages',updateImages);
+	//====?!!
 	for (const imgFile of FilesToUpload) {
 		//uploadFile00w(imgFile);
 		//uploadFile01_NO(imgFile);
@@ -216,7 +230,9 @@ function uploadFiles() {
 		// uploadFile02Works(imgFile); //:
 		let data = imgFile.data;
 		let filename = imgFile.name;
-		Socket.emit('image', { data: data, filename: filename });
+
+		if (updateImages) Socket.emit('image', { data: data, filename: filename });
+		else Socket.emit('addToPool', { data: data, filename: filename });
 
 	}
 	closePerlenEditor();

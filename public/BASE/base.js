@@ -24,6 +24,21 @@ function mCenterFlex(d, hCenter = true, vCenter = false, wrap = true) {
 	if (wrap) styles['flex-wrap'] = 'wrap';
 	mStyleX(d, styles);
 }
+function mCheckbox(label,val,dParent,styles={},id){
+	let d = mDiv(dParent,{display:'inline-block',align:'left'});
+	// let val = lookup(this.o, skeys);
+	// if (nundef(val)) val = init;
+	let inp = createElementFromHTML(
+		`<input type="checkbox" class="checkbox" ${(val === true ? 'checked=true' : '')} >`
+	);
+	if (isdef(id)) inp.id=id;
+	let labelui = createElementFromHTML(`<label>${label}</label>`);
+	mAppend(d, labelui);
+	mAppend(labelui, inp);
+	mStyleX(inp, styles);
+	mClass(inp, 'input');
+	return inp;
+}
 function mClass(d) { for (let i = 1; i < arguments.length; i++) d.classList.add(arguments[i]); }
 function mContainer(d, styles = {}) {
 	let defOuterStyles = {

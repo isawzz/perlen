@@ -239,20 +239,20 @@ class GP1 {
 		this.sendGameState(pl, newState, msg);
 	}
 
-	playerReset(client,x){
+	playerReset(client, x) {
 		console.log('Reset!!!!', x);
 		this.initState(x);
 
 		//make sure initState has resetted ALL players to isInitialized = false!
-		console.log('playerstates',this.State.players);
+		console.log('playerstates', this.State.players);
 
 		this.emitInitial(client);
 		//console.log('...',G.State.poolArr)
 		//G.io.emit('gameState', { state: G.State });
 		//G.emitGameStateIncludingPool(client);
-	
+
 	}
-	sendInit(){
+	sendInit() {
 
 	}
 	sendGameState(pl, newState, msg) {
@@ -288,32 +288,41 @@ function addPerle(filename, client) {
 
 	console.assert(base.isdef(perle), 'KEINE PERLE!!!!!!!!!!!!!! ' + filename);
 
+	addIfNotInPool(client,filename);
+	if (savePerlen) { savePerlenDictToFile(); }
+}
+function addIfNotInPool(client,filename) {
 	let poolPerle = G.getPerleByFilename(filename);
 	console.log('pool perle', poolPerle);
 	if (poolPerle == null) {
-		poolPerle = G.addToPool(perle);
+		poolPerle = G.addToPool(PerlenDict[filename]);
 		G.emitGameStateIncludingPool(client);		//io.emit('gameState', { state: State });		
-		if (savePerlen) { savePerlenDictToFile(); }
 	}
 	else { console.assert(base.isdef(G.State.pool[poolPerle.index]), 'ASSERT SCHON IN POOL NICHT IN POOL!!!'); }
 }
-function handleImage(client, x) {
+function handleImage(client, x, override = false) {
 	try {
 		let isTesting = x.filename == 'aaa';
 		let filename = base.stringBefore(x.filename, '.').toLowerCase();
 
 		let fullPath;
-		if (isTesting) {
-			fullPath = path.join(__dirname, filename + '.png');
-			console.log('...fake saving file', fullPath); return;
+		if (isTesting) { fullPath = path.join(__dirname, filename + '.png'); console.log('...fake saving file', fullPath); return; }
+
+		//zuerst stelle fest ob diese perle schon existiert!
+		if (override || perleNichtInPerlenDict(filename)) {
+			fullPath = path.join(__dirname, '../public/assets/games/perlen/perlen/' + filename + '.png')
+			let imgData = decodeBase64Image(x.data);
+			fs.writeFile(fullPath, imgData.data,
+				function () {
+					console.log('...images saved:', fullPath);
+					addPerle(filename, client);		// add perle!
+				});
+		} else {
+			//diese perle existiert schon! muss sie nur zu pool adden!!!
+			//console.log('haaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa')
+			addIfNotInPool(client,filename);
 		}
-		fullPath = path.join(__dirname, '../public/assets/games/perlen/perlen/' + filename + '.png')
-		let imgData = decodeBase64Image(x.data);
-		fs.writeFile(fullPath, imgData.data,
-			function () {
-				console.log('...images saved:', fullPath);
-				addPerle(filename, client);		// add perle!
-			});
+
 	}
 	catch (error) {
 		console.log('ERROR:', error);
@@ -330,7 +339,7 @@ function handlePlayerLeft(client, x) { G.playerLeft(client, x); }
 function handlePlacePerle(client, x) { G.playerPlacesPerle(client, x); }
 function handleRelayout(client, x) { G.boardLayoutChange(client, x); }
 function handleRemovePerle(client, x) { G.playerRemovesPerle(client, x); }
-function handleReset(client, x) { G.playerReset(client,x); }
+function handleReset(client, x) { G.playerReset(client, x); }
 function handleStartOrJoin(client, x) { G.playerJoins(client, x); }
 
 function handleInitialPoolDone(client, x) { G.initialPoolDone(client, x); }
