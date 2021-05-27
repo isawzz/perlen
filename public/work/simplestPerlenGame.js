@@ -6,13 +6,17 @@ class SimpleClass {
 
 		Schritt+=1;
 		let state = data.state; logState(state); copyKeys(state, this); let dParent = this.dParent;
+		this.State=state;
+		//let x=filterByKey(state,'rows,cols');
+		//console.log('x',x)
 
 		clearElement(dParent);
 
+		//console.log('state',state,'\nclientId',Socket.id);
 		if (isdef(state.pool)) {
 			this.pool = state.pool;
-			console.log('POOL IS HERE!!!',this.pool)
 			this.perlenListeImSpiel = Object.values(this.pool);
+			//console.log('POOL IS HERE!!!',this.perlenListeImSpiel[0].Name)
 
 			for(const idx in this.pool){let p=this.pool[idx]; p.path = mPath(p);}
 		}
@@ -20,7 +24,7 @@ class SimpleClass {
 		this.board = showEmptyPerlenBoard(this.rows, this.cols, dParent);
 		mLinebreak(dParent, 25);
 
-		console.log('___________',Schritt,state,state.poolArr);
+		//console.log('___________',Schritt,state,state.poolArr);
 		showPerlen(this.pool, this.boardArr, this.poolArr, this.board, dParent);
 		this.activateDD();
 

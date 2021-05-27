@@ -17,6 +17,8 @@ var PerlenDict;
 
 //#endregion
 
+
+
 class GP1 {
 	constructor(io, perlenDict, settings) {
 		this.io = io;
@@ -61,25 +63,29 @@ class GP1 {
 			});
 
 	}
+	emitPartialGameState(client){
 
+	}
 	emitGameStateIncludingPool(client) {
 		let pl = this.players[client.id];
 		let username = pl.name;
-		console.log('sollte gameState emitten!',client.id);
-		console.log('this.state.players');
-		this.io.emit('gameState',
-			{
-				state: {
-					rows: this.State.rows,
-					cols: this.State.cols,
-					boardArr: this.State.boardArr,
-					poolArr: this.State.poolArr,
-					pool: this.State.byIndex,
-					players: this.State.players
-				},
+		console.log('username',username);
+		// console.log('sollte gameState emitten!',client.id);
+		// console.log('this.state.players',this.State.players);
+		this.io.emit('gameState', { state: this.State, username:username });
+		// this.io.emit('gameState',
+		// 	{
+		// 		state: {
+		// 			rows: this.State.rows,
+		// 			cols: this.State.cols,
+		// 			boardArr: this.State.boardArr,
+		// 			poolArr: this.State.poolArr,
+		// 			pool: this.State.byIndex,
+		// 			players: this.State.players
+		// 		},
 
-				username: username
-			});
+		// 		username: username
+		// 	});
 	}
 
 	getNumActivePlayers() { return this.state.players.length; }
@@ -117,7 +123,7 @@ class GP1 {
 		//keys[1]='carelessness';
 		keys.map(x => this.addToPool(this.perlenDict[x]));
 
-		console.log('byIndex',keys);
+		//console.log('byIndex',keys);
 		this.State = {
 			rows: rows,
 			cols: cols,
@@ -309,6 +315,8 @@ function handleRemovePerle(client, x) { G.playerRemovesPerle(client, x); }
 function handleReset(client, x) {
 	console.log('handleReset', x)
 	G.initState(x);
+	//console.log('...',G.State.poolArr)
+	//G.io.emit('gameState', { state: G.State });
 	G.emitGameStateIncludingPool(client);
 
 }

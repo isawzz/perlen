@@ -25,14 +25,14 @@ function mCenterFlex(d, hCenter = true, vCenter = false, wrap = true) {
 	mStyleX(d, styles);
 }
 function mClass(d) { for (let i = 1; i < arguments.length; i++) d.classList.add(arguments[i]); }
-function mContainer(d,styles={}){
+function mContainer(d, styles = {}) {
 	let defOuterStyles = {
 		display: 'inline-flex', 'flex-direction': 'column',
 		'justify-content': 'center', 'align-items': 'center', 'vertical-align': 'top',
 		padding: 0, box: true
 	};
-	addKeys(d,defOuterStyles);
-	mStyleX(d,styles);
+	addKeys(d, defOuterStyles);
+	mStyleX(d, styles);
 }
 function mCreate(tag, styles, id) { let d = document.createElement(tag); if (isdef(id)) d.id = id; if (isdef(styles)) mStyleX(d, styles); return d; }
 function mDestroy(elem) { if (isString(elem)) elem = mById(elem); purge(elem); } // elem.parentNode.removeChild(elem); }
@@ -123,7 +123,7 @@ function mInput(label, value, dParent, styles, id) {
 	mAppend(dParent, labelui);
 	mAppend(labelui, inp);
 	if (isdef(styles)) mStyleX(labelui, styles);
-	if (isdef(id)) inp.id=id;
+	if (isdef(id)) inp.id = id;
 	return inp;
 }
 function mInsert(dParent, el, index = 0) { dParent.insertBefore(el, dParent.childNodes[index]); }
@@ -1718,7 +1718,7 @@ function onReleaseClone(ev) {
 			//if (DragElem.clearTarget) clearElement(dTarget);
 			if (isdef(dropHandler)) {
 				dropHandler(source, target, DragElem.isCopy, DragElem.clearTarget);
-			} 
+			}
 			//console.log('dropped', source.name, 'on target', target);
 			break; //as soon as found a target, stop looking for more targets!
 
@@ -2404,6 +2404,19 @@ function fisherYates(array) {
 	}
 	return array;
 }
+function filterByKey(o, keyString, exceptString) {
+	let keys;
+	if (isdef(keyString)) keys = keyString.split(',');
+	console.log('keys', keys);
+	//else if (isdef(exceptString)) keys=Object.keys(o).filter(x=>exceptString.includes(x));
+
+	let result = {};
+	for (const k of keys) {
+		if (isdef(o[k])) result[k] = o[k];
+	}
+	//copyKeys(o,result,null,keys);
+	return result;
+}
 function findLongestWord(arr) { return arr[arrMinMax(arr, x => x.length).imax]; }
 function firstCond(arr, func) {
 	//return first elem that fulfills condition
@@ -2744,14 +2757,14 @@ function randomHslaColor(s = 100, l = 70, a = 1) {
 function randomDarkColor() {
 	let s = '#';
 	for (let i = 0; i < 3; i++) {
-		s += chooseRandom([0,1,2,3,4,5,6,7])+chooseRandom(['f', 'c', '9', '6', '3', '0']);
+		s += chooseRandom([0, 1, 2, 3, 4, 5, 6, 7]) + chooseRandom(['f', 'c', '9', '6', '3', '0']);
 	}
 	return s;
 }
 function randomLightColor() {
 	let s = '#';
 	for (let i = 0; i < 3; i++) {
-		s += chooseRandom(['A','B','C','D','E','F'])+chooseRandom(['f', 'c', '9', '6', '3', '0']);
+		s += chooseRandom(['A', 'B', 'C', 'D', 'E', 'F']) + chooseRandom(['f', 'c', '9', '6', '3', '0']);
 	}
 	return s;
 }
@@ -3331,7 +3344,7 @@ function purge(elem) {
 		}
 	}
 	elem.remove(); //elem.parentNode.removeChild(elem);
-} 
+}
 function show(elem, isInline = false) {
 	if (isString(elem)) elem = document.getElementById(elem);
 	if (isSvg(elem)) {
@@ -3359,7 +3372,7 @@ if (this && typeof module == "object" && module.exports && this === module.expor
 		dict2list,
 		firstCond, firstCondDictKey, formatDate,
 		isdef, jsCopy,
-		nundef, 
+		nundef,
 		range, randomNumber, removeInPlace,
 		stringBefore, stringAfter, stringAfterLast,
 		valf,
