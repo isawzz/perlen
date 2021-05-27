@@ -855,14 +855,6 @@ observe act experiment:
   Update: 5/7/2021
   Wala Tags: methode, wahrnehmung
   path: observe act experiment
-ocean:
-  Name: ocean
-  path: ocean
-  Update: 04/18/2021
-  Created: 04/18/2021
-  Fe Tags: ""
-  Wala Tags: ""
-  Ma Tags: ""
 oligarchie:
   path: oligarchie
   Name: Oligarchie
@@ -1359,33 +1351,17 @@ wintersonne:
   Fe Tags: ""
   Wala Tags: ""
   Ma Tags: ""
-alt-right.png:
-  Name: alt-right.png
-  path: alt-right.png
+ocean2:
+  Name: ocean2
+  path: ocean2
   Update: 04/26/2021
   Created: 04/26/2021
   Fe Tags: ""
   Wala Tags: ""
   Ma Tags: ""
-ai.png:
-  Name: ai.png
-  path: ai.png
-  Update: 04/26/2021
-  Created: 04/26/2021
-  Fe Tags: ""
-  Wala Tags: ""
-  Ma Tags: ""
-bach.png:
-  Name: bach.png
-  path: bach.png
-  Update: 04/26/2021
-  Created: 04/26/2021
-  Fe Tags: ""
-  Wala Tags: ""
-  Ma Tags: ""
-angkor wat.png:
-  Name: angkor wat.png
-  path: angkor wat.png
+chillax2:
+  Name: chillax2
+  path: chillax2
   Update: 04/26/2021
   Created: 04/26/2021
   Fe Tags: ""

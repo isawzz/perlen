@@ -17,8 +17,6 @@ var PerlenDict;
 
 //#endregion
 
-
-
 class GP1 {
 	constructor(io, perlenDict, settings) {
 		this.io = io;
@@ -100,7 +98,6 @@ class GP1 {
 		return null;
 	}
 	getPerlenName(iPerle) { return this.byIndex[iPerle].Name; }
-	//BROKENgetState(keys){return base.isdef(keys)?partialObject(this.State,keys):this.State;}
 	getTurn() { return this.state.turn; }
 	initPlayerState(plid) {
 		console.log('initPlayerState', plid)
@@ -119,7 +116,7 @@ class GP1 {
 		let [rows, cols] = [base.valf(settings.rows, 4), base.valf(settings.cols, 4)];
 		let board = new Array(rows * cols);
 		let keys = getRandomPerlenKeys(base.valf(settings.N, 50));
-		//keys[0]='playful';
+		keys[0]='chillax';
 		//keys[1]='carelessness';
 		keys.map(x => this.addToPool(this.perlenDict[x]));
 
@@ -253,8 +250,10 @@ class GP1 {
 
 //#region interface
 function addPerle(filename,client) {
-	console.log('adding perle for', filename);
-	console.assert(filename == filename.toLowerCase(), 'FILENAME CASING!!!!')
+	
+	//filename = base.stringBefore(filename,'.').toLowerCase();
+	console.log('==>adding perle for', filename);
+	console.assert(filename == filename.toLowerCase(), 'FILENAME CASING!!!!');
 
 	// if this filename is already present in pool, do NOT add it again!!!
 	let emitPool = false, savePerlen = false;
@@ -266,29 +265,29 @@ function addPerle(filename,client) {
 	console.assert(base.isdef(perle), 'KEINE PERLE!!!!!!!!!!!!!! ' + filename);
 
 	let poolPerle = G.getPerleByFilename(filename);
+	console.log('pool perle',poolPerle);
 	if (poolPerle == null) {
 		poolPerle = G.addToPool(perle);
 		G.emitGameStateIncludingPool(client);		//io.emit('gameState', { state: State });		
 		if (savePerlen) { savePerlenDictToFile(); }
 	}
-	// if (perleNichtInStatePool(perle)) { emitPool = true; addToByIndex(perle); }
-	else { console.assert(base.isdef(G.State.pool[poolPerle.index]), 'SCHON IN STATE POOL!!! do nothing!'); }
+	else { console.assert(base.isdef(G.State.pool[poolPerle.index]), 'ASSERT SCHON IN POOL NICHT IN POOL!!!'); }
 }
-//BROKENfunction partialObject(o, keys) { let onew = {}; for (const k of keys) onew = o[k]; return onew; }
 function handleImage(client, x) {
 	try {
 		let isTesting = x.filename == 'aaa';
-		let fname;
+		let filename = base.stringBefore(x.filename,'.').toLowerCase();
+
+		let fullPath;
 		if (isTesting) {
-			fname = path.join(__dirname, x.filename + '.png');
-			console.log('...fake saving file', fname); return;
+			fullPath = path.join(__dirname, filename + '.png');
+			console.log('...fake saving file', fullPath); return;
 		}
-		let filename = x.filename.toLowerCase();
-		fname = path.join(__dirname, '../public/assets/games/perlen/perlen/' + x.filename + '.png')
+		fullPath = path.join(__dirname, '../public/assets/games/perlen/perlen/' + filename + '.png')
 		let imgData = decodeBase64Image(x.data);
-		fs.writeFile(fname, imgData.data,
+		fs.writeFile(fullPath, imgData.data,
 			function () {
-				console.log('...images saved:', fname);
+				console.log('...images saved:', fullPath);
 				addPerle(filename, client);		// add perle!
 			});
 	}
@@ -296,11 +295,6 @@ function handleImage(client, x) {
 		console.log('ERROR:', error);
 	}
 }
-
-
-//#endregion
-
-//#region DONE!
 function initPerlenGame(IO, perlenDict) {
 	console.log('hhhhhhhhhhhhhhhh');
 	PerlenDict = perlenDict;
@@ -321,6 +315,7 @@ function handleReset(client, x) {
 
 }
 function handleStartOrJoin(client, x) { G.playerJoins(client, x); }
+//#endregion
 
 //#region helpers
 function addToPerlenDict(filename) {
@@ -336,19 +331,6 @@ function addToPerlenDict(filename) {
 	PerlenDict[filename] = perle;
 	return perle;
 }
-function addToByIndex(perle) {
-	function nextIndex(perle) {
-		perle.index = MaxIndex;
-		MaxIndex += 1;
-		byIndex[perle.index] = perle;
-	}
-	let newPerle = {};
-	base.copyKeys(perle, newPerle);
-	nextIndex(newPerle);
-	//console.assert(base.isdef(State.pool[newPerle.index]));
-	return newPerle;
-}
-function addToPoolArr(index) { State.poolArr.push(index); }
 function decodeBase64Image(dataString) {
 	var matches = dataString.match(/^data:([A-Za-z-+\/]+);base64,(.+)$/);
 	var response = {};
@@ -362,48 +344,12 @@ function decodeBase64Image(dataString) {
 
 	return response;
 }
-function emitGameStateIncludingPool(username) { io.emit('gameState', { state: State, username: username }); }
-function findPerleInStatePool(p) {
-	for (const idx in State.pool) {
-		if (State.pool.path == p.path) return State.pool[idx];
-	}
-	return null;
-}
 function getRandomPerlenKeys(n) { return base.choose(Object.keys(PerlenDict), n); }
-
-function initState(settings = {}) {
-	byIndex = {}; MaxIndex = 0; State = {};
-
-	let [rows, cols] = [base.valf(settings.rows, ROWS), base.valf(settings.cols, COLS)];
-	let board = new Array(rows * cols);
-	let keys = getRandomPerlenKeys(base.valf(settings.N, N));
-	//keys[0]='playful';
-	//keys[1]='carelessness';
-	keys.map(x => addToByIndex(PerlenDict[x]));
-
-	State = {
-		rows: rows,
-		cols: cols,
-		poolArr: Object.values(byIndex).map(x => x.index),
-		boardArr: board,
-		pool: byIndex,
-		players: [],
-	};
-
-	let n = keys.length;
-	console.log('==>there are ', n, 'perlen');
-}
 function log() { if (Verbose) console.log('perlen: ', ...arguments); }
 function logBroadcast(type) { MessageCounter++; log('#' + MessageCounter, 'broadcast ' + type); }
 function logSend(type) { MessageCounter++; log('#' + MessageCounter, 'send ' + type); }
 function logReceive(type) { MessageCounter++; log('#' + MessageCounter, 'receive ' + type); }
 function perleNichtInPerlenDict(filename) { return base.nundef(PerlenDict[filename]); }
-function perleNichtInStatePool(p) {
-	for (const idx in State.pool) {
-		if (State.pool.path == p.path) return false;
-	}
-	return true;
-}
 function savePerlenDictToFile() {
 	// let newDict = {};
 	// for (const k in PerlenDict) {

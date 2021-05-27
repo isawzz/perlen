@@ -144,7 +144,13 @@ function previewImageFromUrl(url) {
 
 		ctx.drawImage(this, sx, sy, w - 2 * sx, h - 2 * sy, 0, 0, diam, diam);
 
-		crop500(this);
+		ctx.globalCompositeOperation = 'destination-in';
+		ctx.beginPath();
+		ctx.arc(diam / 2, diam / 2, diam / 2, 0, Math.PI * 2);
+		ctx.closePath();
+		//ctx.fillStyle = "#23ff94";
+		ctx.fill();
+		//crop500(this);
 		showUploadInput();
 		showUploadButton();
 	};

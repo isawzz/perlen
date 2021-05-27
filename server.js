@@ -4,6 +4,8 @@ const app = express();
 const cors = require('cors');
 const http = require('http').Server(app);
 const path = require('path');
+const fs = require('fs');
+
 const base = require('./public/BASE/base.js');
 const { PORT } = require('./public/BASE/globals.js');
 
@@ -25,36 +27,6 @@ app.get('/', (req, res) => {
 	res.header("Access-Control-Allow-Origin", "*");
 	res.header("Access-Control-Allow-Headers", "X-Requested-With");
 	res.sendFile(path.join(__dirname, +'public/index.html'));
-});
-//#endregion
-
-//#region formidable POST upload WEG DAMIT!
-//var lastFilename;
-const fs = require('fs');
-var formidable = require('formidable');
-app.post('/imageUpload', function (req, res) {
-	var form = new formidable.IncomingForm();
-	form.parse(req, function (err, fields, data) {
-		//console.log('files', data,'fields',fields);
-		var oldpath = data.image.path;
-		let name = data.image.name;
-		//console.log('oldpath',name);
-		//let lastFilename = 'zhallo';
-		var newpath = './public/assets/games/perlen/perlen/' + name;
-		//var newpath = './z' + name;
-		console.log('_______data', data);
-		console.log('_______fields', fields);
-		console.log('oldPath', oldpath);
-		console.log('name', name);
-		console.log('newPath', newpath);
-		fs.rename(oldpath, newpath, function (err) {
-			if (err) throw err;
-			res.write('File uploaded and moved!');
-			res.end();
-			name = base.stringBefore(name, '.');
-			simple.addPerle(name);
-		});
-	});
 });
 //#endregion
 
@@ -85,7 +57,7 @@ io.on('connection', client => {
 	client.on('relayout', x => simple.handleRelayout(client, x));
 	client.on('removePerle', x => simple.handleRemovePerle(client, x));
 	client.on('reset', x => simple.handleReset(client, x))
-	client.on('startOrJoinPerlen', x => simple.handleStartOrJoin(client, x)); //x...
+	client.on('startOrJoinPerlen', x => simple.handleStartOrJoin(client, x)); 
 
 
 });
