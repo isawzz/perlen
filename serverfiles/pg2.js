@@ -125,8 +125,8 @@ class GP2 {
 		let board = this.board = this.settings.IsTraditionalBoard ? this.initBoardTraditional(settings)
 			: this.initBoardImage(settings);
 
-		let numInitPerlen = this.settings.SkipInitialSelect ? 50 : 10;
-		let keys = getRandomPerlenKeys(base.valf(this.settings.N, numInitPerlen));
+		let numInitPerlen = this.settings.SkipInitialSelect ? this.settings.N : this.settings.M;
+		let keys = getRandomPerlenKeys(numInitPerlen);
 		//keys[0]='chillax';
 		//keys[1]='carelessness';
 		keys.map(x => this.addToPool(this.perlenDict[x]));
