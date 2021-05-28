@@ -11,7 +11,7 @@ const { PORT } = require('./public/BASE/globals.js');
 
 const utils = require('./serverfiles/utils.js');
 const userman = require('./serverfiles/userManager.js');
-const simple = require('./serverfiles/pg2.js');
+const simple = require('./serverfiles/pg3.js');
 
 const DB = utils.fromYamlFile(path.join(__dirname, 'public/data.yaml'));
 const PerlenDict = utils.fromYamlFile(path.join(__dirname, 'public/perlenDict.yaml'));
@@ -38,7 +38,7 @@ const io = require('socket.io')(http, {
 });
 
 userman.initUserManager(io, DB);
-simple.initPerlenGame(io, PerlenDict);
+simple.initPerlenGame(io, PerlenDict, DB);
 //#endregion
 
 //#region io

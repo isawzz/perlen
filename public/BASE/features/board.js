@@ -462,18 +462,11 @@ function boardTestGetCol() {
 }
 
 function reduceBoard(board, rNew, cNew, iModify) {
+	//console.log(board.rows,board.cols, 'iModify',iModify)
 	let [boardArrOld, rOld, cOld] = [board.fields.map(x => isdef(x.item) ? x.item.index : null), board.rows, board.cols];
 
-	//logging!
-	//let oldState = { boardArr: boardArrOld, poolArr: [], rows: rOld, cols: cOld };
-	//console.log('old state:');
-	//logState(oldState);
-	//let perlen = collectPerlen(board);
-	//console.log('perlen', perlen.map(x => x.index));
+	//console.log('boardArrOld',boardArrOld)
 
-	//fieldItems = createFields(board, rNew, cNew);
-	//jetzt muss ich den neuen boardArr machen!
-	//row iModify aus boardArrOld muss herausgenommen werden: alle perlen zurueck zu pool!
 	let rest = [];
 	if (rOld > rNew) { rest = bGetRow(boardArrOld, iModify, rOld, cOld).filter(x => x != null); }
 	else if (cOld > cNew) { rest = bGetCol(boardArrOld, iModify, rOld, cOld).filter(x => x != null); }
@@ -498,36 +491,26 @@ function reduceBoard(board, rNew, cNew, iModify) {
 			}
 		}
 	}
-	let poolArr = G.poolArr;
-	for(const x of rest){poolArr.unshift(x);}
-	sendRelayout(rNew, cNew, boardArrNew, poolArr);//this.board.rows, this.board.cols, this.boardArr, this.poolArr);
+	return {rows:rNew,cols:cNew,boardArr:boardArrNew,extras:rest};
 }
 function removeColNew(board, cClick) {
-	if (board.cols<3) return;
+	//if (board.cols<3) return {rows:board.rows,cols:board.cols,boardArr:boardArrNew,extras:rest};;
 	let iInsert = cClick;
 	//console.log('remove col', cClick)
-	reduceBoard(board, board.rows, board.cols - 1, iInsert);
+	let result=reduceBoard(board, board.rows, board.cols - 1, iInsert);
+	return result;
 }
 function removeRowNew(board, cClick) {
-	if (board.rows<3) return;
+	//if (board.rows<3) return;
 	let iInsert = cClick;
 	//console.log('remove row', cClick)
-	reduceBoard(board, board.rows - 1, board.cols, iInsert);
+	let result = reduceBoard(board, board.rows - 1, board.cols, iInsert);
+	return result;
 }
 
 function expandBoard(board, rNew, cNew, iInsert) {
 	let [boardArrOld, rOld, cOld] = [board.fields.map(x => isdef(x.item) ? x.item.index : null), board.rows, board.cols];
 
-	//logging!
-	//let oldState = { boardArr: boardArrOld, poolArr: [], rows: rOld, cols: cOld };
-	//console.log('old state:');
-	//logState(oldState);
-	//let perlen = collectPerlen(board);
-	//console.log('perlen', perlen.map(x => x.index));
-
-	//fieldItems = createFields(board, rNew, cNew); //brauch ich garnicht?
-	//jetzt muss ich den neuen boardArr machen!
-	let rest = [];
 	let boardArrNew = new Array(rNew * cNew);
 	for (let r = 0; r < rNew; r++) {
 		for (let c = 0; c < cNew; c++) {
@@ -547,17 +530,18 @@ function expandBoard(board, rNew, cNew, iInsert) {
 			}
 		}
 	}
-	sendRelayout(rNew, cNew, boardArrNew, G.poolArr);//this.board.rows, this.board.cols, this.boardArr, this.poolArr);
+	return {rows:rNew,cols:cNew,boardArr:boardArrNew,extras:[]};
+
 }
 function insertColNew(board, cClick) {
 	let iInsert = cClick + 1;
 	//console.log('insert col after', cClick)
-	expandBoard(board, board.rows, board.cols + 1, iInsert);
+	return expandBoard(board, board.rows, board.cols + 1, iInsert);
 }
 function insertRowNew(board, cClick) {
 	let iInsert = cClick + 1;
 	//console.log('insert row after', cClick)
-	expandBoard(board, board.rows + 1, board.cols, iInsert);
+	return expandBoard(board, board.rows + 1, board.cols, iInsert);
 }
 
 

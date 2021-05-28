@@ -1,26 +1,26 @@
 
 function onClickReset() {
-	sendReset({ SkipInitialSelect: SkipInitialSelect, IsTraditionalBoard: IsTraditionalBoard });
+	sendReset(isdef(G)?G.settings:DB.games.gPerlen2.settings);
 }
-function initToolbar() {
+function initToolbar(settings) {
 	let bSelect = mBy('dPreselectButton');
-	if (SkipInitialSelect) { closePerlenEditor();turnButtonOff(bSelect);} else{turnButtonOn(bSelect);}
+	if (settings.SkipInitialSelect) { closePerlenEditor();turnButtonOff(bSelect);} else{turnButtonOn(bSelect);}
 	let bHex = mBy('dBoardSwitchButton');
-	if (IsTraditionalBoard) { turnButtonOff(bHex);} else{turnButtonOn(bHex);}
+	if (settings.IsTraditionalBoard) { turnButtonOff(bHex);} else{turnButtonOn(bHex);}
 }
 function turnButtonOn(b) { mStyleX(b, { bg: '#ffff0080', rounding: '50%' }); }
 function turnButtonOff(b) { mStyleX(b, { bg: '#33333340' }); }
 function onClickPreselect(b) {
-	SkipInitialSelect = !SkipInitialSelect;
+	G.settings.SkipInitialSelect = !G.settings.SkipInitialSelect;
 	let bSelect = mBy('dPreselectButton');
-	if (SkipInitialSelect) { closePerlenEditor();turnButtonOff(bSelect);} else{turnButtonOn(bSelect);}
-	sendReset({ SkipInitialSelect: SkipInitialSelect, IsTraditionalBoard: IsTraditionalBoard });
+	if (G.settings.SkipInitialSelect) { closePerlenEditor();turnButtonOff(bSelect);} else{turnButtonOn(bSelect);}
+	sendReset({ SkipInitialSelect: G.settings.SkipInitialSelect, IsTraditionalBoard: G.settings.IsTraditionalBoard });
 }
 function onClickBoardSwitch(b) {
-	IsTraditionalBoard = !IsTraditionalBoard;
+	G.settings.IsTraditionalBoard = !G.settings.IsTraditionalBoard;
 	let bHex = mBy('dBoardSwitchButton');
-	if (IsTraditionalBoard) { turnButtonOff(bHex);} else{turnButtonOn(bHex);}
-	sendReset({ SkipInitialSelect: SkipInitialSelect, IsTraditionalBoard: IsTraditionalBoard });
+	if (G.settings.IsTraditionalBoard) { turnButtonOff(bHex);} else{turnButtonOn(bHex);}
+	sendReset({ SkipInitialSelect: G.settings.SkipInitialSelect, IsTraditionalBoard: G.settings.IsTraditionalBoard });
 }
 
 //************* old code **************** */

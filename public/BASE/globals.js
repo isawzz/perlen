@@ -13,8 +13,8 @@ const USERNAME_SELECTION = 'local'; // random | local | nil | gul | ma ...
 
 var USESOCKETS = true; //false ist wahtscheinlich broken!
 const JUST_PERLEN_GAME = true;
-var SkipInitialSelect = true;
-var IsTraditionalBoard = false;
+// var SkipInitialSelect = true;
+// var IsTraditionalBoard = false;
 
 const PERLEN_EDITOR_OPEN_AT_START = false;
 
@@ -251,8 +251,8 @@ const BoyNames = ['Aaron', 'Ariel', 'Billy', 'Cayley', 'Erik',
 if (this && typeof module == "object" && module.exports && this === module.exports) {
 	module.exports = {
 		PORT,
-		SkipInitialSelect,
-		IsTraditionalBoard,
+		// SkipInitialSelect,
+		// IsTraditionalBoard,
 	};
 }
 //#endregion

@@ -1,9 +1,9 @@
 //#region requires, const, var
-const base = require('../public/BASE/base.js');
+const base = require('../../public/BASE/base.js');
 const fs = require('fs');
 const path = require('path');
-const utils = require('./utils.js');
-const { SkipInitialSelect } = require('../public/BASE/globals.js');
+const utils = require('../../serverfiles/utils.js');
+const { SkipInitialSelect } = require('../../public/BASE/globals.js');
 var MessageCounter = 0;
 var Verbose = true;
 var G;

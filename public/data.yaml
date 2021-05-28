@@ -31,6 +31,17 @@ addons:
       prop: tNext
       value: 60000000 #1 day interval (1000 minutes)
 games:
+  gPerlen2:
+    N: 50
+    M: 10
+    bretter:
+      brett02cropped: 25 littleHexBoardTool
+      shapeShifters: 81 grid9_9
+    IsTraditionalBoard: true
+    SkipInitialSelect: true
+    rows: 4
+    cols: 4
+    filename: brett02cropped.png
   gAbacus:
     friendly: 'Abacus'
     logo: 'abacus'
