@@ -1,6 +1,6 @@
 
 function onClickReset() {
-	sendReset();
+	sendReset({ SkipInitialSelect: SkipInitialSelect, IsTraditionalBoard: IsTraditionalBoard });
 }
 function initToolbar() {
 	let bSelect = mBy('dPreselectButton');

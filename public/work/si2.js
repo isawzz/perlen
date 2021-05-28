@@ -38,8 +38,6 @@ function handleInitialPool(data) {
 	createPerlenEditor();
 
 }
-function sendInitialPool() { }
-
 //handling socket messages for perlen game
 
 function handleGameState(data) {

@@ -16,6 +16,7 @@ class GP2 {
 		this.io = io;
 		this.perlenDict = perlenDict;
 		this.players = {};
+		this.settings = settings;
 
 		this.initState(settings);
 	}
@@ -117,8 +118,8 @@ class GP2 {
 	}
 
 	initState(settings) {
-		if (base.isdef(settings)) this.settings = settings;
-		console.log('initState: settings:',this.settings)
+		if (base.isdef(settings)) base.copyKeys(settings, this.settings); else settings = this.settings;
+		console.log('_initState: settings:', settings)
 		let byIndex = this.byIndex = {}; this.maxIndex = 0; this.State = {};
 
 		let board = this.board = this.settings.IsTraditionalBoard ? this.initBoardTraditional(settings)
@@ -253,13 +254,13 @@ class GP2 {
 	}
 
 	playerReset(client, x) {
-		//console.log('Reset!!!!', x);
+		console.log('Reset!!!!', x);
 		this.initState(x.settings);
 
 		//make sure initState has resetted ALL players to isInitialized = false!
 		//console.log('playerstates', this.State.players);
 
-		this.emitInitial(client);
+		this.emitInitial(client,x);
 
 	}
 	sendInit() {
@@ -306,7 +307,7 @@ function addIfNotInPool(client, filename) {
 	//console.log('pool perle', poolPerle);
 	if (poolPerle == null) {
 		poolPerle = G.addToPool(PerlenDict[filename]);
-		G.emitGameStateIncludingPool(client);		
+		G.emitGameStateIncludingPool(client);
 	}
 	else { console.assert(base.isdef(G.State.pool[poolPerle.index]), 'ASSERT SCHON IN POOL NICHT IN POOL!!!'); }
 }
@@ -336,9 +337,19 @@ function handleImage(client, x) {
 	}
 }
 function initPerlenGame(IO, perlenDict) {
-	//console.log('hhhhhhhhhhhhhhhh');
+	//console.log(' *** Settings only here ***');
+	//settings soll von DB.games kommen!
 	PerlenDict = perlenDict;
-	G = new GP2(IO, perlenDict, { SkipInitialSelect: SkipInitialSelect, IsTraditionalBoard: IsTraditionalBoard });
+	let settings = {
+		rows: 4,
+		cols: 4,
+		N: 50,
+		M: 10,
+		filename: 'brett02cropped.png',
+		SkipInitialSelect: SkipInitialSelect,
+		IsTraditionalBoard: IsTraditionalBoard
+	};
+	G = new GP2(IO, perlenDict, settings);
 	//console.log('players', G.players);
 }
 function handleMovePerle(client, x) { G.playerMovesPerle(client, x); }
@@ -396,5 +407,5 @@ module.exports = {
 	addPerle, initPerlenGame,
 	handleAddToPool, handleImage, handleInitialPoolDone, handleMovePerle, handlePlacePerle, handlePlayerLeft,
 	handleRelayout, handleRemovePerle, handleReset,
-	handleStartOrJoin, GP2,
+	handleStartOrJoin,
 }
