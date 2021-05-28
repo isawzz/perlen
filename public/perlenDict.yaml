@@ -1,3 +1,11 @@
+schulen:
+  Name: 100 schulen
+  path: schulen
+  Update: 02/22/2021
+  Created: 02/22/2021
+  Fe Tags: ""
+  Wala Tags: ""
+  Ma Tags: ""
 agent:
   Name: agent
   path: agent
@@ -527,6 +535,14 @@ immigration:
   Fe Tags: ""
   Wala Tags: ""
   Ma Tags: ""
+impostor syndrom:
+  path: impostor syndrom
+  Name: impostor syndrom
+  Update: 05/26/2021
+  Created: 05/26/2021
+  Fe Tags: ""
+  Wala Tags: ""
+  Ma Tags: ""
 individualismus:
   Name: Individualismus
   Created: 4/29/2021
@@ -807,6 +823,14 @@ neoliberalismus:
   Update: 5/8/2021
   Wala Tags: geld, geschichte, stimmung
   path: neoliberalismus
+neuer hut:
+  path: neuer hut
+  Name: neuer hut
+  Update: 05/16/2021
+  Created: 05/16/2021
+  Fe Tags: ""
+  Wala Tags: ""
+  Ma Tags: ""
 neutraler begriff:
   path: neutraler begriff
   Name: Neutraler begriff
@@ -1367,11 +1391,11 @@ chillax2:
   Fe Tags: ""
   Wala Tags: ""
   Ma Tags: ""
-ball:
-  Name: ball
-  path: ball
-  Update: 04/27/2021
-  Created: 04/27/2021
+living in a bubble:
+  Name: living in a bubble
+  path: living in a bubble
+  Update: 04/28/2021
+  Created: 04/28/2021
   Fe Tags: ""
   Wala Tags: ""
   Ma Tags: ""
