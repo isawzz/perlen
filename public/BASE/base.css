@@ -1347,6 +1347,14 @@ p{
 	margin: 0px 5px;
 	cursor:pointer;
 }
+.tbon{
+	background-color: green;
+	border-radius: 50%;
+}
+.tboff{
+	background-color: #00000080;
+	border-radius: 50%;
+}
 
 #drop-region {
 	background-color: #fff;

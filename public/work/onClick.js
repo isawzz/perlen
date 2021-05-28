@@ -1,6 +1,26 @@
 
-function onClickReset(){
+function onClickReset() {
 	sendReset();
+}
+function initToolbar() {
+	let bSelect = mBy('dPreselectButton');
+	if (SkipInitialSelect) { closePerlenEditor();turnButtonOff(bSelect);} else{turnButtonOn(bSelect);}
+	let bHex = mBy('dBoardSwitchButton');
+	if (IsTraditionalBoard) { turnButtonOff(bHex);} else{turnButtonOn(bHex);}
+}
+function turnButtonOn(b) { mStyleX(b, { bg: '#ffff0080', rounding: '50%' }); }
+function turnButtonOff(b) { mStyleX(b, { bg: '#33333340' }); }
+function onClickPreselect(b) {
+	SkipInitialSelect = !SkipInitialSelect;
+	let bSelect = mBy('dPreselectButton');
+	if (SkipInitialSelect) { closePerlenEditor();turnButtonOff(bSelect);} else{turnButtonOn(bSelect);}
+	sendReset({ SkipInitialSelect: SkipInitialSelect, IsTraditionalBoard: IsTraditionalBoard });
+}
+function onClickBoardSwitch(b) {
+	IsTraditionalBoard = !IsTraditionalBoard;
+	let bHex = mBy('dBoardSwitchButton');
+	if (IsTraditionalBoard) { turnButtonOff(bHex);} else{turnButtonOn(bHex);}
+	sendReset({ SkipInitialSelect: SkipInitialSelect, IsTraditionalBoard: IsTraditionalBoard });
 }
 
 //************* old code **************** */

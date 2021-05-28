@@ -3,7 +3,7 @@ const base = require('../public/BASE/base.js');
 const fs = require('fs');
 const path = require('path');
 const utils = require('./utils.js');
-const { SKIP_INITIAL_SELECT } = require('../public/BASE/globals.js');
+const { SkipInitialSelect } = require('../public/BASE/globals.js');
 var MessageCounter = 0;
 var Verbose = true;
 var G;
@@ -131,7 +131,7 @@ class GP1 {
 		let pl = this.addPlayer(client, x);
 		console.log('hallo', x, 'starts or joins game!');
 
-		if (SKIP_INITIAL_SELECT) {
+		if (SkipInitialSelect) {
 			logSend('gameState');
 			client.emit('gameState', { state: this.State });
 		} else {

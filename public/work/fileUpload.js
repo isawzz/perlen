@@ -104,7 +104,7 @@ function onClickUpload() {
 
 function previewFiles(files) {
 	FilesToUpload = files;// FilesToUpload.concat(files);
-	console.log('FilesToUpload', files)
+	//console.log('FilesToUpload', files)
 	for (var i = 0, len = files.length; i < len; i++) {
 		if (validateImage(files[i])) {
 			previewImageFromFile(files[i]);
@@ -203,7 +203,7 @@ function showUploadInput() {
 }
 
 function uploadImage() {
-	console.log('uploading image:', 'NI');
+	//console.log('uploading image:', 'NI');
 	try {
 		let canvas = mBy('canvas1');
 		let data = canvas.toDataURL("image/png");
@@ -221,7 +221,7 @@ function uploadImage() {
 function uploadFiles() {
 	//console.log('uploading files:', FilesToUpload);
 	let updateImages=mBy('chkUpdateImages').checked;
-	console.log('updateImages',updateImages);
+	//console.log('updateImages',updateImages);
 	//====?!!
 	for (const imgFile of FilesToUpload) {
 		//uploadFile00w(imgFile);
@@ -236,7 +236,7 @@ function uploadFiles() {
 
 		if (updateImages || !isdef(PerlenDict[perlenName])) Socket.emit('image', { data: data, filename: filename });
 		else {
-			console.log('JUST ADD TO POOL!!!!',perlenName)
+			//console.log('JUST ADD TO POOL!!!!',perlenName)
 			Socket.emit('addToPool', { name: perlenName });
 		}
 

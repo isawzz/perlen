@@ -1,5 +1,5 @@
 var Schritt = 0;
-class SimpleClass1 {
+class SimpleClass2 {
 	constructor() {
 		this.dParent = dTable;
 	}
@@ -13,16 +13,27 @@ class SimpleClass1 {
 	}
 	presentGameState(data) {
 
+		let dParent = this.dParent;
+		clearElement(dParent);
+
 		Schritt += 1;
-		let state = data.state; logState(state); copyKeys(state, this); let dParent = this.dParent;
+		let state = data.state; logState(state); 
+		copyKeys(state, this); 
+		
 		this.State = state;
+		//console.log('===>boardArr',state.boardArr)
 		//let x=filterByKey(state,'rows,cols');
 		//console.log('x',x)
 		//console.log('PerlenDict',isdef(PerlenDict)?jsCopy(PerlenDict):'no perlenDict!!!');
 		if (isdef(data.perlenDict)) PerlenDict = data.perlenDict;
 
+		if (isdef(data.settings)) {
+			//console.log('got settings!',data.settings)
+			SkipInitialSelect = data.settings.SkipInitialSelect;
+			IsTraditionalBoard = data.settings.IsTraditionalBoard;
+			initToolbar();
+		}
 
-		clearElement(dParent);
 
 		//console.log('state',state,'\nclientId',Socket.id);
 		if (isdef(state.pool)) {
@@ -33,20 +44,25 @@ class SimpleClass1 {
 			for (const idx in this.pool) { let p = this.pool[idx]; p.path = mPath(p); }
 		}
 
-		this.board = showEmptyPerlenBoard(this.rows, this.cols, dParent);
-		mLinebreak(dParent, 25);
+		//console.log('state', state);
+		//let IsTraditionalBoard = isdef(this.rows);
+		this.clientBoard = IsTraditionalBoard ? showEmptyPerlenBoard(this.rows, this.cols, dParent)
+			: showBrettBoard(this.board.filename, dParent);
+
+		mLinebreak(dParent, IsTraditionalBoard ? 25 : 45);
 
 		//console.log('___________',Schritt,state,state.poolArr);
-		showPerlen(this.pool, this.boardArr, this.poolArr, this.board, dParent);
+		showPerlen(this.pool, this.boardArr, this.poolArr, this.clientBoard, dParent);
 		this.activateDD();
 
 	}
 	activateDD() {
-		enableDD(this.perlenListeImSpiel, this.board.fields.filter(x => x.row > 0 && x.col > 0), this.onDropPerleSimplest.bind(this), false, false, dragStartPreventionOnSidebarOpen);
+		let fields = IsTraditionalBoard? this.clientBoard.fields.filter(x => x.row > 0 && x.col > 0) : this.clientBoard.fields;
+		enableDD(this.perlenListeImSpiel, fields, this.onDropPerleSimplest.bind(this), false, false, dragStartPreventionOnSidebarOpen);
 		addDDTarget({ item: this.poolArr, div: this.dParent }, false, false);
 	}
 	onDropPerleSimplest(source, target) {
-		//console.log('dropHandler!',source,target)
+		//console.log('dropHandler!',source,'\ntarget',target)
 		if (target.item == this.poolArr) {
 			//console.log('===>perle',source,'needs to go back to pool!');
 			let f = source.field;
@@ -62,6 +78,7 @@ class SimpleClass1 {
 				let f = source.field;
 				sendMovePerle(source, f, target, displaced);
 			} else {
+				//console.log('sending place ')
 				sendPlacePerle(source, target, displaced);
 			}
 		}

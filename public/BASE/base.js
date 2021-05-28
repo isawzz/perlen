@@ -1721,15 +1721,20 @@ function onMovingCloneAround(ev) {
 	mStyleX(DragElem, { left: dx, top: dy });
 }
 function onReleaseClone(ev) {
+	//console.log('RELEASE!!!')
 	let els = allElementsFromPoint(ev.clientX, ev.clientY);
 	//console.log('_________',els);
 	let source = DDInfo.source;
 	let dSource = iDiv(source);
 	let dropHandler = DDInfo.dropHandler;
 	//let success
+	//console.log(DDInfo.targets);
 	for (const target of DDInfo.targets) {
+		//console.log('_target',target);
 		let dTarget = iDiv(target);
+		//console.log('_dTarget',dTarget);
 		if (els.includes(dTarget)) {
+			//console.log('YES!',firstCond(els,x=>x==dTarget))
 			//if (DragElem.clearTarget) clearElement(dTarget);
 			if (isdef(dropHandler)) {
 				dropHandler(source, target, DragElem.isCopy, DragElem.clearTarget);

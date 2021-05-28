@@ -1,4 +1,4 @@
-var VerboseSimpleClass = true;
+var VerboseSimpleClass = false;
 
 //#region perlen game start here!
 function simplestPerlenGame() {
@@ -24,13 +24,14 @@ function sendStartOrJoinPerlenGame() {
 	window.onkeydown = keyDownHandler;
 	window.onkeyup = keyUpHandler;
 	mBy('sidebar').ondblclick = togglePerlenEditor;
-	G = new SimpleClass1();
+	G = new SimpleClass2();
 }
 //skip next 2 steps!
 function handleInitialPool(data) {
 	//console.log('HAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA',data)
-	//G.INITIAL_POOL_DONE = SkipInitialSelect ? true : false;
-	G.INITIAL_POOL_DONE=false;
+	SkipInitialSelect = false;
+	initToolbar();
+	G.INITIAL_POOL_DONE = false;
 	logClientReceive('initialPool', data);
 	setTitle(data.instruction);
 	G.presentGameState(data);
@@ -150,7 +151,7 @@ function createPerle(perle, dParent, sz = 64, wf = 1.3, hf = 0.4, useNewImage = 
 	mAppend(dParent, d);
 	return d;
 }
-function dragStartPreventionOnSidebarOpen(){
+function dragStartPreventionOnSidebarOpen() {
 	if (isdef(mBy('drop-region'))) {
 		alert('please close sidebar (by DOUBLECLICK on it) before proceeding!');
 		return false;
@@ -170,7 +171,7 @@ function logState(state) {
 function mPath(p) {
 	let pre = './assets/games/perlen/perlen/';
 	let post = '.png';
-	if (isdef(p.path)) return p.path[0]=='.'?p.path: pre + p.path + post;
+	if (isdef(p.path)) return p.path[0] == '.' ? p.path : pre + p.path + post;
 	let x = p.Name.toLowerCase();
 	x = replaceAll(x, "'", "");
 	//x = replaceAll(x, " ", "_");
@@ -178,6 +179,7 @@ function mPath(p) {
 }
 function showPerlen(perlenByIndex, boardArr, poolArr, board, dParent) {
 
+	//console.log('boardArr',boardArr);
 	for (let i = 0; i < poolArr.length; i++) {
 		let iPerle = poolArr[i];
 		perle = perlenByIndex[iPerle];
@@ -203,78 +205,104 @@ function showEmptyPerlenBoard(rows, cols, dParent) {
 	createFields(board, rows, cols);
 	return board;
 }
+function showBrettBoard(filename, dParent) {
+	let dp = mDiv(dParent, { display: 'inline-block' });
+	let path = './assets/games/perlen/bretter/' + filename;
+	let d1 = mDiv(dp, { display: 'inline-block', position: 'relative' });//,'background-image':path });
+	let img = mImg(path, d1);
+	let board = { img: img, div: d1 };
 
-var Schritt = 0;
-class SimpleClass1 {
-	constructor() {
-		this.dParent = dTable;
+	let centers = littleHexBoardTool(); // startsWith(filename, 'brett02') ? littleHexBoardTool() : null;
+	//console.log('centers', centers);
+
+	if (centers) createFieldsFromCenters(board, centers, 90);
+	// for (const p of centers) {
+	// 	let sz = 90;
+	// 	let dx = dy = sz / 2;
+	// 	let bg = '#00000010'; //'black';//'#00000010'
+	// 	let f = mDiv(d1, { position: 'absolute', left: p.x - dx, top: p.y - dy, display: 'inline', h: sz, w: sz, rounding: '50%', bg: bg });
+	// }
+
+	return board;
+}
+function createFieldsFromCenters(board, centers, sz = 90) {
+	let fieldItems = [];
+	let d1 = iDiv(board);
+
+	let i = 0;
+	for (const p of centers) {
+		// let sz = 90;
+		let dx = dy = sz / 2;
+		dy -= 12;
+		let bg = '#00000010'; //'black';//'#00000010'
+		let dItem = mDiv(d1, { position: 'absolute', left: p.x - dx, top: p.y - dy, display: 'inline', h: sz, w: sz, rounding: '50%', bg: bg });
+		mCenterCenterFlex(dItem)
+		let f = { div: dItem, index: i, center: p }; i += 1;
+		fieldItems.push(f);
 	}
-	checkInitialPoolDone() {
-		if (!this.INITIAL_POOL_DONE) {
-			Socket.emit('initialPoolDone', { username: Username });
-			this.INITIAL_POOL_DONE = true;
-			setTitle('Glasperlenspiel');
-		}
 
-	}
-	presentGameState(data) {
-
-		Schritt += 1;
-		let state = data.state; logState(state); copyKeys(state, this); let dParent = this.dParent;
-		this.State = state;
-		//let x=filterByKey(state,'rows,cols');
-		//console.log('x',x)
-		//console.log('PerlenDict',isdef(PerlenDict)?jsCopy(PerlenDict):'no perlenDict!!!');
-		if (isdef(data.perlenDict)) PerlenDict = data.perlenDict;
-
-
-		clearElement(dParent);
-
-		//console.log('state',state,'\nclientId',Socket.id);
-		if (isdef(state.pool)) {
-			this.pool = state.pool;
-			this.perlenListeImSpiel = Object.values(this.pool);
-			//console.log('POOL IS HERE!!!',this.perlenListeImSpiel[0].Name)
-
-			for (const idx in this.pool) { let p = this.pool[idx]; p.path = mPath(p); }
-		}
-
-		this.board = showEmptyPerlenBoard(this.rows, this.cols, dParent);
-		mLinebreak(dParent, 25);
-
-		//console.log('___________',Schritt,state,state.poolArr);
-		showPerlen(this.pool, this.boardArr, this.poolArr, this.board, dParent);
-		this.activateDD();
-
-	}
-	activateDD() {
-		enableDD(this.perlenListeImSpiel, this.board.fields.filter(x => x.row > 0 && x.col > 0), this.onDropPerleSimplest.bind(this), false, false, dragStartPreventionOnSidebarOpen);
-		addDDTarget({ item: this.poolArr, div: this.dParent }, false, false);
-	}
-	onDropPerleSimplest(source, target) {
-		//console.log('dropHandler!',source,target)
-		if (target.item == this.poolArr) {
-			//console.log('===>perle',source,'needs to go back to pool!');
-			let f = source.field;
-			if (isdef(f)) sendRemovePerle(source, f);
-		} else {
-			let displaced = null;
-			if (isdef(target.item)) {
-				let p = target.item;
-				if (p == source) return;
-				displaced = p;
-			}
-			if (isdef(source.field)) {
-				let f = source.field;
-				sendMovePerle(source, f, target, displaced);
-			} else {
-				sendPlacePerle(source, target, displaced);
-			}
-		}
-
-	}
+	board.fields = fieldItems;
+	board.fieldCenters = centers;
+	return fieldItems;
 }
 
+function littleHexBoardTool(p1, p2, p3) {
+	p1 = { x: 282, y: 72 };
+	p2 = { x: 484, y: 72 };
+	p3 = { x: 282, y: 422 };
+
+	let centers = [];
+	let row1x = [p1.x, (p1.x + p2.x) / 2, p2.x];
+	let row1y = [p1.y, p1.y, p1.y];
+	let dxh = (row1x[1] - row1x[0]) / 2;
+	let dx = dxh * 2;
+	let dy = (p3.y - p1.y) / 2;
+	let dyh = dy / 2;
+	let row2x = [p1.x - dxh, p1.x + dxh, p2.x - dxh, p2.x + dxh];
+	let y = p1.y + dyh;
+	let row2y = [y, y, y, y];
+	//let row2x = [p1.x - dxh, p1.x + dxh, p3.x - dxh, p3.x + dxh];
+	y += dyh;
+	let [x1, x3] = [p1.x, p2.x];
+	let row3x = [x1 - dx, x1, x1 + dx, x3, x3 + dx];
+	let row3y = [y, y, y, y, y];
+	let row4x = row2x;
+	let row5x = row1x;
+
+	let rowsX = [row1x, row2x, row3x, row4x, row5x];
+	let centersX = [];
+	for (const r of rowsX) {
+		for (const x of r) {
+			centersX.push(x);
+		}
+	}
+	//console.log('centersX', centersX);
+	let i = 0;
+	let centersY = [];
+	let yStart = p1.y;
+	let yInc = dyh;
+	y = yStart;
+	for (colcount of [3, 4, 5, 4, 3]) {
+		for (let c = 0; c < colcount; c++)		centersY.push(y);
+		y += yInc;
+	}
+
+	//finally, zip centersX and centersY
+	for (let i = 0; i < centersX.length; i++) centers.push({ x: centersX[i], y: centersY[i] });
+
+	//auessere felder dazu!
+	dx += 0;
+	let xVor = centersX[7] - dx;
+	let xNach = centersX[11] + dx;
+	y=yStart;// = [yStart,yStart+yInc*1.25,yStart+yInc*1.5,yStart+yInc*4];
+	for (let i = 0; i < 5; i++) {
+		if (i%2==0) { centers.push({ x: xVor, y: y }); centers.push({ x: xNach, y: y }); }
+		y += yInc;
+	}
+
+
+	return centers;
+}
 
 
 

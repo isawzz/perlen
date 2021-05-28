@@ -3,15 +3,15 @@ const base = require('../public/BASE/base.js');
 const fs = require('fs');
 const path = require('path');
 const utils = require('./utils.js');
-const { SkipInitialSelect } = require('../public/BASE/globals.js');
+const { SkipInitialSelect, IsTraditionalBoard } = require('../public/BASE/globals.js');
 var MessageCounter = 0;
-var Verbose = true;
+var Verbose = false;
 var G;
 var PerlenDict;
 
 //#endregion
 
-class GP1 {
+class GP2 {
 	constructor(io, perlenDict, settings) {
 		this.io = io;
 		this.perlenDict = perlenDict;
@@ -61,10 +61,10 @@ class GP1 {
 	emitInitial(client) {
 		let pl = this.players[client.id];
 		let username = pl.name;
-		console.log('username', username);
-		if (SkipInitialSelect) {
+		//console.log('username', username);
+		if (this.settings.SkipInitialSelect) {
 			logSend('gameState');
-			this.io.emit('gameState', { state: this.State, username: username });
+			this.io.emit('gameState', { settings: this.settings, state: this.State, username: username });
 		} else {
 			let data = { state: this.State, instruction: 'pick your set of pearls!' };
 			this.io.emit('initialPool', data); // { state: this.State, username: username });
@@ -74,8 +74,8 @@ class GP1 {
 	emitGameStateIncludingPool(client) {
 		let pl = this.players[client.id];
 		let username = pl.name;
-		console.log('username', username);
-		this.io.emit('gameState', { state: this.State, username: username });
+		//console.log('username', username);
+		this.io.emit('gameState', { settings: this.settings, state: this.State, username: username });
 	}
 
 	getNumActivePlayers() { return this.state.players.length; }
@@ -104,25 +104,39 @@ class GP1 {
 		return pl;
 	}
 	initPlayers() { this.State.players = []; for (const plid in this.players) { this.initPlayerState(plid); } }
-	initState(settings = {}) {
+	initBoardTraditional(settings) {
+		let [rows, cols] = [base.valf(settings.rows, 4), base.valf(settings.cols, 4)];
+		let arr = new Array(rows * cols);
+		return { rows: rows, cols: cols, arr: arr };
+	}
+	initBoardImage(settings) {
+		let filename = 'brett02cropped.png'; // [base.valf(settings.rows, 4), base.valf(settings.cols, 4)];
+		let arr = new Array(26);
+		//let arr = new Array(rows * cols);
+		return { filename: filename, arr: arr };
+	}
+
+	initState(settings) {
+		if (base.isdef(settings)) this.settings = settings;
+		console.log('initState: settings:',this.settings)
 		let byIndex = this.byIndex = {}; this.maxIndex = 0; this.State = {};
 
-		let [rows, cols] = [base.valf(settings.rows, 4), base.valf(settings.cols, 4)];
-		let board = new Array(rows * cols);
+		let board = this.board = this.settings.IsTraditionalBoard ? this.initBoardTraditional(settings)
+			: this.initBoardImage(settings);
 
-		let numInitPerlen = SkipInitialSelect ? 50 : 10;
-
-		let keys = getRandomPerlenKeys(base.valf(settings.N, numInitPerlen));
+		let numInitPerlen = this.settings.SkipInitialSelect ? 50 : 10;
+		let keys = getRandomPerlenKeys(base.valf(this.settings.N, numInitPerlen));
 		//keys[0]='chillax';
 		//keys[1]='carelessness';
 		keys.map(x => this.addToPool(this.perlenDict[x]));
 
 		//console.log('byIndex',keys);
 		this.State = {
-			rows: rows,
-			cols: cols,
+			board: board,
+			rows: board.rows,
+			cols: board.cols,
+			boardArr: board.arr,
 			poolArr: Object.values(byIndex).map(x => x.index),
-			boardArr: board,
 			pool: byIndex,
 		};
 
@@ -137,13 +151,13 @@ class GP1 {
 	}
 	playerJoins(client, x) {
 		let pl = this.addPlayer(client, x);
-		console.log('join:', pl.isInitialized);
+		//console.log('join:', pl.isInitialized);
 		//console.log('hallo', x, 'starts or joins game!');
 
 
-		if (SkipInitialSelect) {
+		if (this.settings.SkipInitialSelect) {
 			logSend('gameState');
-			client.emit('gameState', { state: this.State, perlenDict: this.perlenDict });
+			client.emit('gameState', { settings: this.settings, state: this.State, perlenDict: this.perlenDict });
 		} else {
 			let data = { state: this.State, perlenDict: this.perlenDict, instruction: 'pick your set of pearls!' };
 			client.emit('initialPool', data);// { state: { pool: State.pool }, instruction: 'pick your set!' });
@@ -192,7 +206,6 @@ class GP1 {
 				}, username: username, msg: 'user ' + username + ' placed ' + perle.Name + ' to field ' + iTo
 			});
 
-		// io.emit('gameState', { state: { boardArr: State.boardArr, poolArr: State.poolArr }, username: username, msg: 'user ' + username + ' moved ' + perle.Name + ' to field ' + iField });
 
 	}
 
@@ -217,7 +230,7 @@ class GP1 {
 	}
 
 	playerRemovesPerle(client, x) {
-		console.log('!!!!!!!!!!!!!!', x, this.State.boardArr)
+		//console.log('!!!!!!!!!!!!!!', x, this.State.boardArr)
 		let iPerle = x.iPerle;
 		let iFrom = x.iFrom;
 		let state = this.State;
@@ -233,23 +246,20 @@ class GP1 {
 			boardArr: state.boardArr,
 			poolArr: state.poolArr
 		};
-		console.log('danch', newState)
+		//console.log('danch', newState)
 		let msg = `user ${pl.name} removed ${this.getPerlenName(iPerle)}`;
-		console.log(msg);
+		//console.log(msg);
 		this.sendGameState(pl, newState, msg);
 	}
 
 	playerReset(client, x) {
-		console.log('Reset!!!!', x);
-		this.initState(x);
+		//console.log('Reset!!!!', x);
+		this.initState(x.settings);
 
 		//make sure initState has resetted ALL players to isInitialized = false!
-		console.log('playerstates', this.State.players);
+		//console.log('playerstates', this.State.players);
 
 		this.emitInitial(client);
-		//console.log('...',G.State.poolArr)
-		//G.io.emit('gameState', { state: G.State });
-		//G.emitGameStateIncludingPool(client);
 
 	}
 	sendInit() {
@@ -276,7 +286,7 @@ class GP1 {
 function addPerle(filename, client) {
 
 	//filename = base.stringBefore(filename,'.').toLowerCase();
-	console.log('==>adding perle for', filename);
+	//console.log('==>adding perle for', filename);
 	console.assert(filename == filename.toLowerCase(), 'FILENAME CASING!!!!');
 
 	// if this filename is already present in pool, do NOT add it again!!!
@@ -288,21 +298,21 @@ function addPerle(filename, client) {
 
 	console.assert(base.isdef(perle), 'KEINE PERLE!!!!!!!!!!!!!! ' + filename);
 
-	addIfNotInPool(client,filename);
+	addIfNotInPool(client, filename);
 	if (savePerlen) { savePerlenDictToFile(); }
 }
-function addIfNotInPool(client,filename) {
+function addIfNotInPool(client, filename) {
 	let poolPerle = G.getPerleByFilename(filename);
-	console.log('pool perle', poolPerle);
+	//console.log('pool perle', poolPerle);
 	if (poolPerle == null) {
 		poolPerle = G.addToPool(PerlenDict[filename]);
-		G.emitGameStateIncludingPool(client);		//io.emit('gameState', { state: State });		
+		G.emitGameStateIncludingPool(client);		
 	}
 	else { console.assert(base.isdef(G.State.pool[poolPerle.index]), 'ASSERT SCHON IN POOL NICHT IN POOL!!!'); }
 }
-function handleAddToPool(client,x){
-		console.log('SHORTCUT!',x.name)
-		addIfNotInPool(client,x.name);
+function handleAddToPool(client, x) {
+	//console.log('SHORTCUT!',x.name)
+	addIfNotInPool(client, x.name);
 
 }
 function handleImage(client, x) {
@@ -317,24 +327,9 @@ function handleImage(client, x) {
 		let imgData = decodeBase64Image(x.data);
 		fs.writeFile(fullPath, imgData.data,
 			function () {
-				console.log('...images saved:', fullPath);
+				//console.log('...images saved:', fullPath);
 				addPerle(filename, client);		// add perle!
 			});
-		// //zuerst stelle fest ob diese perle schon existiert!
-		// if (override || perleNichtInPerlenDict(filename)) {
-		// 	fullPath = path.join(__dirname, '../public/assets/games/perlen/perlen/' + filename + '.png')
-		// 	let imgData = decodeBase64Image(x.data);
-		// 	fs.writeFile(fullPath, imgData.data,
-		// 		function () {
-		// 			console.log('...images saved:', fullPath);
-		// 			addPerle(filename, client);		// add perle!
-		// 		});
-		// } else {
-		// 	//diese perle existiert schon! muss sie nur zu pool adden!!!
-		// 	//console.log('haaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa')
-		// 	addIfNotInPool(client,filename);
-		// }
-
 	}
 	catch (error) {
 		console.log('ERROR:', error);
@@ -343,7 +338,7 @@ function handleImage(client, x) {
 function initPerlenGame(IO, perlenDict) {
 	//console.log('hhhhhhhhhhhhhhhh');
 	PerlenDict = perlenDict;
-	G = new GP1(IO, perlenDict);
+	G = new GP2(IO, perlenDict, { SkipInitialSelect: SkipInitialSelect, IsTraditionalBoard: IsTraditionalBoard });
 	//console.log('players', G.players);
 }
 function handleMovePerle(client, x) { G.playerMovesPerle(client, x); }
@@ -401,5 +396,5 @@ module.exports = {
 	addPerle, initPerlenGame,
 	handleAddToPool, handleImage, handleInitialPoolDone, handleMovePerle, handlePlacePerle, handlePlayerLeft,
 	handleRelayout, handleRemovePerle, handleReset,
-	handleStartOrJoin, GP1,
+	handleStartOrJoin, GP2,
 }

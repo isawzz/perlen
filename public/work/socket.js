@@ -1,7 +1,7 @@
 //#region prelim
 const messageTypes = { LEFT: 'left', RIGHT: 'right', LOGIN: 'login' };
 const messages = []; // { author, date, content, type }
-const VerboseSocket = true;
+const VerboseSocket = false;
 
 function initSocket() {
 	Socket = io(SERVERURL);
@@ -37,7 +37,7 @@ function handleUserMessage(data) {
 }
 
 //sending
-function sendReset() { logClientSend('reset', Username); Socket.emit('reset', { Username }); }
+function sendReset(settings) { logClientSend('reset', Username); Socket.emit('reset', { settings:settings,username:Username }); }
 function sendUserMessage(data) { logClientSend('userMessage', data); Socket.emit('userMessage', { data: data }); }
 function sendFilename(msg) { logClientSend('filename', msg); Socket.emit('filename', { msg }); }
 

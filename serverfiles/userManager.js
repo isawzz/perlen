@@ -64,7 +64,7 @@ function handleUserMessage(client, x) {
 	let id = client.id;
 	let user = Clients[id];
 	let name = user.username;
-	console.log('message received from',name, x);
+	//console.log('message received from',name, x);
 	io.emit('userMessage', x);
 
 }
@@ -78,7 +78,7 @@ function handleMessage(client, x) {
 	let id = client.id;
 	let user = Clients[id];
 	let name = user.username;
-	console.log('message received from',name, x);
+	//console.log('message received from',name, x);
 	io.emit('userMessage', x);
 
 }
@@ -105,7 +105,7 @@ function handleGameStateUpdate(client,x){
 }
 function handleGameStateRequest(client, x) {
 	//someone logged in on server and entered the lobby
-	console.log('position request from',x.msg);
+	//console.log('position request from',x.msg);
 	logSend('gameState');
 	let len = GameState.history.length;
 	client.emit('gameState', { data:len==0?null:GameState.history[len-1] });

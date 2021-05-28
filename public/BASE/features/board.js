@@ -551,12 +551,12 @@ function expandBoard(board, rNew, cNew, iInsert) {
 }
 function insertColNew(board, cClick) {
 	let iInsert = cClick + 1;
-	console.log('insert col after', cClick)
+	//console.log('insert col after', cClick)
 	expandBoard(board, board.rows, board.cols + 1, iInsert);
 }
 function insertRowNew(board, cClick) {
 	let iInsert = cClick + 1;
-	console.log('insert row after', cClick)
+	//console.log('insert row after', cClick)
 	expandBoard(board, board.rows + 1, board.cols, iInsert);
 }
 

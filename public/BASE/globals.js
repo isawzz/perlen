@@ -2,18 +2,19 @@
 const PORT = 3333;
 
 // *** deploy to heroku ***
-const NGROK = false; //'http://849aec381695.ngrok.io/'; // MUSS / am ende!!! 
-const HEROKU = true;
-const USERNAME_SELECTION = 'local'; // random | local | nil | gul | ma ...
+// const NGROK = false; //'http://849aec381695.ngrok.io/'; // MUSS / am ende!!! 
+// const HEROKU = true;
+// const USERNAME_SELECTION = 'local'; // random | local | nil | gul | ma ...
 
 //*** testing */:
-// const NGROK = false; //'http://849aec381695.ngrok.io/'; // MUSS / am ende!!! 
-// const HEROKU = false;
-// const USERNAME_SELECTION = 'random'; // random | local | nil | gul | ma ...
+const NGROK = false; //'http://849aec381695.ngrok.io/'; // MUSS / am ende!!! 
+const HEROKU = false;
+const USERNAME_SELECTION = 'random'; // random | local | nil | gul | ma ...
 
 var USESOCKETS = true; //false ist wahtscheinlich broken!
 const JUST_PERLEN_GAME = true;
-const SKIP_INITIAL_SELECT = false;
+var SkipInitialSelect = true;
+var IsTraditionalBoard = false;
 
 const PERLEN_EDITOR_OPEN_AT_START = false;
 
@@ -250,7 +251,8 @@ const BoyNames = ['Aaron', 'Ariel', 'Billy', 'Cayley', 'Erik',
 if (this && typeof module == "object" && module.exports && this === module.exports) {
 	module.exports = {
 		PORT,
-		SKIP_INITIAL_SELECT,
+		SkipInitialSelect,
+		IsTraditionalBoard,
 	};
 }
 //#endregion
