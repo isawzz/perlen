@@ -59,9 +59,9 @@ class GP2 {
 	emitPartialGameState(client) {
 
 	}
-	emitInitial(client) {
-		let pl = this.players[client.id];
-		let username = pl.name;
+	emitInitial(client,x) {
+		//let pl = this.players[client.id];
+		let username = x.username; //pl.name;
 		//console.log('username', username);
 		if (this.settings.SkipInitialSelect) {
 			logSend('gameState');
