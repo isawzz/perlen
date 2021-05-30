@@ -1,11 +1,12 @@
-onload = start(); // start || startTesting
+onload = start(); // start | startTesting
 
 async function start() {
 
 	//boardTestGetCol(); return; //boardTestGetRow();	return;
 
 	//body is initially hidden!!!
-	loadAssets('./assets/'); //await loadAssets('./assets/'); //use this when starting in game!
+	loadAssets('./assets/'); 
+	//await loadAssets('./assets/'); //use this when starting in game!
 
 	//determining user name
 	let username;
@@ -41,7 +42,7 @@ function establishUsername(username) {
 //1. server sends client id => client sends login/username
 function fakeInitSocket() { ClientId = '12345'; fakeLogin(Username); }
 function handleClientIdSendLogin(data) {
-	//console.log('handleClientId data received:',data);
+	console.log('handleClientId data received:',data);
 	ClientId = data.clientId;
 	sendLogin(Username);
 }
@@ -67,6 +68,7 @@ function setUserData(username) {
 	} else {
 		U = DB.users[username]; U.name = U.username = Username = U.id;
 	}
+	U.clientId = ClientId;
 }
 //default ist: wenn mal drin bin kann alles anschauen in lobby gehen
 //eine neue table createn, eine table joinen, ...

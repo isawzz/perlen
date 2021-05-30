@@ -1,8 +1,6 @@
 var Schritt = 0;
-class SimpleClass2 {
-	constructor() {
-		this.dParent = dTable;
-	}
+class SimpleClass {
+	constructor() { this.dParent = dTable; }
 	checkInitialPoolDone() {
 		if (!this.INITIAL_POOL_DONE) {
 			Socket.emit('initialPoolDone', { username: Username });
@@ -14,7 +12,8 @@ class SimpleClass2 {
 	presentGameState(data) {
 
 		//console.log('got data:', jsCopy(data));
-		clearElement(this.dParent); Schritt += 1;
+		clearElement(this.dParent); 
+		Schritt += 1;
 
 		if (nundef(this.state)) this.state = {}; copyKeys(data.state, this.state);
 
@@ -29,12 +28,18 @@ class SimpleClass2 {
 		if (isdef(data.state.pool)) { //sent new pool!
 			//console.log('got POOL!')
 			this.perlenListeImSpiel = Object.values(this.state.pool);
-			for (const idx in this.state.pool) { let p = this.state.pool[idx]; p.path = mPath(p); }
+			for (const idx in this.state.pool) { 
+				let p = this.state.pool[idx]; 
+				let key = p.key;
+				copyKeys(this.perlenDict[key],p);
+				p.path = mPath(p); 
+			}
 		}
 
-		let boardDescription=this.state.board;
-		this.clientBoard = this.settings.IsTraditionalBoard ? 
-		quadBoard(boardDescription.rows, boardDescription.cols, this.dParent)
+		//console.log('perlenDict',this.perlenDict,'\npool',this.perlenListeImSpiel)
+		let boardDescription = this.state.board;
+		this.clientBoard = this.settings.IsTraditionalBoard ?
+			quadBoard(boardDescription.rows, boardDescription.cols, this.dParent)
 			: showBrettBoard(boardDescription.filename, this.dParent);
 
 		mLinebreak(this.dParent, this.settings.IsTraditionalBoard ? 25 : 45);

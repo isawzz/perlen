@@ -1,6 +1,6 @@
 async function startTesting() {
-	await loadAssets('./assets/'); //use this when starting in game!
-	DB = await route_path_yaml_dict('./data.yaml');
+	// await loadAssets('./assets/'); //use this when starting in game!
+	// DB = await route_path_yaml_dict('./data.yaml');
 
 	hide('dMainContent');
 	show('dGameScreen');
@@ -26,6 +26,9 @@ function runTest() {
 	//add hovering over hex!
 
 }
+
+
+//#region hex board test + function!
 function hexBoard(dParent,rows=13,cols=5,wHex=100) {
 	let hline = (wHex / .866) * .75;
 	dParent = mDiv(dParent, { position: 'relative', w: wHex * cols, h: hline * (rows + .5), display: 'inline-block' });
@@ -273,7 +276,27 @@ function hexTest00() {
 	styles = { padding: 4 };
 	let h1 = mHex00(dParent, styles);
 }
+//#endregion
 
+//#region board tests
+function boardTestGetRow() {
+	let arr = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11];
+	let [rows, cols] = [6, 2];
+	for (let i = 0; i < rows; i++) {
+		let x = bGetRow(arr, i, rows, cols);
+		console.log('arr', toBoardString(arr, rows, cols), 'row', i, x);
+	}
+}
+function boardTestGetCol() {
+	let arr = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11];
+	let [rows, cols] = [3,4];
+	for (let i = 0; i < cols; i++) {
+		let x = bGetCol(arr, i, rows, cols);
+		console.log('arr', toBoardString(arr, rows, cols), 'col', i, x);
+	}
+}
+
+//#endregion
 
 //#region testing before perlen game
 //test areas

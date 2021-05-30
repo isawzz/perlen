@@ -12,6 +12,8 @@ function simplestPerlenGame() {
 	mStyleX(document.body, { opacity: 1 });
 	initTable(null, 2); initSidebar(); initAux(); initScore();
 
+	//bis hier ist alles so fuer alle spiel!
+	//*** hier PerlenGame starts von Client aus!
 	if (PERLEN_EDITOR_OPEN_AT_START) createPerlenEditor();
 	sendStartOrJoinPerlenGame();
 }
@@ -24,16 +26,16 @@ function sendStartOrJoinPerlenGame() {
 	window.onkeydown = keyDownHandler;
 	window.onkeyup = keyUpHandler;
 	mBy('sidebar').ondblclick = togglePerlenEditor;
-	G = new SimpleClass2();
+	G = new SimpleClass();
 }
 //skip next 2 steps!
 function handleInitialPool(data) {
-	console.assert(isdef(G),'G not defined!!!!!!!!!!!')
+	console.assert(isdef(G), 'G not defined!!!!!!!!!!!')
 	//if (nundef(G.settings) && isdef(data.settings)) 
-	if (isdef(data.settings) && isdef(G.settings)) copyKeys(data.settings,G.settings);
+	if (isdef(data.settings) && isdef(G.settings)) copyKeys(data.settings, G.settings);
 	else if (isdef(data.settings)) G.settings = data.settings;
 	else if (isdef(G.settings)) G.settings.SkipInitialSelect = false;
-	else if (nundef(data.settings) && nundef(G.settings)) G.settings={SkipInitialSelect:false};
+	else if (nundef(data.settings) && nundef(G.settings)) G.settings = { SkipInitialSelect: false };
 	//console.log('HAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA',data,G)
 	//SkipInitialSelect = false;
 	initToolbar(G.settings);
@@ -51,6 +53,7 @@ function handleGameState(data) {
 	//console.log('data',data)
 	G.presentGameState(data);
 }
+
 function sendMovePerle(perle, fFrom, fTo, dis) {
 	//console.log('===> PLACE')
 	let data = { iPerle: perle.index, iFrom: fFrom.index, iTo: fTo.index, displaced: isdef(dis) ? dis.index : null, username: Username };
@@ -95,6 +98,7 @@ function keyUpHandler(ev) {
 		IsControlKeyDown = false;
 		iMagnifyCancel();
 	}
+	if (ev.key == 'Alt' && isdef(Socket)) {Socket.emit('hide',{username:Username});}
 	//else if (keyCode == 112) { show('dHelpWindow'); }
 }
 function keyDownHandler(ev) {
@@ -113,6 +117,8 @@ function keyDownHandler(ev) {
 
 		}
 	}
+	if (ev.key == 'Alt' && isdef(Socket)) {Socket.emit('show',{username:Username});}
+
 }
 
 //#endregion
@@ -154,7 +160,7 @@ function createFields(board, rows, cols, sz = 104) {
 	return fieldItems;
 }
 function doBoardRelayout(board, c, func, isReduction) {
-	if (func == removeColNew && board.cols < 3 || func == removeRowNew && board.rows<3) return;
+	if (func == removeColNew && board.cols < 3 || func == removeRowNew && board.rows < 3) return;
 	let result = func(board, c);
 	//console.log('result von relayout:', result);
 	let poolArr = G.state.poolArr;
@@ -201,10 +207,13 @@ function mPath(p) {
 }
 function showPerlen(perlenByIndex, boardArr, poolArr, board, dParent) {
 
+	//console.log('perlenByIndex',perlenByIndex)
 	//console.log('boardArr',boardArr);
 	for (let i = 0; i < poolArr.length; i++) {
 		let iPerle = poolArr[i];
+		//console.log('iPerle',iPerle);
 		perle = perlenByIndex[iPerle];
+		//console.log('perle',perle)
 		perle.field = perle.row = perle.col = null;
 		let ui = createPerle(perle, dParent, 64, 1.3, .4);
 	}
@@ -267,7 +276,6 @@ function createFieldsFromCenters(board, centers, sz = 90) {
 	board.fieldCenters = centers;
 	return fieldItems;
 }
-
 function littleHexBoardTool(p1, p2, p3) {
 	p1 = { x: 282, y: 72 };
 	p2 = { x: 484, y: 72 };

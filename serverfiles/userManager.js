@@ -98,6 +98,7 @@ function handleMove(client, x) {
 
 }
 
+
 const GameData={history:[]};
 function handleGameStateUpdate(client,x){
 	GameData.history.push(x.data);
@@ -132,6 +133,7 @@ function loadUserInfo(username, client) {
 	let data = base.nundef(u) ? base.jsCopy(DB.users.guest0) : base.jsCopy(u);
 	base.copyKeys(data, client, {id:'id'});
 	client.name = username;
+	//console.log('object client hat',Object.keys(client));
 	return base.isdef(u);
 }
 function log() { if (Verbose) console.log('userManager: ', ...arguments); }

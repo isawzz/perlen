@@ -4,17 +4,21 @@ const messages = []; // { author, date, content, type }
 const VerboseSocket = false;
 
 function initSocket() {
+	console.log('init socket!!!')
 	Socket = io(SERVERURL);
 	Socket.on('clientId', handleClientIdSendLogin);
 	Socket.on('db', handleDB);
 
 	Socket.on('userJoined', handleUserJoined);
 	Socket.on('userLeft', handleUserLeft);
-	Socket.on('userMessage',handleUserMessage);
+	Socket.on('userMessage', handleUserMessage);
 
-	Socket.on('initialPool',handleInitialPool); //skip for now!
+	Socket.on('initialPool', handleInitialPool); //skip for now!
 
 	Socket.on('gameState', handleGameState);
+	Socket.on('mouse', handleMouse);
+	Socket.on('show', handleShow);
+	Socket.on('hide', handleHide);
 
 	// Socket.on('gameOver', handleGameOver);
 	// Socket.on('gameCode', handleGameCode);
@@ -37,7 +41,7 @@ function handleUserMessage(data) {
 }
 
 //sending
-function sendReset(settings) { logClientSend('reset', Username); Socket.emit('reset', { settings:settings,username:Username }); }
+function sendReset(settings) { logClientSend('reset', Username); Socket.emit('reset', { settings: settings, username: Username }); }
 function sendUserMessage(data) { logClientSend('userMessage', data); Socket.emit('userMessage', { data: data }); }
 function sendFilename(msg) { logClientSend('filename', msg); Socket.emit('filename', { msg }); }
 
@@ -120,32 +124,32 @@ const displayMessages = () => {
 
 
 function handleGameOver(data) {
-  if (!gameActive) {
-    return;
-  }
-  data = JSON.parse(data);
+	if (!gameActive) {
+		return;
+	}
+	data = JSON.parse(data);
 
-  gameActive = false;
+	gameActive = false;
 
-  if (data.winner === playerNumber) {
-    alert('You Win!');
-  } else {
-    alert('You Lose :(');
-  }
+	if (data.winner === playerNumber) {
+		alert('You Win!');
+	} else {
+		alert('You Lose :(');
+	}
 }
 
 function handleGameCode(gameCode) {
-  gameCodeDisplay.innerText = gameCode;
+	gameCodeDisplay.innerText = gameCode;
 }
 
 function handleUnknownCode() {
-  reset();
-  alert('Unknown Game Code')
+	reset();
+	alert('Unknown Game Code')
 }
 
 function handleTooManyPlayers() {
-  reset();
-  alert('This game is already in progress');
+	reset();
+	alert('This game is already in progress');
 }
 //#endregion
 

@@ -11,10 +11,11 @@ const { PORT } = require('./public/BASE/globals.js');
 
 const utils = require('./serverfiles/utils.js');
 const userman = require('./serverfiles/userManager.js');
-const simple = require('./serverfiles/pg3.js');
+const simple = require('./serverfiles/pg4.js');
 
 const DB = utils.fromYamlFile(path.join(__dirname, 'public/data.yaml'));
 const PerlenDict = utils.fromYamlFile(path.join(__dirname, 'public/perlenDict.yaml'));
+const lastGame = utils.fromYamlFile(path.join(__dirname, './lastState.yaml'));
 
 app.all('/*', function (req, res, next) {
 	res.header("Access-Control-Allow-Origin", "*");
@@ -38,7 +39,7 @@ const io = require('socket.io')(http, {
 });
 
 userman.initUserManager(io, DB);
-simple.initPerlenGame(io, PerlenDict, DB);
+simple.initPerlenGame(io, PerlenDict, DB, lastGame);
 //#endregion
 
 //#region io
@@ -58,9 +59,13 @@ io.on('connection', client => {
 	client.on('relayout', x => simple.handleRelayout(client, x));
 	client.on('removePerle', x => simple.handleRemovePerle(client, x));
 	client.on('reset', x => simple.handleReset(client, x))
-	client.on('startOrJoinPerlen', x => simple.handleStartOrJoin(client, x)); 
+	client.on('startOrJoinPerlen', x => simple.handleStartOrJoin(client, x));
 
-	client.on('initialPoolDone', x => simple.handleInitialPoolDone(client, x)); 
+	client.on('initialPoolDone', x => simple.handleInitialPoolDone(client, x));
+
+	client.on('mouse', x => { io.emit('mouse', x); });//should send x,y,username
+	client.on('show', x => { io.emit('show', x); });//should send x,y,username
+	client.on('hide', x => { io.emit('hide', x); });//should send x,y,username
 
 });
 

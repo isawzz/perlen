@@ -443,24 +443,6 @@ class Board2D {
 }
 
 
-function boardTestGetRow() {
-	let arr = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11];
-	let [rows, cols] = [6, 2];
-	for (let i = 0; i < rows; i++) {
-		let x = bGetRow(arr, i, rows, cols);
-		console.log('arr', toBoardString(arr, rows, cols), 'row', i, x);
-	}
-}
-
-function boardTestGetCol() {
-	let arr = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11];
-	let [rows, cols] = [3,4];
-	for (let i = 0; i < cols; i++) {
-		let x = bGetCol(arr, i, rows, cols);
-		console.log('arr', toBoardString(arr, rows, cols), 'col', i, x);
-	}
-}
-
 function reduceBoard(board, rNew, cNew, iModify) {
 	//console.log(board.rows,board.cols, 'iModify',iModify)
 	let [boardArrOld, rOld, cOld] = [board.fields.map(x => isdef(x.item) ? x.item.index : null), board.rows, board.cols];
@@ -493,21 +475,6 @@ function reduceBoard(board, rNew, cNew, iModify) {
 	}
 	return {rows:rNew,cols:cNew,boardArr:boardArrNew,extras:rest};
 }
-function removeColNew(board, cClick) {
-	//if (board.cols<3) return {rows:board.rows,cols:board.cols,boardArr:boardArrNew,extras:rest};;
-	let iInsert = cClick;
-	//console.log('remove col', cClick)
-	let result=reduceBoard(board, board.rows, board.cols - 1, iInsert);
-	return result;
-}
-function removeRowNew(board, cClick) {
-	//if (board.rows<3) return;
-	let iInsert = cClick;
-	//console.log('remove row', cClick)
-	let result = reduceBoard(board, board.rows - 1, board.cols, iInsert);
-	return result;
-}
-
 function expandBoard(board, rNew, cNew, iInsert) {
 	let [boardArrOld, rOld, cOld] = [board.fields.map(x => isdef(x.item) ? x.item.index : null), board.rows, board.cols];
 
@@ -533,16 +500,10 @@ function expandBoard(board, rNew, cNew, iInsert) {
 	return {rows:rNew,cols:cNew,boardArr:boardArrNew,extras:[]};
 
 }
-function insertColNew(board, cClick) {
-	let iInsert = cClick + 1;
-	//console.log('insert col after', cClick)
-	return expandBoard(board, board.rows, board.cols + 1, iInsert);
-}
-function insertRowNew(board, cClick) {
-	let iInsert = cClick + 1;
-	//console.log('insert row after', cClick)
-	return expandBoard(board, board.rows + 1, board.cols, iInsert);
-}
+function insertColNew(board, cClick) {return expandBoard(board, board.rows, board.cols + 1, cClick + 1);}
+function insertRowNew(board, cClick) {return expandBoard(board, board.rows + 1, board.cols, cClick + 1);}
+function removeColNew(board, cClick) {return reduceBoard(board, board.rows, board.cols - 1, cClick);}
+function removeRowNew(board, cClick) {return reduceBoard(board, board.rows - 1, board.cols, cClick);}
 
 
 
