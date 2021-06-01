@@ -17,7 +17,7 @@ class GP2 {
 		//console.log('settings',this.settings)
 		this.state = {};
 
-		if (NO_LAST_STATE || base.nundef(lastState)) lastState={settings:{},state:{}};
+		if (NO_LAST_STATE || base.nundef(lastState)) lastState = { settings: {}, state: {} };
 		this.initState(lastState.state, lastState.settings);
 
 		this.players = {};
@@ -25,11 +25,21 @@ class GP2 {
 		this.clients = {};
 	}
 	initState(state, settings) {
+
+		console.log(state.pool)
+
 		base.copyKeys(state, this.state);
 		base.copyKeys(settings, this.settings);
-		// console.log('settings', this.settings);
-		this.maxPoolIndex = base.initServerPool(this.settings, this.state, this.perlenDict);
 
+
+		// console.log('settings', this.settings);
+		if (base.isdef(state.pool)) {
+			console.log('state', state.pool);
+			this.maxPoolIndex = Object.keys(state.pool).length;
+		} else {
+			this.maxPoolIndex = base.initServerPool(this.settings, this.state, this.perlenDict);
+			this.state.boardArr = [];
+		}
 	}
 	addPlayer(client, x) {
 		let username = x;
@@ -80,7 +90,12 @@ class GP2 {
 		//1. clear boardArr, put alle perlen zurueck in stall
 		//==>2. clear boardArr, reset pool to new pool
 		let barr = this.state.boardArr;
+
 		if (base.isdef(barr)) { this.state.boardArr = new Array(barr.length); }
+
+		delete this.state.poolArr;
+		delete this.state.pool;
+
 		this.maxPoolIndex = base.initServerPool(this.settings, this.state, this.perlenDict);
 		logSend('gameState');
 		if (this.settings.poolSelection != 'random') {

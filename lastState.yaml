@@ -12,40 +12,89 @@ settings:
   rows: 7
   cols: 6
 state:
+  boardArr:
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
   pool:
     "0":
-      key: mozart
+      key: islam
       index: 0
     "1":
-      key: kind
+      key: der eiserne vorhang
       index: 1
     "2":
-      key: grosse seuche
+      key: der schwarze drachen tod
       index: 2
     "3":
-      key: kunst
+      key: seher
       index: 3
     "4":
-      key: fear
+      key: cafehauskultur
       index: 4
     "5":
-      key: alchemie
+      key: kriegszerstörung
       index: 5
     "6":
-      key: idee
+      key: langsam
       index: 6
     "7":
-      key: schatten
+      key: taoismus
       index: 7
     "8":
-      key: spanisch
+      key: machtspiel
       index: 8
     "9":
-      key: political correctness 01
+      key: komplex
       index: 9
-    "10":
-      key: gelb
-      index: 10
   poolArr:
     - 0
     - 1
@@ -53,57 +102,7 @@ state:
     - 3
     - 4
     - 5
+    - 6
     - 7
     - 8
-  boardArr:
-    - 10
     - 9
-    - null
-    - null
-    - null
-    - null
-    - null
-    - null
-    - null
-    - null
-    - null
-    - null
-    - null
-    - null
-    - null
-    - null
-    - null
-    - null
-    - null
-    - null
-    - null
-    - null
-    - null
-    - null
-    - null
-    - null
-    - null
-    - null
-    - null
-    - null
-    - null
-    - null
-    - null
-    - null
-    - null
-    - null
-    - null
-    - null
-    - null
-    - null
-    - null
-    - null
-    - null
-    - null
-    - null
-    - null
-    - null
-    - null
-    - 6
-    - null
-    - null

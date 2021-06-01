@@ -3420,6 +3420,7 @@ function initServerPool(settings, state, perlenDict) {
 	let maxPoolIndex = 0;
 	addKeys(settings, { poolSelection: 'random', numPool: 20 });
 	let n = settings.poolSelection != 'player' ? settings.numPool : 0;
+
 	let keys = getRandomPerlenKeys(perlenDict, n);
 
 	//keys[0]='gelb';
