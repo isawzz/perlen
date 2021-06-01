@@ -15,7 +15,7 @@ const perlenGame = require('./serverfiles/pg6.js');
 
 const DB = utils.fromYamlFile(path.join(__dirname, 'public/data.yaml'));
 const PerlenDict = utils.fromYamlFile(path.join(__dirname, 'public/perlenDict.yaml'));
-//const lastState = utils.fromYamlFile(path.join(__dirname, './lastState.yaml'));
+const lastState = utils.fromYamlFile(path.join(__dirname, './lastState.yaml'));
 
 app.all('/*', function (req, res, next) {
 	res.header("Access-Control-Allow-Origin", "*");
@@ -40,7 +40,7 @@ const io = require('socket.io')(http, {
 
 userman.initUserManager(io, DB);
 // console.log('lastState',lastState);
-const simple = new perlenGame.GP2(io, PerlenDict, DB);//, lastState);
+const simple = new perlenGame.GP2(io, PerlenDict, DB, lastState);
 //#endregion
 
 //#region io

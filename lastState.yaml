@@ -1,0 +1,109 @@
+settings:
+  poolSelection: random
+  numPool: 10
+  boardLayout: hex1
+  boardFilename: brett10
+  fieldShape: circle
+  fieldColor: transparent
+  wField: 101
+  hField: 117
+  wGap: 15
+  hGap: 30
+  rows: 7
+  cols: 6
+state:
+  pool:
+    "0":
+      key: mozart
+      index: 0
+    "1":
+      key: kind
+      index: 1
+    "2":
+      key: grosse seuche
+      index: 2
+    "3":
+      key: kunst
+      index: 3
+    "4":
+      key: fear
+      index: 4
+    "5":
+      key: alchemie
+      index: 5
+    "6":
+      key: idee
+      index: 6
+    "7":
+      key: schatten
+      index: 7
+    "8":
+      key: spanisch
+      index: 8
+    "9":
+      key: political correctness 01
+      index: 9
+    "10":
+      key: gelb
+      index: 10
+  poolArr:
+    - 0
+    - 1
+    - 2
+    - 3
+    - 4
+    - 5
+    - 7
+    - 8
+  boardArr:
+    - 10
+    - 9
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - 6
+    - null
+    - null

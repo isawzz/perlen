@@ -7,7 +7,7 @@ var MessageCounter = 0;
 var Verbose = true;
 
 //#endregion
-const NO_LAST_STATE = true;
+const NO_LAST_STATE = false;
 class GP2 {
 	constructor(io, perlenDict, DB, lastState) {
 		this.io = io;
@@ -17,7 +17,7 @@ class GP2 {
 		//console.log('settings',this.settings)
 		this.state = {};
 
-		if (NO_LAST_STATE) lastState={settings:{},state:{}};
+		if (NO_LAST_STATE || base.nundef(lastState)) lastState={settings:{},state:{}};
 		this.initState(lastState.state, lastState.settings);
 
 		this.players = {};
