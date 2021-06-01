@@ -1,3 +1,48 @@
+function createClientBoardNew(o, s) {//filename, layout, wCell = 140, hCell = 140, wgap = 20, hgap=20) {
+
+	let [layout, wCell, hCell, wGap, hGap] = [s.boardLayout, s.wField, s.hField, s.wGap, s.hGap];
+
+	let dInner = o.dInner;
+	mCenterCenterFlex(dInner);
+
+	// dArea: area for fields: positioned in the center of dInner
+	let [wArea, hArea] = [Math.min(o.wOuter, 800), Math.min(o.hOuter, 800)];
+	let dArea = o.dArea = mDiv(dInner, { w: wArea, h: hArea }, 'dFieldArea'); //, bg:'blue'
+	mCenterCenterFlex(dArea);
+
+	let [w, h] = [wArea, hArea];
+
+	//console.log('layout', layout);
+	let isHexLayout = startsWith(layout, 'hex');
+	let hline = isHexLayout ? hCell * .75 : hCell;
+	//console.log('hline', hline)
+
+	let rows, cols;
+	if (isdef(s.rows)) rows = s.rows; else rows = Math.floor(h / hline);
+	if (isdef(s.cols)) cols = s.cols; else cols = Math.floor(w / wCell)
+
+	if (isHexLayout && rows * hline + hCell / 4 > h) rows -= 1;
+
+	let boardShouldHaveCenter = true;
+	if (rows % 2 == 0 && boardShouldHaveCenter) rows -= 1;
+	if (cols % 2 == 0 && boardShouldHaveCenter) cols -= 1;
+
+	//console.log('rows,cols', rows, cols);
+	let [centers, wTotal, hTotal] = getCentersFromRowsCols(layout, rows, cols, wCell, hCell);
+	//console.log('centers', centers, '\n dims', wTotal, hTotal);
+
+	// dCells: this is where actually fields are! also needs to be centered in dArea
+	let dCells = mDiv(dArea,{w:wTotal,h:hTotal,position:'relative'}); //, bg:'green'});
+	//dArea size also needs to be adjusted to at least that size!!!
+	mStyleX(dArea,{w:Math.max(wArea,wTotal),h:Math.max(hArea,hTotal)});
+
+	let fields;
+	if (isdef(centers)) fields = createFieldsFromCenters(dCells,o, centers, wCell, hCell, wGap, hGap, wTotal, hTotal);
+	let bg = valf(s.fieldColor, colorTrans('black', .3));
+	fields.map(x => mStyleX(iDiv(x), { bg: bg }));
+
+	//return clientBoard;
+}
 function createClientBoard(dParent, settings) {//filename, layout, wCell = 140, hCell = 140, wgap = 20, hgap=20) {
 
 	let [filename, layout, wCell, hCell, wGap, hGap] = [settings.boardFilename, settings.boardLayout, settings.wField, settings.hField, settings.wGap, settings.hGap];
@@ -6,7 +51,7 @@ function createClientBoard(dParent, settings) {//filename, layout, wCell = 140, 
 	let img, wOuter, hOuter;
 	if (filename != 'none') {
 		let path = './assets/games/perlen/bretter/' + filename + '.png';
-		img = mImg(path, dOuter);
+		img = mImg(path, dOuter, null,null,weiter);
 		[wOuter, hOuter] = [img.naturalWidth, img.naturalHeight];
 	} else[wOuter, hOuter] = [1000, 600];
 	mStyleX(dOuter, { w: wOuter, h: hOuter }); //full board size!!!

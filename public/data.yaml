@@ -1020,4 +1020,27 @@ users:
     lastGame: gTouchPic
     settings:
       userColor: orange
+standardSettings:
+  hex51:
+    boardLayout: hex1
+    boardFilename: brett10
+    fieldShape: circle
+    fieldColor: transparent
+    wField: 101
+    hField: 117
+    wGap: 15
+    hGap: 30
+    rows: 7
+    cols: 6
+  hex18:
+    boardLayout: hex1
+    boardFilename: brett18_56
+    fieldShape: circle
+    fieldColor: transparent
+    wField: 101
+    hField: 117
+    wGap: 15
+    hGap: 30
+    rows: 7
+    cols: 6
 

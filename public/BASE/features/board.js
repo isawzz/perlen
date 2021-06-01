@@ -629,10 +629,10 @@ function _calc_hex_col_array(rows, cols) {
 
 
 function hex1Centers(rows, cols, wCell = 100, hCell) {
-	console.log('haaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa')
+	//console.log('haaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa')
 	rows = 7, cols = 6;
 	let colarr = _calc_hex_col_array(rows, cols);
-	console.log('colarr', colarr);
+	//console.log('colarr', colarr);
 	let maxcols = arrMax(colarr);
 	//calc x offset of row: (maxcols-colarr[i])*wCell/2
 
@@ -652,7 +652,7 @@ function hex1Centers(rows, cols, wCell = 100, hCell) {
 			centers.push(center);
 		}
 	}
-	console.log(centers)
+	//console.log(centers)
 	return [centers, wCell * maxcols, hCell / 4 + rows * hline];
 }
 

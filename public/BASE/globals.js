@@ -1,7 +1,7 @@
 //#region server and client
 const PORT = 3333;
 
-// *** deploy to heroku ***
+// *** HEROKU *** deploy to HEROKU ***
 const NGROK = false; //'http://849aec381695.ngrok.io/'; // MUSS / am ende!!! 
 const HEROKU = true;
 const USERNAME_SELECTION = 'local'; // random | local | nil | gul | ma ...

@@ -34,7 +34,7 @@ class SimpleClass {
 	}
 	presentGameState(data) {
 		let [settings, state] = this.copyData(data);
-		//console.log('settings', settings); //console.log('state', state);
+		console.log('settings', settings); //console.log('state', state);
 
 		clearElement(this.dParent); Schritt += 1;
 
@@ -44,33 +44,10 @@ class SimpleClass {
 		}
 
 		let s = this.settings;
-		if (isEmpty(s.boardFilename)) { createBoardEditor(); setTitle('pick a board'); return; }
-		if (nundef(s.boardLayout)) { openSettings(); setTitle('specify board layout'); return; }
+		if (isEmpty(s.boardFilename)) { createBoardEditor(); setTitle('pick a board'); }
+		if (nundef(s.boardLayout)) { openSettings(); setTitle('specify board layout'); }
 
-		let dOuter =this.dBoardOuter= mDiv(this.dParent, { display: 'inline-block', position: 'relative' }, 'dBoardOuter');
-		if (isdef(s.boardFilename)) {
-			let img, wOuter, hOuter;
-			let path = './assets/games/perlen/bretter/' + s.boardFilename + '.png';
-			img =this.boardImage = mImg(path, dOuter, null, null, this.sizeDOuter.bind(this));
-		} else {
-			this.boardImage = null;
-			this.sizeDOuter();
-		}
-	}
-	sizeDOuter() {
-		let img=this.boardImage;
-		let [wOuter, hOuter] =isdef(img)? [img.naturalWidth, img.naturalHeight]:[1000, 700];
-		let dOuter = this.dBoardOuter;
-		mStyleX(dOuter, { w: wOuter, h: hOuter }); //full board size!!!
-
-		//console.log('hallo da bin ch jetzt!');
-
-		let dInner = this.dBoardInner = mDiv(dOuter, { left:0,top:0,w:wOuter,h:hOuter,position:'absolute' }, 'dBoardInner');//,'background-image':path });
-		this.clientBoard = {dOuter:dOuter,wOuter:wOuter,hOuter:hOuter,dInner:dInner};
-		
-		createClientBoardNew(this.clientBoard, this.settings);
-
-
+		this.clientBoard = createClientBoard(this.dParent, this.settings);
 		//console.log(this.clientBoard);
 		if (isEmpty(this.state.boardArr)) {
 			logClientSend('board', { nFields: this.clientBoard.fields.length });

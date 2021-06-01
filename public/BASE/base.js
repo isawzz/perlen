@@ -121,9 +121,10 @@ function miAddLabel(item, styles) {
 }
 function mIfNotRelative(d) { if (nundef(d.style.position)) d.style.position = 'relative'; }
 function mImage() { return mImg(...arguments); }
-function mImg(path, dParent, styles, classes) {
+function mImg(path, dParent, styles, classes, callback) {
 	//console.log('_______________',path)
 	let d = mCreate('img');
+	if (isdef(callback)) d.onload = callback;
 	d.src = path;
 	mAppend(dParent, d);
 	if (isdef(styles)) mStyleX(d, styles);
