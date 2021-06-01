@@ -7,6 +7,7 @@ var MessageCounter = 0;
 var Verbose = true;
 
 //#endregion
+const NO_LAST_STATE = true;
 class GP2 {
 	constructor(io, perlenDict, DB, lastState) {
 		this.io = io;
@@ -16,6 +17,7 @@ class GP2 {
 		//console.log('settings',this.settings)
 		this.state = {};
 
+		if (NO_LAST_STATE) lastState={settings:{},state:{}};
 		this.initState(lastState.state, lastState.settings);
 
 		this.players = {};
@@ -152,7 +154,7 @@ class GP2 {
 		if (keys.includes('perlenDict')) o.perlenDict = this.perlenDict;
 		if (base.isdef(eMore)) base.copyKeys(eMore, o);
 
-		utils.toYamlFile({ settings: this.settings, state: this.state }, './lastState.yaml');
+		if (!NO_LAST_STATE) utils.toYamlFile({ settings: this.settings, state: this.state }, './lastState.yaml');
 
 		if (base.isdef(client)) client.emit('gameState', o); else this.io.emit('gameState', o);
 

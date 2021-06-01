@@ -511,15 +511,16 @@ function getCenters(layout, rows, cols, wCell, hCell,) {
 	else if (layout == 'hex') { return hexCenters(rows, cols, wCell, hCell); }
 	else if (layout == 'circle') { return circleCenters(rows, cols, wCell, hCell); }
 }
-function getCenters(layout, rows, cols, wCell, hCell) {
-	if (layout == 'quad') { return quadCenters(rows, cols, wCell, hCell); }
-	else if (layout == 'hex') { return hexCenters(rows, cols, wCell, hCell); }
-	else if (layout == 'circle') { return circleCenters(rows, cols, wCell, hCell); }
-}
+// function getCenters(layout, rows, cols, wCell, hCell) {
+// 	if (layout == 'quad') { return quadCenters(rows, cols, wCell, hCell); }
+// 	else if (layout == 'hex') { return hexCenters(rows, cols, wCell, hCell); }
+// 	else if (layout == 'circle') { return circleCenters(rows, cols, wCell, hCell); }
+// }
 function getCentersFromRowsCols(layout, rows, cols, wCell, hCell) {
 	let info;
 	if (layout == 'quad') { info = quadCenters(rows, cols, wCell, hCell); }
 	else if (layout == 'hex') { info = hexCenters(rows, cols, wCell, hCell); }
+	else if (layout == 'hex1') { info = hex1Centers(rows, cols, wCell, hCell); }
 	else if (layout == 'circle') { info = circleCenters(rows, cols, wCell, hCell); }
 	return info;
 }
@@ -538,36 +539,36 @@ function quadCenters(rows, cols, wCell, hCell) {
 	//last,x,y+offX,offY 	
 	return [centers, wCell * cols, hCell * rows];
 }
-function circleCenters(rows,cols,wCell,hCell) {
+function circleCenters(rows, cols, wCell, hCell) {
 	//find center
-	let [w, h] = [cols*wCell,rows*hCell];
+	let [w, h] = [cols * wCell, rows * hCell];
 	let cx = w / 2;
 	let cy = h / 2;
 
-	console.log('cx,cy',cx,cy)
+	console.log('cx,cy', cx, cy)
 
 	let centers = [{ x: cx, y: cy }];
 
 	//calc wieviele schichten sich ausgehen?
-	let rx=cx+wCell/2;	let dradx=rx/wCell;
-	let ry=cy+hCell/2;	let drady=ry/hCell;
-	let nSchichten = Math.floor(Math.min(dradx,drady));
-	console.log('Schichten',nSchichten)
+	let rx = cx + wCell / 2; let dradx = rx / wCell;
+	let ry = cy + hCell / 2; let drady = ry / hCell;
+	let nSchichten = Math.floor(Math.min(dradx, drady));
+	console.log('Schichten', nSchichten)
 
-	for(let i=1;i<nSchichten;i++){
-		let [newCenters,wsch,hsch] = oneCircleCenters(i*2+1,i*2+1,wCell,hCell);
+	for (let i = 1; i < nSchichten; i++) {
+		let [newCenters, wsch, hsch] = oneCircleCenters(i * 2 + 1, i * 2 + 1, wCell, hCell);
 		//console.log('newCenters',newCenters,'w',wsch,'h',hsch);//,'\n',newCenters.centers.length);
-		for(const nc of newCenters){
+		for (const nc of newCenters) {
 			//console.log('adding point',nc);
-			centers.push({x:nc.x+cx-wsch/2,y:nc.y+cy-hsch/2});
+			centers.push({ x: nc.x + cx - wsch / 2, y: nc.y + cy - hsch / 2 });
 		}
 	}
 	return [centers, wCell * cols, hCell * rows];
 }
 
-function oneCircleCenters(rows,cols,wCell,hCell) {
+function oneCircleCenters(rows, cols, wCell, hCell) {
 	//find center
-	let [w, h] = [cols*wCell,rows*hCell];
+	let [w, h] = [cols * wCell, rows * hCell];
 	let cx = w / 2;
 	let cy = h / 2;
 
@@ -577,22 +578,22 @@ function oneCircleCenters(rows,cols,wCell,hCell) {
 
 
 	//wieviele will ich placen?
-	let n=8;
+	let n = 8;
 	//was ist radius?
-	let radx=cx-wCell/2;
-	let rady=cy-hCell/2;
+	let radx = cx - wCell / 2;
+	let rady = cy - hCell / 2;
 
 	//console.log('radx,rady',radx,rady)
 
-	let peri=Math.min(radx,rady)*2*Math.PI;
+	let peri = Math.min(radx, rady) * 2 * Math.PI;
 	//console.log('.............n',n)
-	n=Math.floor(peri/Math.min(wCell,hCell));
+	n = Math.floor(peri / Math.min(wCell, hCell));
 	//console.log('.............n',n)
-	while(n>4 && n%4!=0 && n%6!=0) n-=1;
+	while (n > 4 && n % 4 != 0 && n % 6 != 0) n -= 1;
 	//console.log('.............n',n)
 
-	centers = getEllipsePoints(radx,rady,n)
-	centers=centers.map(pt=>({x:pt.X+cx,y:pt.Y+cy}));
+	centers = getEllipsePoints(radx, rady, n)
+	centers = centers.map(pt => ({ x: pt.X + cx, y: pt.Y + cy }));
 
 	return [centers, wCell * cols, hCell * rows];
 }
@@ -605,7 +606,7 @@ function hexCenters(rows, cols, wCell = 100, hCell) {
 
 	let x = 0; y = 0;
 	for (let r = 0; r < rows; r++) {
-		let isSmaller = startSmaller && r % 2 == 0 || !startSmaller && r%2==1;
+		let isSmaller = startSmaller && r % 2 == 0 || !startSmaller && r % 2 == 1;
 		let curCols = isSmaller ? cols - 1 : cols;
 		let dx = isSmaller ? wCell / 2 : 0;
 		dx += offX;
@@ -614,9 +615,46 @@ function hexCenters(rows, cols, wCell = 100, hCell) {
 			centers.push(center);
 		}
 	}
-	return [centers, wCell * cols,hCell/4+rows * hline];
+	return [centers, wCell * cols, hCell / 4 + rows * hline];
+}
+function _calc_hex_col_array(rows, cols) {
+	let colarr = []; //how many cols in each row
+	for (let i = 0; i < rows; i++) {
+		colarr[i] = cols;
+		if (i < (rows - 1) / 2) cols += 1;
+		else cols -= 1;
+	}
+	return colarr;
 }
 
+
+function hex1Centers(rows, cols, wCell = 100, hCell) {
+	console.log('haaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa')
+	rows = 7, cols = 6;
+	let colarr = _calc_hex_col_array(rows, cols);
+	console.log('colarr', colarr);
+	let maxcols = arrMax(colarr);
+	//calc x offset of row: (maxcols-colarr[i])*wCell/2
+
+
+	if (nundef(hCell)) hCell = (hCell / .866);
+	let hline = hCell * .75;
+	let offX = wCell / 2, offY = hCell / 2;
+	let centers = [];
+
+	let x = 0; y = 0;
+	for (let r = 0; r < colarr.length; r++) {
+		let n = colarr[r];
+		for (let c = 0; c < n; c++) {
+			let dx = (maxcols - n) * wCell / 2;
+			let dy = r * hline;
+			let center = { x: dx + c * wCell + offX, y: dy + offY };
+			centers.push(center);
+		}
+	}
+	console.log(centers)
+	return [centers, wCell * maxcols, hCell / 4 + rows * hline];
+}
 
 
 

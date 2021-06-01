@@ -34,7 +34,7 @@ class SimpleClass {
 	}
 	presentGameState(data) {
 		let [settings, state] = this.copyData(data);
-		//console.log('settings', settings); console.log('state', state);
+		console.log('settings', settings); //console.log('state', state);
 
 		clearElement(this.dParent); Schritt += 1;
 

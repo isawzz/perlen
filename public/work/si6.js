@@ -162,15 +162,8 @@ function createFields(board, rows, cols, sz = 104) {
 	mStyleX(iDiv(board), { display: 'inline-grid', 'grid-template-columns': `repeat(${cols}, auto)` })
 	return fieldItems;
 }
-function createFieldsFromCenters(clientBoard, centers, wCell, hCell, wgap,hgap, wNeeded, hNeeded) {
+function createFieldsFromCenters(dCells, clientBoard, centers, wCell, hCell, wgap, hgap, wNeeded, hNeeded) {
 	let fieldItems = [];
-	let d1 = iDiv(clientBoard);
-	let rect = getRect(d1);
-
-	//console.log('rect', rect)
-
-	let dCells = mDiv(d1);//,{bg:'blue'});
-	//mCenterCenterFlex(d1)
 
 	let i = 0;
 	let dx = wCell / 2, dy = hCell / 2;
@@ -182,15 +175,11 @@ function createFieldsFromCenters(clientBoard, centers, wCell, hCell, wgap,hgap, 
 		let r = calcMinMaxXY(centers, wCell, hCell);
 		[wNeeded, hNeeded] = [r.w, r.h];
 	}
-	//console.log('wNeeded,hNeeded',wNeeded,hNeeded)
 	let bg = '#ffffff80';// '#00000010'; //'black';//'#00000010'
 	for (const p of centers) {
-		// let sz = 90;
-		let left=p.x - dx + wgap / 2;
-		let top=p.y - dy + hgap / 2;
-		//console.log('left',left,'top',top, p, dx,dy,wgap,hgap,wNeeded,hNeeded)
+		let left = p.x - dx + wgap / 2;
+		let top = p.y - dy + hgap / 2;
 		let dItem = mDiv(dCells, { position: 'absolute', left: left, top: top, display: 'inline', w: wCell - wgap, h: hCell - hgap, rounding: '50%', bg: bg });
-		//console.log(dItem)
 		mCenterCenterFlex(dItem)
 		let f = { div: dItem, index: i, center: p }; i += 1;
 		fieldItems.push(f);
@@ -199,10 +188,6 @@ function createFieldsFromCenters(clientBoard, centers, wCell, hCell, wgap,hgap, 
 	clientBoard.fields = fieldItems;
 	clientBoard.fieldCenters = centers;
 	clientBoard.dCells = dCells;
-
-	// mStyleX(dCells, { position:'absolute',left: 100, top: 100, w: wNeeded, h: hNeeded, bg: 'blue' });
-	mStyleX(dCells, { position:'absolute',left: (rect.w - wNeeded) / 2, top: (rect.h - hNeeded) / 2, w: wNeeded, h: hNeeded});
-	// mStyleX(dCells, { maleft: (rect.w - wNeeded) / 2, matop: (rect.h - hNeeded) / 2, bg: 'blue' });
 
 	return fieldItems;
 }
@@ -274,24 +259,24 @@ function showPerlen(perlenByIndex, boardArr, poolArr, board, dParent) {
 		field.item = perle;
 		let ui = createPerle(perle, iDiv(field), 64, 1.3, .4);
 		//perle.key='gelb';
-		if (isGermanColorName(perle.key)){
-			let bg=GermanToEnglish[perle.key];
-			if (nundef(bg)) bg=perle.key;
+		if (isGermanColorName(perle.key)) {
+			let bg = GermanToEnglish[perle.key];
+			if (nundef(bg)) bg = perle.key;
 			//bg=colorTrans(bg,.5);
-			let d=perle.live.dImg;
+			let d = perle.live.dImg;
 			perle.live.dLabel.remove();
 			//h-offset v-offset blur spread color
 			d.style.boxShadow = `0px 0px 200px 100px ${bg}`;// '100px 100px red';//`2px 2px 50px ${bg}`;
-			ui.style.zIndex=10;
+			ui.style.zIndex = 10;
 			//d.style.textShadow = '10px 24px 80px 100px blue';// '100px 100px red';//`2px 2px 50px ${bg}`;
 			//mStyleX(,{'text-shadow': `2px 2px 50px ${bg}`});
 			//console.log('JAAAAAAAAAAAAAAAAAAAA',d);
 			//let c=getColorDictColor(perle.key);
-		}else{
-			mStyleX(ui,{bg:'dimgray',rounding:'50%'});
-			ui.style.zIndex=11;
+		} else {
+			mStyleX(ui, { bg: 'dimgray', rounding: '50%' });
+			ui.style.zIndex = 11;
 		}
-		
+
 	}
 }
 function quadBoard(rows, cols, dParent) {
@@ -386,7 +371,6 @@ function littleHexBoardTool(p1, p2, p3) {
 
 	return centers;
 }
-
 
 
 

@@ -34,16 +34,16 @@ games:
   gPerlen2:
     poolSelection: random # random | mixed | player
     numPool: 10
-    boardLayout: hex
+    boardLayout: hex1
     boardFilename: brett10
     fieldShape: circle
-    fieldColor: '#000000A0'
-    fieldWidth: 90
-    fieldHeight: 110
-    wField: 90
-    hField: 103
-    wGap: 10
-    hGap: 10
+    fieldColor: transparent
+    wField: 101
+    hField: 117
+    wGap: 15
+    hGap: 30
+    rows: 7
+    cols: 6
     #old stuff
     # bretter:
     #   quad: 4 4 quad

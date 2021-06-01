@@ -2336,6 +2336,8 @@ function arrFromIndex(arr, i) { return arr.slice(i); }
 function arrFromTo(arr, iFrom, iTo) { return takeFromTo(arr, iFrom, iTo); }
 function arrLastOfLast(arr) { if (arr.length > 0) { let l = arrLast(arr); return isList(l) ? arrLast(l) : null; } else return null; }
 function arrLast(arr) { return arr.length > 0 ? arr[arr.length - 1] : null; }
+function arrMax(arr) { return arr.reduce((m, n) => Math.max(m, n)); }
+function arrMin(arr) { return arr.reduce((m, n) => Math.min(m, n)); }
 function arrMinMax(arr, func) {
 	//console.log('====arr',arr)
 	if (nundef(func)) func = x => x;

@@ -2,46 +2,55 @@ function createClientBoard(dParent, settings) {//filename, layout, wCell = 140, 
 
 	let [filename, layout, wCell, hCell, wGap, hGap] = [settings.boardFilename, settings.boardLayout, settings.wField, settings.hField, settings.wGap, settings.hGap];
 
-	let dp = mDiv(dParent, { display: 'inline-block' }, 'dBoardOuter');
-	let d1 = mDiv(dp, { display: 'inline-block', position: 'relative' },'dBoardInner');//,'background-image':path });
-	let img, w, h;
+	let dOuter = mDiv(dParent, { display: 'inline-block', position:'relative' }, 'dBoardOuter');
+	let img, wOuter, hOuter;
 	if (filename != 'none') {
 		let path = './assets/games/perlen/bretter/' + filename + '.png';
-		img = mImg(path, d1);
-		[w, h] = [img.naturalWidth, img.naturalHeight];
-	} else[w, h] = [1000, 600];
-	//console.log('board Size', w, h);
+		img = mImg(path, dOuter);
+		[wOuter, hOuter] = [img.naturalWidth, img.naturalHeight];
+	} else[wOuter, hOuter] = [1000, 600];
+	mStyleX(dOuter, { w: wOuter, h: hOuter }); //full board size!!!
 
-	//console.log(w,h)
-	mStyleX(d1, { w: w, h: h });
-	let clientBoard = { div: d1, img: img };
-	//let rect = getRect(d1); console.log('rect', rect)
+	// dInner: inner div that completely covers image
+	let dInner = mDiv(dOuter, { left:0,top:0,w:wOuter,h:hOuter,position:'absolute' }, 'dBoardInner');//,'background-image':path });
+	let clientBoard = { div: dOuter, dInner: dInner, img: img };
+	mCenterCenterFlex(dInner);
 
-	//let [wCell,hCell]=[140,120];
-	//if (layout == 'hex') hCell-=10;
-	let hline = layout == 'hex' ? hCell * .75 : hCell;
+	// dArea: area for fields: positioned in the center of dInner
+	let [wArea, hArea] = [Math.min(wOuter, 800), Math.min(hOuter, 800)];
+	let dArea = mDiv(dInner, { w: wArea, h: hArea }, 'dFieldArea'); //, bg:'blue'
+	mCenterCenterFlex(dArea);
+
+	let [w, h] = [wArea, hArea];
+
+	console.log('layout', layout);
+	let isHexLayout = startsWith(layout, 'hex');
+	let hline = isHexLayout ? hCell * .75 : hCell;
 	//console.log('hline', hline)
-	let [rows, cols] = [Math.floor(h / hline), Math.floor(w / wCell)];
 
-	if (layout == 'hex' && rows * hline + hCell / 4 > h) rows -= 1;
+	let rows, cols;
+	if (isdef(settings.rows)) rows = settings.rows; else rows = Math.floor(h / hline);
+	if (isdef(settings.cols)) cols = settings.cols; else cols = Math.floor(w / wCell)
 
-	//console.log('recommended rows', rows)
+	if (isHexLayout && rows * hline + hCell / 4 > h) rows -= 1;
 
 	let boardShouldHaveCenter = true;
-	//should there be a center cell, need rows,cols to be odd numbers bei quad at least!
-	//also bei hex
 	if (rows % 2 == 0 && boardShouldHaveCenter) rows -= 1;
 	if (cols % 2 == 0 && boardShouldHaveCenter) cols -= 1;
+
 	//console.log('rows,cols', rows, cols);
-	//layout='hex';
 	let [centers, wTotal, hTotal] = getCentersFromRowsCols(layout, rows, cols, wCell, hCell);
-	//console.log('centers', centers, '\ndims', wTotal, hTotal);
+	console.log('centers', centers, '\n dims', wTotal, hTotal);
+
+	// dCells: this is where actually fields are! also needs to be centered in dArea
+	let dCells = mDiv(dArea,{w:wTotal,h:hTotal,position:'relative'}); //, bg:'green'});
+	//dArea size also needs to be adjusted to at least that size!!!
+	mStyleX(dArea,{w:Math.max(wArea,wTotal),h:Math.max(hArea,hTotal)});
 
 	let fields;
-	if (isdef(centers)) fields = createFieldsFromCenters(clientBoard, centers, wCell, hCell, wGap, hGap, wTotal, hTotal);
-	// fields.map(x => mStyleX(iDiv(x), { bg: 'red'}));//colorTrans('black', .8) }))
-	let bg = valf(settings.fieldColor,colorTrans('black', .3));
-	fields.map(x => mStyleX(iDiv(x), { bg: bg }))
+	if (isdef(centers)) fields = createFieldsFromCenters(dCells,clientBoard, centers, wCell, hCell, wGap, hGap, wTotal, hTotal);
+	let bg = valf(settings.fieldColor, colorTrans('black', .3));
+	fields.map(x => mStyleX(iDiv(x), { bg: bg }));
 
 	return clientBoard;
 }
