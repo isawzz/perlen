@@ -3,8 +3,16 @@ const messageTypes = { LEFT: 'left', RIGHT: 'right', LOGIN: 'login' };
 const messages = []; // { author, date, content, type }
 const VerboseSocket = false;
 
+class FakeSocketClass{
+	constructor(){
+		if (VerboseSocket) console.log('FAKE SOCKET!!!');
+	}
+	emit(){if (VerboseSocket) console.log('client emits',...arguments);}
+}
 function initSocket() {
-	console.log('init socket!!!')
+
+	if (!USESOCKETS) {Socket=new FakeSocketClass();return;}
+	//console.log('init socket!!!')
 	Socket = io(SERVERURL);
 	Socket.on('clientId', handleClientIdSendLogin);
 	Socket.on('db', handleDB);

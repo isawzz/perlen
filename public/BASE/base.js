@@ -24,14 +24,14 @@ function mCenterFlex(d, hCenter = true, vCenter = false, wrap = true) {
 	if (wrap) styles['flex-wrap'] = 'wrap';
 	mStyleX(d, styles);
 }
-function mCheckbox(label,val,dParent,styles={},id){
-	let d = mDiv(dParent,{display:'inline-block',align:'left'});
+function mCheckbox(label, val, dParent, styles = {}, id) {
+	let d = mDiv(dParent, { display: 'inline-block', align: 'left' });
 	// let val = lookup(this.o, skeys);
 	// if (nundef(val)) val = init;
 	let inp = createElementFromHTML(
 		`<input type="checkbox" class="checkbox" ${(val === true ? 'checked=true' : '')} >`
 	);
-	if (isdef(id)) inp.id=id;
+	if (isdef(id)) inp.id = id;
 	let labelui = createElementFromHTML(`<label>${label}</label>`);
 	mAppend(d, labelui);
 	mAppend(labelui, inp);
@@ -1982,6 +1982,20 @@ function getCirclePoints(rad, n, disp = 0) {
 	}
 	return pts;
 }
+function getEllipsePoints(radx, rady, n, disp = 0) {
+	let pts = [];
+	let i = 0;
+	let da = 360 / n;
+	let angle = disp;
+	while (i < n) {
+		let px = radx * Math.cos(toRadian(angle));
+		let py = rady * Math.sin(toRadian(angle));
+		pts.push({ X: px, Y: py });
+		angle += da;
+		i++;
+	}
+	return pts;
+}
 
 function polyPointsFrom(w, h, x, y, pointArr) {
 
@@ -3293,6 +3307,7 @@ function isAlphaNumeric(str) {
 }
 function isCapitalLetter(s) { return /^[A-Z]$/i.test(s); }
 function isCapitalLetterOrDigit(s) { return /^[A-Z0-9ÖÄÜ]$/i.test(s); }
+function isGermanColorName(s) { return isColorName(s) || isdef(GermanToEnglish[s]) && isColorName(GermanToEnglish[s]); }
 function isColorName(s) { ensureColorNames(); return (isdef(ColorNames[s.toLowerCase()])); }
 function isdef(x) { return x !== null && x !== undefined; }
 function isDOM(x) { let c = lookup(x, ['constructor', 'name']); return c ? startsWith(c, 'HTML') || startsWith(c, 'SVG') : false; }
@@ -3385,12 +3400,53 @@ function getUID(pref = '') {
 function resetUIDs() { UIDCounter = 0; }
 //#endregion
 
+//#region PerlenGame common code!
+
+function createServerBoard(layout, filename, rows, cols) {
+	let sz = 100;
+	return { filename: 'brett10', layout: 'hex', cells: { w: 100, h: 120, wgap: 10, hgap: 10 } };
+}
+function createServerPoolKeys(perlenDict, settings = {}) { return getRandomPerlenKeys(perlenDict, valf(settings.numPool, 20)); }
+function getRandomPerlenKeys(di, n) { return choose(Object.keys(di), n); }
+function ensureKeys(o, def) {
+	addKeys(def, o);
+}
+function initServerPool(settings, state, perlenDict) {
+	let pool = {};
+	let poolArr = [];
+	let maxPoolIndex = 0;
+	addKeys(settings, { poolSelection: 'random', numPool: 20 });
+	let n = settings.poolSelection != 'player' ? settings.numPool : 0;
+	let keys = getRandomPerlenKeys(perlenDict, n);
+
+	//keys[0]='gelb';
+
+	for (const k of keys) {
+		addToPool(pool, poolArr, perlenDict[k], maxPoolIndex);
+		maxPoolIndex += 1;
+	}
+	state.pool = pool;
+	state.poolArr = poolArr;
+	return maxPoolIndex;
+}
+function addToPool(pool, poolArr, perle, index) {
+	let p = pool[index] = { key: perle.path, index: index };
+	poolArr.push(index);
+	return p;
+}
+
+
 //#region functions to be used in node.js:
 if (this && typeof module == "object" && module.exports && this === module.exports) {
 	module.exports = {
-		allNumbers, arrTake, capitalize, choose, chooseRandom, copyKeys,
+		//perlenGame common code:
+		initServerPool, addToPool,//initServerBoard,
+
+		//helpers:
+		allNumbers, arrTake,
+		capitalize, choose, chooseRandom, copyKeys,
 		dict2list,
-		firstCond, firstCondDictKey, formatDate,
+		firstCond, firstCondDict, firstCondDictKey, formatDate,
 		isdef, jsCopy,
 		nundef,
 		range, randomNumber, removeInPlace,

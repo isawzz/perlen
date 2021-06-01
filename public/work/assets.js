@@ -12,7 +12,7 @@ async function loadAssets(path) {
 	Speech = new SpeechAPI('E');
 	KeySets = getKeySets();
 	TOMan = new TimeoutManager();
-	console.log('...assets loaded');
+	//console.log('...assets loaded');
 }
 
 

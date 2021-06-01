@@ -32,16 +32,30 @@ addons:
       value: 60000000 #1 day interval (1000 minutes)
 games:
   gPerlen2:
-    N: 50
-    M: 10
-    bretter:
-      brett02cropped: 25 littleHexBoardTool
-      shapeShifters: 81 grid9_9
-    IsTraditionalBoard: true
-    SkipInitialSelect: true
-    rows: 4
-    cols: 4
-    filename: brett02cropped.png
+    poolSelection: random # random | mixed | player
+    numPool: 10
+    boardLayout: hex
+    boardFilename: brett10
+    fieldShape: circle
+    fieldColor: '#000000A0'
+    fieldWidth: 90
+    fieldHeight: 110
+    wField: 90
+    hField: 103
+    wGap: 10
+    hGap: 10
+    #old stuff
+    # bretter:
+    #   quad: 4 4 quad
+    #   hex: 0 5 hex #cols rows algo (cols=0 heisst volle breite von brett)
+    #   cicle: 3 circle
+    #   brett02cropped: 25 littleHexBoardTool
+    #   shapeShifters: 81 grid9_9
+    # IsTraditionalBoard: false
+    # individualSelection: false
+    # rows: 4
+    # cols: 4
+    # filename: brett02cropped.png
   gAbacus:
     friendly: 'Abacus'
     logo: 'abacus'

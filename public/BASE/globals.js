@@ -2,14 +2,14 @@
 const PORT = 3333;
 
 // *** deploy to heroku ***
-// const NGROK = false; //'http://849aec381695.ngrok.io/'; // MUSS / am ende!!! 
-// const HEROKU = true;
-// const USERNAME_SELECTION = 'local'; // random | local | nil | gul | ma ...
+const NGROK = false; //'http://849aec381695.ngrok.io/'; // MUSS / am ende!!! 
+const HEROKU = true;
+const USERNAME_SELECTION = 'local'; // random | local | nil | gul | ma ...
 
 //*** testing */:
-const NGROK = false; //'http://849aec381695.ngrok.io/'; // MUSS / am ende!!! 
-const HEROKU = false;
-const USERNAME_SELECTION = 'random'; // random | local | nil | gul | ma ...
+// const NGROK = false; //'http://849aec381695.ngrok.io/'; // MUSS / am ende!!! 
+// const HEROKU = false;
+// const USERNAME_SELECTION = 'random'; // random | local | nil | gul | ma ...
 
 var USESOCKETS = true; //false ist wahtscheinlich broken!
 const JUST_PERLEN_GAME = true;
@@ -115,6 +115,11 @@ const levelColors = [LIGHTGREEN, LIGHTBLUE, YELLOW, 'orange', RED,
 var levelKeys = ['island', 'justice star', 'materials science', 'mayan pyramid', 'medieval gate',
 	'great pyramid', 'meeple', 'smart', 'stone tower', 'trophy cup', 'viking helmet',
 	'flower star', 'island', 'justice star', 'materials science', 'mayan pyramid',];
+const GermanToEnglish={
+	rot:'red',blau:'blue',grün:'green',gelb:'yellow',violett:'violet',lila:'purple',
+	braun:'brown',schwarz:'black',weiss:'white',grau:'grey',rosa:'pink',orange:'orange'
+};
+
 const DD = {
 	yellow: 'gelb', green: 'grün', blue: 'blau', red: 'rot', pink: 'rosa', orange: 'orange', black: 'schwarz',
 	white: 'weiss', violet: 'violett', '1st': 'erste', '2nd': 'zweite', '3rd': 'dritte', '4th': 'vierte', '5th': 'fünfte',
@@ -249,8 +254,6 @@ const BoyNames = ['Aaron', 'Ariel', 'Billy', 'Cayley', 'Erik',
 if (this && typeof module == "object" && module.exports && this === module.exports) {
 	module.exports = {
 		PORT,
-		// SkipInitialSelect,
-		// IsTraditionalBoard,
 	};
 }
 //#endregion

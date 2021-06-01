@@ -20,7 +20,7 @@ class SimpleClass {
 		if (isdef(data.settings)) {
 			if (nundef(this.settings)) this.settings = {};
 			copyKeys(data.settings, this.settings);
-			initToolbar(this.settings);
+			//initToolbar(this.settings);
 		}
 
 		if (isdef(data.perlenDict)) { PerlenDict = this.perlenDict = data.perlenDict; }

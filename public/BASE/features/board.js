@@ -6,7 +6,7 @@ var EmptyFunc = x => nundef(x) || x == ' ';
 function bGetCol(arr, icol, rows, cols) {
 	let iStart = icol;
 	let res = [];
-	for (let i = iStart; i < iStart + (cols * rows); i+=cols) res.push(arr[i]);
+	for (let i = iStart; i < iStart + (cols * rows); i += cols) res.push(arr[i]);
 	return res;
 }
 function bGetRow(arr, irow, rows, cols) {
@@ -274,10 +274,10 @@ function boardToNode(state) {
 	}
 	return res;
 }
-function printBoard(arr,rows,cols,reduced=true){
-	let arrR=boardArrReduced(arr,rows,cols);
-	let s=toBoardString(arrR);
-	console.log('board',s);
+function printBoard(arr, rows, cols, reduced = true) {
+	let arrR = boardArrReduced(arr, rows, cols);
+	let s = toBoardString(arrR);
+	console.log('board', s);
 }
 function boardArrReduced(boardArr, rows, cols) {
 	let res = [];
@@ -473,7 +473,7 @@ function reduceBoard(board, rNew, cNew, iModify) {
 			}
 		}
 	}
-	return {rows:rNew,cols:cNew,boardArr:boardArrNew,extras:rest};
+	return { rows: rNew, cols: cNew, boardArr: boardArrNew, extras: rest };
 }
 function expandBoard(board, rNew, cNew, iInsert) {
 	let [boardArrOld, rOld, cOld] = [board.fields.map(x => isdef(x.item) ? x.item.index : null), board.rows, board.cols];
@@ -497,15 +497,125 @@ function expandBoard(board, rNew, cNew, iInsert) {
 			}
 		}
 	}
-	return {rows:rNew,cols:cNew,boardArr:boardArrNew,extras:[]};
+	return { rows: rNew, cols: cNew, boardArr: boardArrNew, extras: [] };
 
 }
-function insertColNew(board, cClick) {return expandBoard(board, board.rows, board.cols + 1, cClick + 1);}
-function insertRowNew(board, cClick) {return expandBoard(board, board.rows + 1, board.cols, cClick + 1);}
-function removeColNew(board, cClick) {return reduceBoard(board, board.rows, board.cols - 1, cClick);}
-function removeRowNew(board, cClick) {return reduceBoard(board, board.rows - 1, board.cols, cClick);}
+function insertColNew(board, cClick) { return expandBoard(board, board.rows, board.cols + 1, cClick + 1); }
+function insertRowNew(board, cClick) { return expandBoard(board, board.rows + 1, board.cols, cClick + 1); }
+function removeColNew(board, cClick) { return reduceBoard(board, board.rows, board.cols - 1, cClick); }
+function removeRowNew(board, cClick) { return reduceBoard(board, board.rows - 1, board.cols, cClick); }
 
 
+function getCenters(layout, rows, cols, wCell, hCell,) {
+	if (layout == 'quad') { return quadCenters(rows, cols, wCell, hCell); }
+	else if (layout == 'hex') { return hexCenters(rows, cols, wCell, hCell); }
+	else if (layout == 'circle') { return circleCenters(rows, cols, wCell, hCell); }
+}
+function getCenters(layout, rows, cols, wCell, hCell) {
+	if (layout == 'quad') { return quadCenters(rows, cols, wCell, hCell); }
+	else if (layout == 'hex') { return hexCenters(rows, cols, wCell, hCell); }
+	else if (layout == 'circle') { return circleCenters(rows, cols, wCell, hCell); }
+}
+function getCentersFromRowsCols(layout, rows, cols, wCell, hCell) {
+	let info;
+	if (layout == 'quad') { info = quadCenters(rows, cols, wCell, hCell); }
+	else if (layout == 'hex') { info = hexCenters(rows, cols, wCell, hCell); }
+	else if (layout == 'circle') { info = circleCenters(rows, cols, wCell, hCell); }
+	return info;
+}
+function quadCenters(rows, cols, wCell, hCell) {
+	let offX = wCell / 2, offY = hCell / 2;
+	let centers = [];
+	let x = 0; y = 0;
+	for (let i = 0; i < rows; i++) {
+		for (let j = 0; j < cols; j++) {
+			let center = { x: x + offX, y: y + offY };
+			centers.push(center);
+			x += wCell;
+		}
+		y += hCell; x = 0;
+	}
+	//last,x,y+offX,offY 	
+	return [centers, wCell * cols, hCell * rows];
+}
+function circleCenters(rows,cols,wCell,hCell) {
+	//find center
+	let [w, h] = [cols*wCell,rows*hCell];
+	let cx = w / 2;
+	let cy = h / 2;
+
+	console.log('cx,cy',cx,cy)
+
+	let centers = [{ x: cx, y: cy }];
+
+	//calc wieviele schichten sich ausgehen?
+	let rx=cx+wCell/2;	let dradx=rx/wCell;
+	let ry=cy+hCell/2;	let drady=ry/hCell;
+	let nSchichten = Math.floor(Math.min(dradx,drady));
+	console.log('Schichten',nSchichten)
+
+	for(let i=1;i<nSchichten;i++){
+		let [newCenters,wsch,hsch] = oneCircleCenters(i*2+1,i*2+1,wCell,hCell);
+		//console.log('newCenters',newCenters,'w',wsch,'h',hsch);//,'\n',newCenters.centers.length);
+		for(const nc of newCenters){
+			//console.log('adding point',nc);
+			centers.push({x:nc.x+cx-wsch/2,y:nc.y+cy-hsch/2});
+		}
+	}
+	return [centers, wCell * cols, hCell * rows];
+}
+
+function oneCircleCenters(rows,cols,wCell,hCell) {
+	//find center
+	let [w, h] = [cols*wCell,rows*hCell];
+	let cx = w / 2;
+	let cy = h / 2;
+
+	//console.log('cx,cy',cx,cy)
+
+	let centers = [{ x: cx, y: cy }];
+
+
+	//wieviele will ich placen?
+	let n=8;
+	//was ist radius?
+	let radx=cx-wCell/2;
+	let rady=cy-hCell/2;
+
+	//console.log('radx,rady',radx,rady)
+
+	let peri=Math.min(radx,rady)*2*Math.PI;
+	//console.log('.............n',n)
+	n=Math.floor(peri/Math.min(wCell,hCell));
+	//console.log('.............n',n)
+	while(n>4 && n%4!=0 && n%6!=0) n-=1;
+	//console.log('.............n',n)
+
+	centers = getEllipsePoints(radx,rady,n)
+	centers=centers.map(pt=>({x:pt.X+cx,y:pt.Y+cy}));
+
+	return [centers, wCell * cols, hCell * rows];
+}
+function hexCenters(rows, cols, wCell = 100, hCell) {
+	if (nundef(hCell)) hCell = (hCell / .866);
+	let hline = hCell * .75;
+	let offX = wCell / 2, offY = hCell / 2;
+	let centers = [];
+	let startSmaller = Math.floor(rows / 2) % 2 == 1;
+
+	let x = 0; y = 0;
+	for (let r = 0; r < rows; r++) {
+		let isSmaller = startSmaller && r % 2 == 0 || !startSmaller && r%2==1;
+		let curCols = isSmaller ? cols - 1 : cols;
+		let dx = isSmaller ? wCell / 2 : 0;
+		dx += offX;
+		for (let c = 0; c < curCols; c++) {
+			let center = { x: dx + c * wCell, y: offY + r * hline };
+			centers.push(center);
+		}
+	}
+	return [centers, wCell * cols,hCell/4+rows * hline];
+}
 
 
 

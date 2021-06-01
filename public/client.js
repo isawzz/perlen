@@ -40,9 +40,9 @@ function establishUsername(username) {
 	if (USESOCKETS) { initSocket(); } else { fakeInitSocket(username); }
 }
 //1. server sends client id => client sends login/username
-function fakeInitSocket() { ClientId = '12345'; fakeLogin(Username); }
+function fakeInitSocket() { ClientId = '12345'; fakeLogin(Username);  }
 function handleClientIdSendLogin(data) {
-	console.log('handleClientId data received:',data);
+	//console.log('handleClientId data received:',data);
 	ClientId = data.clientId;
 	sendLogin(Username);
 }
@@ -51,7 +51,11 @@ function sendLogin(username) { logClientSend('login', username); Socket.emit('lo
 //2. server sends DB => client sets DB
 async function fakeLogin(username) {
 	DB = await route_path_yaml_dict('./data.yaml');
+	PerlenDict = await route_path_yaml_dict('./perlenDict.yaml');
+	//console.log('db loaded...')
+	initSocket();
 	setUserData(username);
+	//console.log('userdata set! ...entering lobby')
 	enterLobby();
 }
 function handleDB(data) {

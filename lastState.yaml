@@ -1,54 +1,123 @@
 settings:
-  N: 50
-  M: 10
-  bretter:
-    brett02cropped: 25 littleHexBoardTool
-    shapeShifters: 81 grid9_9
-  IsTraditionalBoard: false
-  SkipInitialSelect: true
-  rows: 4
-  cols: 4
-  filename: brett02cropped.png
+  poolSelection: random
+  numPool: 10
+  boardLayout: hex
+  boardFilename: brett10
+  fieldShape: circle
+  fieldColor: "#000000A0"
+  fieldWidth: 90
+  fieldHeight: 110
+  wField: 90
+  hField: 103
+  wGap: 10
+  hGap: 10
 state:
-  board:
-    filename: brett02cropped.png
-    algo: littleHexBoardTool
-    nFields: 25
-  boardArr:
-    - null
-    - null
-    - null
-    - null
-    - 8
-    - null
-    - null
-    - null
-    - null
-    - 7
-    - null
-    - null
-    - null
-    - 5
-    - null
-    - 13
-    - 9
-    - null
-    - 11
-    - null
-    - null
-    - null
-    - null
-    - null
-    - null
+  pool:
+    "0":
+      key: gelb
+      index: 0
+    "1":
+      key: begeisterung
+      index: 1
+    "2":
+      key: werte
+      index: 2
+    "3":
+      key: kriegszerstörung
+      index: 3
+    "4":
+      key: uncertainty
+      index: 4
+    "5":
+      key: blau
+      index: 5
+    "6":
+      key: kunst
+      index: 6
+    "7":
+      key: wut
+      index: 7
+    "8":
+      key: kollektiventscheidung
+      index: 8
+    "9":
+      key: ocean2
+      index: 9
+    "10":
+      key: orange
+      index: 10
+    "11":
+      key: rot
+      index: 11
+    "12":
+      key: bildung
+      index: 12
+    "13":
+      key: blockchain
+      index: 13
+    "14":
+      key: böses will und gutes schafft
+      index: 14
+    "15":
+      key: buddhismus
+      index: 15
+    "16":
+      key: cafehauskultur
+      index: 16
+    "17":
+      key: cafehauskultur_alt
+      index: 17
+    "18":
+      key: carelessness
+      index: 18
+    "19":
+      key: chillax
+      index: 19
+    "20":
+      key: chillax2
+      index: 20
+    "21":
+      key: christentum
+      index: 21
+    "22":
+      key: cia
+      index: 22
+    "23":
+      key: collectivism
+      index: 23
+    "24":
+      key: consensus building
+      index: 24
+    "25":
+      key: culture wars
+      index: 25
+    "26":
+      key: dark ages
+      index: 26
+    "27":
+      key: das große rote megaphon
+      index: 27
+    "28":
+      key: das leben ein film
+      index: 28
+    "29":
+      key: das mehrstöckige haus
+      index: 29
+    "30":
+      key: demokratie
+      index: 30
+    "31":
+      key: der eiserne vorhang
+      index: 31
   poolArr:
-    - 0
+    - 7
     - 1
     - 2
     - 3
-    - 4
     - 6
-    - 10
+    - 8
     - 12
+    - 13
     - 14
     - 15
     - 16
@@ -67,178 +136,153 @@ state:
     - 29
     - 30
     - 31
-    - 32
-    - 33
-    - 34
-    - 35
-    - 36
-    - 37
-    - 38
-    - 39
-    - 40
-    - 41
-    - 42
-    - 43
-    - 44
-    - 45
-    - 46
-    - 47
-    - 48
-    - 49
-  pool:
-    "0":
-      key: wandel
-      index: 0
-    "1":
-      key: geschichte
-      index: 1
-    "2":
-      key: emergence
-      index: 2
-    "3":
-      key: flavors of joy
-      index: 3
-    "4":
-      key: kampfbegriff
-      index: 4
-    "5":
-      key: das große rote megaphon
-      index: 5
-    "6":
-      key: spiritualität
-      index: 6
-    "7":
-      key: monarchie
-      index: 7
-    "8":
-      key: cia
-      index: 8
-    "9":
-      key: political correctness 02
-      index: 9
-    "10":
-      key: chillax
-      index: 10
-    "11":
-      key: cafehauskultur
-      index: 11
-    "12":
-      key: woke
-      index: 12
-    "13":
-      key: taoismus
-      index: 13
-    "14":
-      key: islam
-      index: 14
-    "15":
-      key: christentum
-      index: 15
-    "16":
-      key: the great reset
-      index: 16
-    "17":
-      key: beethoven
-      index: 17
-    "18":
-      key: orange
-      index: 18
-    "19":
-      key: rassismus 01
-      index: 19
-    "20":
-      key: wut
-      index: 20
-    "21":
-      key: uncertainty
-      index: 21
-    "22":
-      key: kriegszerstörung
-      index: 22
-    "23":
-      key: mozart
-      index: 23
-    "24":
-      key: vorurteil
-      index: 24
-    "25":
-      key: schwarz
-      index: 25
-    "26":
-      key: bildung
-      index: 26
-    "27":
-      key: böses will und gutes schafft
-      index: 27
-    "28":
-      key: sprache
-      index: 28
-    "29":
-      key: ai
-      index: 29
-    "30":
-      key: oligarchie
-      index: 30
-    "31":
-      key: maske
-      index: 31
-    "32":
-      key: yang
-      index: 32
-    "33":
-      key: überleben
-      index: 33
-    "34":
-      key: stern
-      index: 34
-    "35":
-      key: power
-      index: 35
-    "36":
-      key: agent
-      index: 36
-    "37":
-      key: collectivism
-      index: 37
-    "38":
-      key: spiel
-      index: 38
-    "39":
-      key: struktur
-      index: 39
-    "40":
-      key: mutter
-      index: 40
-    "41":
-      key: langsam
-      index: 41
-    "42":
-      key: geld
-      index: 42
-    "43":
-      key: gier
-      index: 43
-    "44":
-      key: maximize agency
-      index: 44
-    "45":
-      key: pessimismus
-      index: 45
-    "46":
-      key: gelb
-      index: 46
-    "47":
-      key: consensus building
-      index: 47
-    "48":
-      key: mit blutigen augen in die welt schauen
-      index: 48
-    "49":
-      key: kunst
-      index: 49
-  players:
-    - id: JmVOuCPCUi8sInB-AAAF
-      name: ma
-      username: ma
-      arr: []
-      isInitialized: null
+  boardArr:
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - 5
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - 9
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - 10
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - 11
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - 4
+    - 0
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null

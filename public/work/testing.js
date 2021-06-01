@@ -14,12 +14,12 @@ async function startTesting() {
 	runTest();
 }
 function runTest() {
-	let w=window.innerWidth;
-	let sz=100;
-	let cols = math.floor(w/100);
+	let w = window.innerWidth;
+	let sz = 100;
+	let cols = math.floor(w / 100);
 	let dBoard = mDiv(dTable);//,{bg:'green'});
 	mCenterFlex(dTable);
-	hexBoard(dBoard,5,cols-1,100);
+	hexBoard(dBoard, 5, cols - 1, 100);
 	//let fields = hexBoard(dTable);
 	//hexTest07();	//hexTest05(); //hexTest04(); //hexTest03(); //hexTest02();//hexTest01();//hexTest00();
 
@@ -29,7 +29,8 @@ function runTest() {
 
 
 //#region hex board test + function!
-function hexBoard(dParent,rows=13,cols=5,wHex=100) {
+
+function hexBoard(dParent, rows = 13, cols = 5, wHex = 100) {
 	let hline = (wHex / .866) * .75;
 	dParent = mDiv(dParent, { position: 'relative', w: wHex * cols, h: hline * (rows + .5), display: 'inline-block' });
 	let hlist = [];
@@ -37,9 +38,9 @@ function hexBoard(dParent,rows=13,cols=5,wHex=100) {
 	for (let r = 0; r < rows; r++) {
 		let curCols = r % 2 ? cols - 1 : cols;
 		let dx = r % 2 ? wHex / 2 : 0;
-		dx+=xOffset;
+		dx += xOffset;
 		for (let c = 0; c < curCols; c++) {
-			let [dOuter,dInner] = oneHex(dParent, wHex, wHex, '#ffffff10');
+			let [dOuter, dInner] = oneHex(dParent, wHex, wHex, '#ffffff10');
 			mStyleX(dOuter, { position: 'absolute', left: dx + c * wHex, top: r * hline });
 			hlist.push(dInner);
 
@@ -57,12 +58,12 @@ function hexBoard(dParent,rows=13,cols=5,wHex=100) {
 		let offy = 20;
 		let d3 = mDiv(d1, { w: w, h: h, display: 'inline', position: 'absolute', left: 0, top: 0 });
 		let d4 = mDiv(d3, { left: `${offx / 2}%`, top: `${offy / 2}%`, w: `${100 - offx}%`, h: `${100 - offy}%`, rounding: '50%', display: 'inline', position: 'absolute' });
-		return [d1,d4];
+		return [d1, d4];
 	}
 
 	return hlist;
 }
-function hexTest08(dParent,rows=13,cols=5,wHex=100) {
+function hexTest08(dParent, rows = 13, cols = 5, wHex = 100) {
 	let hline = (wHex / .866) * .75;
 	dParent = mDiv(dParent, { position: 'relative', w: wHex * cols, h: hline * (rows + .5), display: 'inline-block' });
 	let hlist = [];
@@ -70,9 +71,9 @@ function hexTest08(dParent,rows=13,cols=5,wHex=100) {
 	for (let r = 0; r < rows; r++) {
 		let curCols = r % 2 ? cols - 1 : cols;
 		let dx = r % 2 ? wHex / 2 : 0;
-		dx+=xOffset;
+		dx += xOffset;
 		for (let c = 0; c < curCols; c++) {
-			let [dOuter,dInner] = oneHex(dParent, wHex, wHex, '#ffffff10');
+			let [dOuter, dInner] = oneHex(dParent, wHex, wHex, '#ffffff10');
 			mStyleX(dOuter, { position: 'absolute', left: dx + c * wHex, top: r * hline });
 			hlist.push(dInner);
 
@@ -90,13 +91,13 @@ function hexTest08(dParent,rows=13,cols=5,wHex=100) {
 		let offy = 20;
 		let d3 = mDiv(d1, { w: w, h: h, display: 'inline', position: 'absolute', left: 0, top: 0 });
 		let d4 = mDiv(d3, { left: `${offx / 2}%`, top: `${offy / 2}%`, w: `${100 - offx}%`, h: `${100 - offy}%`, rounding: '50%', display: 'inline', position: 'absolute' });
-		return [d1,d4];
+		return [d1, d4];
 	}
 
 	return hlist;
 }
 
-function hexBoardNO(dParent, rows=3, cols=5, sz=100) {
+function hexBoardNO(dParent, rows = 3, cols = 5, sz = 100) {
 	let hline = (sz / .866) * .75;
 	dParent = mDiv(dParent, { position: 'relative', w: sz * cols, h: hline * (rows + .5), display: 'inline-block' });
 	let fields = [];
@@ -104,7 +105,7 @@ function hexBoardNO(dParent, rows=3, cols=5, sz=100) {
 		let curCols = r % 2 ? cols - 1 : cols;
 		let dx = r % 2 ? sz / 2 : 0;
 		for (let c = 0; c < curCols; c++) {
-			let [dOuter,dInner] = oneHex(dParent, sz, sz, 'yellow');
+			let [dOuter, dInner] = oneHex(dParent, sz, sz, 'yellow');
 			mStyleX(dOuter, { position: 'absolute', left: dx + c * sz, top: r * hline });
 			fields.push(dInner);
 		}
@@ -121,7 +122,7 @@ function hexBoardNO(dParent, rows=3, cols=5, sz=100) {
 		let offy = 20;
 		let d3 = mDiv(d1, { w: w, h: h, rounding: '50%', display: 'inline', position: 'absolute', left: 0, top: 0 });
 		let d4 = mDiv(d3, { left: `${offx / 2}%`, top: `${offy / 2}%`, w: `${100 - offx}%`, h: `${100 - offy}%`, rounding: '50%', bg: 'random', display: 'inline', position: 'absolute' });
-		return [d1,d4];
+		return [d1, d4];
 	}
 
 }
@@ -289,7 +290,7 @@ function boardTestGetRow() {
 }
 function boardTestGetCol() {
 	let arr = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11];
-	let [rows, cols] = [3,4];
+	let [rows, cols] = [3, 4];
 	for (let i = 0; i < cols; i++) {
 		let x = bGetCol(arr, i, rows, cols);
 		console.log('arr', toBoardString(arr, rows, cols), 'col', i, x);

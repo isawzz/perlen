@@ -1,26 +1,36 @@
+function closeBoardEditor() { closePerlenEditor(); }
+function openBoardEditor() { createBoardEditor(); }
+function openPerlenEditor() { createPerlenEditor(); }
+function openSettings() { onClickSettings(); }
+function onClickSettings() {
+	show("dSettingsWindow");
+	console.log('settings', G.settings)
+	let settingsView = new PerlenSettingsClass(G.settings, mBy('dSettingsWindow'), U);
+	settingsView.createSettingsUi();
+}
 
 function onClickReset() {
-	sendReset(isdef(G)?G.settings:DB.games.gPerlen2.settings);
+	sendReset(isdef(G) ? G.settings : DB.games.gPerlen2.settings);
 }
 function initToolbar(settings) {
 	let bSelect = mBy('dPreselectButton');
-	if (settings.SkipInitialSelect) { closePerlenEditor();turnButtonOff(bSelect);} else{turnButtonOn(bSelect);}
+	if (!settings.individualSelection) { closePerlenEditor(); turnButtonOff(bSelect); } else { turnButtonOn(bSelect); }
 	let bHex = mBy('dBoardSwitchButton');
-	if (settings.IsTraditionalBoard) { turnButtonOff(bHex);} else{turnButtonOn(bHex);}
+	if (settings.IsTraditionalBoard) { turnButtonOff(bHex); } else { turnButtonOn(bHex); }
 }
 function turnButtonOn(b) { mStyleX(b, { bg: '#ffff0080', rounding: '50%' }); }
 function turnButtonOff(b) { mStyleX(b, { bg: '#33333340' }); }
 function onClickPreselect(b) {
-	G.settings.SkipInitialSelect = !G.settings.SkipInitialSelect;
+	G.settings.individualSelection = !G.settings.individualSelection;
 	let bSelect = mBy('dPreselectButton');
-	if (G.settings.SkipInitialSelect) { closePerlenEditor();turnButtonOff(bSelect);} else{turnButtonOn(bSelect);}
-	sendReset({ SkipInitialSelect: G.settings.SkipInitialSelect, IsTraditionalBoard: G.settings.IsTraditionalBoard });
+	if (!G.settings.individualSelection) { closePerlenEditor(); turnButtonOff(bSelect); } else { turnButtonOn(bSelect); }
+	sendReset({ individualSelection: G.settings.individualSelection, IsTraditionalBoard: G.settings.IsTraditionalBoard });
 }
 function onClickBoardSwitch(b) {
 	G.settings.IsTraditionalBoard = !G.settings.IsTraditionalBoard;
 	let bHex = mBy('dBoardSwitchButton');
-	if (G.settings.IsTraditionalBoard) { turnButtonOff(bHex);} else{turnButtonOn(bHex);}
-	sendReset({ SkipInitialSelect: G.settings.SkipInitialSelect, IsTraditionalBoard: G.settings.IsTraditionalBoard });
+	if (G.settings.IsTraditionalBoard) { turnButtonOff(bHex); } else { turnButtonOn(bHex); }
+	sendReset({ individualSelection: G.settings.individualSelection, IsTraditionalBoard: G.settings.IsTraditionalBoard });
 }
 
 //************* old code **************** */

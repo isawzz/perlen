@@ -237,12 +237,12 @@ function uploadFiles() {
 		if (updateImages || !isdef(PerlenDict[perlenName])) Socket.emit('image', { data: data, filename: filename });
 		else {
 			//console.log('JUST ADD TO POOL!!!!',perlenName)
-			Socket.emit('addToPool', { name: perlenName });
+			Socket.emit('addToPool', { path: perlenName });
 		}
 
 	}
 	closePerlenEditor();
-	if (isdef(G)) G.checkInitialPoolDone();
+	if (isdef(G)) G.setInitialPoolSelected();
 }
 
 function validateImage(image) {
@@ -265,6 +265,79 @@ function validateImage(image) {
 }
 
 
+//#region board upload
+function createBoardEditor() {
+	FilesToUpload = [];
+	DataToUpload = null;
+	let d = mBy('dLeiste');
+	clearElement(d);
+	// mStyleX(d,{w:SZ_UPLOAD_CANVAS+40});
+	mButton('close', closePerlenEditor, mBy('dLeiste'), { w: '100%', h: 25 }, ['buttonClass']);
+	mLinebreak(d, 10);
+	let dropRegion = createDropBox(d);
+	dropRegion.ondragenter = dropRegion.ondragleave = dropRegion.ondragover = e => { e.preventDefault(); e.stopPropagation(); }
+	dropRegion.ondrop = e => { e.preventDefault(); e.stopPropagation(); onDropBoardImage(e); };
+
+	var fakeInput = document.createElement("input"); //open file selector when clicked on the drop region
+	fakeInput.type = "file";
+	fakeInput.accept = "image/*";
+	fakeInput.multiple = true;
+	dropRegion.onclick = () => { fakeInput.click(); };
+	fakeInput.onchange = () => { var files = fakeInput.files; previewFiles(files); };
+}
+function onDropBoardImage(e) {
+	var files = e.dataTransfer.files;
+	if (files.length) {		previewBoardImage(files);	}
+}
+function onClickUploadBoard() {
+	if (!isEmpty(FilesToUpload)) uploadBoard(); 
+}
+function previewBoardImage(files) {
+	FilesToUpload = files;// FilesToUpload.concat(files);
+	//console.log('FilesToUpload', files)
+	for (var i = 0, len = files.length; i < len; i++) {
+		if (validateImage(files[i])) {
+			previewImageFromFile(files[i]);
+		}
+	}
+	//console
+
+	showBoardUploadButton();
+	showUpdateImagesCheckbox();
+}
+function showBoardUploadButton() {
+	if (isdef(mBy('btnUpload'))) return;
+	let btn = mButton('upload', onClickUploadBoard, mBy('dLeiste'), { matop:5, w: 80, h: 25 }, ['buttonClass']);
+	btn.id = 'btnUpload';
+
+}
+function uploadBoard() {
+	//console.log('uploading files:', FilesToUpload);
+	let updateImages=mBy('chkUpdateImages').checked;
+	//console.log('updateImages',updateImages);
+	//====?!!
+	for (const imgFile of FilesToUpload) {
+		//uploadFile00w(imgFile);
+		//uploadFile01_NO(imgFile);
+		//convertUrlToImageData
+		// uploadFile02Works(imgFile); //:
+		let data = imgFile.data;
+		let filename = imgFile.name;
+
+		//console.log('filename',filename);
+		let boardName = stringBefore(filename,'.');
+
+		if (updateImages || !isdef(PerlenDict[boardName])){
+			Socket.emit('image', { data: data, filename: filename });
+		} 
+		else {
+			//console.log('JUST ADD TO POOL!!!!',perlenName)
+			Socket.emit('board', { path: boardName });
+		}
+
+	}
+	closePerlenEditor();
+}
 
 
 

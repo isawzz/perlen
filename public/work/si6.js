@@ -27,6 +27,12 @@ function sendStartOrJoinPerlenGame() {
 	window.onkeyup = keyUpHandler;
 	mBy('sidebar').ondblclick = togglePerlenEditor;
 	G = new SimpleClass();
+	//console.log('G created');
+	if (!USESOCKETS) G.presentGameState();
+	// if (!USESOCKETS) G.presentGameState({
+	// 	settings: DB.games.gPerlen2.settings,
+	// 	state: createFakeState(),
+	// });
 }
 //skip next 2 steps!
 function handleInitialPool(data) {
@@ -34,12 +40,9 @@ function handleInitialPool(data) {
 	//if (nundef(G.settings) && isdef(data.settings)) 
 	if (isdef(data.settings) && isdef(G.settings)) copyKeys(data.settings, G.settings);
 	else if (isdef(data.settings)) G.settings = data.settings;
-	else if (isdef(G.settings)) G.settings.SkipInitialSelect = false;
-	else if (nundef(data.settings) && nundef(G.settings)) G.settings = { SkipInitialSelect: false };
-	//console.log('HAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA',data,G)
-	//SkipInitialSelect = false;
-	initToolbar(G.settings);
-	G.INITIAL_POOL_DONE = false;
+	else if (isdef(G.settings)) G.settings.individualSelection = true;
+	else if (nundef(data.settings) && nundef(G.settings)) G.settings = { individualSelection: true };
+	G.initialPoolSelected = false;
 	logClientReceive('initialPool', data);
 	setTitle(data.instruction);
 	G.presentGameState(data);
@@ -98,7 +101,7 @@ function keyUpHandler(ev) {
 		IsControlKeyDown = false;
 		iMagnifyCancel();
 	}
-	if (ev.key == 'Alt' && isdef(Socket)) {Socket.emit('hide',{username:Username});}
+	if (ev.key == 'Alt' && isdef(Socket)) { Socket.emit('hide', { username: Username }); }
 	//else if (keyCode == 112) { show('dHelpWindow'); }
 }
 function keyDownHandler(ev) {
@@ -117,7 +120,7 @@ function keyDownHandler(ev) {
 
 		}
 	}
-	if (ev.key == 'Alt' && isdef(Socket)) {Socket.emit('show',{username:Username});}
+	if (ev.key == 'Alt' && isdef(Socket)) { Socket.emit('show', { username: Username }); }
 
 }
 
@@ -157,6 +160,50 @@ function createFields(board, rows, cols, sz = 104) {
 	board.rows = rows;
 	board.cols = cols;
 	mStyleX(iDiv(board), { display: 'inline-grid', 'grid-template-columns': `repeat(${cols}, auto)` })
+	return fieldItems;
+}
+function createFieldsFromCenters(clientBoard, centers, wCell, hCell, wgap,hgap, wNeeded, hNeeded) {
+	let fieldItems = [];
+	let d1 = iDiv(clientBoard);
+	let rect = getRect(d1);
+
+	//console.log('rect', rect)
+
+	let dCells = mDiv(d1);//,{bg:'blue'});
+	//mCenterCenterFlex(d1)
+
+	let i = 0;
+	let dx = wCell / 2, dy = hCell / 2;
+	if (nundef(wgap)) wgap = 4;
+	if (nundef(hgap)) hgap = 4;
+
+	if (nundef(wNeeded)) {
+		//console.log('falle!!!')
+		let r = calcMinMaxXY(centers, wCell, hCell);
+		[wNeeded, hNeeded] = [r.w, r.h];
+	}
+	//console.log('wNeeded,hNeeded',wNeeded,hNeeded)
+	let bg = '#ffffff80';// '#00000010'; //'black';//'#00000010'
+	for (const p of centers) {
+		// let sz = 90;
+		let left=p.x - dx + wgap / 2;
+		let top=p.y - dy + hgap / 2;
+		//console.log('left',left,'top',top, p, dx,dy,wgap,hgap,wNeeded,hNeeded)
+		let dItem = mDiv(dCells, { position: 'absolute', left: left, top: top, display: 'inline', w: wCell - wgap, h: hCell - hgap, rounding: '50%', bg: bg });
+		//console.log(dItem)
+		mCenterCenterFlex(dItem)
+		let f = { div: dItem, index: i, center: p }; i += 1;
+		fieldItems.push(f);
+	}
+
+	clientBoard.fields = fieldItems;
+	clientBoard.fieldCenters = centers;
+	clientBoard.dCells = dCells;
+
+	// mStyleX(dCells, { position:'absolute',left: 100, top: 100, w: wNeeded, h: hNeeded, bg: 'blue' });
+	mStyleX(dCells, { position:'absolute',left: (rect.w - wNeeded) / 2, top: (rect.h - hNeeded) / 2, w: wNeeded, h: hNeeded});
+	// mStyleX(dCells, { maleft: (rect.w - wNeeded) / 2, matop: (rect.h - hNeeded) / 2, bg: 'blue' });
+
 	return fieldItems;
 }
 function doBoardRelayout(board, c, func, isReduction) {
@@ -214,19 +261,37 @@ function showPerlen(perlenByIndex, boardArr, poolArr, board, dParent) {
 		//console.log('iPerle',iPerle);
 		perle = perlenByIndex[iPerle];
 		//console.log('perle',perle)
-		perle.field = perle.row = perle.col = null;
+		perle.field = null;
 		let ui = createPerle(perle, dParent, 64, 1.3, .4);
 	}
 	for (let i = 0; i < boardArr.length; i++) {
 		let iPerle = boardArr[i];
 		if (iPerle == null) continue;
 		let perle = perlenByIndex[iPerle];
+		//console.log('perle auf dem board',perle)
 		let field = board.fields[i];
-		perle.row = field.row;
-		perle.col = field.col;
 		perle.field = field;
 		field.item = perle;
 		let ui = createPerle(perle, iDiv(field), 64, 1.3, .4);
+		//perle.key='gelb';
+		if (isGermanColorName(perle.key)){
+			let bg=GermanToEnglish[perle.key];
+			if (nundef(bg)) bg=perle.key;
+			//bg=colorTrans(bg,.5);
+			let d=perle.live.dImg;
+			perle.live.dLabel.remove();
+			//h-offset v-offset blur spread color
+			d.style.boxShadow = `0px 0px 200px 100px ${bg}`;// '100px 100px red';//`2px 2px 50px ${bg}`;
+			ui.style.zIndex=10;
+			//d.style.textShadow = '10px 24px 80px 100px blue';// '100px 100px red';//`2px 2px 50px ${bg}`;
+			//mStyleX(,{'text-shadow': `2px 2px 50px ${bg}`});
+			//console.log('JAAAAAAAAAAAAAAAAAAAA',d);
+			//let c=getColorDictColor(perle.key);
+		}else{
+			mStyleX(ui,{bg:'dimgray',rounding:'50%'});
+			ui.style.zIndex=11;
+		}
+		
 	}
 }
 function quadBoard(rows, cols, dParent) {
@@ -256,25 +321,13 @@ function showBrettBoard(filename, dParent) {
 
 	return board;
 }
-function createFieldsFromCenters(board, centers, sz = 90) {
-	let fieldItems = [];
-	let d1 = iDiv(board);
-
-	let i = 0;
-	for (const p of centers) {
-		// let sz = 90;
-		let dx = dy = sz / 2;
-		dy -= 12;
-		let bg = '#00000010'; //'black';//'#00000010'
-		let dItem = mDiv(d1, { position: 'absolute', left: p.x - dx, top: p.y - dy, display: 'inline', h: sz, w: sz, rounding: '50%', bg: bg });
-		mCenterCenterFlex(dItem)
-		let f = { div: dItem, index: i, center: p }; i += 1;
-		fieldItems.push(f);
+function calcMinMaxXY(centers, wCell, hCell) {
+	let minx = 1000000, maxx = 0, miny = 1000000, maxy = 0, dx = wCell / 2, dy = hCell / 2;
+	for (const c of centers) {
+		if (c.x - dx < minx) minx = c.x - dx; else if (c.x + dx > maxx) maxx = c.x + dx;
+		if (c.y - dy < miny) miny = c.y - dy; else if (c.y + dy > maxy) maxy = c.y + dy;
 	}
-
-	board.fields = fieldItems;
-	board.fieldCenters = centers;
-	return fieldItems;
+	return { x: minx, y: miny, w: maxx - minx, h: maxy - miny };
 }
 function littleHexBoardTool(p1, p2, p3) {
 	p1 = { x: 282, y: 72 };

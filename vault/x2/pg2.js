@@ -1,13 +1,12 @@
 //#region requires, const, var
-const base = require('../public/BASE/base.js');
+const base = require('../../public/BASE/base.js');
 const fs = require('fs');
 const path = require('path');
-const utils = require('./utils.js');
-// const { SkipInitialSelect, IsTraditionalBoard } = require('../public/BASE/globals.js');
+const utils = require('../../serverfiles/utils.js');
+const { SkipInitialSelect, IsTraditionalBoard } = require('../../public/BASE/globals.js');
 var MessageCounter = 0;
 var Verbose = false;
 var G;
-var DB;
 var PerlenDict;
 
 //#endregion
@@ -51,33 +50,27 @@ class GP2 {
 				state: {
 					boardArr: x.boardArr,
 					poolArr: x.poolArr,
-					board: {
-						rows: x.rows,
-						cols: x.cols,
-					},
-
+					rows: x.rows,
+					cols: x.cols,
 				}, username: x.username, msg: 'user ' + x.username + ' modified board'
 			});
 
 	}
-	safeEmitState(emitSettings, emitPool, emitPerlenDict, emitBoardLayout) {
+	emitPartialGameState(client) {
 
-		let o = {
-			settings: this.settings,
-			state: this.State,
-			players: this.players,
-
+	}
+	emitInitial(client,x) {
+		//let pl = this.players[client.id];
+		let username = x.username; //pl.name;
+		//console.log('username', username);
+		if (this.settings.SkipInitialSelect) {
+			logSend('gameState');
+			this.io.emit('gameState', { settings: this.settings, state: this.State, username: username });
+		} else {
+			let data = { state: this.State, instruction: 'pick your set of pearls!' };
+			this.io.emit('initialPool', data); // { state: this.State, username: username });
+			//client.emit('initialPool', data);// { state: { pool: State.pool }, instruction: 'pick your set!' });
 		}
-		DB.tables.perlen = o;
-		utils.toYamlFile(DB, '../data.yaml');
-
-		if (emitPerlenDict) o.perlenDict = perlenDict;
-		if (!emitSettings) delete o.settings;
-		if (!emitBoardLayout) delete o.state.board;
-		if (!emitPool) delete o.state.pool;
-
-		this.io.emit('gameState',o)
-
 	}
 	emitGameStateIncludingPool(client) {
 		let pl = this.players[client.id];
@@ -85,6 +78,7 @@ class GP2 {
 		//console.log('username', username);
 		this.io.emit('gameState', { settings: this.settings, state: this.State, username: username });
 	}
+
 	getNumActivePlayers() { return this.state.players.length; }
 	getNumPlayers() { return Object.keys(this.players).length; }
 	getPlayerNames() { return this.State.players.map(x => x.name).join(','); }
@@ -113,27 +107,23 @@ class GP2 {
 	initPlayers() { this.State.players = []; for (const plid in this.players) { this.initPlayerState(plid); } }
 	initBoardTraditional(settings) {
 		let [rows, cols] = [base.valf(settings.rows, 4), base.valf(settings.cols, 4)];
-		// let arr = new Array(rows * cols);
-		return { rows: rows, cols: cols, nFields: rows * cols };
+		let arr = new Array(rows * cols);
+		return { rows: rows, cols: cols, arr: arr };
 	}
 	initBoardImage(settings) {
-		let filename = settings.filename; //'brett02cropped.png'; // [base.valf(settings.rows, 4), base.valf(settings.cols, 4)];
-		let name = base.stringBefore(filename, '.');
-		let info = settings.bretter[name];
-		let nums = base.allNumbers(info);
-		let algo = base.stringAfter(info, ' ');
-		//let N = settings.N=nums[0];
-		// let arr = new Array(nums[0]);
+		let filename = 'brett02cropped.png'; // [base.valf(settings.rows, 4), base.valf(settings.cols, 4)];
+		let arr = new Array(26);
 		//let arr = new Array(rows * cols);
-		return { filename: filename, algo: algo, nFields: nums[0] };
+		return { filename: filename, arr: arr };
 	}
+
 	initState(settings) {
-		if (base.isdef(settings)) base.copyKeys(settings, this.settings);
-		//console.log('_initState: settings:', this.settings)
+		if (base.isdef(settings)) base.copyKeys(settings, this.settings); else settings = this.settings;
+		console.log('_initState: settings:', settings)
 		let byIndex = this.byIndex = {}; this.maxIndex = 0; this.State = {};
 
-		let board = this.board = this.settings.IsTraditionalBoard ? this.initBoardTraditional(this.settings)
-			: this.initBoardImage(this.settings);
+		let board = this.board = this.settings.IsTraditionalBoard ? this.initBoardTraditional(settings)
+			: this.initBoardImage(settings);
 
 		let numInitPerlen = this.settings.SkipInitialSelect ? this.settings.N : this.settings.M;
 		let keys = getRandomPerlenKeys(numInitPerlen);
@@ -142,10 +132,11 @@ class GP2 {
 		keys.map(x => this.addToPool(this.perlenDict[x]));
 
 		//console.log('byIndex',keys);
-		//let n=board.nFields;
 		this.State = {
 			board: board,
-			boardArr: new Array(board.nFields),
+			rows: board.rows,
+			cols: board.cols,
+			boardArr: board.arr,
 			poolArr: Object.values(byIndex).map(x => x.index),
 			pool: byIndex,
 		};
@@ -163,6 +154,8 @@ class GP2 {
 		let pl = this.addPlayer(client, x);
 		//console.log('join:', pl.isInitialized);
 		//console.log('hallo', x, 'starts or joins game!');
+
+
 		if (this.settings.SkipInitialSelect) {
 			logSend('gameState');
 			client.emit('gameState', { settings: this.settings, state: this.State, perlenDict: this.perlenDict });
@@ -267,18 +260,7 @@ class GP2 {
 		//make sure initState has resetted ALL players to isInitialized = false!
 		//console.log('playerstates', this.State.players);
 
-		// this.emitInitial(client, x);
-		//let pl = this.players[client.id];
-		let username = x.username; //pl.name;
-		//console.log('username', username);
-		if (this.settings.SkipInitialSelect) {
-			logSend('gameState');
-			this.io.emit('gameState', { settings: this.settings, state: this.State, username: username });
-		} else {
-			let data = { settings: this.settings, state: this.State, instruction: 'pick your set of pearls!' };
-			this.io.emit('initialPool', data); // { state: this.State, username: username });
-			//client.emit('initialPool', data);// { state: { pool: State.pool }, instruction: 'pick your set!' });
-		}
+		this.emitInitial(client,x);
 
 	}
 	sendInit() {
@@ -354,6 +336,22 @@ function handleImage(client, x) {
 		console.log('ERROR:', error);
 	}
 }
+function initPerlenGame(IO, perlenDict) {
+	//console.log(' *** Settings only here ***');
+	//settings soll von DB.games kommen!
+	PerlenDict = perlenDict;
+	let settings = {
+		rows: 4,
+		cols: 4,
+		N: 50,
+		M: 10,
+		filename: 'brett02cropped.png',
+		SkipInitialSelect: SkipInitialSelect,
+		IsTraditionalBoard: IsTraditionalBoard
+	};
+	G = new GP2(IO, perlenDict, settings);
+	//console.log('players', G.players);
+}
 function handleMovePerle(client, x) { G.playerMovesPerle(client, x); }
 function handlePlayerLeft(client, x) { G.playerLeft(client, x); }
 function handlePlacePerle(client, x) { G.playerPlacesPerle(client, x); }
@@ -361,25 +359,8 @@ function handleRelayout(client, x) { G.boardLayoutChange(client, x); }
 function handleRemovePerle(client, x) { G.playerRemovesPerle(client, x); }
 function handleReset(client, x) { G.playerReset(client, x); }
 function handleStartOrJoin(client, x) { G.playerJoins(client, x); }
+
 function handleInitialPoolDone(client, x) { G.initialPoolDone(client, x); }
-function initPerlenGame(IO, perlenDict, db) {
-	//console.log(' *** Settings only here ***');
-	//settings soll von DB.games kommen!
-	DB = db;
-	PerlenDict = perlenDict;
-	// let settings = {
-	// 	rows: 4,
-	// 	cols: 4,
-	// 	N: 50,
-	// 	M: 10,
-	// 	filename: 'brett02cropped.png',
-	// 	SkipInitialSelect: SkipInitialSelect,
-	// 	IsTraditionalBoard: IsTraditionalBoard
-	// };
-	settings = DB.games.gPerlen2;
-	G = new GP2(IO, perlenDict, settings);
-	//console.log('players', G.players);
-}
 
 //#region helpers
 function addToPerlenDict(filename) {

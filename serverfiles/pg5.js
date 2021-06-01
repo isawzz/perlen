@@ -3,7 +3,6 @@ const base = require('../public/BASE/base.js');
 const fs = require('fs');
 const path = require('path');
 const utils = require('./utils.js');
-// const { SkipInitialSelect, IsTraditionalBoard } = require('../public/BASE/globals.js');
 var MessageCounter = 0;
 var Verbose = false;
 var G;
@@ -11,15 +10,71 @@ var DB;
 var PerlenDict;
 
 //#endregion
-
 class GP2 {
-	constructor(io, perlenDict, settings, state) {
+	constructor(io, perlenDict){
 		this.io = io;
 		this.perlenDict = perlenDict;
 		this.players = {};
-		this.settings = settings;
+		this.settings = {};
+		this.initBlankState();
+	}
+	initBlankState(){
+		let state,settings;
+		// if (isdef(settings)) copyKeys(settings, this.settings);
+		let byIndex = this.byIndex = {}; this.maxIndex = 0; 
+		this.State = state;
 
-		this.initState(settings, state);
+		console.log('---------------');
+
+		if (base.nundef(state)) {
+			state = this.State = {};
+			let board = state.board = base.createServerBoard();
+			state.boardArr = [];// new Array(board.nFields);
+			//console.log('board', board);
+
+			state.pool = byIndex;
+			state.poolArr = [];
+			let keys = base.createServerPoolKeys();
+			keys.map(x => this.addToPool(this.perlenDict[x]));
+			//console.log('byIndex', keys);
+
+		}
+		this.initPlayers();
+
+		//console.log('==>there are ', Object.keys(this.State.pool).length, 'perlen');//, '\npool', byIndex);
+	}
+	initState(settings, state) {
+
+		//
+
+		if (base.isdef(settings)) base.copyKeys(settings, this.settings);
+		let byIndex = this.byIndex = {}; this.maxIndex = 0; this.State = {};
+
+		console.log('_initState: settings:', this.settings)
+
+		let board = this.board = this.settings.IsTraditionalBoard ? this.initBoardTraditional(this.settings)
+			: this.initBoardImage(this.settings);
+
+		let numInitPerlen = this.settings.individualSelection ? this.settings.M : this.settings.N;
+		let keys = getRandomPerlenKeys(numInitPerlen);
+		//keys[0]='chillax';
+		//keys[1]='carelessness';
+		keys.map(x => this.addToPool(this.perlenDict[x]));
+
+		//console.log('byIndex',keys);
+		//let n=board.nFields;
+
+		this.State = base.isdef(state) ? state
+			: {
+				board: board,
+				boardArr: new Array(board.nFields),
+				poolArr: Object.values(byIndex).map(x => x.index),
+				pool: byIndex,
+			};
+
+		this.initPlayers();
+		let n = keys.length;
+		console.log('==>there are ', n, 'perlen');//, '\npool', byIndex);
 	}
 	addPlayer(client, x) {
 		let username = x;
@@ -109,49 +164,23 @@ class GP2 {
 		//let arr = new Array(rows * cols);
 		return { filename: filename, algo: algo, nFields: nums[0] };
 	}
-	initState(settings, state) {
-		if (base.isdef(settings)) base.copyKeys(settings, this.settings);
-		//console.log('_initState: settings:', this.settings)
-		let byIndex = this.byIndex = {}; this.maxIndex = 0; this.State = {};
-
-		let board = this.board = this.settings.IsTraditionalBoard ? this.initBoardTraditional(this.settings)
-			: this.initBoardImage(this.settings);
-
-		let numInitPerlen = this.settings.SkipInitialSelect ? this.settings.N : this.settings.M;
-		let keys = getRandomPerlenKeys(numInitPerlen);
-		//keys[0]='chillax';
-		//keys[1]='carelessness';
-		keys.map(x => this.addToPool(this.perlenDict[x]));
-
-		//console.log('byIndex',keys);
-		//let n=board.nFields;
-
-		this.State = base.isdef(state) ? state
-			: {
-				board: board,
-				boardArr: new Array(board.nFields),
-				poolArr: Object.values(byIndex).map(x => x.index),
-				pool: byIndex,
-			};
-
-		this.initPlayers();
-		let n = keys.length;
-		console.log('==>there are ', n, 'perlen', '\npool', byIndex);
-	}
 	initialPoolDone(client, x) {
 		let pl = this.players[client.id];
 		pl.isInitialized = true;
 		this.updatePlayerState(pl);
 	}
-	playerJoins(client, x) {
-		let pl = this.addPlayer(client, x);
-		if (this.settings.SkipInitialSelect) {
-			logSend('gameState');
-			this.safeEmitState(true, true, true, true, client);
-		} else {
+	sendInitialOrState(client){
+		if (this.settings.individualSelection) {
 			let data = { state: this.State, perlenDict: this.perlenDict, instruction: 'pick your set of pearls!' };
 			client.emit('initialPool', data);
+		} else {
+			logSend('gameState');
+			this.safeEmitState(true, true, true, true, client);
 		}
+	}
+	playerJoins(client, x) {
+		let pl = this.addPlayer(client, x);
+		this.sendInitialOrState(client);
 		this.io.emit('userMessage', {
 			username: x,
 			msg: `user ${pl.name} joined! (players:${this.getPlayerNames()})`,
@@ -188,7 +217,7 @@ class GP2 {
 		this.safeEmitState(false, false, false, false);
 	}
 	playerPlacesPerle(client, x) {
-		console.log('x', x, 'this.State', this.State);
+		//console.log('x', x, 'this.State', this.State);
 		let iPerle = x.iPerle;
 		let iField = x.iField;
 		let username = x.username;
@@ -204,7 +233,6 @@ class GP2 {
 
 	}
 	playerRemovesPerle(client, x) {
-		//console.log('!!!!!!!!!!!!!!', x, this.State.boardArr)
 		let iPerle = x.iPerle;
 		let iFrom = x.iFrom;
 		let state = this.State;
@@ -216,17 +244,9 @@ class GP2 {
 		this.safeEmitState(false, false, false, false);
 	}
 	playerReset(client, x) {
-		console.log('Reset!!!!', x);
 		this.initState(x.settings);
 		let username = x.username;
-		if (this.settings.SkipInitialSelect) {
-			logSend('gameState');
-			this.safeEmitState(true, true, false, true);
-		} else {
-			let data = { settings: this.settings, state: this.State, instruction: 'pick your set of pearls!' };
-			this.io.emit('initialPool', data); // { state: this.State, username: username });
-		}
-
+		this.sendInitialOrState(client);
 	}
 	updatePlayerState(pl) {
 		let plState = base.firstCond(this.State.players, x => x.id == pl.id);
@@ -234,7 +254,31 @@ class GP2 {
 	}
 }
 
+
+
+
 //#region interface
+function initPerlenGame(IO, perlenDict, db, lastState) {
+	//console.log(' *** Settings only here ***');
+	//settings soll von DB.games kommen!
+	//wenn es lastState gibt, nimm lastState
+	DB = db;
+	PerlenDict = perlenDict;
+
+	//no use of settings and no use of lastState!!!!!!!
+	G = new GP2(IO, perlenDict);
+
+	return; 
+	let settings = DB.games.gPerlen2;
+	if (base.isdef(lastState)) {
+		settings = lastState.settings;
+		state = lastState.state;
+	}
+
+	// G = new GP2(IO, perlenDict, settings, state);
+	
+}
+
 function addPerle(filename, client) {
 
 	//filename = base.stringBefore(filename,'.').toLowerCase();
@@ -296,19 +340,6 @@ function handleRemovePerle(client, x) { G.playerRemovesPerle(client, x); }
 function handleReset(client, x) { G.playerReset(client, x); }
 function handleStartOrJoin(client, x) { G.playerJoins(client, x); }
 function handleInitialPoolDone(client, x) { G.initialPoolDone(client, x); }
-function initPerlenGame(IO, perlenDict, db, lastState) {
-	//console.log(' *** Settings only here ***');
-	//settings soll von DB.games kommen!
-	//wenn es lastState gibt, nimm lastState
-	DB = db;
-	PerlenDict = perlenDict;
-	let settings = DB.games.gPerlen2;
-	if (base.isdef(lastState)) {
-		settings = lastState.settings;
-		state = lastState.state;
-	}
-	G = new GP2(IO, perlenDict, settings, state);
-}
 
 //#region helpers
 function addToPerlenDict(filename) {

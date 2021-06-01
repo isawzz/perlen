@@ -38,14 +38,15 @@
 	<body style="opacity:0">
 		<div id="dHeader" style="background-color: var(--dark-blue); padding-top: 10px">
 			<div id='dButtonsLeft' style="position: absolute; left:0px; padding:10px; display:flex">
-				<div id='dResetButton'  onclick='onClickReset()' class='toolbarButtonClass'>♻️</div>
+				<div id='dSettingsButton' onclick='onClickSettings()' class='toolbarButtonClass'>⚙️</div>
+				<!-- 
 				<div id='dPreselectButton'  onclick='onClickPreselect(this)' class='toolbarButtonClass'>select</div>
-				<div id='dBoardSwitchButton'  onclick='onClickBoardSwitch(this)' class='toolbarButtonClass'>hex</div>
+				<div id='dBoardSwitchButton'  onclick='onClickBoardSwitch(this)' class='toolbarButtonClass'>hex</div> -->
 				<!-- <button onClick="launchOneDrivePicker()">OneDrive</button> -->
 			</div>
 			<div id='dTempleLobby' style="display: none; position: absolute; margin: 10px; padding: 20px" onclick='onClickTempleLobby()'>🏛️</div>
 			<div id='dButtonsRight' style="position: absolute; right:0px; padding:10px; display:flex">
-				<div id='dHelpButton'  onclick='show("dHelpWindow");' class='toolbarButtonClass'>🪔</div>
+				<div id='dResetButton'  onclick='onClickReset()' class='toolbarButtonClass'>♻️</div>				<div id='dHelpButton'  onclick='show("dHelpWindow");' class='toolbarButtonClass'>🪔</div>
 				<div id='dColorButton' onclick='setNewBackgroundColor();' class='toolbarButtonClass'>🎨</div>
 			</div>
 			<div class="flex-column flex-center">
@@ -118,6 +119,13 @@
 				<button style="margin-top:10px;padding:4px 14px" class="buttonClass" onclick="hide('dHelpWindow');">close</button>
 			</div>
 		</div>
+		<div id='dSettingsWindow' style="display:none;font-size:16px;background:dimgray;width:320px;position:fixed;left:20px;top:20px;padding:10px;border-radius:10px">
+			<h4>Settings:</h4>
+			<div id='dSettingsContent'></div>
+			<div style='text-align:center'>
+				<button style="margin-top:10px;padding:4px 14px" class="buttonClass" onclick="hide('dSettingsWindow');">close</button>
+			</div>
+		</div>
 
 		<!-- <script src='../alibs/socket.io.js'></script> -->
 		<script src='https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js'></script>
@@ -138,6 +146,7 @@
 		<script src="./BASE/features/time.js"></script>
 		<script src="./BASE/features/ui.js"></script>
 		<script src="./work/cardGame.js"></script>
+		<script src="./work/fake.js"></script>
 		<script src="./work/onClick.js"></script>
 		<script src="./work/testing.js"></script>
 		<script src="./work/fileUpload.js"></script>
@@ -145,8 +154,8 @@
 		<script src="./work/shapes.js"></script>
 		<!-- <script src="./work/simplestPerlenGame.js"></script> -->
 		<!-- <script src="./work/si1.js"></script> -->
-		<script src="./work/si3.js"></script>
-		<script src="./work/si3Class.js"></script>
+		<script src="./work/si6.js"></script>
+		<script src="./work/si6Class.js"></script>
 		<!-- <script src="./work/si1Class.js"></script> -->
 		<script src="./work/socket.js"></script>
 		<script src="./work/users.js"></script>
