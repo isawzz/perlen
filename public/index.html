@@ -119,11 +119,12 @@
 				<button style="margin-top:10px;padding:4px 14px" class="buttonClass" onclick="hide('dHelpWindow');">close</button>
 			</div>
 		</div>
-		<div id='dSettingsWindow' style="display:none;font-size:16px;background:dimgray;width:320px;position:fixed;left:20px;top:20px;padding:10px;border-radius:10px">
+		<div id='dSettingsWindow' style="display:none;font-size:16px;background:dimgray;width:420px;z-index:1200;position:fixed;left:20px;top:20px;padding:10px;border-radius:10px">
 			<h4>Settings:</h4>
 			<div id='dSettingsContent'></div>
 			<div style='text-align:center'>
-				<button style="margin-top:10px;padding:4px 14px" class="buttonClass" onclick="hide('dSettingsWindow');">close</button>
+				<button style="margin-top:10px;width:90px;padding:4px 14px" class="buttonClass" onclick="saveSettings()">set</button>
+				<button style="margin-top:10px;width:90px;padding:4px 14px" class="buttonClass" onclick="closeSettings()">close</button>
 			</div>
 		</div>
 
@@ -134,33 +135,32 @@
 		<script src="./BASE/features/audio.js"></script>
 		<script src="./BASE/features/badges.js"></script>
 		<script src="./BASE/features/banner.js"></script>
-		<script src="./BASE/features/board.js"></script>
 		<script src="./BASE/features/dbStub.js"></script>
-		<script src="./BASE/features/item.js"></script>
 		<script src="./BASE/features/keys.js"></script>
 		<script src="./BASE/features/markers.js"></script>
 		<script src="./BASE/features/menu.js"></script>
 		<script src="./BASE/features/scoring.js"></script>
 		<script src="./BASE/features/speech.js"></script>
-		<script src="./BASE/features/settings.js"></script>
 		<script src="./BASE/features/time.js"></script>
 		<script src="./BASE/features/ui.js"></script>
+
+		<script src="./work/board.js"></script>
 		<script src="./work/cardGame.js"></script>
 		<script src="./work/fake.js"></script>
-		<script src="./work/onClick.js"></script>
-		<script src="./work/testing.js"></script>
 		<script src="./work/fileUpload.js"></script>
+		<script src="./work/item.js"></script>
+		<script src="./work/onClick.js"></script>
 		<script src="./work/lobby.js"></script>
+		<script src="./work/settings.js"></script>
+		<!-- <script src="./work/perle.js"></script> -->
 		<script src="./work/shapes.js"></script>
-		<!-- <script src="./work/simplestPerlenGame.js"></script> -->
-		<!-- <script src="./work/si1.js"></script> -->
 		<script src="./work/si6.js"></script>
 		<script src="./work/si6Class.js"></script>
-		<!-- <script src="./work/si1Class.js"></script> -->
 		<script src="./work/socket.js"></script>
 		<script src="./work/users.js"></script>
 		<script src="./work/userAvatar.js"></script>
 		<script src="./work/assets.js"></script>
+		<script src="./work/testing.js"></script>
 
 		<!-- <script src="./start.js"></script> -->
 		<script src="./client.js"></script>

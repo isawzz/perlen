@@ -1,15 +1,15 @@
 //#region server and client
-const PORT = 3333;
+const PORT = 3344;
 
 // *** HEROKU *** deploy to HEROKU ***
-const NGROK = false; //'http://849aec381695.ngrok.io/'; // MUSS / am ende!!! 
-const HEROKU = true;
-const USERNAME_SELECTION = 'local'; // random | local | nil | gul | ma ...
+// const NGROK = false; //'http://849aec381695.ngrok.io/'; // MUSS / am ende!!! 
+// const HEROKU = true;
+// const USERNAME_SELECTION = 'local'; // random | local | nil | gul | ma ...
 
 //*** testing */:
-// const NGROK = false; //'http://849aec381695.ngrok.io/'; // MUSS / am ende!!! 
-// const HEROKU = false;
-// const USERNAME_SELECTION = 'random'; // random | local | nil | gul | ma ...
+const NGROK = false; //'http://849aec381695.ngrok.io/'; // MUSS / am ende!!! 
+const HEROKU = false;
+const USERNAME_SELECTION = 'random'; // random | local | nil | gul | ma ...
 
 var USESOCKETS = true; //false ist wahtscheinlich broken!
 const JUST_PERLEN_GAME = true;
@@ -27,7 +27,7 @@ var MessageCounter = 0;
 var Pictures, Goal, Selected, Score, TO, TOMain, TOTrial, TOList, IsAnswerCorrect, QContextCounter = 0;
 var uiActivated, aiActivated, auxOpen, GameTimer, STOPAUS = false;
 var Settings, SettingsList, SettingsChanged, SelectedMenuKey; //var G, T, P, U, User, ????? , G...Game, T...Table, U...Userdata
-var Daat = {}, DA = {}, Items;
+var Daat = {}, DA = {}, Items, ItemsByKey;
 var Players, PlayerOnTurn, GC, GameCounter;
 var PerlenDict, BaseColor, HeaderColor, IsControlKeyDown = false;
 

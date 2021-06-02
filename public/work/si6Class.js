@@ -35,15 +35,8 @@ class SimpleClass {
 		return [this.settings, this.state];
 	}
 	presentGameState(data) {
-
-		// while(PresentationCompleted == false){
-		// 	clearTimeout(TOPresentation)
-		// 	TOPresentation = setTimeout(()=>presentGameState(data),200);
-		// }
-
-		// PresentationCompleted = false;
+		//console.log('data',data); return;
 		let [settings, state] = this.copyData(data);
-		//console.log('settings', settings); //console.log('state', state);
 
 		clearElement(this.dParent); Schritt += 1;
 
@@ -52,31 +45,37 @@ class SimpleClass {
 			setTitle(data.instruction);
 		}
 
+		console.assert(this.settings == settings,'SETTINGS MISMATCH!!!!!!')
 		let s = this.settings;
+		console.log('settings', s.boardFilename,s.boardLayout,s.nFields); 
+		console.log('state', state);
+
+
+
 		if (isEmpty(s.boardFilename)) { createBoardEditor(); setTitle('pick a board'); return; }
 		if (nundef(s.boardLayout)) { openSettings(); setTitle('specify board layout'); return; }
 
-		let dOuter =this.dBoardOuter= mDiv(this.dParent, { display: 'inline-block', position: 'relative' }, 'dBoardOuter');
+		let dOuter = this.dBoardOuter = mDiv(this.dParent, { display: 'inline-block', position: 'relative' }, 'dBoardOuter');
 		if (isdef(s.boardFilename)) {
 			let img, wOuter, hOuter;
 			let path = './assets/games/perlen/bretter/' + s.boardFilename + '.png';
-			img =this.boardImage = mImg(path, dOuter, null, null, this.sizeDOuter.bind(this));
+			img = this.boardImage = mImg(path, dOuter, null, null, this.sizeDOuter.bind(this));
 		} else {
 			this.boardImage = null;
 			this.sizeDOuter();
 		}
 	}
 	sizeDOuter() {
-		let img=this.boardImage;
-		let [wOuter, hOuter] =isdef(img)? [img.naturalWidth, img.naturalHeight]:[1000, 700];
+		let img = this.boardImage;
+		let [wOuter, hOuter] = isdef(img) ? [img.naturalWidth, img.naturalHeight] : [1000, 700];
 		let dOuter = this.dBoardOuter;
 		mStyleX(dOuter, { w: wOuter, h: hOuter }); //full board size!!!
 
 		//console.log('hallo da bin ch jetzt!');
 
-		let dInner = this.dBoardInner = mDiv(dOuter, { left:0,top:0,w:wOuter,h:hOuter,position:'absolute' }, 'dBoardInner');//,'background-image':path });
-		this.clientBoard = {dOuter:dOuter,wOuter:wOuter,hOuter:hOuter,dInner:dInner};
-		
+		let dInner = this.dBoardInner = mDiv(dOuter, { left: 0, top: 0, w: wOuter, h: hOuter, position: 'absolute' }, 'dBoardInner');//,'background-image':path });
+		this.clientBoard = { dOuter: dOuter, wOuter: wOuter, hOuter: hOuter, dInner: dInner };
+
 		createClientBoardNew(this.clientBoard, this.settings);
 
 		//console.log(this.clientBoard);
@@ -99,7 +98,7 @@ class SimpleClass {
 		//PresentationCompleted= true;
 	}
 	activateDD() {
-		let fields = this.settings.IsTraditionalBoard ? this.clientBoard.fields.filter(x => x.row > 0 && x.col > 0) : this.clientBoard.fields;
+		let fields = this.clientBoard.fields;
 		//console.log('fields',fields)
 		enableDD(this.perlenListeImSpiel, fields, this.onDropPerleSimplest.bind(this), false, false, dragStartPreventionOnSidebarOpen);
 		addDDTarget({ item: this.state.poolArr, div: this.dParent }, false, false);

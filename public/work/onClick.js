@@ -4,9 +4,20 @@ function openPerlenEditor() { createPerlenEditor(); }
 function openSettings() { onClickSettings(); }
 function onClickSettings() {
 	show("dSettingsWindow");
-	console.log('settings', G.settings)
-	let settingsView = new PerlenSettingsClass(G.settings, mBy('dSettingsWindow'), U);
+	//console.log('settings', G.settings)
+	let settingsView = Settings = new PerlenSettingsClass(G.settings, mBy('dSettingsWindow'), U);
 	settingsView.createSettingsUi();
+}
+function closeSettings(){
+//	saveSettings();
+	hide("dSettingsWindow");
+}
+
+function saveSettings(){
+	//depending which settings have changed!!!
+	
+	console.log('changed',Settings.haveChanged);
+	Socket.emit('settings',{settings:Settings.o,nFields:calcNFields(Settings)});
 }
 
 function onClickReset() {

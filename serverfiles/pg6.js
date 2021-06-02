@@ -70,11 +70,13 @@ class GP2 {
 	}
 	getPlayerNames() { return Object.values(this.players).map(x => x.username); }
 	handleBoard(client, x) {
+		logReceive('board', x);
 		if ('boardFilename' in x) { this.settings.boardFilename = x.boardFilename; }
 		if ('nFields' in x) { this.state.boardArr = new Array(x.nFields); }
 		this.safeEmitState(['settings']);
 	}
 	handlePerlenImages(client, x) {
+		logReceive('perlenImages', client.id);
 		let pack = x.pack;
 		let emitPool = false;
 		for (const key in pack) {
@@ -112,6 +114,7 @@ class GP2 {
 		this.safeEmitState(['pool', 'perlenDict'])
 	}
 	handleAddToPool(client, x) {
+		logReceive('addToPool', client.id);
 		//console.log('SHORTCUT!',x.name)
 		let key = x.path;
 		let p = base.firstCondDict(this.state.pool, x => x.key == key);
@@ -141,6 +144,7 @@ class GP2 {
 		this.sendMessage(pl.username, `user ${pl.username} joined! (players:${this.getPlayerNames().join()})`);
 	}
 	handleReset(client, x) {
+		logReceive('reset', client.id);
 		//choice:
 		//1. clear boardArr, put alle perlen zurueck in stall
 		//==>2. clear boardArr, reset pool to new pool
@@ -158,6 +162,33 @@ class GP2 {
 		} else {
 			this.safeEmitState(['perlenDict', 'settings', 'pool']);
 		}
+	}
+	handleSettings(client, x) {
+		logReceive('removePerle', x);
+		this.settings = x.settings;
+		let nFields = this.settings.nFields = x.nFields;
+
+		let barr = this.state.boardArr;
+		if (barr.length != nFields) {
+			if (base.isEmpty(barr) || !base.firstCond(barr, x => x != null)) this.state.boardArr = new Array(nFields);
+			else if (barr.length < nFields){
+				for(let i=barr.length;i<nFields;i++) this.state.boardArr.push(null);
+			}	else {
+				// verkuerzung von boardArr!
+				let nBarr = barr.length;
+				let extras = [];
+				for(let i=nFields;i<barr.length;i++){
+					if (base.isdef(barr[i])) extras.push(barr[i]);
+				}
+				for(const idx of extras){this.state.poolArr.push(idx);}
+				this.state.boardArr = this.state.boardArr.slice(0,nFields);
+			}
+		}
+		console.log(x.nFields);
+		console.log(this.state.boardArr);
+		console.log(this.state.poolArr);
+
+		this.safeEmitState(['settings']);
 	}
 	handleMovePerle(client, x) {
 		let iPerle = x.iPerle;
@@ -198,13 +229,15 @@ class GP2 {
 
 	}
 	handleRemovePerle(client, x) {
+		logReceive('removePerle', x);
 		let iPerle = x.iPerle;
 		let iFrom = x.iFrom;
-		let state = this.state;
+		//let state = this.state;
 
-		state.boardArr[iFrom] = null;//update board state!
-		state.poolArr.unshift(iPerle);
-		let pl = this.players[client.id];
+		this.state.boardArr[iFrom] = null;//update board state!
+		this.state.poolArr.unshift(iPerle);
+
+		console.log('poolArr', this.state.poolArr);
 
 		this.safeEmitState();
 	}
@@ -212,19 +245,13 @@ class GP2 {
 	safeEmitState(keys, eMore, client) {
 
 		if (base.nundef(keys)) keys = [];
-		//complete reconstructable state is: poolArr,boardArr,settings,pool
-		//minimal state is: poolArr, boardArr
-		//das board layout is in settings!
-
-		//board extensibility deprecated!
-		//console.log('state', this.state)
 		let o = { state: { boardArr: this.state.boardArr, poolArr: this.state.poolArr } };
 		if (keys.includes('settings')) o.settings = this.settings;
 		if (keys.includes('pool')) o.state.pool = this.state.pool;
 		if (keys.includes('perlenDict')) o.perlenDict = this.perlenDict;
 		if (base.isdef(eMore)) base.copyKeys(eMore, o);
 
-		if (!NO_LAST_STATE) utils.toYamlFile({ settings: this.settings, state: this.state }, './lastState.yaml');
+		if (!NO_LAST_STATE) utils.toYamlFile({ settings: this.settings, state: this.state }, path.join(__dirname, '../public/lastState.yaml'));
 
 		if (base.isdef(client)) client.emit('gameState', o); else this.io.emit('gameState', o);
 

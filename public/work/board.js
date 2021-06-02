@@ -516,6 +516,14 @@ function getCenters(layout, rows, cols, wCell, hCell,) {
 // 	else if (layout == 'hex') { return hexCenters(rows, cols, wCell, hCell); }
 // 	else if (layout == 'circle') { return circleCenters(rows, cols, wCell, hCell); }
 // }
+function getCentersFromAreaSize(layout, wBoard, hBoard, wCell, hCell) {
+	let info;
+	if (layout == 'quad') { info = quadCenters(rows, cols, wCell, hCell); }
+	else if (layout == 'hex') { info = hexCenters(rows, cols, wCell, hCell); }
+	else if (layout == 'hex1') { info = hex1Centers(rows, cols, wCell, hCell); }
+	else if (layout == 'circle') { info = circleCenters(rows, cols, wCell, hCell); }
+	return info;
+}
 function getCentersFromRowsCols(layout, rows, cols, wCell, hCell) {
 	let info;
 	if (layout == 'quad') { info = quadCenters(rows, cols, wCell, hCell); }
@@ -630,7 +638,7 @@ function _calc_hex_col_array(rows, cols) {
 
 function hex1Centers(rows, cols, wCell = 100, hCell) {
 	//console.log('haaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa')
-	rows = 7, cols = 6;
+	//rows = 7, cols = 6;
 	let colarr = _calc_hex_col_array(rows, cols);
 	//console.log('colarr', colarr);
 	let maxcols = arrMax(colarr);
@@ -655,7 +663,6 @@ function hex1Centers(rows, cols, wCell = 100, hCell) {
 	//console.log(centers)
 	return [centers, wCell * maxcols, hCell / 4 + rows * hline];
 }
-
 
 
 

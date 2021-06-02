@@ -160,11 +160,19 @@
 	display: inline-block;
 	padding: 10px;
 }
+label{
+	margin-bottom: 2px;
+}
 .input {
-	width: 70px;
+	width: 100px;
+}
+input[type='file'] {
+  color: transparent;
+
+	width:100px;
 }
 .options {
-	width: 77px;
+	width: 100px;
 }
 #dGameSettings input {
 	width: 70px;
@@ -1396,3 +1404,10 @@ p{
 }
 
 /* #endregion fileUpload */
+
+.showOnHover{
+	opacity:0;
+}
+.showOnHover:hover{
+	opacity:1;
+}

@@ -520,6 +520,10 @@ function iResize(i, w, h) { return isList(i) ? i.map(x => iSize(x, w, h)) : iSiz
 function iSize(i, w, h) { i.w = w; i.h = h; mSize(iDiv(i), w, h); }
 function isItem(i) { return isdef(i.live) || isdef(i.div); }
 function iRegister(item, id) { let uid = isdef(id) ? id : getUID(); Items[uid] = item; return uid; }
+function iRegisterX(item,keyProp, id) { 
+	let uid = isdef(id) ? id : getUID(); Items[uid] = item; 
+	if (isdef(item[keyProp])) ItemsByKey[item[keyProp]]=uid;return uid; 
+}
 function iSplay(items, iContainer, containerStyles, splay = 'right', ov = 20, ovUnit = '%', createHand = true, rememberFunc = true) {
 
 	if (!isList(items)) items = [items];
@@ -3451,7 +3455,7 @@ if (this && typeof module == "object" && module.exports && this === module.expor
 		capitalize, choose, chooseRandom, copyKeys,
 		dict2list,
 		firstCond, firstCondDict, firstCondDictKey, formatDate,
-		isdef, jsCopy,
+		isdef, isEmpty, jsCopy,
 		nundef,
 		range, randomNumber, removeInPlace,
 		stringBefore, stringAfter, stringAfterLast,

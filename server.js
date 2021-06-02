@@ -15,7 +15,7 @@ const perlenGame = require('./serverfiles/pg6.js');
 
 const DB = utils.fromYamlFile(path.join(__dirname, 'public/data.yaml'));
 const PerlenDict = utils.fromYamlFile(path.join(__dirname, 'public/perlenDict.yaml'));
-const lastState = utils.fromYamlFile(path.join(__dirname, './lastState.yaml'));
+const lastState = utils.fromYamlFile(path.join(__dirname, 'public/lastState.yaml'));
 
 app.all('/*', function (req, res, next) {
 	res.header("Access-Control-Allow-Origin", "*");
@@ -55,6 +55,7 @@ io.on('connection', client => {
 	//the following messages are handled by 'simple' (module or class)
 
 	client.on('perlenImages',x=>simple.handlePerlenImages(client,x));
+	client.on('settings',x=>simple.handleSettings(client,x));
 
 	client.on('board', x => simple.handleBoard(client, x));
 	client.on('movePerle', x => simple.handleMovePerle(client, x));

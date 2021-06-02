@@ -1,7 +1,7 @@
 //#region prelim
 const messageTypes = { LEFT: 'left', RIGHT: 'right', LOGIN: 'login' };
 const messages = []; // { author, date, content, type }
-const VerboseSocket = false;
+const VerboseSocket = true;
 
 class FakeSocketClass{
 	constructor(){
@@ -36,21 +36,21 @@ function initSocket() {
 
 //#region done!
 function handleUserJoined(data) {
-	logClientReceive('userJoined', data)
+	logClientReceive('userJoined', data.username)
 	// if (VerboseSocket) console.log('received userJoined data:',data);
 }
 function handleUserLeft(data) {
-	logClientReceive('userLeft', data)
+	logClientReceive('userLeft', data.id)
 	// if (VerboseSocket) console.log('received userLeft data:',data);
 }
 function handleUserMessage(data) {
-	logClientReceive('userMessage', data)
+	logClientReceive('userMessage', data.username)
 	// if (VerboseSocket) console.log('received user message:',data);
 }
 
 //sending
 function sendReset(settings) { logClientSend('reset', Username); Socket.emit('reset', { settings: settings, username: Username }); }
-function sendUserMessage(data) { logClientSend('userMessage', data); Socket.emit('userMessage', { data: data }); }
+function sendUserMessage(data) { logClientSend('userMessage', data.username); Socket.emit('userMessage', { data: data }); }
 function sendFilename(msg) { logClientSend('filename', msg); Socket.emit('filename', { msg }); }
 
 //helpers: keeping track of messages!

@@ -36,6 +36,7 @@ games:
     numPool: 10
     boardLayout: hex1
     boardFilename: brett10
+    boardRotation: 0
     fieldShape: circle
     fieldColor: transparent
     wField: 101
@@ -44,18 +45,18 @@ games:
     hGap: 30
     rows: 7
     cols: 6
-    #old stuff
-    # bretter:
-    #   quad: 4 4 quad
-    #   hex: 0 5 hex #cols rows algo (cols=0 heisst volle breite von brett)
-    #   cicle: 3 circle
-    #   brett02cropped: 25 littleHexBoardTool
-    #   shapeShifters: 81 grid9_9
-    # IsTraditionalBoard: false
-    # individualSelection: false
-    # rows: 4
-    # cols: 4
-    # filename: brett02cropped.png
+    maxWidth: 800
+    maxHeight: 800
+    boardMarginLeft: 0
+    boardMarginTop: 10
+    #perlen
+    bgPool: 'transparent'
+    fgPool: '#ffffffff'
+    bgBoard: 'silver'
+    fgBoard: 'black'
+    szPerle: 90
+    fzLabel: 16
+    labelPos: hover # none | top | bottom | middle | hover
   gAbacus:
     friendly: 'Abacus'
     logo: 'abacus'
@@ -1021,6 +1022,22 @@ users:
     settings:
       userColor: orange
 standardSettings:
+  kleinSchwarz:
+    boardLayout: hex1
+    boardFilename: brett19_09
+    boardRotation: 0
+    fieldShape: circle
+    fieldColor: "#ffffff20"
+    wField: 101
+    hField: 116
+    wGap: 20
+    hGap: 30
+    rows: 5
+    cols: 3
+    maxWidth: 1000
+    maxHeight: 700
+    boardMarginLeft: 0
+    boardMarginTop: 0
   hex51:
     boardLayout: hex1
     boardFilename: brett10
@@ -1036,11 +1053,35 @@ standardSettings:
     boardLayout: hex1
     boardFilename: brett18_56
     fieldShape: circle
-    fieldColor: transparent
+    fieldColor: '#ffffff80'
     wField: 101
     hField: 117
     wGap: 15
     hGap: 30
     rows: 7
     cols: 6
+  verdreht:
+    boardLayout: hex1
+    boardFilename: brett03
+    boardRotation: 21
+    fieldShape: circle
+    fieldColor: transparent
+    wField: 96
+    hField: 102
+    wGap: 10
+    hGap: 10
+    rows: 7
+    cols: 4
+    maxWidth: 1000
+    maxHeight: 700
+    boardMarginLeft: 0
+    boardMarginTop: 10
+    bgPool: transparent
+    fgPool: "#ffffffff"
+    bgBoard: silver
+    fgBoard: black
+    szPerle: 75
+    fzLabel: 16
+    labelPos: hover
+    nFields: 37
 

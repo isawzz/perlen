@@ -1,5 +1,5 @@
 async function loadAssets(path) {
-	Daat = {}; DA = {}; Items = {};
+	Daat = {}; DA = {}; Items = {}; ItemsByKey = {};
 
 	if (CLEAR_LOCAL_STORAGE) localStorage.clear();
 
