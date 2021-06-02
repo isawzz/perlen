@@ -53,9 +53,10 @@ io.on('connection', client => {
 	client.on('userMessage', x => userman.handleUserMessage(client, x)); //broadcast user left: userManager
 
 	//the following messages are handled by 'simple' (module or class)
-	client.on('addToPool', x => simple.handleAddToPool(client, x));
+
+	client.on('perlenImages',x=>simple.handlePerlenImages(client,x));
+
 	client.on('board', x => simple.handleBoard(client, x));
-	client.on('image', x => simple.handleImage(client, x));
 	client.on('movePerle', x => simple.handleMovePerle(client, x));
 	client.on('placePerle', x => simple.handlePlacePerle(client, x));
 	client.on('relayout', x => simple.handleRelayout(client, x));
@@ -64,6 +65,8 @@ io.on('connection', client => {
 	client.on('startOrJoinPerlen', x => simple.handleStartOrJoin(client, x));
 
 	//deprecate:
+	client.on('image', x => simple.handleImage(client, x));
+	client.on('addToPool', x => simple.handleAddToPool(client, x));
 	client.on('initialPoolDone', x => simple.handleInitialPoolDone(client, x));
 
 	client.on('mouse', x => { io.emit('mouse', x); });//should send x,y,username

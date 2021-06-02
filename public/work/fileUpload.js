@@ -184,15 +184,15 @@ function previewImageFromFile(imgFile) {
 
 function showUploadButton() {
 	if (isdef(mBy('btnUpload'))) return;
-	let btn = mButton('upload', onClickUpload, mBy('dLeiste'), { matop:5, w: 80, h: 25 }, ['buttonClass']);
+	let btn = mButton('upload', onClickUpload, mBy('dLeiste'), { matop: 5, w: 80, h: 25 }, ['buttonClass']);
 	btn.id = 'btnUpload';
 
 }
 function showUpdateImagesCheckbox() {
-	let id='chkUpdateImages';
+	let id = 'chkUpdateImages';
 	if (isdef(mBy(id))) return;
 
-	let btn = mCheckbox('update images', false, mBy('dLeiste'),  { maleft: 12, mabottom: 0, hmin:25 },id);
+	let btn = mCheckbox('update images', false, mBy('dLeiste'), { maleft: 12, mabottom: 0, hmin: 25 }, id);
 
 }
 function showUploadInput() {
@@ -220,9 +220,37 @@ function uploadImage() {
 }
 function uploadFiles() {
 	//console.log('uploading files:', FilesToUpload);
-	let updateImages=mBy('chkUpdateImages').checked;
+	let updateImages = mBy('chkUpdateImages').checked;
+	let pack = {};
+	//console.log('updateImages',updateImages);
+	for (const imgFile of FilesToUpload) {
+		let data = imgFile.data;
+		let filename = imgFile.name;
+
+		//console.log('filename',filename);
+		let perlenName = stringBefore(filename, '.');
+
+		if (updateImages || !isdef(PerlenDict[perlenName])) {
+			pack[perlenName]={data:data,name:perlenName,filename:filename,type:'imageData'};
+			//Socket.emit('image', { data: data, filename: filename });
+		}else {
+			//console.log('JUST ADD TO POOL!!!!',perlenName)
+			pack[perlenName]={data:null,name:perlenName,filename:filename,type:'perlenName'};
+			// Socket.emit('addToPool', { path: perlenName });
+		}
+
+	}
+	Socket.emit('perlenImages',{pack:pack});
+	console.log('uploading pack',pack);
+	closePerlenEditor();
+	if (isdef(G)) G.setInitialPoolSelected();
+}
+function uploadFilesOrig() {
+	//console.log('uploading files:', FilesToUpload);
+	let updateImages = mBy('chkUpdateImages').checked;
 	//console.log('updateImages',updateImages);
 	//====?!!
+
 	for (const imgFile of FilesToUpload) {
 		//uploadFile00w(imgFile);
 		//uploadFile01_NO(imgFile);
@@ -232,7 +260,7 @@ function uploadFiles() {
 		let filename = imgFile.name;
 
 		//console.log('filename',filename);
-		let perlenName = stringBefore(filename,'.');
+		let perlenName = stringBefore(filename, '.');
 
 		if (updateImages || !isdef(PerlenDict[perlenName])) Socket.emit('image', { data: data, filename: filename });
 		else {
@@ -287,10 +315,10 @@ function createBoardEditor() {
 }
 function onDropBoardImage(e) {
 	var files = e.dataTransfer.files;
-	if (files.length) {		previewBoardImage(files);	}
+	if (files.length) { previewBoardImage(files); }
 }
 function onClickUploadBoard() {
-	if (!isEmpty(FilesToUpload)) uploadBoard(); 
+	if (!isEmpty(FilesToUpload)) uploadBoard();
 }
 function previewBoardImage(files) {
 	FilesToUpload = files;// FilesToUpload.concat(files);
@@ -307,13 +335,13 @@ function previewBoardImage(files) {
 }
 function showBoardUploadButton() {
 	if (isdef(mBy('btnUpload'))) return;
-	let btn = mButton('upload', onClickUploadBoard, mBy('dLeiste'), { matop:5, w: 80, h: 25 }, ['buttonClass']);
+	let btn = mButton('upload', onClickUploadBoard, mBy('dLeiste'), { matop: 5, w: 80, h: 25 }, ['buttonClass']);
 	btn.id = 'btnUpload';
 
 }
 function uploadBoard() {
 	//console.log('uploading files:', FilesToUpload);
-	let updateImages=mBy('chkUpdateImages').checked;
+	let updateImages = mBy('chkUpdateImages').checked;
 	//console.log('updateImages',updateImages);
 	//====?!!
 	for (const imgFile of FilesToUpload) {
@@ -325,11 +353,11 @@ function uploadBoard() {
 		let filename = imgFile.name;
 
 		//console.log('filename',filename);
-		let boardName = stringBefore(filename,'.');
+		let boardName = stringBefore(filename, '.');
 
-		if (updateImages || !isdef(PerlenDict[boardName])){
+		if (updateImages || !isdef(PerlenDict[boardName])) {
 			Socket.emit('image', { data: data, filename: filename });
-		} 
+		}
 		else {
 			//console.log('JUST ADD TO POOL!!!!',perlenName)
 			Socket.emit('board', { path: boardName });

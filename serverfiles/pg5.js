@@ -368,15 +368,15 @@ function decodeBase64Image(dataString) {
 
 	return response;
 }
+function savePerlenDictToFile() {
+	utils.toYamlFile(PerlenDict, path.join(__dirname, '../public/perlenDict.yaml'));
+}
 function getRandomPerlenKeys(n) { return base.choose(Object.keys(PerlenDict), n); }
 function log() { if (Verbose) console.log('perlen: ', ...arguments); }
 function logBroadcast(type) { MessageCounter++; log('#' + MessageCounter, 'broadcast ' + type); }
 function logSend(type) { MessageCounter++; log('#' + MessageCounter, 'send ' + type); }
 function logReceive(type) { MessageCounter++; log('#' + MessageCounter, 'receive ' + type); }
 function perleNichtInPerlenDict(filename) { return base.nundef(PerlenDict[filename]); }
-function savePerlenDictToFile() {
-	utils.toYamlFile(PerlenDict, path.join(__dirname, '../public/perlenDict.yaml'));
-}
 
 //#endregion
 

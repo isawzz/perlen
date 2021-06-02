@@ -20,6 +20,7 @@ state:
     - null
     - null
     - null
+    - 3
     - null
     - null
     - null
@@ -38,21 +39,20 @@ state:
     - null
     - null
     - null
+    - 13
+    - 32
+    - null
+    - null
+    - null
+    - null
+    - 27
     - null
     - null
     - null
     - null
     - null
     - null
-    - null
-    - null
-    - null
-    - null
-    - null
-    - null
-    - null
-    - null
-    - null
+    - 16
     - null
     - null
     - null
@@ -66,43 +66,170 @@ state:
     - null
   pool:
     "0":
-      key: islam
+      key: joy
       index: 0
     "1":
-      key: der eiserne vorhang
+      key: böses will und gutes schafft
       index: 1
     "2":
-      key: der schwarze drachen tod
+      key: individualismus
       index: 2
     "3":
-      key: seher
+      key: power
       index: 3
     "4":
-      key: cafehauskultur
+      key: wintersonne
       index: 4
     "5":
-      key: kriegszerstörung
+      key: carelessness
       index: 5
     "6":
-      key: langsam
+      key: aktie
       index: 6
     "7":
-      key: taoismus
+      key: hinduismus
       index: 7
     "8":
-      key: machtspiel
+      key: optimismus
       index: 8
     "9":
-      key: komplex
+      key: blockchain
       index: 9
+    "10":
+      key: deutsch
+      index: 10
+    "11":
+      key: diktatur
+      index: 11
+    "12":
+      key: diskussion
+      index: 12
+    "13":
+      key: ego
+      index: 13
+    "14":
+      key: egoless
+      index: 14
+    "15":
+      key: einfach
+      index: 15
+    "16":
+      key: emergence
+      index: 16
+    "17":
+      key: endzeit
+      index: 17
+    "18":
+      key: english
+      index: 18
+    "19":
+      key: erziehung
+      index: 19
+    "20":
+      key: european theatre
+      index: 20
+    "21":
+      key: evolution
+      index: 21
+    "22":
+      key: faschismus
+      index: 22
+    "23":
+      key: fe metaphysik
+      index: 23
+    "24":
+      key: fear
+      index: 24
+    "25":
+      key: flavors of joy
+      index: 25
+    "26":
+      key: fpö
+      index: 26
+    "27":
+      key: gelb
+      index: 27
+    "28":
+      key: geld
+      index: 28
+    "29":
+      key: geschichte
+      index: 29
+    "30":
+      key: gier
+      index: 30
+    "31":
+      key: grosse seuche
+      index: 31
+    "32":
+      key: grün
+      index: 32
+    "33":
+      key: gutes will und böses schafft
+      index: 33
+    "34":
+      key: handwerk
+      index: 34
+    "35":
+      key: historical time dilation
+      index: 35
+    "36":
+      key: hoffnung
+      index: 36
+    "37":
+      key: idee
+      index: 37
+    "38":
+      key: immer bessere werkzeuge
+      index: 38
+    "39":
+      key: immigration
+      index: 39
+    "40":
+      key: impostor syndrom
+      index: 40
+    "41":
+      key: industrie
+      index: 41
+    "42":
+      key: introspektion
+      index: 42
   poolArr:
     - 0
     - 1
     - 2
-    - 3
     - 4
     - 5
     - 6
     - 7
     - 8
     - 9
+    - 10
+    - 11
+    - 12
+    - 14
+    - 15
+    - 17
+    - 18
+    - 19
+    - 20
+    - 21
+    - 22
+    - 23
+    - 24
+    - 25
+    - 26
+    - 28
+    - 29
+    - 30
+    - 31
+    - 33
+    - 34
+    - 35
+    - 36
+    - 37
+    - 38
+    - 39
+    - 40
+    - 41
+    - 42

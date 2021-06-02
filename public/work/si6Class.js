@@ -1,4 +1,6 @@
 var Schritt = 0;
+//var PresentationCompleted=true;
+//var TOPresentation;
 class SimpleClass {
 	constructor() {
 		this.dParent = dTable;
@@ -33,6 +35,13 @@ class SimpleClass {
 		return [this.settings, this.state];
 	}
 	presentGameState(data) {
+
+		// while(PresentationCompleted == false){
+		// 	clearTimeout(TOPresentation)
+		// 	TOPresentation = setTimeout(()=>presentGameState(data),200);
+		// }
+
+		// PresentationCompleted = false;
 		let [settings, state] = this.copyData(data);
 		//console.log('settings', settings); //console.log('state', state);
 
@@ -70,7 +79,6 @@ class SimpleClass {
 		
 		createClientBoardNew(this.clientBoard, this.settings);
 
-
 		//console.log(this.clientBoard);
 		if (isEmpty(this.state.boardArr)) {
 			logClientSend('board', { nFields: this.clientBoard.fields.length });
@@ -88,7 +96,7 @@ class SimpleClass {
 
 		//console.log('state.boardArr', state.boardArr)
 		//if (isEmpty(state.boardArr)) sendBoardArr(clientBoard.fields.length);
-
+		//PresentationCompleted= true;
 	}
 	activateDD() {
 		let fields = this.settings.IsTraditionalBoard ? this.clientBoard.fields.filter(x => x.row > 0 && x.col > 0) : this.clientBoard.fields;

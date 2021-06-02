@@ -50,11 +50,66 @@ class GP2 {
 		this.players[id] = pl;
 		return pl;
 	}
+	addPerle(key, client) {
+		console.assert(key == key.toLowerCase(), 'FILENAME CASING!!!!');
+		let emitPool = false, savePerlen = false;
+		let perle;
+		if (!(key in this.perlenDict)) { emitPool = true; savePerlen = true; perle = addToPerlenDict(key); }
+		else perle = PerlenDict[key];
+
+		console.assert(base.isdef(perle), 'KEINE PERLE!!!!!!!!!!!!!! ' + key);
+
+		let p = base.firstCondDict(this.state.pool, x => x.key == key);
+		if (!p) {
+			base.addToPool(this.state.pool, this.state.poolArr, this.perlenDict[key], this.maxPoolIndex);
+			this.maxPoolIndex += 1;
+			emitPool = true;
+		}
+		if (savePerlen) { savePerlenDictToFile(); }
+		return emitPool;
+	}
 	getPlayerNames() { return Object.values(this.players).map(x => x.username); }
 	handleBoard(client, x) {
 		if ('boardFilename' in x) { this.settings.boardFilename = x.boardFilename; }
 		if ('nFields' in x) { this.state.boardArr = new Array(x.nFields); }
 		this.safeEmitState(['settings']);
+	}
+	handlePerlenImages(client, x) {
+		let pack = x.pack;
+		let emitPool = false;
+		for (const key in pack) {
+			let p = pack[key];
+			if (p.type == 'perlenName') {
+				//console.log('got',key)
+				let p = base.firstCondDict(this.state.pool, x => x.key == key);
+				if (!p) {
+					//console.log('NEU!')
+					base.addToPool(this.state.pool, this.state.poolArr, this.perlenDict[key], this.maxPoolIndex);
+					this.maxPoolIndex += 1;
+					emitPool = true;
+				}
+			} else if (p.type == 'imageData') {
+				try {
+					let fullPath;
+					let isTesting = key == 'aaa';
+					let filename = base.stringBefore(p.filename, '.').toLowerCase();
+					if (isTesting) { fullPath = path.join(__dirname, filename + '.png'); console.log('...fake saving file', fullPath); return; }
+					fullPath = path.join(__dirname, '../public/assets/games/perlen/perlen/' + filename + '.png')
+					let imgData = decodeBase64Image(p.data);
+					fs.writeFile(fullPath, imgData.data,
+						function () {
+							//console.log('...images saved:', fullPath);
+							emitPool = emitPool || this.addPerle(key, client);		// add perle!
+						});
+				}
+				catch (error) {
+					console.log('ERROR:', error);
+				}
+
+			}
+		}
+		let sz = Object.keys(this.state.pool).length; console.log('==>pool', sz);
+		this.safeEmitState(['pool', 'perlenDict'])
 	}
 	handleAddToPool(client, x) {
 		//console.log('SHORTCUT!',x.name)
@@ -99,9 +154,9 @@ class GP2 {
 		this.maxPoolIndex = base.initServerPool(this.settings, this.state, this.perlenDict);
 		logSend('gameState');
 		if (this.settings.poolSelection != 'random') {
-			this.safeEmitState(['perlenDict', 'settings', 'pool'], { instruction: 'pick your set of pearls!' }, client);
+			this.safeEmitState(['perlenDict', 'settings', 'pool'], { instruction: 'pick your set of pearls!' });
 		} else {
-			this.safeEmitState(['perlenDict', 'settings', 'pool'], null, client);
+			this.safeEmitState(['perlenDict', 'settings', 'pool']);
 		}
 	}
 	handleMovePerle(client, x) {
@@ -177,7 +232,38 @@ class GP2 {
 
 }
 
+
+
 //#region helpers
+function addToPerlenDict(filename) {
+	let perle = {
+		Name: filename,
+		path: filename,
+		Update: base.formatDate(),
+		Created: base.formatDate(),
+		"Fe Tags": '',
+		"Wala Tags": '',
+		"Ma Tags": ''
+	};
+	PerlenDict[filename] = perle;
+	return perle;
+}
+function decodeBase64Image(dataString) {
+	var matches = dataString.match(/^data:([A-Za-z-+\/]+);base64,(.+)$/);
+	var response = {};
+
+	if (matches.length !== 3) {
+		return new Error('Invalid input string');
+	}
+
+	response.type = matches[1];
+	response.data = Buffer.from(matches[2], 'base64');
+
+	return response;
+}
+function savePerlenDictToFile() {
+	utils.toYamlFile(PerlenDict, path.join(__dirname, '../public/perlenDict.yaml'));
+}
 function log() { if (Verbose) console.log('perlen: ', ...arguments); }
 function logReceive(type,) { MessageCounter++; log('#' + MessageCounter, 'receive', ...arguments); }
 function logSend(type) { MessageCounter++; log('#' + MessageCounter, 'send', ...arguments); }
