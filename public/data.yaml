@@ -1121,4 +1121,20 @@ standardSettings:
     hFieldArea: 700
     boardMarginLeft: -4
     boardMarginTop: 0
+  rund:
+    boardLayout: hex1
+    boardFilename: brett19_02c
+    boardRotation: 0
+    fieldShape: circle
+    fieldColor: transparent
+    wField: 102
+    hField: 117
+    wGap: 20
+    hGap: 32
+    rows: 7
+    cols: 4
+    wFieldArea: 1000
+    hFieldArea: 800
+    boardMarginLeft: 0
+    boardMarginTop: -2
 

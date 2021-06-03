@@ -2,20 +2,20 @@ settings:
   poolSelection: random
   numPool: 20
   boardLayout: hex1
-  boardFilename: brett03
-  boardRotation: 20
+  boardFilename: brett19_02c
+  boardRotation: 0
   fieldShape: circle
   fieldColor: transparent
-  wField: 90
-  hField: 104
-  wGap: 25
+  wField: 102
+  hField: 117
+  wGap: 20
   hGap: 32
-  rows: 9
-  cols: 5
+  rows: 7
+  cols: 4
   wFieldArea: 1000
-  hFieldArea: 700
-  boardMarginLeft: -4
-  boardMarginTop: 0
+  hFieldArea: 800
+  boardMarginLeft: 0
+  boardMarginTop: -2
   bgPool: transparent
   fgPool: "#ffffffff"
   bgBoard: silver
@@ -23,10 +23,16 @@ settings:
   szPerle: 75
   fzLabel: 16
   labelPos: hover
-  nFields: 61
+  nFields: 37
 state:
   boardArr:
     - null
+    - 3
+    - null
+    - null
+    - null
+    - null
+    - 10
     - null
     - null
     - null
@@ -38,44 +44,14 @@ state:
     - null
     - null
     - null
+    - 9
+    - null
+    - null
+    - 5
     - null
     - null
     - null
-    - null
-    - null
-    - 13
-    - null
-    - null
-    - null
-    - null
-    - null
-    - null
-    - null
-    - null
-    - null
-    - null
-    - null
-    - null
-    - 16
-    - null
-    - null
-    - null
-    - null
-    - null
-    - null
-    - null
-    - null
-    - null
-    - null
-    - null
-    - 19
-    - null
-    - null
-    - null
-    - null
-    - null
-    - null
-    - 12
+    - 8
     - null
     - null
     - null
@@ -89,79 +65,78 @@ state:
     - null
   pool:
     "0":
-      key: orange
+      key: kriegszerstörung
       index: 0
     "1":
-      key: kalter krieg
+      key: neuer hut
       index: 1
     "2":
-      key: klassisches chinesisch
+      key: islam
       index: 2
     "3":
-      key: impostor syndrom
+      key: gelb
       index: 3
     "4":
-      key: begeisterung
+      key: ausbildung
       index: 4
     "5":
-      key: struktur
+      key: grün
       index: 5
     "6":
-      key: cafehauskultur_alt
+      key: seher
       index: 6
     "7":
-      key: kampfbegriff
+      key: langsam
       index: 7
     "8":
-      key: kreativität
+      key: wandel
       index: 8
     "9":
-      key: zeitzyklen
+      key: kollektiventscheidung
       index: 9
     "10":
-      key: das mehrstöckige haus
+      key: zeit
       index: 10
     "11":
-      key: chillax2
+      key: mozart
       index: 11
     "12":
-      key: endzeit
+      key: komplex
       index: 12
     "13":
-      key: carelessness
+      key: alles steigt aus der quelle
       index: 13
     "14":
-      key: the great reset
+      key: bach
       index: 14
     "15":
-      key: cia
+      key: faschismus
       index: 15
     "16":
-      key: das große rote megaphon
+      key: struktur
       index: 16
     "17":
-      key: natur
+      key: wut
       index: 17
     "18":
-      key: taoismus
+      key: traum
       index: 18
     "19":
-      key: bildung
+      key: joy
       index: 19
   poolArr:
     - 0
     - 1
     - 2
-    - 3
     - 4
-    - 5
     - 6
     - 7
-    - 8
-    - 9
-    - 10
     - 11
+    - 12
+    - 13
     - 14
     - 15
+    - 16
     - 17
     - 18
+    - 19

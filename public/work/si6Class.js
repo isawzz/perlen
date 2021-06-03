@@ -48,8 +48,8 @@ class SimpleClass {
 
 		console.assert(this.settings == settings,'SETTINGS MISMATCH!!!!!!')
 		let s = this.settings;
-		console.log('settings', s.boardFilename,s.boardLayout,s.nFields); 
-		console.log('state', state);
+		//console.log('settings', s.boardFilename,s.boardLayout,s.nFields); 
+		//console.log('state', state);
 
 		if (isEmpty(s.boardFilename)) { createBoardEditor(); setTitle('pick a board'); return; }
 		if (nundef(s.boardLayout)) { openSettings(); setTitle('specify board layout'); return; }

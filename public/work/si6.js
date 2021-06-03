@@ -281,7 +281,7 @@ function createPerle(perle, dParent, sz = 64, wf = 1.3, hf = 0.4, useNewImage = 
 		{ w: sz, h: sz }, { wmax: sz * wf, hmax: sz * hf, fz: sz / 6 },
 		'b', true, null, useNewImage);
 	mAppend(dParent, d);
-	console.log('perle', perle);
+	//console.log('perle', perle);
 
 	if (perle.field != null) { //board perle!
 		perle.live.dLabel.remove();
@@ -290,8 +290,8 @@ function createPerle(perle, dParent, sz = 64, wf = 1.3, hf = 0.4, useNewImage = 
 		let d = iDiv(perle);
 		let rect = getRect(img);
 
-		console.log('img', img, rect)
-		console.log('d', d, getRect(d))
+		//console.log('img', img, rect)
+		//console.log('d', d, getRect(d))
 
 		let sz = G.settings.wField - G.settings.wGap;
 		let [wf, hf] = [sz, sz];
