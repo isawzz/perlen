@@ -1,21 +1,21 @@
 settings:
   poolSelection: random
-  numPool: 10
+  numPool: 2
   boardLayout: hex1
   boardFilename: brett03
-  boardRotation: 21
+  boardRotation: 20
   fieldShape: circle
-  fieldColor: transparent
-  wField: 96
-  hField: 102
-  wGap: 10
-  hGap: 10
-  rows: 7
-  cols: 4
+  fieldColor: "#00000015"
+  wField: 90
+  hField: 104
+  wGap: 25
+  hGap: 32
+  rows: 9
+  cols: 5
   maxWidth: 1000
   maxHeight: 700
-  boardMarginLeft: 0
-  boardMarginTop: 10
+  boardMarginLeft: -4
+  boardMarginTop: 0
   bgPool: transparent
   fgPool: "#ffffffff"
   bgBoard: silver
@@ -23,159 +23,7 @@ settings:
   szPerle: 75
   fzLabel: 16
   labelPos: hover
-  o:
-    poolSelection: random
-    numPool: 9
-    boardLayout: hex1
-    boardFilename: brett19_09
-    boardRotation: 0
-    fieldShape: circle
-    fieldColor: "#ffffff20"
-    wField: 101
-    hField: 116
-    wGap: 20
-    hGap: 30
-    rows: 5
-    cols: 3
-    maxWidth: 1000
-    maxHeight: 700
-    boardMarginLeft: 0
-    boardMarginTop: 0
-    bgPool: transparent
-    fgPool: "#ffffffff"
-    bgBoard: silver
-    fgBoard: black
-    szPerle: 75
-    fzLabel: 16
-    labelPos: hover
-    o:
-      poolSelection: random
-      numPool: 5
-      boardLayout: hex1
-      boardFilename: brett19_09
-      boardRotation: 0
-      fieldShape: circle
-      fieldColor: "#ffffff20"
-      wField: 101
-      hField: 116
-      wGap: 20
-      hGap: 30
-      rows: 5
-      cols: 3
-      maxWidth: 1000
-      maxHeight: 700
-      boardMarginLeft: 0
-      boardMarginTop: 0
-      bgPool: transparent
-      fgPool: "#ffffffff"
-      bgBoard: silver
-      fgBoard: black
-      szPerle: 75
-      fzLabel: 16
-      labelPos: hover
-    u: {}
-    dParent:
-      id: felix
-      avGames:
-        - gPerlen
-        - gKrieg
-        - gSteps
-        - gSentence
-        - gTouchColors
-        - gSayPic
-        - gReversi
-        - gMissingLetter
-        - gNamit
-        - gTouchPic
-        - gWritePic
-        - gChess
-        - gPremem
-        - gMem
-        - gSwap
-        - gTTT
-        - gElim
-        - gAnagram
-        - gCats
-        - gAbacus
-        - gRiddle
-        - gC4
-      lastGame: gPerlen
-      settings:
-        userColor: BLUE
-      username: felix
-      name: felix
-      clientId: BB46hMsXPJf7Fa_aAAAD
-    haveChanged: []
-    list:
-      - boardLayout
-      - boardFilename
-      - boardRotation
-      - boardMarginTop
-      - boardMarginLeft
-      - fieldColor
-      - wField
-      - hField
-      - wGap
-      - hGap
-      - rows
-      - cols
-      - maxWidth
-      - maxHeight
-      - poolSelection
-      - numPool
-  u: {}
-  dParent:
-    id: felix
-    avGames:
-      - gPerlen
-      - gKrieg
-      - gSteps
-      - gSentence
-      - gTouchColors
-      - gSayPic
-      - gReversi
-      - gMissingLetter
-      - gNamit
-      - gTouchPic
-      - gWritePic
-      - gChess
-      - gPremem
-      - gMem
-      - gSwap
-      - gTTT
-      - gElim
-      - gAnagram
-      - gCats
-      - gAbacus
-      - gRiddle
-      - gC4
-    lastGame: gPerlen
-    settings:
-      userColor: BLUE
-    username: felix
-    name: felix
-    clientId: BB46hMsXPJf7Fa_aAAAD
-  haveChanged:
-    - - numPool
-  list:
-    - boardLayout
-    - boardFilename
-    - boardRotation
-    - boardMarginTop
-    - boardMarginLeft
-    - fieldColor
-    - wField
-    - hField
-    - wGap
-    - hGap
-    - rows
-    - cols
-    - maxWidth
-    - maxHeight
-    - poolSelection
-    - numPool
-  hasChanged: true
-  nFields: null
+  nFields: 61
 state:
   boardArr:
     - null
@@ -213,45 +61,38 @@ state:
     - null
     - null
     - null
-    - 4
-    - 5
+    - null
+    - null
+    - null
+    - null
+    - 1
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
   pool:
     "0":
-      key: neutraler begriff
+      key: das mehrstöckige haus
       index: 0
     "1":
-      key: to be placed
+      key: immer bessere werkzeuge
       index: 1
-    "2":
-      key: agent
-      index: 2
-    "3":
-      key: wut
-      index: 3
-    "4":
-      key: why do you need to drag him in
-      index: 4
-    "5":
-      key: flavors of joy
-      index: 5
-    "6":
-      key: emergence
-      index: 6
-    "7":
-      key: chillax
-      index: 7
-    "8":
-      key: erziehung
-      index: 8
-    "9":
-      key: wissenswirtschaft
-      index: 9
   poolArr:
     - 0
-    - 1
-    - 2
-    - 3
-    - 6
-    - 7
-    - 8
-    - 9

@@ -553,7 +553,7 @@ function circleCenters(rows, cols, wCell, hCell) {
 	let cx = w / 2;
 	let cy = h / 2;
 
-	console.log('cx,cy', cx, cy)
+	//console.log('cx,cy', cx, cy)
 
 	let centers = [{ x: cx, y: cy }];
 
@@ -561,7 +561,7 @@ function circleCenters(rows, cols, wCell, hCell) {
 	let rx = cx + wCell / 2; let dradx = rx / wCell;
 	let ry = cy + hCell / 2; let drady = ry / hCell;
 	let nSchichten = Math.floor(Math.min(dradx, drady));
-	console.log('Schichten', nSchichten)
+	//console.log('Schichten', nSchichten)
 
 	for (let i = 1; i < nSchichten; i++) {
 		let [newCenters, wsch, hsch] = oneCircleCenters(i * 2 + 1, i * 2 + 1, wCell, hCell);

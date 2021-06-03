@@ -4,7 +4,7 @@ const fs = require('fs');
 const path = require('path');
 const utils = require('./utils.js');
 var MessageCounter = 0;
-var Verbose = true;
+var Verbose = false;
 
 //#endregion
 const NO_LAST_STATE = false;
@@ -26,7 +26,7 @@ class GP2 {
 	}
 	initState(state, settings) {
 
-		console.log(state.pool)
+		//console.log(state.pool)
 
 		base.copyKeys(state, this.state);
 		base.copyKeys(settings, this.settings);
@@ -34,7 +34,7 @@ class GP2 {
 
 		// console.log('settings', this.settings);
 		if (base.isdef(state.pool)) {
-			console.log('state', state.pool);
+			//console.log('state', state.pool);
 			this.maxPoolIndex = Object.keys(state.pool).length;
 		} else {
 			this.maxPoolIndex = base.initServerPool(this.settings, this.state, this.perlenDict);
@@ -184,9 +184,9 @@ class GP2 {
 				this.state.boardArr = this.state.boardArr.slice(0,nFields);
 			}
 		}
-		console.log(x.nFields);
-		console.log(this.state.boardArr);
-		console.log(this.state.poolArr);
+		console.log('nFields',x.nFields);
+		console.log('board',this.state.boardArr.length);
+		console.log('pool',this.state.poolArr.length);
 
 		this.safeEmitState(['settings']);
 	}

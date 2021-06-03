@@ -1,7 +1,7 @@
 //#region prelim
 const messageTypes = { LEFT: 'left', RIGHT: 'right', LOGIN: 'login' };
 const messages = []; // { author, date, content, type }
-const VerboseSocket = true;
+const VerboseSocket = false;
 
 class FakeSocketClass{
 	constructor(){

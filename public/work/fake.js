@@ -3,7 +3,7 @@ function calcNFields(s) {
 	let boardSize = { w: s.maxWidth, h: s.maxHeight };
 	let [w,h]=[boardSize.w,boardSize.h];
 
-	if (layout == 'circle' || layout == 'hex') {
+	if (layout == 'circle'){// || layout == 'hex') {
 
 		let hline = layout == 'circle' ? hCell * 1.2 : layout == 'hex' ? hCell * .78 : hCell;
 		rows = Math.floor(h / hline);
@@ -15,18 +15,19 @@ function calcNFields(s) {
 	if (layout == 'hex1') {
 		let colarr = _calc_hex_col_array(rows, cols);
 		n = arrSum(colarr);
-		console.log('nFields for hex1', n);
+		//console.log('nFields for hex1', n);
 	} else if (layout == 'quad') {
 		n= rows * cols;
 	} else if (layout == 'hex') {
-		//da brauch ich board size!		
+		//da brauch ich board size!	
+		console.log('rows',rows,'cols',cols)	
 		let [cs,wn,hn] = hexCenters(rows, cols, wCell, hCell);
-		console.log('hexCenters',cs)
+		//console.log('hexCenters',cs)
 		n= cs.length;
 	} else if (layout == 'circle') {
 		//da brauch ich board size!		
 		let [cs,wn,hn] = circleCenters(rows, cols, wCell, hCell);
-		console.log('circleCenters',cs)
+		//console.log('circleCenters',cs)
 		n= cs.length;
 	}
 
@@ -61,7 +62,7 @@ function createClientBoardNew(o, s) {//filename, layout, wCell = 140, hCell = 14
 	if (isdef(s.rows) && layout != 'circle') rows = s.rows; else rows = Math.floor(h / hline);
 	if (isdef(s.cols) && layout != 'circle') cols = s.cols; else cols = Math.floor(w / wCell)
 
-	if (isHexLayout && rows * hline + hCell / 4 > h) rows -= 1;
+	//if (isHexLayout && rows * hline + hCell / 4 > h) rows -= 1;
 
 	// let boardShouldHaveCenter = true;
 	// if (rows % 2 == 0 && boardShouldHaveCenter) rows -= 1;

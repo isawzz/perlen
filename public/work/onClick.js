@@ -17,7 +17,7 @@ function saveSettings(){
 	//depending which settings have changed!!!
 	
 	console.log('changed',Settings.haveChanged);
-	Socket.emit('settings',{settings:Settings.o,nFields:calcNFields(Settings)});
+	Socket.emit('settings',{settings:Settings.o,nFields:calcNFields(Settings.o)});
 }
 
 function onClickReset() {

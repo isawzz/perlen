@@ -1022,6 +1022,22 @@ users:
     settings:
       userColor: orange
 standardSettings:
+  adversarial:
+    boardLayout: hex1
+    boardFilename: shapeShifters
+    boardRotation: 0
+    fieldShape: circle
+    fieldColor: "#ff000020"
+    wField: 130
+    hField: 120
+    wGap: 25
+    hGap: 25
+    rows: 9
+    cols: 3
+    maxWidth: 1000
+    maxHeight: 1000
+    boardMarginLeft: 0
+    boardMarginTop: 0
   kleinSchwarz:
     boardLayout: hex1
     boardFilename: brett19_09
@@ -1063,19 +1079,19 @@ standardSettings:
   verdreht:
     boardLayout: hex1
     boardFilename: brett03
-    boardRotation: 21
+    boardRotation: 20
     fieldShape: circle
-    fieldColor: transparent
-    wField: 96
-    hField: 102
-    wGap: 10
-    hGap: 10
+    fieldColor: "#00000015"
+    wField: 90
+    hField: 104
+    wGap: 25
+    hGap: 32
     rows: 7
     cols: 4
     maxWidth: 1000
-    maxHeight: 700
-    boardMarginLeft: 0
-    boardMarginTop: 10
+    maxHeight: 800
+    boardMarginLeft: -4
+    boardMarginTop: 0
     bgPool: transparent
     fgPool: "#ffffffff"
     bgBoard: silver
@@ -1084,4 +1100,20 @@ standardSettings:
     fzLabel: 16
     labelPos: hover
     nFields: 37
+  rotBig:
+    boardLayout: hex1
+    boardFilename: brett03
+    boardRotation: 20
+    fieldShape: circle
+    fieldColor: "#00000015"
+    wField: 90
+    hField: 104
+    wGap: 25
+    hGap: 32
+    rows: 9
+    cols: 5
+    maxWidth: 1000
+    maxHeight: 700
+    boardMarginLeft: -4
+    boardMarginTop: 0
 
