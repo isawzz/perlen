@@ -332,8 +332,8 @@ class PerlenSettingsClass extends SettingsClass {
 		this.setzeEineZahl(nGroupBoardSettings, 'vertical gap', 20, ['hGap']);
 		this.setzeEineZahl(nGroupBoardSettings, 'rows', 7, ['rows']);
 		this.setzeEineZahl(nGroupBoardSettings, 'columns', 6, ['cols']);
-		this.setzeEineZahl(nGroupBoardSettings, 'max width', 800, ['maxWidth']);
-		this.setzeEineZahl(nGroupBoardSettings, 'max height', 800, ['maxHeight']);
+		this.setzeEineZahl(nGroupBoardSettings, 'max width', 800, ['wFieldArea']);
+		this.setzeEineZahl(nGroupBoardSettings, 'max height', 800, ['hFieldArea']);
 
 		let nGroupPerlenSettings = this.mInputGroup(dParent);
 		this.setzeEinOptions(nGroupPerlenSettings, 'pool selection', ['random', 'mixed', 'player'], ['random', 'mixed', 'never'], 'random', ['poolSelection']);

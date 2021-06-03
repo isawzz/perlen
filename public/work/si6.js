@@ -203,23 +203,7 @@ function doBoardRelayout(board, c, func, isReduction) {
 	sendRelayout(result.rows, result.cols, result.boardArr, poolArr);//this.board.rows, this.board.cols, this.boardArr, this.poolArr);
 
 }
-function createPerle(perle, dParent, sz = 64, wf = 1.3, hf = 0.4, useNewImage = false) {
-	let d = makePerleDiv(perle,
-		{ wmin: sz + 4, h: sz * (1 + hf) + 4 },
-		{ w: sz, h: sz }, { wmax: sz * wf, hmax: sz * hf, fz: sz / 6 },
-		'b', true, null, useNewImage);
-	mAppend(dParent, d);
-	console.log('perle', perle);
-
-	if (perle.field != null) {
-		perle.live.dLabel.remove();
-		let d=iDiv(perle);
-		console.log(d)
-		//mStyleX(d,{w:sz,h:sz})
-	}
-
-	return d;
-}
+function isFarbPerle(perle) { return isGermanColorName(perle.key); }
 function createPerleOrig(perle, dParent, sz = 64, wf = 1.3, hf = 0.4, useNewImage = false) {
 	let d = makePerleDiv(perle,
 		{ wmin: sz + 4, h: sz * (1 + hf) + 4 },
@@ -278,25 +262,49 @@ function showPerlen(perlenByIndex, boardArr, poolArr, board, dParent) {
 		field.item = perle;
 		let ui = createPerle(perle, iDiv(field), 64, 1.3, .4);
 		//perle.key='gelb';
-		if (isGermanColorName(perle.key)) {
+		if (isFarbPerle(perle)) {
 			let bg = GermanToEnglish[perle.key];
 			if (nundef(bg)) bg = perle.key;
-			//bg=colorTrans(bg,.5);
 			let d = perle.live.dImg;
-			perle.live.dLabel.remove();
-			//h-offset v-offset blur spread color
-			d.style.boxShadow = `0px 0px 200px 100px ${bg}`;// '100px 100px red';//`2px 2px 50px ${bg}`;
+			// perle.live.dLabel.remove();
+			d.style.boxShadow = `0px 0px 200px 200px ${bg}`;//h-offset v-offset blur spread color
 			ui.style.zIndex = 10;
-			//d.style.textShadow = '10px 24px 80px 100px blue';// '100px 100px red';//`2px 2px 50px ${bg}`;
-			//mStyleX(,{'text-shadow': `2px 2px 50px ${bg}`});
-			//console.log('JAAAAAAAAAAAAAAAAAAAA',d);
-			//let c=getColorDictColor(perle.key);
 		} else {
-			mStyleX(ui, { bg: 'dimgray', rounding: '50%' });
 			ui.style.zIndex = 11;
 		}
 
 	}
+}
+function createPerle(perle, dParent, sz = 64, wf = 1.3, hf = 0.4, useNewImage = false) {
+	let d = makePerleDiv(perle,
+		{ wmin: sz + 4, h: sz * (1 + hf) + 4 },
+		{ w: sz, h: sz }, { wmax: sz * wf, hmax: sz * hf, fz: sz / 6 },
+		'b', true, null, useNewImage);
+	mAppend(dParent, d);
+	console.log('perle', perle);
+
+	if (perle.field != null) { //board perle!
+		perle.live.dLabel.remove();
+		let img = perle.live.dImg;
+
+		let d = iDiv(perle);
+		let rect = getRect(img);
+
+		console.log('img', img, rect)
+		console.log('d', d, getRect(d))
+
+		let sz = G.settings.wField - G.settings.wGap;
+		let [wf, hf] = [sz, sz];
+		if (isFarbPerle(perle)) mStyleX(img, { w: 1, h: 1 }); else mStyleX(img, { w: wf, h: hf });
+		mStyleX(d, { bg: 'transparent' });
+	} else {
+		//styling for pool perle
+		let d = iDiv(perle);
+		mStyleX(d, { opacity: .6 });
+
+	}
+
+	return d;
 }
 function showPerlenOrig(perlenByIndex, boardArr, poolArr, board, dParent) {
 

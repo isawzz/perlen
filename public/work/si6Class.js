@@ -1,6 +1,4 @@
 var Schritt = 0;
-//var PresentationCompleted=true;
-//var TOPresentation;
 class SimpleClass {
 	constructor() {
 		this.dParent = dTable;
@@ -36,6 +34,9 @@ class SimpleClass {
 	}
 	presentGameState(data) {
 		//console.log('data',data); return;
+
+		//detect if got new boardFilename
+
 		let [settings, state] = this.copyData(data);
 
 		clearElement(this.dParent); Schritt += 1;
@@ -49,8 +50,6 @@ class SimpleClass {
 		let s = this.settings;
 		console.log('settings', s.boardFilename,s.boardLayout,s.nFields); 
 		console.log('state', state);
-
-
 
 		if (isEmpty(s.boardFilename)) { createBoardEditor(); setTitle('pick a board'); return; }
 		if (nundef(s.boardLayout)) { openSettings(); setTitle('specify board layout'); return; }

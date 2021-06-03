@@ -1,6 +1,6 @@
 function calcNFields(s) {
 	let [layout, wCell, hCell, rows, cols] = [s.boardLayout, s.wField, s.hField, s.rows, s.cols];
-	let boardSize = { w: s.maxWidth, h: s.maxHeight };
+	let boardSize = { w: s.wFieldArea, h: s.hFieldArea };
 	let [w,h]=[boardSize.w,boardSize.h];
 
 	if (layout == 'circle'){// || layout == 'hex') {
@@ -47,7 +47,7 @@ function createClientBoardNew(o, s) {//filename, layout, wCell = 140, hCell = 14
 	// dArea: area for fields: positioned in the center of dInner
 	// let [wArea, hArea] = [Math.min(o.wOuter, 800), Math.min(o.hOuter, 800)];
 	// let dArea = o.dArea = mDiv(dInner, { w: wArea, h: hArea }, 'dFieldArea'); //, bg:'blue'
-	let [wArea, hArea] = [Math.min(o.wOuter, s.maxWidth), Math.min(o.hOuter, s.maxHeight)];
+	let [wArea, hArea] = [Math.min(o.wOuter, s.wFieldArea), Math.min(o.hOuter, s.hFieldArea)];
 	let dArea = o.dArea = mDiv(dInner, { matop: s.boardMarginTop, maleft: s.boardMarginLeft, w: wArea, h: hArea }, 'dFieldArea'); //, bg:'blue'
 	mCenterCenterFlex(dArea);
 

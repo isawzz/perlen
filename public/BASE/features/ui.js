@@ -115,7 +115,7 @@ function setNewBackgroundColor(bg) {
 	BaseColor = bg; HeaderColor = colorDarker(BaseColor);
 	setBackgroundColor(bg);
 	mStyleX(dHeader, { bg: HeaderColor });
-	mStyleX(dSubtitle, { fg: colorLighter(bg) });
+	//mStyleX(dSubtitle, { fg: colorLighter(bg) });
 	mStyleX(mBy('sidebar'), { bg: colorLighter(BaseColor,.125) });
 	localStorage.setItem('BaseColor', BaseColor);
 }

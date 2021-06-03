@@ -45,8 +45,8 @@ games:
     hGap: 30
     rows: 7
     cols: 6
-    maxWidth: 800
-    maxHeight: 800
+    wFieldArea: 800
+    hFieldArea: 800
     boardMarginLeft: 0
     boardMarginTop: 10
     #perlen
@@ -1034,8 +1034,8 @@ standardSettings:
     hGap: 25
     rows: 9
     cols: 3
-    maxWidth: 1000
-    maxHeight: 1000
+    wFieldArea: 1000
+    hFieldArea: 1000
     boardMarginLeft: 0
     boardMarginTop: 0
   kleinSchwarz:
@@ -1050,13 +1050,14 @@ standardSettings:
     hGap: 30
     rows: 5
     cols: 3
-    maxWidth: 1000
-    maxHeight: 700
+    wFieldArea: 1000
+    hFieldArea: 700
     boardMarginLeft: 0
     boardMarginTop: 0
   hex51:
     boardLayout: hex1
     boardFilename: brett10
+    boardRotation: 0
     fieldShape: circle
     fieldColor: transparent
     wField: 101
@@ -1065,6 +1066,10 @@ standardSettings:
     hGap: 30
     rows: 7
     cols: 6
+    wFieldArea: 1000
+    hFieldArea: 700
+    boardMarginLeft: 0
+    boardMarginTop: -4
   hex18:
     boardLayout: hex1
     boardFilename: brett18_56
@@ -1088,8 +1093,8 @@ standardSettings:
     hGap: 32
     rows: 7
     cols: 4
-    maxWidth: 1000
-    maxHeight: 800
+    wFieldArea: 1000
+    hFieldArea: 800
     boardMarginLeft: -4
     boardMarginTop: 0
     bgPool: transparent
@@ -1105,15 +1110,15 @@ standardSettings:
     boardFilename: brett03
     boardRotation: 20
     fieldShape: circle
-    fieldColor: "#00000015"
+    fieldColor: transparent
     wField: 90
     hField: 104
     wGap: 25
     hGap: 32
     rows: 9
     cols: 5
-    maxWidth: 1000
-    maxHeight: 700
+    wFieldArea: 1000
+    hFieldArea: 700
     boardMarginLeft: -4
     boardMarginTop: 0
 

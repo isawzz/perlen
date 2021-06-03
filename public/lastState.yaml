@@ -1,19 +1,19 @@
 settings:
   poolSelection: random
-  numPool: 2
+  numPool: 20
   boardLayout: hex1
   boardFilename: brett03
   boardRotation: 20
   fieldShape: circle
-  fieldColor: "#00000015"
+  fieldColor: transparent
   wField: 90
   hField: 104
   wGap: 25
   hGap: 32
   rows: 9
   cols: 5
-  maxWidth: 1000
-  maxHeight: 700
+  wFieldArea: 1000
+  hFieldArea: 700
   boardMarginLeft: -4
   boardMarginTop: 0
   bgPool: transparent
@@ -43,6 +43,7 @@ state:
     - null
     - null
     - null
+    - 13
     - null
     - null
     - null
@@ -55,6 +56,7 @@ state:
     - null
     - null
     - null
+    - 16
     - null
     - null
     - null
@@ -65,17 +67,15 @@ state:
     - null
     - null
     - null
-    - 1
+    - null
+    - 19
     - null
     - null
     - null
     - null
     - null
     - null
-    - null
-    - null
-    - null
-    - null
+    - 12
     - null
     - null
     - null
@@ -89,10 +89,79 @@ state:
     - null
   pool:
     "0":
-      key: das mehrstöckige haus
+      key: orange
       index: 0
     "1":
-      key: immer bessere werkzeuge
+      key: kalter krieg
       index: 1
+    "2":
+      key: klassisches chinesisch
+      index: 2
+    "3":
+      key: impostor syndrom
+      index: 3
+    "4":
+      key: begeisterung
+      index: 4
+    "5":
+      key: struktur
+      index: 5
+    "6":
+      key: cafehauskultur_alt
+      index: 6
+    "7":
+      key: kampfbegriff
+      index: 7
+    "8":
+      key: kreativität
+      index: 8
+    "9":
+      key: zeitzyklen
+      index: 9
+    "10":
+      key: das mehrstöckige haus
+      index: 10
+    "11":
+      key: chillax2
+      index: 11
+    "12":
+      key: endzeit
+      index: 12
+    "13":
+      key: carelessness
+      index: 13
+    "14":
+      key: the great reset
+      index: 14
+    "15":
+      key: cia
+      index: 15
+    "16":
+      key: das große rote megaphon
+      index: 16
+    "17":
+      key: natur
+      index: 17
+    "18":
+      key: taoismus
+      index: 18
+    "19":
+      key: bildung
+      index: 19
   poolArr:
     - 0
+    - 1
+    - 2
+    - 3
+    - 4
+    - 5
+    - 6
+    - 7
+    - 8
+    - 9
+    - 10
+    - 11
+    - 14
+    - 15
+    - 17
+    - 18
