@@ -23,6 +23,7 @@ class SimpleClass {
 		if (isdef(data.state.pool)) { //sent new pool!
 			//console.log('got POOL!')
 			this.perlenListeImSpiel = Object.values(this.state.pool);
+			this.poolEnriched = this.state.pool;
 			for (const idx in this.state.pool) {
 				let p = this.state.pool[idx];
 				let key = p.key;
@@ -89,7 +90,7 @@ class SimpleClass {
 		//return;
 
 		//console.log('___________', Schritt, this.state, this.state.poolArr);
-		showPerlen(this.perlenListeImSpiel, this.state.boardArr, this.state.poolArr, this.clientBoard, this.dParent);
+		showPerlen(this.poolEnriched, this.state.boardArr, this.state.poolArr, this.clientBoard, this.dParent);
 		this.activateDD();
 
 		//console.log('state.boardArr', state.boardArr)

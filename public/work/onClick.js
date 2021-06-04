@@ -8,21 +8,12 @@ function onClickSettings() {
 	let settingsView = Settings = new PerlenSettingsClass(G.settings, mBy('dSettingsWindow'), U);
 	settingsView.createSettingsUi();
 }
-function closeSettings(){
-//	saveSettings();
-	hide("dSettingsWindow");
-}
-
-function saveSettings(){
-	//depending which settings have changed!!!
-	
-	console.log('changed',Settings.haveChanged);
-	Socket.emit('settings',{settings:Settings.o,nFields:calcNFields(Settings.o)});
-}
-
+function closeSettings(){	hide("dSettingsWindow");}
 function onClickReset() {
 	sendReset(isdef(G) ? G.settings : DB.games.gPerlen2.settings);
 }
+
+//#region initToolbar alles unbrauchbar!
 function initToolbar(settings) {
 	let bSelect = mBy('dPreselectButton');
 	if (!settings.individualSelection) { closePerlenEditor(); turnButtonOff(bSelect); } else { turnButtonOn(bSelect); }
@@ -43,8 +34,10 @@ function onClickBoardSwitch(b) {
 	if (G.settings.IsTraditionalBoard) { turnButtonOff(bHex); } else { turnButtonOn(bHex); }
 	sendReset({ individualSelection: G.settings.individualSelection, IsTraditionalBoard: G.settings.IsTraditionalBoard });
 }
+//#endregion
 
-//************* old code **************** */
+//#region ************* old code **************** */
+
 function onClickFreezer2(ev) {
 	clearTable(); mRemoveClass(mBy('freezer2'), 'aniSlowlyAppear'); hide('freezer2'); auxOpen = false;
 	startUnit();
@@ -109,3 +102,4 @@ function interrupt() {
 	TOMan.clear();
 }
 function openAux() { interrupt(); show(dAux); show('dGo'); }
+//#endregion

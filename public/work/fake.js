@@ -31,7 +31,7 @@ function calcNFields(s) {
 		n= cs.length;
 	}
 
-	console.log(layout,rows,'x',cols,'=>',n)
+	//console.log(layout,rows,'x',cols,'=>',n)
 	return n;
 
 }

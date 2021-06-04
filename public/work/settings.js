@@ -235,18 +235,16 @@ class PerlenSettings extends SettingsClass {
 
 class PerlenSettingsClass extends SettingsClass {
 	setOtherSettings(elem) {
-		console.log('elem', elem);
+		//console.log('elem', elem);
 		let val = elem.value;
 		let key = elem.keyList[0];
-		console.log('jetzt muss andere settings von dieser group accordingly setzen!');
+		//console.log('jetzt muss andere settings von dieser group accordingly setzen!');
 		switch (key) {
 			case 'boardStandard':
 				let data = DB.standardSettings[val];
 				if (nundef(data)) { console.log('NO! key', key); return; }
-				for (const k in data) {
-					this.o[k] = data[k];
-				}
-				console.log('settings sollen so geaendert werden:', data);
+				for (const k in data) { this.o[k] = data[k]; }
+				//console.log('settings sollen so geaendert werden:', data);
 				this.createSettingsUi();
 
 				break;
@@ -296,7 +294,9 @@ class PerlenSettingsClass extends SettingsClass {
 		inp.onclick = () => { fakeInput.click(); };
 		fakeInput.onchange = () => { //this.setSettingsKeysFile(this.o,fakeInput,inp);
 			let val = fakeInput.files[0].name;
-			val = inp.value = stringBefore(val, '.');
+			let ext = stringAfter(val, '.');
+			if (ext == 'png') val = stringBefore(val, '.');
+			inp.value = val;
 			this.hasChanged = true;
 			this.haveChanged.push(['boardFilename']);
 			this.o[skeys[0]] = val;

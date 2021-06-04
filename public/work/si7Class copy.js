@@ -12,15 +12,15 @@ class SimpleClass7 {
 
 		//jetzt sind settings,state,perleDict,pool,needToLoadBoard complete
 		//zuerst: ueberpruefe was noch von server brauche und board layout params
-		//let needToLoadBoard = nundef(this.clientBoard) || this.clientBoard.boardFilename != settings.boardFilename;
-		if (isdef(data.settings)) {
+		let needToLoadBoard = nundef(this.clientBoard) || this.clientBoard.boardFilename != settings.boardFilename;
+		if (needToLoadBoard) {
 			clearElement(this.dParent);
 			//console.log('NEW BOARD!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!', this.settings.boardFilename);
 			this.clientBoard = { boardFilename: this.settings.boardFilename };
 
 			this.calcLayoutParameters(); //	console.log('clientBoard', this.clientBoard);
-			let correct = this.syncServerToClientBoard(); console.log('server data?', correct?'correct':'WRONG!!!'); //propag params to server if needed!
-			if (!correct) return;
+			// let correct = this.syncServerToClientBoard(); console.log('server?', correct); //propag params to server if needed!
+
 			//hier soll dOuter machen
 
 			let dOuter = this.clientBoard.dOuter = mDiv(this.dParent, { hmin: 768, wmin: 768, display: 'inline-block', position: 'relative' }, 'dBoardOuter');
@@ -50,7 +50,7 @@ class SimpleClass7 {
 	}
 	createFields() {
 		let [b, s] = [this.clientBoard, this.settings];
-		let dCells = b.dCells = mDiv(b.dOuter, { matop: s.boardMarginTop, maleft: s.boardMarginLeft, w: b.wNeeded, h: b.hNeeded, position: 'relative' }); //, bg: 'green' });
+		let dCells = b.dCells = mDiv(b.dOuter, { w: b.wNeeded, h: b.hNeeded, position: 'relative' }); //, bg: 'green' });
 
 		let [wCell, hCell, wGap, hGap] = [s.wField, s.hField, s.wGap, s.hGap];
 		//console.log(wCell, hCell);
@@ -157,8 +157,8 @@ class SimpleClass7 {
 		//determineRowsAndCols
 		//for circle, need to determine which area of board should be covered by fields
 		//this area is s.wFieldArea, s.hFieldArea
-		if (nundef(rows) || layout == 'circle') rows = Math.floor(s.hFieldArea / hline);
-		if (nundef(cols) || layout == 'circle') cols = Math.floor(s.wFieldArea / wCell)
+		if (nundef(rows) || layout == 'circle') rows = Math.floor(h / hline);
+		if (nundef(cols) || layout == 'circle') cols = Math.floor(w / wCell)
 
 		let [centers, wNeeded, hNeeded] = getCentersFromRowsCols(layout, rows, cols, wCell, hCell);
 
@@ -253,16 +253,11 @@ class SimpleClass7 {
 	syncServerToClientBoard() {
 		//wenn irgendwelche params anders sind als bei server, speziell boardArr.length != nFields ist => send settings!
 		//correct settings according to clientBoard!
-
 		let [b, s, st] = [this.clientBoard, this.settings, this.state];
 		let corr = {};
 		if (st.boardArr.length != b.nFields) { corr.nFields = s.nFields = b.nFields; }
 		if (s.rows != b.rows || s.cols != b.cols) { corr.rows = s.rows = b.rows; corr.cols = s.cols = b.cols; }
-		if (!isEmpty(Object.keys(corr))) { 
-			console.log('should send settings: ',b)
-			Socket.emit('board', { nFields: b.nFields, rows: b.rows, cols: b.cols, layout: b.layout, boardFilename:b.boardFilename });
-			return false; 
-		}
+		if (!isEmpty(Object.keys(corr))) { sendSettings(); return false; }
 		else { return true; }
 	}
 

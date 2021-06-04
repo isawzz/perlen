@@ -52,6 +52,14 @@ function handleUserMessage(data) {
 function sendReset(settings) { logClientSend('reset', Username); Socket.emit('reset', { settings: settings, username: Username }); }
 function sendUserMessage(data) { logClientSend('userMessage', data.username); Socket.emit('userMessage', { data: data }); }
 function sendFilename(msg) { logClientSend('filename', msg); Socket.emit('filename', { msg }); }
+function sendSettings(){
+	//depending which settings have changed!!!
+	
+	if (isdef(Settings)) console.log('changed',Settings.haveChanged);
+	//console.assert(G.settings == Settings.o,"wrong settings object!!!!!!!")
+	Socket.emit('settings',{settings:G.settings,nFields:calcNFields(G.settings)});
+}
+
 
 //helpers: keeping track of messages!
 function logClientSend(type, data) {

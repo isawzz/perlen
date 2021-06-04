@@ -1,21 +1,21 @@
 settings:
   poolSelection: random
-  numPool: 20
+  numPool: 10
   boardLayout: hex1
-  boardFilename: brett19_02c
+  boardFilename: brett10
   boardRotation: 0
   fieldShape: circle
   fieldColor: transparent
-  wField: 102
+  wField: 101
   hField: 117
-  wGap: 20
-  hGap: 32
+  wGap: 15
+  hGap: 30
   rows: 7
-  cols: 4
+  cols: 6
   wFieldArea: 1000
-  hFieldArea: 800
+  hFieldArea: 768
   boardMarginLeft: 0
-  boardMarginTop: -2
+  boardMarginTop: -4
   bgPool: transparent
   fgPool: "#ffffffff"
   bgBoard: silver
@@ -23,17 +23,12 @@ settings:
   szPerle: 75
   fzLabel: 16
   labelPos: hover
-  nFields: 37
+  nFields: 51
 state:
   boardArr:
     - null
-    - 3
     - null
-    - null
-    - null
-    - null
-    - 10
-    - null
+    - 4
     - null
     - null
     - null
@@ -44,14 +39,31 @@ state:
     - null
     - null
     - null
-    - 9
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - 6
+    - null
+    - null
     - null
     - null
     - 5
     - null
     - null
     - null
-    - 8
     - null
     - null
     - null
@@ -61,82 +73,45 @@ state:
     - null
     - null
     - null
+    - null
+    - 2
     - null
     - null
   pool:
     "0":
-      key: kriegszerstörung
+      key: umgekehrt
       index: 0
     "1":
-      key: neuer hut
+      key: ausbildung
       index: 1
     "2":
-      key: islam
+      key: joy
       index: 2
     "3":
-      key: gelb
+      key: religion
       index: 3
     "4":
-      key: ausbildung
+      key: nazi
       index: 4
     "5":
-      key: grün
+      key: mozart
       index: 5
     "6":
-      key: seher
+      key: der eiserne vorhang
       index: 6
     "7":
-      key: langsam
+      key: cafehauskultur
       index: 7
     "8":
-      key: wandel
+      key: the great reset
       index: 8
     "9":
-      key: kollektiventscheidung
+      key: nicht wissen
       index: 9
-    "10":
-      key: zeit
-      index: 10
-    "11":
-      key: mozart
-      index: 11
-    "12":
-      key: komplex
-      index: 12
-    "13":
-      key: alles steigt aus der quelle
-      index: 13
-    "14":
-      key: bach
-      index: 14
-    "15":
-      key: faschismus
-      index: 15
-    "16":
-      key: struktur
-      index: 16
-    "17":
-      key: wut
-      index: 17
-    "18":
-      key: traum
-      index: 18
-    "19":
-      key: joy
-      index: 19
   poolArr:
     - 0
     - 1
-    - 2
-    - 4
-    - 6
+    - 3
     - 7
-    - 11
-    - 12
-    - 13
-    - 14
-    - 15
-    - 16
-    - 17
-    - 18
-    - 19
+    - 8
+    - 9

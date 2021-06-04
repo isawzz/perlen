@@ -12,6 +12,7 @@ function simplestPerlenGame() {
 	mStyleX(document.body, { opacity: 1 });
 	initTable(null, 2); initSidebar(); initAux(); initScore();
 
+
 	//bis hier ist alles so fuer alle spiel!
 	//*** hier PerlenGame starts von Client aus!
 	if (PERLEN_EDITOR_OPEN_AT_START) createPerlenEditor();
@@ -26,7 +27,7 @@ function sendStartOrJoinPerlenGame() {
 	window.onkeydown = keyDownHandler;
 	window.onkeyup = keyUpHandler;
 	mBy('sidebar').ondblclick = togglePerlenEditor;
-	G = new SimpleClass();
+	G = VERSION == 7 ? new SimpleClass7() : new SimpleClass();
 	//console.log('G created');
 	if (!USESOCKETS) G.presentGameState();
 	// if (!USESOCKETS) G.presentGameState({

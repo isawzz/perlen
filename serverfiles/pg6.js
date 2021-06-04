@@ -25,13 +25,9 @@ class GP2 {
 		this.clients = {};
 	}
 	initState(state, settings) {
-
 		//console.log(state.pool)
-
 		base.copyKeys(state, this.state);
 		base.copyKeys(settings, this.settings);
-
-
 		// console.log('settings', this.settings);
 		if (base.isdef(state.pool)) {
 			//console.log('state', state.pool);
@@ -71,8 +67,12 @@ class GP2 {
 	getPlayerNames() { return Object.values(this.players).map(x => x.username); }
 	handleBoard(client, x) {
 		logReceive('board', x);
+		console.log('HANDLE BOARD',x)
 		if ('boardFilename' in x) { this.settings.boardFilename = x.boardFilename; }
 		if ('nFields' in x) { this.state.boardArr = new Array(x.nFields); }
+		if ('rows' in x) { this.settings.rows = x.rows; }
+		if ('cols' in x) { this.settings.cols = x.cols; }
+		if ('layout' in x) { this.settings.layout = x.layout; }
 		this.safeEmitState(['settings']);
 	}
 	handlePerlenImages(client, x) {
@@ -184,9 +184,9 @@ class GP2 {
 				this.state.boardArr = this.state.boardArr.slice(0,nFields);
 			}
 		}
-		console.log('nFields',x.nFields);
-		console.log('board',this.state.boardArr.length);
-		console.log('pool',this.state.poolArr.length);
+		//console.log('nFields',x.nFields);
+		//console.log('board',this.state.boardArr.length);
+		//console.log('pool',this.state.poolArr.length);
 
 		this.safeEmitState(['settings']);
 	}

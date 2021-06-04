@@ -1067,7 +1067,7 @@ standardSettings:
     rows: 7
     cols: 6
     wFieldArea: 1000
-    hFieldArea: 700
+    hFieldArea: 768
     boardMarginLeft: 0
     boardMarginTop: -4
   hex18:
@@ -1118,9 +1118,9 @@ standardSettings:
     rows: 9
     cols: 5
     wFieldArea: 1000
-    hFieldArea: 700
-    boardMarginLeft: -4
-    boardMarginTop: 0
+    hFieldArea: 768
+    boardMarginLeft: -22
+    boardMarginTop: -10
   rund:
     boardLayout: hex1
     boardFilename: brett19_02c

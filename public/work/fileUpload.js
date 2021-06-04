@@ -241,7 +241,7 @@ function uploadFiles() {
 
 	}
 	Socket.emit('perlenImages',{pack:pack});
-	console.log('uploading pack',pack);
+	//console.log('uploading pack',pack);
 	closePerlenEditor();
 	if (isdef(G)) G.setInitialPoolSelected();
 }
