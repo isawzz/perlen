@@ -12,6 +12,7 @@ const { PORT } = require('./public/BASE/globals.js');
 const utils = require('./serverfiles/utils.js');
 const userman = require('./serverfiles/userManager.js');
 const perlenGame = require('./serverfiles/pg6.js');
+const test = require('./serverfiles/serverTest.js');
 
 const DB = utils.fromYamlFile(path.join(__dirname, 'public/data.yaml'));
 const PerlenDict = utils.fromYamlFile(path.join(__dirname, 'public/perlenDict.yaml'));
@@ -39,11 +40,9 @@ const io = require('socket.io')(http, {
 //#region *** CODE STARTS HERE ********************************
 
 userman.initUserManager(io, DB);
-// console.log('lastState',lastState);
 const simple = new perlenGame.GP2(io, PerlenDict, DB, lastState);
-//#endregion
+const tester = test.initTest(io, DB);
 
-//#region io
 io.on('connection', client => {
 
 	//connection and login: userManager
@@ -54,26 +53,48 @@ io.on('connection', client => {
 
 	//the following messages are handled by 'simple' (module or class)
 
-	client.on('perlenImages',x=>simple.handlePerlenImages(client,x));
-	client.on('settings',x=>simple.handleSettings(client,x));
+	client.on('perlenImages', x => simple.handlePerlenImages(client, x));
+	client.on('generalImages', x => simple.handleGeneralImages(client, x));
 
-	client.on('board', x => simple.handleBoard(client, x));
+	client.on('settings', x => simple.handleSettings(client, x));
+	client.on('settingsWithBoardImage', x => simple.handleSettingsWithBoardImage(client, x));
+
+
 	client.on('movePerle', x => simple.handleMovePerle(client, x));
 	client.on('placePerle', x => simple.handlePlacePerle(client, x));
 	client.on('relayout', x => simple.handleRelayout(client, x));
 	client.on('removePerle', x => simple.handleRemovePerle(client, x));
-	client.on('reset', x => simple.handleReset(client, x))
+	client.on('reset', x => simple.handleReset(client, x));
 	client.on('startOrJoinPerlen', x => simple.handleStartOrJoin(client, x));
 
 	//deprecate:
-	client.on('image', x => simple.handleImage(client, x));
-	client.on('addToPool', x => simple.handleAddToPool(client, x));
-	client.on('initialPoolDone', x => simple.handleInitialPoolDone(client, x));
+	// client.on('image', x => simple.handleImage(client, x));
+	// client.on('addToPool', x => simple.handleAddToPool(client, x));
+	// client.on('initialPoolDone', x => simple.handleInitialPoolDone(client, x));
+	// client.on('board', x => simple.handleBoard(client, x));
+	// client.on('boardImage', x => simple.handleBoardImage(client, x));
 
 	client.on('mouse', x => { io.emit('mouse', x); });//should send x,y,username
 	client.on('show', x => { io.emit('show', x); });//should send x,y,username
 	client.on('hide', x => { io.emit('hide', x); });//should send x,y,username
 
+	client.on('testImageUpload', x => tester.handleImageUpload(client, x));
+	client.on('image1', image => {
+		// image is an array of bytes
+		const buffer = Buffer.from(image);
+		fs.writeFile('writeMe.txt', buffer, function (err, result) {
+			if (err) console.log('error', err);
+		});
+		//await fs.writeFile('/tmp/image', buffer).catch(console.error); // fs.promises
+	});
+	client.on('image2', async image => {
+		const buffer = Buffer.from(image, 'base64');
+		fs.writeFile('./image.png', buffer, function (err, result) {
+			if (err) console.log('error', err);
+		});
+		console.log('SUCCESS!!!')
+		//fs.writeFile('/tmp/image', buffer).catch(console.error); // fs.promises
+	});
 });
 
 //#endregion

@@ -1,6 +1,7 @@
 function closeBoardEditor() { closePerlenEditor(); }
 function openBoardEditor() { createBoardEditor(); }
 function openPerlenEditor() { createPerlenEditor(); }
+
 function openSettings() { onClickSettings(); }
 function onClickSettings() {
 	show("dSettingsWindow");
@@ -8,7 +9,96 @@ function onClickSettings() {
 	let settingsView = Settings = new PerlenSettingsClass(G.settings, mBy('dSettingsWindow'), U);
 	settingsView.createSettingsUi();
 }
-function closeSettings(){	hide("dSettingsWindow");}
+function onClickSetSettings() {
+	console.log('Settings', Settings, '\nG.settings', G.settings)
+	let s = G.settings;
+	let changed = Settings.haveChanged;
+	let propsChanged = changed.map(x => arrLast(x));
+
+	let hasChanged = Settings.hasChanged;
+	if (!Settings.hasChanged) {
+		console.log('NOTHING HAS BEEN CHANGED!!!!!');
+		return;
+	}
+	console.log('changed settings:', propsChanged);
+
+	if (propsChanged.includes('boardFilename')) {
+		console.log('boardFilenames', s.boardFilenames);
+		let fpure = getFilename(s.boardFilename, false);
+		console.log('fpure', fpure);
+		let found = firstCond(s.boardFilenames, x => x.includes(fpure));
+		console.log('found', found);
+
+		//let fileObject = s.boardFilename_file;
+		//delete s.boardFilename_file;
+		let imgFile = Settings.imgFile;
+
+		if (!found && isdef(imgFile.data)) {
+			uploadImgData(imgFile);
+			return;
+			// //need to upload this file!!!!!!!!!
+			// //after uploading, need to remove it from G.settings!!!!!!!
+			// let pack = { settings: s, nFields: s.nFields, data: imgFile.data, filename: s.boardFilename };
+			// sendSettingsWithBoardImage(pack);
+		}
+	}
+}
+function onClickSetSettings1() {
+	console.log('Settings', Settings, '\nG.settings', G.settings)
+	let s = G.settings;
+	let changed = Settings.haveChanged;
+	let propsChanged = changed.map(x => arrLast(x));
+
+	let hasChanged = Settings.hasChanged;
+	if (!Settings.hasChanged) {
+		console.log('NOTHING HAS BEEN CHANGED!!!!!');
+		return;
+	}
+	console.log('changed settings:', propsChanged);
+
+	if (propsChanged.includes('boardFilename')) {
+		console.log('boardFilenames', s.boardFilenames);
+		let fpure = getFilename(s.boardFilename, false);
+		console.log('fpure', fpure);
+		let found = firstCond(s.boardFilenames, x => x.includes(fpure));
+		console.log('found', found);
+
+		//let fileObject = s.boardFilename_file;
+		//delete s.boardFilename_file;
+		let imgFile = Settings.imgFile;
+
+		if (!found && isdef(imgFile.data)) {
+			//need to upload this file!!!!!!!!!
+			//after uploading, need to remove it from G.settings!!!!!!!
+			let pack = { settings: s, nFields: s.nFields, data: imgFile.data, filename: s.boardFilename };
+			sendSettingsWithBoardImage(pack);
+			// var img = document.createElement("img");
+			// mAppend(dTable,img);
+			// var reader = new FileReader();
+			// reader.onload = e=> {
+			// 	console.log('loaded!!!')
+			// 	img.src = e.target.result;
+			// 	imgFile.data = e.target.result; //img.toDataURL("image/png");
+			// 	let data = imgFile.data;
+			// 	let filename = imgFile.name;
+			// 	console.log('filename', filename);
+			// 	// let s1={};
+			// 	// copyKeys(s,s1,{boardFilename_file:true,boardFilenames:true});
+			// 	// delete s.boardFilename_file;
+
+			// }
+			// reader.readAsDataURL(imgFile);
+
+			return;
+		}
+	}//else{
+	sendSettings(s);
+	//}
+	//
+}
+function onClickCloseSettings() { closeSettings(); }
+function closeSettings() { hide("dSettingsWindow"); }
+
 function onClickReset() {
 	sendReset(isdef(G) ? G.settings : DB.games.gPerlen2.settings);
 }

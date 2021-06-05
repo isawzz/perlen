@@ -1,6 +1,7 @@
 module.exports = {
 	makeid,
 	fromYamlFile,
+	getFilenames,
 	toYamlFile,
 	convertPerlen,
 	listFiles,
@@ -38,6 +39,48 @@ function toYamlFile(data, path) {
 	//console.log('?')
 	fs.writeFileSync(path, yamlStr, 'utf8');
 }
+function getFilenames(dir,callback){
+	let filenames = [];
+	fs.readdir(dir, (err, files) => {
+		if (err) { return console.log('Unable to scan directory: ' + err); }
+		files.forEach(file => {
+			// Do whatever you want to do with the file
+			filenames.push(file);//console.log(file);
+		});
+		//console.log(filenames);
+		if (base.isdef(callback)) callback(filenames);
+	});
+}
+function listFiles(perlen) {
+	const directoryPath = path.join(__dirname, '../public/assets/games/perlen/perlen');
+	let names = [];
+	fs.readdir(directoryPath, (err, files) => {
+		if (err) { return console.log('Unable to scan directory: ' + err); }
+		files.forEach(file => {
+			// Do whatever you want to do with the file
+			names.push(file);//console.log(file);
+		});
+		console.log(names.length);
+		for(let i=0;i<names.length;i++){
+			console.log(names[i]);
+			let fname = base.stringBefore(names[i],'.');
+			console.log(fname);
+			let p=findPerle(fname,perlen);
+			if (p){
+				p.path = fname;
+			}else{
+				p={path:fname,Name:base.capitalize(fname),Update:base.formatDate(),Created:base.formatDate(),'Fe Tags':'','Wala Tags':'','Ma Tags':''};
+				perlen.push(p);
+			}
+		}
+		//save perlen in new file!
+		perlen.sort((a,b)=>a.path<b.path?-1:1);
+		toYamlFile(perlen,'./newPerlen.yaml');
+	});
+}
+
+
+//#region ?
 function toPngFile(data,path){
 	const fs = require('fs');
 	const fetch = require('node-fetch');
@@ -80,33 +123,6 @@ function addRandomTags(name) {
 	return t;
 }
 
-function listFiles(perlen) {
-	const directoryPath = path.join(__dirname, '../public/assets/games/perlen/perlen');
-	let names = [];
-	fs.readdir(directoryPath, (err, files) => {
-		if (err) { return console.log('Unable to scan directory: ' + err); }
-		files.forEach(file => {
-			// Do whatever you want to do with the file
-			names.push(file);//console.log(file);
-		});
-		console.log(names.length);
-		for(let i=0;i<names.length;i++){
-			console.log(names[i]);
-			let fname = base.stringBefore(names[i],'.');
-			console.log(fname);
-			let p=findPerle(fname,perlen);
-			if (p){
-				p.path = fname;
-			}else{
-				p={path:fname,Name:base.capitalize(fname),Update:base.formatDate(),Created:base.formatDate(),'Fe Tags':'','Wala Tags':'','Ma Tags':''};
-				perlen.push(p);
-			}
-		}
-		//save perlen in new file!
-		perlen.sort((a,b)=>a.path<b.path?-1:1);
-		toYamlFile(perlen,'./newPerlen.yaml');
-	});
-}
 function findPerle(fname,perlen){
 	let x=base.firstCond(perlen,x=>x.Name.toLowerCase().includes(fname.toLowerCase()));
 	if (base.isdef(x)) console.log('found perle for',fname);

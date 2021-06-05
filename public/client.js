@@ -1,4 +1,4 @@
-onload = start(); // start | startTesting
+onload = startClientTest(); // start | startTesting | startClientTest
 
 async function start() {
 
@@ -46,7 +46,6 @@ function handleClientIdSendLogin(data) {
 	ClientId = data.clientId;
 	sendLogin(Username);
 }
-function sendLogin(username) { logClientSend('login', username); Socket.emit('login', { data: username }); }
 
 //2. server sends DB => client sets DB
 async function fakeLogin(username) {

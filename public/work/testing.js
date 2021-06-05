@@ -14,6 +14,12 @@ async function startTesting() {
 	runTest();
 }
 function runTest() {
+
+	hexBoardTests();
+}
+
+//#region hex board test + function!
+function hexBoardTests(){
 	let w = window.innerWidth;
 	let sz = 100;
 	let cols = math.floor(w / 100);
@@ -26,9 +32,6 @@ function runTest() {
 	//add hovering over hex!
 
 }
-
-
-//#region hex board test + function!
 
 function hexBoard(dParent, rows = 13, cols = 5, wHex = 100) {
 	let hline = (wHex / .866) * .75;

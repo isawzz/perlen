@@ -1,7 +1,7 @@
 //#region prelim
 const messageTypes = { LEFT: 'left', RIGHT: 'right', LOGIN: 'login' };
 const messages = []; // { author, date, content, type }
-const VerboseSocket = false;
+const VerboseSocket = true;
 
 class FakeSocketClass{
 	constructor(){
@@ -37,27 +37,31 @@ function initSocket() {
 //#region done!
 function handleUserJoined(data) {
 	logClientReceive('userJoined', data.username)
-	// if (VerboseSocket) console.log('received userJoined data:',data);
 }
 function handleUserLeft(data) {
 	logClientReceive('userLeft', data.id)
-	// if (VerboseSocket) console.log('received userLeft data:',data);
 }
 function handleUserMessage(data) {
 	logClientReceive('userMessage', data.username)
-	// if (VerboseSocket) console.log('received user message:',data);
 }
 
 //sending
+function sendLogin(username) { logClientSend('login', username); Socket.emit('login', { data: username }); }
 function sendReset(settings) { logClientSend('reset', Username); Socket.emit('reset', { settings: settings, username: Username }); }
 function sendUserMessage(data) { logClientSend('userMessage', data.username); Socket.emit('userMessage', { data: data }); }
 function sendFilename(msg) { logClientSend('filename', msg); Socket.emit('filename', { msg }); }
 function sendSettings(){
+	logClientSend('settings', G.settings);
 	//depending which settings have changed!!!
-	
-	if (isdef(Settings)) console.log('changed',Settings.haveChanged);
+	//if (isdef(Settings)) console.log('changed',Settings.haveChanged);
 	//console.assert(G.settings == Settings.o,"wrong settings object!!!!!!!")
 	Socket.emit('settings',{settings:G.settings,nFields:calcNFields(G.settings)});
+}
+function sendSettingsWithBoardImage(pack){
+	logClientSend('sendSettingsWithBoardImage', pack.filename);
+	
+	console.log('pack',pack);
+	Socket.emit('settingsWithBoardImage', pack);
 }
 
 

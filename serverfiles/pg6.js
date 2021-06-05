@@ -4,9 +4,9 @@ const fs = require('fs');
 const path = require('path');
 const utils = require('./utils.js');
 var MessageCounter = 0;
-var Verbose = false;
 
 //#endregion
+var Verbose = true;
 const NO_LAST_STATE = false;
 class GP2 {
 	constructor(io, perlenDict, DB, lastState) {
@@ -14,10 +14,32 @@ class GP2 {
 		this.perlenDict = perlenDict;
 		this.db = DB;
 		this.settings = base.jsCopy(DB.games.gPerlen2);
+
+		if (NO_LAST_STATE || base.nundef(lastState)) lastState = { settings: {}, state: {} };
+		this.lastState = lastState;
+		base.copyKeys(lastState.settings, this.settings);
+
+		utils.getFilenames(path.join(__dirname, '../public/assets/games/perlen/bretter'),
+			filenames => {
+				//console.log('result',filenames)
+				let s = this.settings;
+				s.boardFilenames = filenames;
+				if (!(filenames.includes(s.boardFilename))) {
+					//eg., this file has been deleted!
+					console.log('board file deleted!!!! =>update DB!!!!!', s.boardFilename);
+					this.lastState.boardFilename = s.boardFilename = filenames[0];
+				}
+				this.weiter();
+			});
+	}
+	weiter() {
+		let s = this.settings, lastState = this.lastState;
+
+		//s.boardFilenames = s.boardFilenames.split(',');
+		console.log('boards', this.settings.boardFilenames);
 		//console.log('settings',this.settings)
 		this.state = {};
 
-		if (NO_LAST_STATE || base.nundef(lastState)) lastState = { settings: {}, state: {} };
 		this.initState(lastState.state, lastState.settings);
 
 		this.players = {};
@@ -67,7 +89,7 @@ class GP2 {
 	getPlayerNames() { return Object.values(this.players).map(x => x.username); }
 	handleBoard(client, x) {
 		logReceive('board', x);
-		console.log('HANDLE BOARD',x)
+		console.log('HANDLE BOARD', x)
 		if ('boardFilename' in x) { this.settings.boardFilename = x.boardFilename; }
 		if ('nFields' in x) { this.state.boardArr = new Array(x.nFields); }
 		if ('rows' in x) { this.settings.rows = x.rows; }
@@ -113,6 +135,87 @@ class GP2 {
 		let sz = Object.keys(this.state.pool).length; console.log('==>pool', sz);
 		this.safeEmitState(['pool', 'perlenDict'])
 	}
+	handleGeneralImages(client, x) {
+		logReceive('generalImages', client.id);
+		//logReceive('generalImage', client.id);
+		console.log('=============>');
+		let pack = x.pack;
+		for (const key in pack) {
+			let p = pack[key];
+			if (p.type == 'imageData') {
+				try {
+					let fullPath;
+					let filename = base.stringBefore(p.filename, '.').toLowerCase();
+					let ext = base.stringAfter(p.filename, '.');
+					// fullPath = path.join(__dirname, '../public/assets/games/perlen/bretter/' + filename + '.png')
+					fullPath = path.join(__dirname, '../public/' + filename + '.' + ext);
+					console.log(p.filename, filename, fullPath);
+					let imgData = decodeBase64Image(p.data);
+					fs.writeFile(fullPath, imgData.data,
+						function () {
+							console.log('...images saved:', fullPath);
+							// emitPool = emitPool || this.addPerle(key, client);		// add perle!
+						});
+				}
+				catch (error) {
+					console.log('ERROR:', error);
+				}
+
+			}
+		}
+		this.safeEmitState(['settings']);
+	}
+	handleSettingsWithBoardImage(client, x) {
+		logReceive('settingsWithBoardImage', x.filename, x.settings);
+		//return;
+		console.log('HANDLE settingsWithBoardImage', x.filename, x.settings);
+		try {
+			let filename = x.filename; //hat ext
+			console.log('saving file:', filename)
+			let fullPath = path.join(__dirname, '../public/assets/games/perlen/bretter/' + filename);
+			let imgData = decodeBase64Image(x.data);
+			console.log('imgData.data', imgData.data);
+			this.settings.boardFilenames.push(filename);
+			console.log('bretter', this.settings.boardFilenames)
+			fs.writeFile(fullPath, imgData.data, () => {
+				console.log('file saved:', fullPath);
+				//console.log('nach write:',x.settings,x.nFields);
+				//this.handleSettings(client, {nFields:x.nFields,settings:x.settings}); 
+			});
+		}
+		catch (error) {
+			console.log('handleSettingsWithBoardImage ERROR:', error);
+		}
+
+	}
+	handleSettings(client, x) {
+		logReceive('settings', x);
+		base.copyKeys(x.settings, this.settings);
+		let nFields = this.settings.nFields = x.nFields;
+
+		let barr = this.state.boardArr;
+		if (barr.length != nFields) {
+			if (base.isEmpty(barr) || !base.firstCond(barr, x => x != null)) this.state.boardArr = new Array(nFields);
+			else if (barr.length < nFields) {
+				for (let i = barr.length; i < nFields; i++) this.state.boardArr.push(null);
+			} else {
+				// verkuerzung von boardArr!
+				let nBarr = barr.length;
+				let extras = [];
+				for (let i = nFields; i < barr.length; i++) {
+					if (base.isdef(barr[i])) extras.push(barr[i]);
+				}
+				for (const idx of extras) { this.state.poolArr.push(idx); }
+				this.state.boardArr = this.state.boardArr.slice(0, nFields);
+			}
+		}
+		//console.log('nFields',x.nFields);
+		//console.log('board',this.state.boardArr.length);
+		//console.log('pool',this.state.poolArr.length);
+
+		this.safeEmitState(['settings']);
+	}
+
 	handleAddToPool(client, x) {
 		logReceive('addToPool', client.id);
 		//console.log('SHORTCUT!',x.name)
@@ -163,33 +266,6 @@ class GP2 {
 			this.safeEmitState(['perlenDict', 'settings', 'pool']);
 		}
 	}
-	handleSettings(client, x) {
-		logReceive('removePerle', x);
-		this.settings = x.settings;
-		let nFields = this.settings.nFields = x.nFields;
-
-		let barr = this.state.boardArr;
-		if (barr.length != nFields) {
-			if (base.isEmpty(barr) || !base.firstCond(barr, x => x != null)) this.state.boardArr = new Array(nFields);
-			else if (barr.length < nFields){
-				for(let i=barr.length;i<nFields;i++) this.state.boardArr.push(null);
-			}	else {
-				// verkuerzung von boardArr!
-				let nBarr = barr.length;
-				let extras = [];
-				for(let i=nFields;i<barr.length;i++){
-					if (base.isdef(barr[i])) extras.push(barr[i]);
-				}
-				for(const idx of extras){this.state.poolArr.push(idx);}
-				this.state.boardArr = this.state.boardArr.slice(0,nFields);
-			}
-		}
-		//console.log('nFields',x.nFields);
-		//console.log('board',this.state.boardArr.length);
-		//console.log('pool',this.state.poolArr.length);
-
-		this.safeEmitState(['settings']);
-	}
 	handleMovePerle(client, x) {
 		let iPerle = x.iPerle;
 		let iFrom = x.iFrom;
@@ -237,7 +313,7 @@ class GP2 {
 		this.state.boardArr[iFrom] = null;//update board state!
 		this.state.poolArr.unshift(iPerle);
 
-		console.log('poolArr', this.state.poolArr);
+		//console.log('poolArr', this.state.poolArr);
 
 		this.safeEmitState();
 	}
@@ -251,7 +327,9 @@ class GP2 {
 		if (keys.includes('perlenDict')) o.perlenDict = this.perlenDict;
 		if (base.isdef(eMore)) base.copyKeys(eMore, o);
 
-		if (!NO_LAST_STATE) utils.toYamlFile({ settings: this.settings, state: this.state }, path.join(__dirname, '../public/lastState.yaml'));
+		let lastState = base.jsCopy(this.settings);
+		delete lastState.boardFilenames;
+		if (!NO_LAST_STATE) utils.toYamlFile({ settings: lastState, state: this.state }, path.join(__dirname, '../public/lastState.yaml'));
 
 		if (base.isdef(client)) client.emit('gameState', o); else this.io.emit('gameState', o);
 

@@ -292,14 +292,14 @@ class PerlenSettingsClass extends SettingsClass {
 		fakeInput.accept = "image/*";
 		fakeInput.multiple = false;
 		inp.onclick = () => { fakeInput.click(); };
-		fakeInput.onchange = () => { //this.setSettingsKeysFile(this.o,fakeInput,inp);
-			let val = fakeInput.files[0].name;
-			let ext = stringAfter(val, '.');
-			if (ext == 'png') val = stringBefore(val, '.');
-			inp.value = val;
+		fakeInput.onchange = () => { 
+			let imgFile = fakeInput.files[0];
+			previewBrowsedFile(dTable,imgFile);
+			let val = inp.value = getFilename(imgFile.name);
 			this.hasChanged = true;
-			this.haveChanged.push(['boardFilename']);
+			this.haveChanged.push(skeys);
 			this.o[skeys[0]] = val;
+			this.imgFile = imgFile;
 		};
 
 		mStyleX(inp, { maleft: 12, mabottom: 4, cursor: 'pointer' });
@@ -328,7 +328,7 @@ class PerlenSettingsClass extends SettingsClass {
 		// this.setzeEinOptions(nGroupNumCommonAllGames, 'field shape', ['circle', 'rectangle', 'hex'], ['circle', 'rectangle', 'hex'], 'circle', ['fieldShape']);
 		this.setzeEineZahl(nGroupBoardSettings, 'field width', 100, ['wField']);
 		this.setzeEineZahl(nGroupBoardSettings, 'field height', 120, ['hField']);
-		this.setzeEineZahl(nGroupBoardSettings, 'horzontal gap', 10, ['wGap']);
+		this.setzeEineZahl(nGroupBoardSettings, 'horizontal gap', 10, ['wGap']);
 		this.setzeEineZahl(nGroupBoardSettings, 'vertical gap', 20, ['hGap']);
 		this.setzeEineZahl(nGroupBoardSettings, 'rows', 7, ['rows']);
 		this.setzeEineZahl(nGroupBoardSettings, 'columns', 6, ['cols']);

@@ -520,9 +520,9 @@ function iResize(i, w, h) { return isList(i) ? i.map(x => iSize(x, w, h)) : iSiz
 function iSize(i, w, h) { i.w = w; i.h = h; mSize(iDiv(i), w, h); }
 function isItem(i) { return isdef(i.live) || isdef(i.div); }
 function iRegister(item, id) { let uid = isdef(id) ? id : getUID(); Items[uid] = item; return uid; }
-function iRegisterX(item,keyProp, id) { 
-	let uid = isdef(id) ? id : getUID(); Items[uid] = item; 
-	if (isdef(item[keyProp])) ItemsByKey[item[keyProp]]=uid;return uid; 
+function iRegisterX(item, keyProp, id) {
+	let uid = isdef(id) ? id : getUID(); Items[uid] = item;
+	if (isdef(item[keyProp])) ItemsByKey[item[keyProp]] = uid; return uid;
 }
 function iSplay(items, iContainer, containerStyles, splay = 'right', ov = 20, ovUnit = '%', createHand = true, rememberFunc = true) {
 
@@ -3442,6 +3442,48 @@ function addToPool(pool, poolArr, perle, index) {
 	poolArr.push(index);
 	return p;
 }
+function getFilename(path, withExt = true) {
+	let fname = stringAfterLast(path, '/');
+	let name = stringBefore(fname, '.');
+	let ext = stringAfter(fname, '.');
+	if (isEmpty(ext)) ext = 'png';
+	let result = withExt ? (name + '.' + ext) : name;
+	console.log(`filename (ext:${withExt}): ${result}`);
+	return result;
+}
+function getPublicPath(filename) {
+	let result = './public/' + getFilename(filename);
+	console.log('pubPath', result);
+	return result;
+}
+function uploadImgData(imgFile) {
+	let pack = {};
+	let data = imgFile.data;
+	let filename = imgFile.name; console.log('filename', filename);
+	let key = stringBefore(filename, '.');
+	pack[key] = { data: data, name: key, filename: filename, type: 'imageData' };
+	Socket.emit('generalImages', { pack: pack });
+	console.log('uploading pack', pack);
+}
+
+function previewBrowsedFile(dParent, imgFile) {
+
+	// container
+	var imgView = document.createElement("div");
+	imgView.className = "image-view";
+	mAppend(dParent, imgView);
+
+	// previewing image
+	var img = document.createElement("img");
+	imgView.appendChild(img);
+
+	var reader = new FileReader();
+	reader.onload = function (e) {
+		img.src = e.target.result;
+		imgFile.data = e.target.result; //img.toDataURL("image/png");
+	}
+	reader.readAsDataURL(imgFile);
+}
 
 
 //#region functions to be used in node.js:
@@ -3455,6 +3497,7 @@ if (this && typeof module == "object" && module.exports && this === module.expor
 		capitalize, choose, chooseRandom, copyKeys,
 		dict2list,
 		firstCond, firstCondDict, firstCondDictKey, formatDate,
+		getFilename, getPublicPath,
 		isdef, isEmpty, jsCopy,
 		nundef,
 		range, randomNumber, removeInPlace,
