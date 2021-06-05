@@ -1,4 +1,4 @@
-onload = startClientTest(); // start | startTesting | startClientTest
+onload = start(); // start | startTesting | startClientTest
 
 async function start() {
 
