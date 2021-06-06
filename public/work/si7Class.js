@@ -5,6 +5,8 @@ class SimpleClass7 {
 	}
 	presentGameState(data) {
 
+		console.log('_________________________gs')
+
 		mStyleX(dTable, { h: window.innerHeight});
 
 		let [settings, state] = this.processData(data);
@@ -14,12 +16,16 @@ class SimpleClass7 {
 		//zuerst: ueberpruefe was noch von server brauche und board layout params
 		//let needToLoadBoard = nundef(this.clientBoard) || this.clientBoard.boardFilename != settings.boardFilename;
 		if (isdef(data.settings)) {
+
+			console.log('Settings',Settings)
+			//Settings.updateSettingsPanel(settings);
+
 			clearElement(this.dParent);
 			//console.log('NEW BOARD!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!', this.settings.boardFilename);
 			this.clientBoard = { boardFilename: this.settings.boardFilename };
 
 			this.calcLayoutParameters(); //	console.log('clientBoard', this.clientBoard);
-			let correct = this.syncServerToClientBoard(); console.log('server data?', correct?'correct':'WRONG!!!'); //propag params to server if needed!
+			let correct = this.syncServerToClientBoard(); //console.log('server data?', correct?'correct':'WRONG!!!'); //propag params to server if needed!
 			if (!correct) return;
 			//hier soll dOuter machen
 

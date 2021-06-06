@@ -20,7 +20,7 @@ function showMouseAvatar(username) { show(getAvatar(username)); }
 function hideMouseAvatar(username) { hide(getAvatar(username)); }
 
 function handleMouse(data) {
-	if (data.username == Username) return; 
+	//if (data.username == Username) return; 
 	let [x, y] = [data.x, data.y];
 	x += $('#dFieldArea').offset().left;
 	y += $('#dFieldArea').offset().top;

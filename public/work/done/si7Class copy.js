@@ -2,6 +2,7 @@ class SimpleClass7 {
 	constructor() {
 		this.dParent = dTable;
 		this.initialPoolSelected = false;
+		this.settings = {};
 	}
 	presentGameState(data) {
 
@@ -227,9 +228,8 @@ class SimpleClass7 {
 
 		if (nundef(this.state)) this.state = {}; copyKeys(data.state, this.state);
 
-		//let previousBoardFilename = null, needToLoadBoard = true;
 		if (isdef(data.settings)) {
-			if (nundef(this.settings)) this.settings = {}; //else previousBoardFilename = this.settings.boardFilename;
+			
 			copyKeys(data.settings, this.settings);
 			//if (isdef(data.settings.boardFilename) && previousBoardFilename == data.settings.boardFilename) needToLoadBoard = false;
 		} //else if (isdef(this.settings.boardFilename)) needToLoadBoard = false;

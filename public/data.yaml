@@ -32,10 +32,12 @@ addons:
       value: 60000000 #1 day interval (1000 minutes)
 games:
   gPerlen2:
+    boardStandard: none
     poolSelection: random # random | mixed | player
     numPool: 10
     boardLayout: hex1
     boardFilename: brett10
+    boardLayoutFile: null
     boardRotation: 0
     fieldShape: circle
     fieldColor: transparent

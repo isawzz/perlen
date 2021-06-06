@@ -11,7 +11,9 @@ class SettingsClass {
 
 	}
 	//#region settings ui
-
+	updateSettingsPanel(settings) {
+		if (isVisible(this.dParent)) this.createSettingsUi();
+	}
 	createSettingsUi(dParent) {
 		this.haveChanged = [];
 		dParent = valf(dParent, this.dParent);
@@ -58,6 +60,44 @@ class SettingsClass {
 		this.hasChanged = true;
 		this.haveChanged.push(elem.keyList);
 		lookupSetOverride(this.o, elem.keyList, val);
+		//console.log('result', lookup(this.o, elem.keyList));
+	}
+	setSettingsKeysSelectPlus(elem) {
+
+		let val;
+		for (const opt of elem.children) {
+			if (opt.selected) val = opt.value;
+		}
+
+		console.log()
+
+		// console.log('lllllllllllllllll', a, a.value, a.keyList);
+		//let val = elem.type == 'number' ? Number(elem.value) : elem.value;
+		this.hasChanged = true;
+		this.haveChanged.push(elem.keyList);
+		lookupSetOverride(this.o, elem.keyList, val);
+
+		let key = elem.keyList[0];
+
+		console.log('val',val,'key',key,'elem.value',elem.value)
+
+		//console.log('jetzt muss andere settings von dieser group accordingly setzen!');
+		switch (key) {
+			case 'boardStandard':
+				let data = DB.standardSettings[val];
+				if (nundef(data)) { console.log('NO! key', key); return; }
+				for (const k in data) { 
+					console.log('k',k)
+					this.o[k] = data[k]; 
+				}
+				this.o.boardStandard = val;
+				console.log('settings sollen so geaendert werden:', data);
+				console.log('G.settings.boardStandard is jetzt',G.settings.boardStandard)
+
+				this.createSettingsUi();
+				break;
+		}
+
 		//console.log('result', lookup(this.o, elem.keyList));
 	}
 	setzeEineZahl(dParent, label, init, skeys) {
@@ -142,7 +182,32 @@ class SettingsClass {
 		inp.keyList = skeys;
 		this.addSetting(skeys[0]);
 	}
-	//#endregion
+	setzeEinOptionsPlus(dParent, label, optionList, friendlyList, init, skeys) {
+
+		// <input id='inputPicsPerLevel' class='input' type="number" value=1 />
+		let d = mDiv(dParent);
+		let val = lookup(this.o, skeys);
+		if (nundef(val)) val = init;
+
+		let inp = createElementFromHTML(`<select class="options" onfocusout="Settings.setSettingsKeysSelectPlus(this)"></select>`);
+		for (let i = 0; i < optionList.length; i++) {
+			let opt = optionList[i];
+			let friendly = friendlyList[i];
+			let optElem = createElementFromHTML(`<option value="${opt}">${friendly}</option>`);
+			mAppend(inp, optElem);
+			if (opt == val) optElem.selected = true;
+		}
+		// // `<input id="${id}" type="number" class="input" value="1" onfocusout="setSettingsKeys(this)" />`); 
+		// `<input type="number" class="input" value="${val}" onfocusout="setSettingsKeys(this)" />`);
+		let labelui = createElementFromHTML(`<label>${label}</label>`);
+		mAppend(d, labelui);
+		mAppend(labelui, inp);
+
+		mStyleX(inp, { maleft: 12, mabottom: 4 });
+
+		inp.keyList = skeys;
+		this.addSetting(skeys[0]);
+	}
 
 	//#region helpers 
 	mInputGroup(dParent, styles) {
@@ -204,47 +269,27 @@ class SettingsClass {
 
 }
 
-class PerlenSettings extends SettingsClass {
-	createSettingsUi(dParent) {
-		dParent = valf(dParent, this.dParent);
-		console.log('settings screen', dParent)
-		clearElement(dParent);
-		this.list = [];
-		let ttag = 'h2';
-		mAppend(dParent, createElementFromHTML(`<${ttag}>Settings for ${this.u.id}:</${ttag}>`));
-
-		let nGroupNumCommonAllGames = this.mInputGroup(dParent);
-		this.setzeEineZahl(nGroupNumCommonAllGames, 'samples', 25, ['samplesPerGame']);
-		this.setzeEineZahl(nGroupNumCommonAllGames, 'minutes', 1, ['minutesPerUnit']);
-		this.setzeEineZahl(nGroupNumCommonAllGames, 'correct streak', 5, ['incrementLevelOnPositiveStreak']);
-		this.setzeEineZahl(nGroupNumCommonAllGames, 'fail streak', 2, ['decrementLevelOnNegativeStreak']);
-		this.setzeEinOptions(nGroupNumCommonAllGames, 'show labels', ['toggle', 'always', 'never'], ['toggle', 'always', 'never'], 'toggle', ['pictureLabels']);
-		this.setzeEinOptions(nGroupNumCommonAllGames, 'language', ['E', 'D', 'S', 'F', 'C'], ['English', 'German', 'Spanish', 'French', 'Chinese'], 'E', ['language']);
-		this.setzeEinOptions(nGroupNumCommonAllGames, 'vocabulary', Object.keys(KeySets), Object.keys(KeySets), 'best25', ['vocab']);
-		this.setzeEineCheckbox(nGroupNumCommonAllGames, 'show time', false, ['showTime']);
-		this.setzeEineCheckbox(nGroupNumCommonAllGames, 'spoken feedback', true, ['spokenFeedback']);
-		this.setzeEineCheckbox(nGroupNumCommonAllGames, 'silent', false, ['silentMode']);
-		this.setzeEineCheckbox(nGroupNumCommonAllGames, 'switch game after level', false, ['switchGame']);
-		this.setzeEineZahl(nGroupNumCommonAllGames, 'trials', 3, ['trials']);
-		this.setzeEineCheckbox(nGroupNumCommonAllGames, 'show hint', true, ['showHint']);
-
-		//console.log('Settings', this.list)
-	}
-
-}
-
 class PerlenSettingsClass extends SettingsClass {
 	setOtherSettings(elem) {
-		//console.log('elem', elem);
+		console.log('____________elem', elem);
 		let val = elem.value;
+
+
 		let key = elem.keyList[0];
+
+		console.log('val',val,'key',key,'elem.value',elem.value)
+
 		//console.log('jetzt muss andere settings von dieser group accordingly setzen!');
 		switch (key) {
 			case 'boardStandard':
 				let data = DB.standardSettings[val];
 				if (nundef(data)) { console.log('NO! key', key); return; }
-				for (const k in data) { this.o[k] = data[k]; }
-				//console.log('settings sollen so geaendert werden:', data);
+				for (const k in data) { 
+					console.log('k',k)
+					this.o[k] = data[k]; 
+				}
+				this.o.boardStandard = val;
+				console.log('settings sollen so geaendert werden:', data);
 				this.createSettingsUi();
 
 				break;
@@ -265,6 +310,7 @@ class PerlenSettingsClass extends SettingsClass {
 			mAppend(inp, optElem);
 			if (opt == val) optElem.selected = true;
 		}
+		inp.value = val;
 		// // `<input id="${id}" type="number" class="input" value="1" onfocusout="setSettingsKeys(this)" />`); 
 		// `<input type="number" class="input" value="${val}" onfocusout="setSettingsKeys(this)" />`);
 		let labelui = createElementFromHTML(`<label>${label}</label>`);
@@ -292,9 +338,9 @@ class PerlenSettingsClass extends SettingsClass {
 		fakeInput.accept = "image/*";
 		fakeInput.multiple = false;
 		inp.onclick = () => { fakeInput.click(); };
-		fakeInput.onchange = () => { 
+		fakeInput.onchange = () => {
 			let imgFile = fakeInput.files[0];
-			previewBrowsedFile(dTable,imgFile);
+			previewBrowsedFile(dTable, imgFile);
 			let val = inp.value = getFilename(imgFile.name);
 			this.hasChanged = true;
 			this.haveChanged.push(skeys);
@@ -314,11 +360,10 @@ class PerlenSettingsClass extends SettingsClass {
 		clearElement(dParent);
 		this.list = [];
 
-
 		let fertigSets = DB.standardSettings;
 		let fsNames = Object.keys(fertigSets); fsNames.unshift('none');
 		let nGroupBoardSettings = this.mInputGroup(dParent);
-		this.setzeEinActiveOptions(nGroupBoardSettings, 'base on standard', fsNames, fsNames, '', ['boardStandard']);
+		this.setzeEinOptions(nGroupBoardSettings, 'base on standard', fsNames, fsNames, 'shapeShifters', ['boardStandard']);
 		this.setzeEinOptions(nGroupBoardSettings, 'board layout', ['hex1', 'hex', 'quad', 'circle'], ['hex1', 'hex', 'quad', 'circle'], 'hex1', ['boardLayout']);
 		this.setzeEinBrowseFile(nGroupBoardSettings, 'board filename', 'shapeShifters', ['boardFilename']);
 		this.setzeEineZahl(nGroupBoardSettings, 'board rotation', 0, ['boardRotation']);

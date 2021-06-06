@@ -1,5 +1,5 @@
 //#region m
-function mAppend(d, child) { d.appendChild(child); }
+function mAppend(d, child) { d.appendChild(child);return child; }
 function mBackground(bg, fg) { mStyleX(document.body, { bg: bg, fg: fg }); }
 
 function mButton(caption, handler, dParent, styles, classes) {

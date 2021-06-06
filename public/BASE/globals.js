@@ -2,17 +2,17 @@
 const PORT = 3344;
 
 // *** HEROKU *** deploy to HEROKU ***
-const NGROK = false; //'http://849aec381695.ngrok.io/'; // MUSS / am ende!!! 
-const HEROKU = true;
-const USERNAME_SELECTION = 'local'; // random | local | nil | gul | ma ...
-const VERSION = 6; //hier immer last stable version!
+// const NGROK = false; //'http://849aec381695.ngrok.io/'; // MUSS / am ende!!! 
+// const HEROKU = true;
+// const USERNAME_SELECTION = 'local'; // random | local | nil | gul | ma ...
+// const VERSION = 7; //hier immer last stable version!
 
 
 //*** testing */:
-// const NGROK = false; //'http://849aec381695.ngrok.io/'; // MUSS / am ende!!! 
-// const HEROKU = false;
-// const USERNAME_SELECTION = 'random'; // random | local | nil | gul | ma ...
-// const VERSION = 7;
+const NGROK = false; //'http://849aec381695.ngrok.io/'; // MUSS / am ende!!! 
+const HEROKU = false;
+const USERNAME_SELECTION = 'random'; // random | local | nil | gul | ma ...
+const VERSION = 7;
 
 var USESOCKETS = true; //false ist wahtscheinlich broken!
 const JUST_PERLEN_GAME = true;
@@ -32,7 +32,8 @@ var uiActivated, aiActivated, auxOpen, GameTimer, STOPAUS = false;
 var Settings, SettingsList, SettingsChanged, SelectedMenuKey; //var G, T, P, U, User, ????? , G...Game, T...Table, U...Userdata
 var Daat = {}, DA = {}, Items, ItemsByKey;
 var Players, PlayerOnTurn, GC, GameCounter;
-var PerlenDict, BaseColor, HeaderColor, IsControlKeyDown = false, dTable;
+var PerlenDict, BaseColor, HeaderColor, IsControlKeyDown = false
+var dTable,dAux;
 
 var BestMinusScore = Infinity, BestMinusState, BestPlusScore = -Infinity, BestPlusState;
 var F_END, F_MOVES, F_APPLYMOVE, F_UNDOMOVE, F_EVAL, DMAX, MAXIMIZER, MINIMIZER, SelectedMove, CANCEL_AI;

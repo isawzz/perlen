@@ -1,14 +1,25 @@
-function closeBoardEditor() { closePerlenEditor(); }
-function openBoardEditor() { createBoardEditor(); }
-function openPerlenEditor() { createPerlenEditor(); }
+function onClickBoardSelection(){
+	//hier gib das zeug vom anderen hin!
+	show(dAux);
+	clearElement(dAux);
+	let form1 = new FileUploadForm(dAux, 'Upload Board Image', 'bretter',
+	filename=>{
+		if (!filename) console.log('cancel!')
+		else console.log('file '+filename+' uploaded successfully!');
+		hide(dAux);
+	});
+}
 
+
+//#region settings
 function openSettings() { onClickSettings(); }
 function onClickSettings() {
 	show("dSettingsWindow");
 	//console.log('settings', G.settings)
-	let settingsView = Settings = new PerlenSettingsClass(G.settings, mBy('dSettingsWindow'), U);
-	settingsView.createSettingsUi();
+	//let settingsView = Settings = new PerlenSettingsClass(G.settings, mBy('dSettingsWindow'), U);
+	Settings.createSettingsUi();
 }
+
 function onClickSetSettings() {
 	console.log('Settings', Settings, '\nG.settings', G.settings)
 	let s = G.settings;
@@ -43,6 +54,7 @@ function onClickSetSettings() {
 		}
 	}
 }
+
 function onClickSetSettings1() {
 	console.log('Settings', Settings, '\nG.settings', G.settings)
 	let s = G.settings;
@@ -98,10 +110,15 @@ function onClickSetSettings1() {
 }
 function onClickCloseSettings() { closeSettings(); }
 function closeSettings() { hide("dSettingsWindow"); }
+//#endregion
 
 function onClickReset() {
 	sendReset(isdef(G) ? G.settings : DB.games.gPerlen2.settings);
 }
+
+function openPerlenEditor() { createPerlenEditor(); }
+function closeBoardEditor() { closePerlenEditor(); }
+function openBoardEditor() { createBoardEditor(); }
 
 //#region initToolbar alles unbrauchbar!
 function initToolbar(settings) {
@@ -164,6 +181,7 @@ function onClickGo(ev) {
 		}
 	}
 }
+//#endregion
 
 //#region helpers
 function clearTimeouts() {

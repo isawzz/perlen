@@ -17,6 +17,11 @@ const test = require('./serverfiles/serverTest.js');
 const DB = utils.fromYamlFile(path.join(__dirname, 'public/data.yaml'));
 const PerlenDict = utils.fromYamlFile(path.join(__dirname, 'public/perlenDict.yaml'));
 const lastState = utils.fromYamlFile(path.join(__dirname, 'public/lastState.yaml'));
+const io = require('socket.io')(http, {
+	cors: {
+		origins: ['http://localhost:' + PORT]
+	}
+});
 
 app.all('/*', function (req, res, next) {
 	res.header("Access-Control-Allow-Origin", "*");
@@ -30,11 +35,48 @@ app.get('/', (req, res) => {
 	res.header("Access-Control-Allow-Headers", "X-Requested-With");
 	res.sendFile(path.join(__dirname, +'public/index.html'));
 });
-const io = require('socket.io')(http, {
-	cors: {
-		origins: ['http://localhost:' + PORT]
+//#endregion
+
+//#region file uploading POST routes
+
+const ASSET_PATH = './public/assets/games/perlen/';
+const multer = require('multer');
+
+const storage = multer.diskStorage({
+	destination: (req, file, cb) => { 
+		let path=ASSET_PATH + file.fieldname + '/';
+		console.log('dir',path)
+		cb(null, path); 
+	},
+	filename: (req, file, cb) => { const fileName = file.originalname.toLowerCase().split(' ').join('-'); cb(null, fileName) }
+});
+const upload = multer({
+	storage: storage,
+	fileFilter: (req, file, cb) => {
+		log('FILTER', { url: req.url, req: Object.keys(req), fieldname: file.fieldname });
+		if (file.mimetype == "image/png" || file.mimetype == "image/jpg" || file.mimetype == "image/jpeg" || file.mimetype == "image/gif") {
+			console.log('correct!', file.mimetype)
+			req.body.tag = 'war'
+			cb(null, true);
+		} else {
+			cb(null, false);
+			return cb(new Error('Allowed only .png, .jpg, .jpeg and .gif'));
+		}
 	}
 });
+
+app.post('/perlen', upload.single('perlen'), function (req, res) {
+	log('POST', { url: req.url, fieldname: req.file.fieldname });
+	res.append('Location', 'success.html');
+	res.status(303).send();
+});
+
+app.post('/bretter', upload.single('bretter'), function (req, res) {
+	log('POST', { url: req.url, fieldname: req.file.fieldname });
+	res.append('Location', 'success.html');
+	res.status(303).send();
+});
+
 //#endregion
 
 //#region *** CODE STARTS HERE ********************************
@@ -96,6 +138,12 @@ io.on('connection', client => {
 		//fs.writeFile('/tmp/image', buffer).catch(console.error); // fs.promises
 	});
 });
+function log(title, o) {
+	console.log('_________' + title);
+	for (const k in o) {
+		console.log(k, o[k]);
+	}
+}
 
 //#endregion
 

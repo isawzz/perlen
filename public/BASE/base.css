@@ -148,7 +148,14 @@
 	padding: 20px;
 	box-sizing: border-box;
 	background: powderBlue;
+	text-align: left;
+	z-index: 100;
 }
+#dAux button,#dAux input{
+margin:4px;
+}
+
+
 #dButtons {
 	position: fixed;
 	display: inline-block;
@@ -166,7 +173,7 @@ label{
 .input {
 	width: 100px;
 }
-input[type='file'] {
+.input[type='file'] {
   color: transparent;
 
 	width:100px;

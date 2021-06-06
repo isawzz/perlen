@@ -28,6 +28,7 @@ function sendStartOrJoinPerlenGame() {
 	window.onkeyup = keyUpHandler;
 	mBy('sidebar').ondblclick = togglePerlenEditor;
 	G = VERSION == 7 ? new SimpleClass7() : new SimpleClass();
+	G.settings = Settings = new PerlenSettingsClass({}, U, mBy('dSettingsWindow'));
 	//console.log('G created');
 	if (!USESOCKETS) G.presentGameState();
 	// if (!USESOCKETS) G.presentGameState({
@@ -103,6 +104,11 @@ function keyUpHandler(ev) {
 		iMagnifyCancel();
 	}
 	if (ev.key == 'Alt' && isdef(Socket)) { Socket.emit('hide', { username: Username }); }
+
+	if (ev.code == 'Escape' && isVisible('dAux')) {
+		console.log('hiding dAux!')
+		hide('dAux');
+	}
 	//else if (keyCode == 112) { show('dHelpWindow'); }
 }
 function keyDownHandler(ev) {
