@@ -3,17 +3,17 @@ settings:
   poolSelection: random
   numPool: 25
   boardLayout: hex1
-  boardFilename: brett10
+  boardFilename: brett18_56
+  fieldShape: circle
+  fieldColor: '#ffffff80'
+  wField: 101
+  hField: 117
+  wGap: 15
+  hGap: 30
+  rows: 7
+  cols: 6
   boardLayoutFile: null
   boardRotation: 0
-  fieldShape: circle
-  fieldColor: white
-  wField: 130
-  hField: 120
-  wGap: 25
-  hGap: 25
-  rows: 9
-  cols: 3
   wFieldArea: 1000
   hFieldArea: 1000
   boardMarginLeft: 0
@@ -27,149 +27,4 @@ settings:
   labelPos: hover
   nFields: 43
   layout: circle
-state:
-  boardArr:
-    - null
-    - null
-    - null
-    - null
-    - null
-    - null
-    - null
-    - null
-    - null
-    - null
-    - null
-    - null
-    - null
-    - null
-    - null
-    - null
-    - null
-    - null
-    - null
-    - null
-    - null
-    - null
-    - null
-    - null
-    - null
-    - null
-    - null
-    - null
-    - null
-    - null
-    - null
-    - null
-    - null
-    - null
-    - null
-    - null
-    - 6
-    - null
-    - null
-    - null
-    - null
-    - null
-    - null
-  pool:
-    "0":
-      key: vorurteil
-      index: 0
-    "1":
-      key: kalter krieg
-      index: 1
-    "2":
-      key: yin
-      index: 2
-    "3":
-      key: das mehrstöckige haus
-      index: 3
-    "4":
-      key: weltkrieg I
-      index: 4
-    "5":
-      key: koreanisch
-      index: 5
-    "6":
-      key: immigration
-      index: 6
-    "7":
-      key: kriegszerstörung
-      index: 7
-    "8":
-      key: kultur
-      index: 8
-    "9":
-      key: vertreibung aus dem paradies
-      index: 9
-    "10":
-      key: traum
-      index: 10
-    "11":
-      key: orange
-      index: 11
-    "12":
-      key: spanisch
-      index: 12
-    "13":
-      key: kunst
-      index: 13
-    "14":
-      key: yang
-      index: 14
-    "15":
-      key: archetyp
-      index: 15
-    "16":
-      key: alles steigt aus der quelle
-      index: 16
-    "17":
-      key: angkor wat
-      index: 17
-    "18":
-      key: argument
-      index: 18
-    "19":
-      key: nazi
-      index: 19
-    "20":
-      key: struktur
-      index: 20
-    "21":
-      key: wissenswirtschaft
-      index: 21
-    "22":
-      key: gelb
-      index: 22
-    "23":
-      key: bach
-      index: 23
-    "24":
-      key: ego
-      index: 24
-  poolArr:
-    - 0
-    - 1
-    - 2
-    - 3
-    - 4
-    - 5
-    - 7
-    - 8
-    - 9
-    - 10
-    - 11
-    - 12
-    - 13
-    - 14
-    - 15
-    - 16
-    - 17
-    - 18
-    - 19
-    - 20
-    - 21
-    - 22
-    - 23
-    - 24
+state: {}

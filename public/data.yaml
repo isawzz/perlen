@@ -33,31 +33,33 @@ addons:
 games:
   gPerlen2:
     boardStandard: none
-    poolSelection: random # random | mixed | player
-    numPool: 10
+    poolSelection: random
+    numPool: 25
     boardLayout: hex1
-    boardFilename: brett10
-    boardLayoutFile: null
-    boardRotation: 0
+    boardFilename: brett18_56
     fieldShape: circle
-    fieldColor: transparent
+    fieldColor: '#ffffff80'
     wField: 101
     hField: 117
     wGap: 15
     hGap: 30
     rows: 7
     cols: 6
-    wFieldArea: 800
-    hFieldArea: 800
+    boardLayoutFile: null
+    boardRotation: 0
+    wFieldArea: 1000
+    hFieldArea: 1000
     boardMarginLeft: 0
-    boardMarginTop: 10
+    boardMarginTop: 0
     #perlen
-    bgPool: 'transparent'
-    fgPool: '#ffffffff'
-    bgBoard: 'silver'
-    fgBoard: 'black'
-    szPerle: 90
+    bgPool: transparent
+    fgPool: "#ffffffff"
+    bgBoard: silver
+    fgBoard: black
+    szPerle: 75
     fzLabel: 16
+    nFields: 43
+    layout: circle
     labelPos: hover # none | top | bottom | middle | hover
   gAbacus:
     friendly: 'Abacus'

@@ -2,16 +2,16 @@
 const PORT = 3344;
 
 // *** HEROKU *** deploy to HEROKU ***
-// const NGROK = false; //'http://849aec381695.ngrok.io/'; // MUSS / am ende!!! 
-// const HEROKU = true;
-// const USERNAME_SELECTION = 'local'; // random | local | nil | gul | ma ...
+const NGROK = false; //'http://849aec381695.ngrok.io/'; // MUSS / am ende!!! 
+const HEROKU = true;
+const USERNAME_SELECTION = 'local'; // random | local | nil | gul | ma ...
 // const VERSION = 7; //hier immer last stable version!
 
 
 //*** testing */:
-const NGROK = false; //'http://849aec381695.ngrok.io/'; // MUSS / am ende!!! 
-const HEROKU = false;
-const USERNAME_SELECTION = 'random'; // random | local | nil | gul | ma ...
+// const NGROK = false; //'http://849aec381695.ngrok.io/'; // MUSS / am ende!!! 
+// const HEROKU = false;
+// const USERNAME_SELECTION = 'random'; // random | local | nil | gul | ma ...
 const VERSION = 7;
 
 var USESOCKETS = true; //false ist wahtscheinlich broken!
