@@ -34,8 +34,9 @@ var uiActivated, aiActivated, auxOpen, GameTimer, STOPAUS = false;
 var Settings, SettingsList, SettingsChanged, SelectedMenuKey; //var G, T, P, U, User, ????? , G...Game, T...Table, U...Userdata
 var Daat = {}, DA = {}, Items, ItemsByKey;
 var Players, PlayerOnTurn, GC, GameCounter;
-var PerlenDict, BaseColor, HeaderColor, IsControlKeyDown = false
-var dTable,dAux;
+var PerlenDict, BaseColor, HeaderColor, SidebarColor, IsControlKeyDown = false
+var dTable, dAux;
+var ColorThief, SelectedItem, SelectedColor;
 
 var BestMinusScore = Infinity, BestMinusState, BestPlusScore = -Infinity, BestPlusState;
 var F_END, F_MOVES, F_APPLYMOVE, F_UNDOMOVE, F_EVAL, DMAX, MAXIMIZER, MINIMIZER, SelectedMove, CANCEL_AI;
@@ -121,9 +122,9 @@ const levelColors = [LIGHTGREEN, LIGHTBLUE, YELLOW, 'orange', RED,
 var levelKeys = ['island', 'justice star', 'materials science', 'mayan pyramid', 'medieval gate',
 	'great pyramid', 'meeple', 'smart', 'stone tower', 'trophy cup', 'viking helmet',
 	'flower star', 'island', 'justice star', 'materials science', 'mayan pyramid',];
-const GermanToEnglish={
-	rot:'red',blau:'blue',grün:'green',gelb:'yellow',violett:'violet',lila:'purple',
-	braun:'brown',schwarz:'black',weiss:'white',grau:'grey',rosa:'pink',orange:'orange'
+const GermanToEnglish = {
+	rot: 'red', blau: 'blue', grün: 'green', gelb: 'yellow', violett: 'violet', lila: 'purple',
+	braun: 'brown', schwarz: 'black', weiss: 'white', grau: 'grey', rosa: 'pink', orange: 'orange'
 };
 
 const DD = {

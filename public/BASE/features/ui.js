@@ -112,11 +112,12 @@ function setSubtitle(s) { mBy('dSubtitle').innerHTML = s; }
 function setNewBackgroundColor(bg) {
 	if (nundef(bg)) bg = randomDarkColor();
 	//bg = 'rgb(192,96,6)';
-	BaseColor = bg; HeaderColor = colorDarker(BaseColor);
+	BaseColor = bg; HeaderColor = colorDarker(BaseColor); SidebarColor =colorLighter(BaseColor,.125);
 	setBackgroundColor(bg);
 	mStyleX(dHeader, { bg: HeaderColor });
 	//mStyleX(dSubtitle, { fg: colorLighter(bg) });
-	mStyleX(mBy('sidebar'), { bg: colorLighter(BaseColor,.125) });
+	mStyleX(mBy('sidebar'), { bg: SidebarColor });
+	mStyleX(mBy('dAux'), { bg: SidebarColor });
 	localStorage.setItem('BaseColor', BaseColor);
 }
 

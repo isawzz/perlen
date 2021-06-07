@@ -184,7 +184,7 @@ class SimpleClass7 {
 		[b.layout, b.rows, b.cols, b.wField, b.hField, b.hline] = [s.boardLayout, rows, cols, wCell, hCell, hline];
 		return s.nFields;
 	}
-	getImagePath(key) {
+	getBoardImagePath(key) {
 		console.assert(key.includes('.'), 'getImagePath: not a filename!!!', key)
 		let ext = stringAfter(key, '.'); if (isEmpty(ext)) ext = 'png';
 		let filename = stringBefore(key, '.') + '.' + ext;
@@ -222,20 +222,20 @@ class SimpleClass7 {
 		mStyleX(b.dOuter, { w: s.wBoard, h: s.hBoard }); //,border:'white'});
 		if (key == 'none') { return; }
 
-		let path = this.getImagePath(key);
+		let path = this.getBoardImagePath(key);
 		// console.log('path to board file',path)
 		let whenSize = (w, h) => {
 			// if (h < 768) mStyleX(b.dOuter, { w: w, h: h, hmin: h });
 			// else mStyleX(b.dOuter, { w: w, h: h });
 			if (s.sizeBoardHeightToImage && h>s.hBoard) mStyleX(b.dOuter,{h:h});
-			//b.boardImageSize = { w: w, h: h };
+			//b.backgroundSize = { w: w, h: h };
 		};
 		let whenLoaded = ev => {
 			let img = ev.target;
 			//console.log('===>background loaded', img, b.dOuter);
 			b.dOuter.style.backgroundImage = `url(${img.src})`;
-			mStyleX(b.dOuter, { 'background-size':s.boardImageSize, 'background-repeat': 'no-repeat', 'background-position': 'center center' });
-			// 'background-size':s.boardImageSize, 
+			mStyleX(b.dOuter, { 'background-size':s.backgroundSize, 'background-repeat': 'no-repeat', 'background-position': 'center center' });
+			// 'background-size':s.backgroundSize, 
 		}
 		this.imageMeasurePreload(path, whenSize, whenLoaded);
 

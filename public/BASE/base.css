@@ -141,18 +141,22 @@
 
 #dAux {
 	position: absolute;
-	left: 0;
-	top: 0;
-	min-height: 100%;
-	min-width: 100%;
+	left: 80px;
+	top: 100px;
+	margin: 10px;
+	border-radius: 8px;
+	border: 1px solid white;
+	/* min-height: 100%; */
+	/* min-width: 100%; */
 	padding: 20px;
 	box-sizing: border-box;
-	background: powderBlue;
+	background: dimgray;
+	/* color: dimgray; */
 	text-align: left;
 	z-index: 100;
 }
 #dAux button,#dAux input{
-margin:4px;
+	margin:4px;
 }
 
 

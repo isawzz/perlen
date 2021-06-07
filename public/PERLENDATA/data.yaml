@@ -38,7 +38,7 @@ games:
     numPool: 25
     boardLayout: hex1
     boardFilename: shapeShifters.png
-    boardImageSize: initial # initial | cover 
+    backgroundSize: initial # initial | cover 
     sizeBoardHeightToImage: false
     fieldShape: circle
     fieldColor: '#ffffff80'
@@ -1213,7 +1213,7 @@ users:
       userColor: orange
 standardSettings:
   palme:
-    baseColor: '#191c46'
+    idealBg: rgb(76, 127, 206)
     boardLayout: hex1
     boardFilename: dateTree.jpg
     fieldShape: circle

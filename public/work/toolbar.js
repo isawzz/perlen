@@ -27,6 +27,9 @@ class ToolbarClass{
 		this.addButton('uploadBoard',onClickUploadBoard,'upload board');
 		this.addButton('uploadPerlen',onClickUploadPerlen,'upload perlen');
 		this.addButton('chooseBoard',onClickChooseBoard,'choose board');
+		this.addButton('chooseLayout',onClickChooseLayout,'choose layout');
+		// this.addButton('colorify',onClickColorify,'colorify');
+		
 	}
 }
 

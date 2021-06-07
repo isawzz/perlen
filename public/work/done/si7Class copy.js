@@ -210,7 +210,7 @@ class SimpleClass7 {
 		let whenSize = (w, h) => {
 			if (h<768) 			mStyleX(b.dOuter, { w: w, h: h, hmin:h});
 			else 	mStyleX(b.dOuter, { w: w, h: h});
-			b.boardImageSize = { w: w, h: h };
+			b.backgroundSize = { w: w, h: h };
 		};
 		let whenLoaded = ev => {
 			let img = ev.target;

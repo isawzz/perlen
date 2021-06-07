@@ -2402,6 +2402,7 @@ function arrString(arr, func) {
 function arrSum(arr, props) { if (!isList(props)) props = [props]; return arr.reduce((a, b) => a + (lookup(b, props) || 0), 0); }
 function arrTail(arr) { return arr.slice(1); }
 function arrTake(arr, n) { return takeFromStart(arr, n); }
+function arrTakeFromTo(arr, a,b) { return takeFromTo(arr, a,b); }
 function arrTakeFromEnd(arr, n) {
 	if (arr.length <= n) return arr.map(x => x); else return arr.slice(arr.length - n);
 }

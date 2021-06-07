@@ -11,6 +11,7 @@ function simplestPerlenGame() {
 	setNewBackgroundColor(color);
 	mStyleX(document.body, { opacity: 1 });
 	initTable(null, 2); initSidebar(); initAux(); initScore();
+	ColorThief = new ColorThief();
 
 
 	//bis hier ist alles so fuer alle spiel!
@@ -28,9 +29,7 @@ function sendStartOrJoinPerlenGame() {
 	window.onkeyup = keyUpHandler;
 	mBy('sidebar').ondblclick = togglePerlenEditor;
 	G = VERSION == 7 ? new SimpleClass7() : new SimpleClass();
-	console.log('------',G.settings);
 	Settings = new PerlenSettingsClass(G.settings, U, mBy('dSettingsWindow'));
-	//G.settings = Settings = new PerlenSettingsClass({}, U, mBy('dSettingsWindow'));
 	//console.log('G created');
 	if (!USESOCKETS) G.presentGameState();
 	// if (!USESOCKETS) G.presentGameState({
@@ -43,9 +42,9 @@ function handleInitialPool(data) {
 	console.assert(isdef(G), 'G not defined!!!!!!!!!!!')
 	//if (nundef(G.settings) && isdef(data.settings)) 
 	if (isdef(data.settings) && isdef(G.settings)) copyKeys(data.settings, G.settings);
-	else if (isdef(data.settings)) G.settings = data.settings;
+	else if (isdef(data.settings)) copyKeys(data.settings,G.settings);
 	else if (isdef(G.settings)) G.settings.individualSelection = true;
-	else if (nundef(data.settings) && nundef(G.settings)) G.settings = { individualSelection: true };
+	else if (nundef(data.settings) && nundef(G.settings)) copyKeys({ individualSelection: true },G.settings);
 	G.initialPoolSelected = false;
 	logClientReceive('initialPool', data);
 	setTitle(data.instruction);

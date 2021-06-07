@@ -4,8 +4,8 @@ settings:
   poolSelection: random
   numPool: 1
   boardLayout: hex1
-  boardFilename: shapeShifters.png
-  boardImageSize: initial
+  boardFilename: brett20_43.png
+  backgroundSize: initial
   sizeBoardHeightToImage: true
   fieldShape: circle
   fieldColor: "#ffffff80"

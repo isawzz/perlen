@@ -16,17 +16,18 @@ function initSocket() {
 	Socket = io(SERVERURL);
 	Socket.on('clientId', handleClientIdSendLogin);
 	Socket.on('db', handleDB);
-
 	Socket.on('userJoined', handleUserJoined);
 	Socket.on('userLeft', handleUserLeft);
 	Socket.on('userMessage', handleUserMessage);
 
-	Socket.on('initialPool', handleInitialPool); //skip for now!
-
 	Socket.on('gameState', handleGameState);
+
 	Socket.on('mouse', handleMouse);
 	Socket.on('show', handleShow);
 	Socket.on('hide', handleHide);
+
+	//Socket.on('initialPool', handleInitialPool); //skip for now!
+
 
 	// Socket.on('gameOver', handleGameOver);
 	// Socket.on('gameCode', handleGameCode);
@@ -52,9 +53,7 @@ function sendUserMessage(data) { logClientSend('userMessage', data.username); So
 function sendFilename(msg) { logClientSend('filename', msg); Socket.emit('filename', { msg }); }
 function sendSettings(){
 	logClientSend('settings', G.settings);
-	//depending which settings have changed!!!
-	//if (isdef(Settings)) console.log('changed',Settings.haveChanged);
-	//console.assert(G.settings == Settings.o,"wrong settings object!!!!!!!")
+	console.assert(G.settings == Settings.o,"wrong settings object!!!!!!!")
 	Socket.emit('settings',{settings:G.settings,nFields:calcNFields(G.settings)});
 }
 function sendSettingsWithBoardImage(pack){
