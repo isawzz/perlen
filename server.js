@@ -7,16 +7,17 @@ const path = require('path');
 const fs = require('fs');
 
 const base = require('./public/BASE/base.js');
-const { PORT } = require('./public/BASE/globals.js');
+const { PORT, PERLEN_DATA_PATH } = require('./public/BASE/globals.js');
 
 const utils = require('./serverfiles/utils.js');
 const userman = require('./serverfiles/userManager.js');
-const perlenGame = require('./serverfiles/pg6.js');
+const perlenGame = require('./serverfiles/pg7.js');
 const test = require('./serverfiles/serverTest.js');
 
-const DB = utils.fromYamlFile(path.join(__dirname, 'public/data.yaml'));
-const PerlenDict = utils.fromYamlFile(path.join(__dirname, 'public/perlenDict.yaml'));
-const lastState = utils.fromYamlFile(path.join(__dirname, 'public/lastState.yaml'));
+const DB = utils.fromYamlFile(path.join(__dirname, PERLEN_DATA_PATH + 'data.yaml'));
+var PerlenDict = utils.fromYamlFile(path.join(__dirname, PERLEN_DATA_PATH + 'perlenDict.yaml'));
+const lastState = utils.fromYamlFile(path.join(__dirname, PERLEN_DATA_PATH + 'lastState.yaml'));
+
 const io = require('socket.io')(http, {
 	cors: {
 		origins: ['http://localhost:' + PORT]
@@ -37,53 +38,43 @@ app.get('/', (req, res) => {
 });
 //#endregion
 
-//#region file uploading POST routes
-
-const ASSET_PATH = './public/assets/games/perlen/';
-const multer = require('multer');
-
-const storage = multer.diskStorage({
-	destination: (req, file, cb) => { 
-		let path=ASSET_PATH + file.fieldname + '/';
-		console.log('dir',path)
-		cb(null, path); 
-	},
-	filename: (req, file, cb) => { const fileName = file.originalname.toLowerCase().split(' ').join('-'); cb(null, fileName) }
-});
-const upload = multer({
-	storage: storage,
-	fileFilter: (req, file, cb) => {
-		log('FILTER', { url: req.url, req: Object.keys(req), fieldname: file.fieldname });
-		if (file.mimetype == "image/png" || file.mimetype == "image/jpg" || file.mimetype == "image/jpeg" || file.mimetype == "image/gif") {
-			console.log('correct!', file.mimetype)
-			req.body.tag = 'war'
-			cb(null, true);
-		} else {
-			cb(null, false);
-			return cb(new Error('Allowed only .png, .jpg, .jpeg and .gif'));
-		}
-	}
-});
-
-app.post('/perlen', upload.single('perlen'), function (req, res) {
-	log('POST', { url: req.url, fieldname: req.file.fieldname });
-	res.append('Location', 'success.html');
-	res.status(303).send();
-});
-
-app.post('/bretter', upload.single('bretter'), function (req, res) {
-	log('POST', { url: req.url, fieldname: req.file.fieldname });
-	res.append('Location', 'success.html');
-	res.status(303).send();
-});
-
-//#endregion
-
 //#region *** CODE STARTS HERE ********************************
 
 userman.initUserManager(io, DB);
 const simple = new perlenGame.GP2(io, PerlenDict, DB, lastState);
 const tester = test.initTest(io, DB);
+
+//#endregion
+
+
+//#region file uploading POST routes
+const multer = require('multer');
+const storage = multer.diskStorage({
+	destination: function (req, file, cb) {
+		cb(null, PERLEN_DATA_PATH + file.fieldname + '/');
+	},
+
+	filename: function (req, file, cb) {
+		cb(null, file.originalname);
+
+	}
+});
+var upload = multer({ storage: storage });
+
+// app.get('/', (req, res) => { res.sendFile(__dirname + '/index.html'); });
+
+app.post('/perlen', upload.array('perlen'), (req, res) => {
+	res.redirect('/');
+	console.log('#files',req.files[0]);
+	console.log(Object.keys(req.files[0]));
+	req.files.map(x => simple.addPerle(x.filename)); //console.log(x.filename));
+});
+app.post('/bretter', upload.array('bretter'), (req, res) => {
+	res.redirect('/');
+	req.files.map(x => simple.addBoard(x.filename)); //console.log(x.filename));
+});
+
+//#endregion
 
 io.on('connection', client => {
 
@@ -93,63 +84,53 @@ io.on('connection', client => {
 	client.on('disconnect', x => { simple.handlePlayerLeft(client, x); userman.handleDisconnected(client, x); }); //broadcast user left: userManager
 	client.on('userMessage', x => userman.handleUserMessage(client, x)); //broadcast user left: userManager
 
-	//the following messages are handled by 'simple' (module or class)
-
-	client.on('perlenImages', x => simple.handlePerlenImages(client, x));
-	client.on('generalImages', x => simple.handleGeneralImages(client, x));
-
-	client.on('settings', x => simple.handleSettings(client, x));
-	client.on('settingsWithBoardImage', x => simple.handleSettingsWithBoardImage(client, x));
-
-
-	client.on('movePerle', x => simple.handleMovePerle(client, x));
-	client.on('placePerle', x => simple.handlePlacePerle(client, x));
-	client.on('relayout', x => simple.handleRelayout(client, x));
-	client.on('removePerle', x => simple.handleRemovePerle(client, x));
-	client.on('reset', x => simple.handleReset(client, x));
-	client.on('startOrJoinPerlen', x => simple.handleStartOrJoin(client, x));
-
-	//deprecate:
-	// client.on('image', x => simple.handleImage(client, x));
-	// client.on('addToPool', x => simple.handleAddToPool(client, x));
-	// client.on('initialPoolDone', x => simple.handleInitialPoolDone(client, x));
-	// client.on('board', x => simple.handleBoard(client, x));
-	// client.on('boardImage', x => simple.handleBoardImage(client, x));
-
 	client.on('mouse', x => { io.emit('mouse', x); });//should send x,y,username
 	client.on('show', x => { io.emit('show', x); });//should send x,y,username
 	client.on('hide', x => { io.emit('hide', x); });//should send x,y,username
 
-	client.on('testImageUpload', x => tester.handleImageUpload(client, x));
-	client.on('image1', image => {
-		// image is an array of bytes
-		const buffer = Buffer.from(image);
-		fs.writeFile('writeMe.txt', buffer, function (err, result) {
-			if (err) console.log('error', err);
-		});
-		//await fs.writeFile('/tmp/image', buffer).catch(console.error); // fs.promises
-	});
-	client.on('image2', async image => {
-		const buffer = Buffer.from(image, 'base64');
-		fs.writeFile('./image.png', buffer, function (err, result) {
-			if (err) console.log('error', err);
-		});
-		console.log('SUCCESS!!!')
-		//fs.writeFile('/tmp/image', buffer).catch(console.error); // fs.promises
-	});
-});
-function log(title, o) {
-	console.log('_________' + title);
-	for (const k in o) {
-		console.log(k, o[k]);
-	}
-}
+	//the following messages are handled by 'simple' (module or class)
+	client.on('movePerle', x => simple.handleMovePerle(client, x));
+	client.on('placePerle', x => simple.handlePlacePerle(client, x));
+	client.on('removePerle', x => simple.handleRemovePerle(client, x));
+	client.on('startOrJoinPerlen', x => simple.handleStartOrJoin(client, x));
 
-//#endregion
+	client.on('chooseBoard', x => simple.handleNewBoard(client, x));
+	client.on('syncBoardLayout', x => simple.handleSyncBoardLayout(client, x));
+
+});
 
 http.listen(process.env.PORT || PORT, () => { console.log('listening on port ' + PORT); });
 
+//#region helpers
+function log(title, o) { console.log('_________' + title); for (const k in o) { console.log(k, o[k]); } }
 
+//#endregion
 
+//#region ein NEUES PERLENDICT MACHEN!!!
+
+function newPerlenDict() {
+	let p2 = {};
+	let perlenDictOrig = utils.fromYamlFile(path.join(__dirname, './public/assets/vault/perlenDictOrig.yaml'));
+	let keys = Object.keys(PerlenDict);
+	keys.sort();
+
+	for (const k of keys) {
+		let p = perlenDictOrig[k];
+		console.log(p.Name)
+		p2[k] = {
+			key: k,
+			path: k + '.png',
+			text: p.Name,
+
+		}
+		//return;
+	}
+
+	utils.toYamlFile(p2, PERLEN_DATA_PATH + 'perlenDict.yaml');
+	return p2;
+}
+//PerlenDict = newPerlenDict();
+
+//#endregion
 
 

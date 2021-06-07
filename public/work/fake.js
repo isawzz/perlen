@@ -186,7 +186,7 @@ class FakeServerClass {
 		}
 		return null;
 	}
-	getPerlenName(iPerle) { return this.byIndex[iPerle].Name; }
+	getPerlenName(iPerle) { return this.byIndex[iPerle].text; }
 	getTurn() { return this.state.turn; }
 	initPlayerState(plid) {
 		//console.log('initPlayerState', plid)

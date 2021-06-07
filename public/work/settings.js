@@ -3,18 +3,21 @@ class SettingsClass {
 	constructor(settingsObject, userObject, dParent) {
 		this.o = settingsObject;
 		this.u = userObject;
-		//console.log('settings:',this.o,this.u);
 		this.dParent = dParent;
-		//console.log('settings screen',this.dParent)
-		//console.log('Settings class constructor',this.o);
+		//console.log('settings.o:',this.o,'settings.u:',this.u,'settings screen',this.dParent);
 		this.haveChanged = [];
-
+		this.isPanelOpen = false;
 	}
 	//#region settings ui
 	updateSettingsPanel(settings) {
 		if (isVisible(this.dParent)) this.createSettingsUi();
 	}
+	close(){
+		hide(this.dParent);
+		this.isPanelOpen = false;
+	}
 	createSettingsUi(dParent) {
+		this.isPanelOpen = true;
 		this.haveChanged = [];
 		dParent = valf(dParent, this.dParent);
 		console.log('settings screen', dParent)
@@ -69,7 +72,7 @@ class SettingsClass {
 			if (opt.selected) val = opt.value;
 		}
 
-		console.log()
+		console.log();
 
 		// console.log('lllllllllllllllll', a, a.value, a.keyList);
 		//let val = elem.type == 'number' ? Number(elem.value) : elem.value;

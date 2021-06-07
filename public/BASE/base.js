@@ -2,7 +2,7 @@
 function mAppend(d, child) { d.appendChild(child);return child; }
 function mBackground(bg, fg) { mStyleX(document.body, { bg: bg, fg: fg }); }
 
-function mButton(caption, handler, dParent, styles, classes) {
+function mButton(caption, handler, dParent, styles, classes, id) {
 	let x = mCreate('button');
 	x.innerHTML = caption;
 	if (isdef(handler)) x.onclick = handler;
@@ -12,6 +12,7 @@ function mButton(caption, handler, dParent, styles, classes) {
 		//console.log('setting classes',classes,...classes)
 		mClass(x, ...classes);
 	}
+	if (isdef(id)) x.id = id;
 	return x;
 }
 function mBy(id) { return document.getElementById(id); }
@@ -2322,7 +2323,7 @@ function addSimpleProps(ofrom, oto = {}) { for (const k in ofrom) { if (nundef(o
 function addIfDict(key, val, dict) { if (!(key in dict)) { dict[key] = [val]; } }
 function any(arr, cond) { return !isEmpty(arr.filter(cond)); }
 function anyStartsWith(arr, prefix) { return any(arr, el => startsWith(el, prefix)); }
-
+function arrAdd(arr,elist){for(const el of elist)arr.push(el);return arr;}
 function arrCount(arr, func) { let filt = arr.filter(func); return filt.length; }
 function arrChildren(elem) { return [...elem.children]; }
 function arrCreate(n, func) { let res = []; for (let i = 0; i < n; i++) { res.push(func(i)); } return res; }
@@ -3175,6 +3176,7 @@ function convertUmlaute(w) {
 	w = replaceAll(w, 'ß', 'ss');
 	return w;
 }
+function createElementFromHtml(s){return createElementFromHTML(s);}
 function createElementFromHTML(htmlString) {
 	//console.log('---------------',htmlString)
 	var div = document.createElement('div');
@@ -3394,6 +3396,7 @@ function show(elem, isInline = false) {
 	} else {
 		elem.style.display = isInline ? 'inline-block' : null;
 	}
+	return elem;
 }
 function valf(val, def) { return isdef(val) ? val : def; }
 //#endregion

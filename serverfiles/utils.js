@@ -39,7 +39,7 @@ function toYamlFile(data, path) {
 	//console.log('?')
 	fs.writeFileSync(path, yamlStr, 'utf8');
 }
-function getFilenames(dir,callback){
+function getFilenames(dir, callback) {
 	let filenames = [];
 	fs.readdir(dir, (err, files) => {
 		if (err) { return console.log('Unable to scan directory: ' + err); }
@@ -52,7 +52,7 @@ function getFilenames(dir,callback){
 	});
 }
 function listFiles(perlen) {
-	const directoryPath = path.join(__dirname, '../public/assets/games/perlen/perlen');
+	const directoryPath = path.join(__dirname, PERLEN_DATA_PATH + 'perlen');
 	let names = [];
 	fs.readdir(directoryPath, (err, files) => {
 		if (err) { return console.log('Unable to scan directory: ' + err); }
@@ -61,38 +61,38 @@ function listFiles(perlen) {
 			names.push(file);//console.log(file);
 		});
 		console.log(names.length);
-		for(let i=0;i<names.length;i++){
+		for (let i = 0; i < names.length; i++) {
 			console.log(names[i]);
-			let fname = base.stringBefore(names[i],'.');
+			let fname = base.stringBefore(names[i], '.');
 			console.log(fname);
-			let p=findPerle(fname,perlen);
-			if (p){
+			let p = findPerle(fname, perlen);
+			if (p) {
 				p.path = fname;
-			}else{
-				p={path:fname,Name:base.capitalize(fname),Update:base.formatDate(),Created:base.formatDate(),'Fe Tags':'','Wala Tags':'','Ma Tags':''};
+			} else {
+				p = { path: fname, Name: base.capitalize(fname), Update: base.formatDate(), Created: base.formatDate(), 'Fe Tags': '', 'Wala Tags': '', 'Ma Tags': '' };
 				perlen.push(p);
 			}
 		}
 		//save perlen in new file!
-		perlen.sort((a,b)=>a.path<b.path?-1:1);
-		toYamlFile(perlen,'./newPerlen.yaml');
+		perlen.sort((a, b) => a.path < b.path ? -1 : 1);
+		toYamlFile(perlen, './newPerlen.yaml');
 	});
 }
 
 
 //#region ?
-function toPngFile(data,path){
+function toPngFile(data, path) {
 	const fs = require('fs');
 	const fetch = require('node-fetch');
-	
+
 	const url = "https://www.something.com/.../image.jpg"
-	
+
 	async function download() {
 		const response = await fetch(url);
 		const buffer = await response.buffer();
-		fs.writeFile(`./image.jpg`, buffer, () => 
+		fs.writeFile(`./image.jpg`, buffer, () =>
 			console.log('finished downloading!'));
-	}	
+	}
 }
 
 function convertPerlen(list) {
@@ -123,8 +123,8 @@ function addRandomTags(name) {
 	return t;
 }
 
-function findPerle(fname,perlen){
-	let x=base.firstCond(perlen,x=>x.Name.toLowerCase().includes(fname.toLowerCase()));
-	if (base.isdef(x)) console.log('found perle for',fname);
+function findPerle(fname, perlen) {
+	let x = base.firstCond(perlen, x => x.text.toLowerCase().includes(fname.toLowerCase()));
+	if (base.isdef(x)) console.log('found perle for', fname);
 	return x;
 }

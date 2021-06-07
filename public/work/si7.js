@@ -28,7 +28,9 @@ function sendStartOrJoinPerlenGame() {
 	window.onkeyup = keyUpHandler;
 	mBy('sidebar').ondblclick = togglePerlenEditor;
 	G = VERSION == 7 ? new SimpleClass7() : new SimpleClass();
-	G.settings = Settings = new PerlenSettingsClass({}, U, mBy('dSettingsWindow'));
+	console.log('------',G.settings);
+	Settings = new PerlenSettingsClass(G.settings, U, mBy('dSettingsWindow'));
+	//G.settings = Settings = new PerlenSettingsClass({}, U, mBy('dSettingsWindow'));
 	//console.log('G created');
 	if (!USESOCKETS) G.presentGameState();
 	// if (!USESOCKETS) G.presentGameState({
@@ -236,15 +238,7 @@ function logState(state) {
 		console.log('board', sBoard, '\npoolArr', poolArr, '\ndims', rows - 1, 'x', cols - 1);
 	}
 }
-function mPath(p) {
-	let pre = './assets/games/perlen/perlen/';
-	let post = '.png';
-	if (isdef(p.path)) return p.path[0] == '.' ? p.path : pre + p.path + post;
-	let x = p.Name.toLowerCase();
-	x = replaceAll(x, "'", "");
-	//x = replaceAll(x, " ", "_");
-	return pre + x + post;
-}
+function mPath(p) { return PERLENPATH_FRONT + '/perlen/' + p.path; }
 
 function showPerlen(perlenByIndex, boardArr, poolArr, board, dParent) {
 
@@ -364,7 +358,7 @@ function quadBoard(rows, cols, dParent) {
 }
 function showBrettBoard(filename, dParent) {
 	let dp = mDiv(dParent, { display: 'inline-block' });
-	let path = './assets/games/perlen/bretter/' + filename;
+	let path = PERLENPATH_FRONT + 'bretter/' + filename;
 	let d1 = mDiv(dp, { display: 'inline-block', position: 'relative' });//,'background-image':path });
 	let img = mImg(path, d1);
 	let board = { img: img, div: d1 };

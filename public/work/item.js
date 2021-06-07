@@ -199,7 +199,7 @@ function makePerleDiv(item, outerStyles, imgStyles, labelStyles, labelPos = null
 
 	let dOuter = mCreate('div', outerStyles);
 
-	if (labelPos && nundef(item.label)) { item.label = item.Name.toLowerCase(); }
+	if (labelPos && nundef(item.label)) { item.label = item.text.toLowerCase(); }
 
 	let dLabel;
 	let [w, h, fz] = [labelStyles.wmax, labelStyles.hmax, labelStyles.fz];

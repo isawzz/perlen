@@ -1,32 +1,36 @@
+var StepCounter = 0;
+
 class SimpleClass7 {
 	constructor() {
 		this.dParent = dTable;
 		this.initialPoolSelected = false;
+		this.settings = {};
+		openToolbar();
 	}
 	presentGameState(data) {
 
-		console.log('_________________________gs')
+		console.log('_________________________gs',StepCounter);StepCounter += 1;
 
-		mStyleX(dTable, { h: window.innerHeight});
+		mStyleX(dTable, { h: window.innerHeight });
 
 		let [settings, state] = this.processData(data);
+		if (settings == Settings.o && Settings.o == this.settings) console.log('...settings ok'); else console.assert(settings == Settings && Settings == this.settings,'hallo settings FALSCH!!!!!!!!!!!!!')
+		let needToLoadBoard = nundef(this.clientBoard) || this.clientBoard.boardFilename != settings.boardFilename;
 		//timit = new TimeIt('*');
 
-		//jetzt sind settings,state,perleDict,pool,needToLoadBoard complete
-		//zuerst: ueberpruefe was noch von server brauche und board layout params
-		//let needToLoadBoard = nundef(this.clientBoard) || this.clientBoard.boardFilename != settings.boardFilename;
-		if (isdef(data.settings)) {
+		//jetzt sind settings,state,perleDict,pool,needToLoadBoard up-to-date
 
-			console.log('Settings',Settings)
-			//Settings.updateSettingsPanel(settings);
-
+		if (needToLoadBoard) {
 			clearElement(this.dParent);
 			//console.log('NEW BOARD!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!', this.settings.boardFilename);
 			this.clientBoard = { boardFilename: this.settings.boardFilename };
 
-			this.calcLayoutParameters(); //	console.log('clientBoard', this.clientBoard);
-			let correct = this.syncServerToClientBoard(); //console.log('server data?', correct?'correct':'WRONG!!!'); //propag params to server if needed!
-			if (!correct) return;
+			this.calcLayoutParameters(); 
+			let correct = this.syncBoardLayout(); 
+			if (!correct) {
+				console.log('server data?', correct ? 'correct' : 'WRONG!!!'); //propag params to server if needed!				
+				return;
+			} else console.log('...sync ok');
 			//hier soll dOuter machen
 
 			let dOuter = this.clientBoard.dOuter = mDiv(this.dParent, { hmin: 768, wmin: 768, display: 'inline-block', position: 'relative' }, 'dBoardOuter');
@@ -53,6 +57,10 @@ class SimpleClass7 {
 			createPerlenEditor();
 			setTitle(data.instruction);
 		}
+	}
+	chooseBoard(boardFilename) {
+		if (boardFilename == this.settings.boardFilename) return;
+		Socket.emit('chooseBoard', { boardFilename: boardFilename });
 	}
 	createFields() {
 		let [b, s] = [this.clientBoard, this.settings];
@@ -177,9 +185,10 @@ class SimpleClass7 {
 		return s.nFields;
 	}
 	getImagePath(key) {
+		console.assert(key.includes('.'), 'getImagePath: not a filename!!!', key)
 		let ext = stringAfter(key, '.'); if (isEmpty(ext)) ext = 'png';
 		let filename = stringBefore(key, '.') + '.' + ext;
-		let path = './assets/games/perlen/bretter/' + filename;
+		let path = PERLENPATH_FRONT + 'bretter/' + filename;
 		return path;
 	}
 	imageMeasurePreload(path, whenSize, whenLoaded) {
@@ -210,19 +219,23 @@ class SimpleClass7 {
 		let [b, s] = [this.clientBoard, this.settings];
 
 		let key = s.boardFilename;
+		mStyleX(b.dOuter, { w: s.wBoard, h: s.hBoard }); //,border:'white'});
+		if (key == 'none') { return; }
+
 		let path = this.getImagePath(key);
 		// console.log('path to board file',path)
 		let whenSize = (w, h) => {
-			if (h<768) 			mStyleX(b.dOuter, { w: w, h: h, hmin:h});
-			else 	mStyleX(b.dOuter, { w: w, h: h});
-			b.boardImageSize = { w: w, h: h };
+			// if (h < 768) mStyleX(b.dOuter, { w: w, h: h, hmin: h });
+			// else mStyleX(b.dOuter, { w: w, h: h });
+			if (s.sizeBoardHeightToImage && h>s.hBoard) mStyleX(b.dOuter,{h:h});
+			//b.boardImageSize = { w: w, h: h };
 		};
 		let whenLoaded = ev => {
 			let img = ev.target;
 			//console.log('===>background loaded', img, b.dOuter);
 			b.dOuter.style.backgroundImage = `url(${img.src})`;
-			// mStyleX(b.dOuter, { 'background-repeat': 'no-repeat', 'background-attachment': 'fixed', 'background-position': 'center' });
-
+			mStyleX(b.dOuter, { 'background-size':s.boardImageSize, 'background-repeat': 'no-repeat', 'background-position': 'center center' });
+			// 'background-size':s.boardImageSize, 
 		}
 		this.imageMeasurePreload(path, whenSize, whenLoaded);
 
@@ -233,12 +246,10 @@ class SimpleClass7 {
 
 		if (nundef(this.state)) this.state = {}; copyKeys(data.state, this.state);
 
-		//let previousBoardFilename = null, needToLoadBoard = true;
 		if (isdef(data.settings)) {
-			if (nundef(this.settings)) this.settings = {}; //else previousBoardFilename = this.settings.boardFilename;
+			console.assert(isdef(this.settings),'processData G.settings is NOT defined after constructor!!!!!')
 			copyKeys(data.settings, this.settings);
-			//if (isdef(data.settings.boardFilename) && previousBoardFilename == data.settings.boardFilename) needToLoadBoard = false;
-		} //else if (isdef(this.settings.boardFilename)) needToLoadBoard = false;
+		} 
 
 		if (isdef(data.perlenDict)) { PerlenDict = this.perlenDict = data.perlenDict; }
 
@@ -246,9 +257,11 @@ class SimpleClass7 {
 			//console.log('got POOL!')
 			this.perlenListeImSpiel = Object.values(this.state.pool);
 			this.poolEnriched = this.state.pool;
+			//console.log('perlenDict', this.perlenDict)
 			for (const idx in this.state.pool) {
 				let p = this.state.pool[idx];
 				let key = p.key;
+				//console.log(p, key)
 				copyKeys(this.perlenDict[key], p);
 				p.path = mPath(p);
 			}
@@ -256,7 +269,7 @@ class SimpleClass7 {
 		return [this.settings, this.state]; //, needToLoadBoard];
 	}
 	setInitialPoolSelected() { this.initialPoolSelected = true; setTitle('Glasperlenspiel'); }
-	syncServerToClientBoard() {
+	syncBoardLayout() {
 		//wenn irgendwelche params anders sind als bei server, speziell boardArr.length != nFields ist => send settings!
 		//correct settings according to clientBoard!
 
@@ -264,10 +277,10 @@ class SimpleClass7 {
 		let corr = {};
 		if (st.boardArr.length != b.nFields) { corr.nFields = s.nFields = b.nFields; }
 		if (s.rows != b.rows || s.cols != b.cols) { corr.rows = s.rows = b.rows; corr.cols = s.cols = b.cols; }
-		if (!isEmpty(Object.keys(corr))) { 
-			console.log('should send settings: ',b)
-			Socket.emit('board', { nFields: b.nFields, rows: b.rows, cols: b.cols, layout: b.layout, boardFilename:b.boardFilename });
-			return false; 
+		if (!isEmpty(Object.keys(corr))) {
+			console.log('should send settings: ', b)
+			Socket.emit('syncBoardLayout', { nFields: b.nFields, rows: b.rows, cols: b.cols, layout: b.layout, boardFilename: b.boardFilename });
+			return false;
 		}
 		else { return true; }
 	}

@@ -87,7 +87,7 @@ function mMagnify(img, item) {
 	let [w,h,fz]=[imgSize,imgSize+fontSize+10,fontSize];
 	let dPresent=MAGNIFIER_IMAGE = mDiv(document.body, { bg:HeaderColor, position: 'absolute',left:0,top:0,w:w,h:h });
 	let d=dPresent; //mDiv(dPresent);
-	let dText = mText(item.Name,d,{color:'white',fz:fz});
+	let dText = mText(item.text,d,{color:'white',fz:fz});
 	let dImage = mDiv(d,{rounding:'50%',w:w,h:w});
 	mCenterCenterFlex(dImage);
 	let img1 = mImg(path, dImage,{});

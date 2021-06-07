@@ -1,24 +1,45 @@
-function onClickBoardSelection(){
+function onClickUploadBoard() {
 	//hier gib das zeug vom anderen hin!
 	show(dAux);
 	clearElement(dAux);
 	let form1 = new FileUploadForm(dAux, 'Upload Board Image', 'bretter',
-	filename=>{
-		if (!filename) console.log('cancel!')
-		else console.log('file '+filename+' uploaded successfully!');
-		hide(dAux);
-	});
+		filename => {
+			if (!filename) console.log('cancel!')
+			else console.log('file ' + filename + ' uploaded successfully!');
+			hide(dAux);
+		});
 }
+function onClickUploadPerlen() {
+	//hier gib das zeug vom anderen hin!
+	show(dAux);
+	clearElement(dAux);
+	let form1 = new FileUploadForm(dAux, 'Upload Perlen Images', 'perlen',
+		filename => {
+			if (!filename) console.log('cancel!')
+			else console.log('file ' + filename + ' uploaded successfully!');
+			hide(dAux);
+		});
+}
+function onClickChooseBoard() {
+	show(dAux);
+	clearElement(dAux);
+	mDiv(dAux, {}, null, '<h1>click board to select!</h1>');
+	let boards = G.settings.boardFilenames;
+	console.log(boards);
+	for (const b of boards) {
+		let img = mImg(PERLENPATH_FRONT + 'bretter/' + b, dAux, { h: 200, margin: 8, 'vertical-align': 'baseline' });
+		img.onclick = () => { hide(dAux); G.chooseBoard(b); }
+	}
+	//add empty frame for empty
+	let img = mDiv(dAux, { display: 'inline-block', border: 'black', w: 300, h: 200, margin: 8, box: true });
+	img.onclick = () => { hide(dAux); G.chooseBoard('none'); }
+}
+
 
 
 //#region settings
 function openSettings() { onClickSettings(); }
-function onClickSettings() {
-	show("dSettingsWindow");
-	//console.log('settings', G.settings)
-	//let settingsView = Settings = new PerlenSettingsClass(G.settings, mBy('dSettingsWindow'), U);
-	Settings.createSettingsUi();
-}
+function onClickSettings() { let d=show("dSettingsWindow"); Settings.createSettingsUi(d); }
 
 function onClickSetSettings() {
 	console.log('Settings', Settings, '\nG.settings', G.settings)

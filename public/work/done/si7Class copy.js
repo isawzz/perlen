@@ -174,7 +174,7 @@ class SimpleClass7 {
 	getImagePath(key) {
 		let ext = stringAfter(key, '.'); if (isEmpty(ext)) ext = 'png';
 		let filename = stringBefore(key, '.') + '.' + ext;
-		let path = './assets/games/perlen/bretter/' + filename;
+		let path = PERLENPATH_FRONT+'bretter/' + filename;
 		return path;
 	}
 	imageMeasurePreload(path, whenSize, whenLoaded) {
