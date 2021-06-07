@@ -6,7 +6,7 @@ settings:
   boardLayout: hex1
   boardFilename: shapeShifters.png
   boardImageSize: initial
-  sizeBoardHeightToImage: false
+  sizeBoardHeightToImage: true
   fieldShape: circle
   fieldColor: "#ffffff80"
   wField: 101
