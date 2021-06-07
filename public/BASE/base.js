@@ -1,5 +1,5 @@
 //#region m
-function mAppend(d, child) { d.appendChild(child);return child; }
+function mAppend(d, child) { d.appendChild(child); return child; }
 function mBackground(bg, fg) { mStyleX(document.body, { bg: bg, fg: fg }); }
 
 function mButton(caption, handler, dParent, styles, classes, id) {
@@ -50,6 +50,91 @@ function mContainer(d, styles = {}) {
 	addKeys(d, defOuterStyles);
 	mStyleX(d, styles);
 }
+function mColorPicker0(dParent, palette, onColor) {
+	let dPalette = mDiv(dParent, { margin: 4 }); mFlex(dPalette);
+	let items = [];
+	for (const c of palette) {
+		dColor = mDiv(dPalette, { display: 'inline-block', w: 50, h: 50, bg: c, rounding: 4, margin: 4 });
+		//console.log('dColor', dColor)
+		let item = { color: c, isSelected: false };
+		iAdd(item, { div: dColor });
+		items.push(item);
+
+	}
+	let picker = { div: dPalette, selected: null, items: items };
+	for (const item of items) {
+		iDiv(item).onclick = (ev) => {
+			console.log('click!!!', ev.target);
+			picker.selectedItem = iToggleSingleSelection(item, items);
+			onColor(item.color);
+		}
+	}
+
+	return picker;
+}
+function mColorPicker3(elem, palette, onColor, initialColor) {
+	//let elem = mDiv(dParent,{w:50,h:50,display:'inline-block'});
+	let picker = new JSColor(elem, {
+		alpha:'ff', 
+		closeButton: true, 
+		value: initialColor,
+		palette: palette,
+	});
+	// picker.onChange = ()=>{let c = picker.toHEXAString(); onColor(c);console.log('picked',c);}
+	//picker.onInput = ()=>{let c = picker.toHEXAString(); onColor(c);console.log('picked',c);}
+	return picker;
+}
+function mColorPicker2(dParent, palette, onColor, initialColor) {
+	let elem = mDiv(dParent,{w:50,h:50,display:'inline-block'});
+	let picker = new JSColor(elem, {
+		alpha:'ff', 
+		closeButton: true, 
+		value: initialColor,
+		palette: palette,
+	});
+	// picker.onChange = ()=>{let c = picker.toHEXAString(); onColor(c);console.log('picked',c);}
+	picker.onInput = ()=>{let c = picker.toHEXAString(); onColor(c);console.log('picked',c);}
+	return picker;
+}
+
+function mColorPicker1(dParent, palette, onColor) {
+	let dPalette = mDiv(dParent, { margin: 4 }); mFlex(dPalette);
+	let items = [];
+	for (const c of palette) {
+		dColor = mDiv(dPalette, { display: 'inline-block', w: 50, h: 50, bg: c, rounding: 4, margin: 4 });
+		//console.log('dColor', dColor)
+		let item = { color: c, isSelected: false };
+		iAdd(item, { div: dColor });
+		items.push(item);
+
+	}
+
+
+
+
+	let picker = { div: dPalette, selected: null, items: items };
+	for (const item of items) {
+		iDiv(item).onclick = (ev) => {
+			console.log('click!!!', ev.target);
+			picker.selectedItem = iToggleSingleSelection(item, items);
+			onColor(item.color);
+		}
+	}
+
+	//add a real html colopicker item
+	//add a transparency item
+	let elem = mCreate('input'); mAppend(dPalette,elem);
+	let alphaPicker = new JSColor(elem, {});
+	let alphaItem = {isSelected: false};
+	alphaPicker.onChange = ()=>{alphaItem.color=elem.value; onColor(elem.value);}
+	alphaItem.picker = alphaPicker;
+	iAdd(alphaItem, { div: elem });
+	items.push(alphaItem);
+
+
+	return picker;
+}
+
 function mCreate(tag, styles, id) { let d = document.createElement(tag); if (isdef(id)) d.id = id; if (isdef(styles)) mStyleX(d, styles); return d; }
 function mDestroy(elem) { if (isString(elem)) elem = mById(elem); purge(elem); } // elem.parentNode.removeChild(elem); }
 function mDiv(dParent = null, styles, id, inner) { let d = mCreate('div'); if (dParent) mAppend(dParent, d); if (isdef(styles)) mStyleX(d, styles); if (isdef(id)) d.id = id; if (isdef(inner)) d.innerHTML = inner; return d; }
@@ -574,6 +659,42 @@ function iSplay(items, iContainer, containerStyles, splay = 'right', ov = 20, ov
 
 }
 function iStyle(i, styles) { mStyleX(iDiv(i), styles); }
+function iToggleSingleSelection(item, items) {
+	let ui = iDiv(item);
+	let selItem = null;
+	item.isSelected = !item.isSelected;
+	if (item.isSelected) { mClass(ui, 'framedPicture'); selItem = item; }
+	else { mRemoveClass(ui, 'framedPicture'); selItem = null; }
+
+	//if piclist is given, add or remove pic according to selection state
+	if (isdef(items) && selItem) {
+		for (const i1 of items) {
+			if (i1.isSelected && i1 != item) {
+				i1.isSelected = false;
+				mRemoveClass(iDiv(i1), 'framedPicture');
+				break;
+			}
+		}
+	}
+	return selItem;
+}
+function iToggleMultipleSelection(item, items) {
+	let ui = iDiv(item);
+	item.isSelected = !item.isSelected;
+	if (item.isSelected) mClass(ui, 'framedPicture'); else mRemoveClass(ui, 'framedPicture');
+	if (isdef(items)) {
+		for (const i1 of items) {
+			if (i1.isSelected) {
+				console.assert(!items.includes(i1), 'UNSELECTED PIC IN PICLIST!!!!!!!!!!!!')
+				items.push(i1);
+			} else {
+				console.assert(items.includes(i1), 'PIC NOT IN PICLIST BUT HAS BEEN SELECTED!!!!!!!!!!!!')
+				removeInPlace(items, i1);
+			}
+		}
+	}
+}
+
 var ZMax = 0;
 function iZMax(n) { if (isdef(n)) ZMax = n; ZMax += 1; return ZMax; }
 //#endregion
@@ -880,6 +1001,17 @@ function getHueWheel(contrastTo, minDiff = 25, mod = 30, start = 0) {
 function getPalette(color, type = 'shade') {
 	color = anyColorToStandardString(color);
 	return colorPalShade(color);
+}
+function getPaletteFromImage(img) {
+	let palette0 = ColorThiefObject.getPalette(img);
+	let palette = [];
+	for (const pal of palette0) {
+		let color = anyColorToStandardString(pal);
+		palette.push(color);
+	}
+	//console.log(palette)
+	//console.log('palette', palette)
+	return palette;
 }
 function getTransPalette(color = '#000000') {
 	let res = [];
@@ -2323,7 +2455,7 @@ function addSimpleProps(ofrom, oto = {}) { for (const k in ofrom) { if (nundef(o
 function addIfDict(key, val, dict) { if (!(key in dict)) { dict[key] = [val]; } }
 function any(arr, cond) { return !isEmpty(arr.filter(cond)); }
 function anyStartsWith(arr, prefix) { return any(arr, el => startsWith(el, prefix)); }
-function arrAdd(arr,elist){for(const el of elist)arr.push(el);return arr;}
+function arrAdd(arr, elist) { for (const el of elist) arr.push(el); return arr; }
 function arrCount(arr, func) { let filt = arr.filter(func); return filt.length; }
 function arrChildren(elem) { return [...elem.children]; }
 function arrCreate(n, func) { let res = []; for (let i = 0; i < n; i++) { res.push(func(i)); } return res; }
@@ -2402,7 +2534,7 @@ function arrString(arr, func) {
 function arrSum(arr, props) { if (!isList(props)) props = [props]; return arr.reduce((a, b) => a + (lookup(b, props) || 0), 0); }
 function arrTail(arr) { return arr.slice(1); }
 function arrTake(arr, n) { return takeFromStart(arr, n); }
-function arrTakeFromTo(arr, a,b) { return takeFromTo(arr, a,b); }
+function arrTakeFromTo(arr, a, b) { return takeFromTo(arr, a, b); }
 function arrTakeFromEnd(arr, n) {
 	if (arr.length <= n) return arr.map(x => x); else return arr.slice(arr.length - n);
 }
@@ -3177,7 +3309,7 @@ function convertUmlaute(w) {
 	w = replaceAll(w, 'ß', 'ss');
 	return w;
 }
-function createElementFromHtml(s){return createElementFromHTML(s);}
+function createElementFromHtml(s) { return createElementFromHTML(s); }
 function createElementFromHTML(htmlString) {
 	//console.log('---------------',htmlString)
 	var div = document.createElement('div');

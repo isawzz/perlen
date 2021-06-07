@@ -1226,18 +1226,18 @@ standardSettings:
     cols: 6
   adversarial:
     boardLayout: hex1
-    boardFilename: shapeShifters.png
+    boardFilename: shapeShifters768.png
     boardRotation: 0
     fieldShape: circle
     fieldColor: '#ff000020'
-    wField: 130
-    hField: 120
-    wGap: 25
-    hGap: 25
+    wField: 100
+    hField: 92
+    wGap: 19
+    hGap: 19
     rows: 9
     cols: 3
-    wFieldArea: 1000
-    hFieldArea: 1000
+    wFieldArea: 768
+    hFieldArea: 768
     boardMarginLeft: 0
     boardMarginTop: 0
   kleinSchwarz:
@@ -1272,7 +1272,7 @@ standardSettings:
     hFieldArea: 768
     boardMarginLeft: 0
     boardMarginTop: -4
-  hex18:
+  derWeg:
     boardLayout: hex1
     boardFilename: brett18_56.png
     fieldShape: circle
@@ -1288,15 +1288,15 @@ standardSettings:
     boardFilename: brett03.png
     boardRotation: 20
     fieldShape: circle
-    fieldColor: '#00000015'
+    fieldColor: '#ffffff80'
     wField: 90
     hField: 104
     wGap: 25
     hGap: 32
     rows: 7
     cols: 4
-    wFieldArea: 1000
-    hFieldArea: 800
+    wFieldArea: 768
+    hFieldArea: 768
     boardMarginLeft: -4
     boardMarginTop: 0
     bgPool: transparent
@@ -1307,28 +1307,12 @@ standardSettings:
     fzLabel: 16
     labelPos: hover
     nFields: 37
-  rotBig:
-    boardLayout: hex1
-    boardFilename: brett03.png
-    boardRotation: 20
-    fieldShape: circle
-    fieldColor: transparent
-    wField: 90
-    hField: 104
-    wGap: 25
-    hGap: 32
-    rows: 9
-    cols: 5
-    wFieldArea: 1000
-    hFieldArea: 768
-    boardMarginLeft: -22
-    boardMarginTop: -10
   rund:
     boardLayout: hex1
     boardFilename: brett19_02c.png
     boardRotation: 0
     fieldShape: circle
-    fieldColor: transparent
+    fieldColor: '#ffffff80'
     wField: 102
     hField: 117
     wGap: 20

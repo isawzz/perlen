@@ -36,7 +36,7 @@ var Daat = {}, DA = {}, Items, ItemsByKey;
 var Players, PlayerOnTurn, GC, GameCounter;
 var PerlenDict, BaseColor, HeaderColor, SidebarColor, IsControlKeyDown = false
 var dTable, dAux;
-var ColorThief, SelectedItem, SelectedColor;
+var ColorThiefObject, SelectedItem, SelectedColor;
 
 var BestMinusScore = Infinity, BestMinusState, BestPlusScore = -Infinity, BestPlusState;
 var F_END, F_MOVES, F_APPLYMOVE, F_UNDOMOVE, F_EVAL, DMAX, MAXIMIZER, MINIMIZER, SelectedMove, CANCEL_AI;

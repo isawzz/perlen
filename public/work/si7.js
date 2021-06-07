@@ -11,7 +11,7 @@ function simplestPerlenGame() {
 	setNewBackgroundColor(color);
 	mStyleX(document.body, { opacity: 1 });
 	initTable(null, 2); initSidebar(); initAux(); initScore();
-	ColorThief = new ColorThief();
+	ColorThiefObject = new ColorThief();
 
 
 	//bis hier ist alles so fuer alle spiel!

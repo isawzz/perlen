@@ -1,15 +1,45 @@
 function applyStandard(dParent, s) {
 	let b = { boardFilename: s.boardFilename };
+
 	let hBoard = 300, wBoard = 600;
 	let scale = hBoard / valf(s.hBoard, 768);
+
 	calcLayoutParameters(s, b, scale);
+
 	let d0 = b.d0 = mDiv(dParent, { w: wBoard + 100, h: hBoard + 100 }, 'd0_' + b.boardFilename); mCenterCenterFlex(d0);
 	let dOuter = b.dOuter = mDiv(d0, {}, 'dOuter_' + b.boardFilename);
-	mCenterCenterFlex(dOuter);
+
 	loadBoardImage(dParent, s, b, scale);
-	createFields(s, b, scale);
+
+	//=>then: loadImage,createFields
 	return b;
 }
+
+
+function setLinearBackground(d, cInner = '#00000080', percentWide, cOuter = 'transparent') {
+	if (typeof cInner == 'function') cInner = cInner();
+	d.style.background = `linear-gradient(to right, ${cOuter} 0%, ${cInner} ${percentWide}%,${cInner} ${100 - percentWide}%, ${cOuter}) 100%`;
+}
+function loadBoardImage(dOneBoard, s, b, scale) {
+	let boardFilename = s.boardFilename;
+	if (boardFilename == 'none') { return; }
+	let path = getBoardImagePath(boardFilename);
+	var img = mCreate('img');
+	img.onload = ev => {
+		let cornerColor = isdef(s.idealBg) ? s.idealBg : getCornerPixelColor(img);
+		let sz = s.naturalImageSize = { w: img.naturalWidth, h: img.naturalHeight };
+		let szi = s.backgroundSize;
+		if (szi == 'initial' && scale != 1) szi = getScaledSizeCss(sz, scale);
+		b.dOuter.style.backgroundImage = `url(${img.src})`;
+		mStyleX(b.dOuter, { 'background-size': szi, 'background-repeat': 'no-repeat', 'background-position': 'center center' });
+		mStyleX(b.dOuter, { w: sz.w * scale, h: sz.h * scale });
+		setLinearBackground(b.d0, cornerColor, 10);
+		b.img = img;
+	}
+	img.src = path;
+}
+
+
 function calcLayoutParameters(s, b, scale = 1) {
 	let [layout, wCell, hCell, rows, cols] = [s.boardLayout, s.wField, s.hField, s.rows, s.cols];
 
@@ -47,21 +77,7 @@ function calcLayoutParameters(s, b, scale = 1) {
 
 	return s.nFields;
 }
-function createFields(s, b, scale) {
-	let dCells = b.dCells = mDiv(b.dOuter, { matop: s.boardMarginTop * scale, maleft: s.boardMarginLeft * scale, w: b.wNeeded, h: b.hNeeded, position: 'relative' }); //, bg: 'green' });
-	let [wCell, hCell, wGap, hGap] = [b.wField, b.hField, s.wGap * scale, s.hGap * scale];
-	let fields = b.fields = [], i = 0, dx = wCell / 2, dy = hCell / 2;
-	let bg = s.fieldColor;
-	for (const p of b.centers) {
-		let left = p.x - dx + wGap / 2;
-		let top = p.y - dy + hGap / 2;
-		let dItem = mDiv(dCells, { position: 'absolute', left: left, top: top, display: 'inline', w: wCell - wGap, h: hCell - hGap, rounding: '50%', bg: bg });
-		mCenterCenterFlex(dItem)
-		let f = { div: dItem, index: i, center: p }; i += 1;
-		fields.push(f);
-	}
-	if (s.boardRotation != 0) { dCells.style.transform = `rotate(${s.boardRotation}deg)`; }
-}
+
 function getRandomPixelColor(img) {
 
 	let canvas = mCreate('canvas');
@@ -84,6 +100,7 @@ function getRandomPixelColor(img) {
 	console.log('pixel', coord, 'has color', color);
 	return color;
 }
+
 function getCornerPixelColor(img) {
 
 	let canvas = mCreate('canvas');
@@ -103,6 +120,7 @@ function getCornerPixelColor(img) {
 	//console.log('pixel', coord, 'has color', color);
 	return color;
 }
+
 function getValueInPixel(val, relto) {
 	if (isNumber(val)) return val;
 	val = firstNumber(val);
@@ -112,50 +130,23 @@ function getBoardImagePath(boardFilename) {
 	console.assert(boardFilename.includes('.'), 'getImagePath: not a filename!!!', boardFilename)
 	return PERLENPATH_FRONT + 'bretter/' + boardFilename;
 }
-function getScaledSizeCss(sz, scale) { return `${sz.w * scale}px ${sz.h * scale}px`; }
-
-function getBoardBackgroundPicker(b) {
-	let palette = getPaletteFromImage(b.img);
-	let picker = mColorPicker3(b.d0, palette, c => setLinearBackground(b.d0, c, 10), cornerColor);
-	b.colorPicker = picker;
-
-
-}
-function loadBoardImage(dOneBoard, s, b, scale) {
-	//aendert NICHT b.d0 size!!!
-	let boardFilename = s.boardFilename;
-	if (boardFilename == 'none') { return; }
-
-	let path = getBoardImagePath(boardFilename);
-	var img = mCreate('img');
-	img.onload = ev => {
-
-		let cornerColor = isdef(s.idealBg) ? s.idealBg : getCornerPixelColor(img);
-
-		let sz = s.naturalImageSize = { w: img.naturalWidth, h: img.naturalHeight };
-		let szi = s.backgroundSize;
-		if (szi == 'initial' && scale != 1) szi = getScaledSizeCss(sz, scale);
-		b.dOuter.style.backgroundImage = `url(${img.src})`;
-		mStyleX(b.dOuter, { 'background-size': szi, 'background-repeat': 'no-repeat', 'background-position': 'center center' });
-		mStyleX(b.dOuter, { w: sz.w * scale, h: sz.h * scale });
-		//mStyleX(b.dOuter, { w: 200, h: 100 });
-		//mStyleX(b.d0,{w:szi.w*2,h:sz.h*1.5});
-		setLinearBackground(b.d0, cornerColor, 10);
-		b.img = img;
-	}
-	img.src = path;
-
-}
 function setGradientImageBackground(d, path, color1 = 'red', color2 = 'green') {
 	d.style.background = color1;
 	d.style.backgroundImage = `url(${path})`;/* fallback */
 	d.style.backgroundImage = `url(${path}), linear-gradient(${color1}, ${color2})`;
 	d.style.backgroundSize = '100%';
 }
-function setLinearBackground(d, cInner = '#00000080', percentWide, cOuter = 'transparent') {
-	if (typeof cInner == 'function') cInner = cInner();
-	d.style.background = `linear-gradient(to right, ${cOuter} 0%, ${cInner} ${percentWide}%,${cInner} ${100 - percentWide}%, ${cOuter}) 100%`;
+function getScaledSizeCss(sz, scale) { return `${sz.w * scale}px ${sz.h * scale}px`; }
+
+function getBoardBackgroundPicker(b){
+	let palette = getPaletteFromImage(b.img);
+	let picker = mColorPicker3(b.d0, palette, c => setLinearBackground(b.d0, c, 10), cornerColor);
+	b.colorPicker = picker;
+
+
 }
+
+
 
 
 
