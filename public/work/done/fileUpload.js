@@ -197,7 +197,7 @@ function showUpdateImagesCheckbox() {
 }
 function showUploadInput() {
 	if (isdef(mBy('inputPerlenName'))) return;
-	let inputPerlenName = mInput('Name:', '', mBy('dLeiste'), { matop: 10, align: 'left' }, 'inputPerlenName');
+	let inputPerlenName = mInput('Name:', '', mBy('dLeiste'), { matop: 10, align: 'left' }, [],'inputPerlenName');
 	mStyleX(inputPerlenName, { w: SZ_UPLOAD_CANVAS, border: 'none' });
 
 }

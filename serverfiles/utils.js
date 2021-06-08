@@ -30,7 +30,7 @@ function fromYamlFile(path) {
 		//console.log('data',typeof data,Object.keys(data),data['playful']);
 		return data;
 	} catch (e) {
-		console.log(e);
+		//console.log(e);
 		return null;
 	}
 }

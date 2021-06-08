@@ -28,7 +28,8 @@ class ToolbarClass{
 		this.addButton('uploadPerlen',onClickUploadPerlen,'upload perlen');
 		this.addButton('chooseBoard',onClickChooseBoard,'choose board');
 		this.addButton('prefabGallery',onClickPrefabGallery,'prefab gallery');
-		// this.addButton('chooseLayout',onClickChooseLayout,'choose layout');
+		this.addButton('editLayout',onClickEditLayout,'EDIT layout');
+		this.addButton('publishLayout',onClickPublishLayout,'publish layout');
 		
 	}
 }

@@ -1,4 +1,4 @@
-onload = start(); // start | startTesting | startClientTest
+onload = UITEST?startTesting:start; // start | startTesting | startClientTest
 
 async function start() {
 

@@ -22,7 +22,7 @@ function initSidebar() {
 	dLeiste = mDiv(dParent,{ 'min-width':2, display: 'flex', 'flex-flow': 'column wrap' },'dLeiste');
 }
 function initAux() {
-	dAux = mBy('dAux');
+	dAux = mBy('dAux');dAuxContent=mBy('dAuxContent');
 }
 function initLineTop() {
 	dLineTopOuter = mDiv(table); dLineTopOuter.id = 'lineTopOuter';

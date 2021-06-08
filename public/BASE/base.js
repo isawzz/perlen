@@ -75,8 +75,8 @@ function mColorPicker0(dParent, palette, onColor) {
 function mColorPicker3(elem, palette, onColor, initialColor) {
 	//let elem = mDiv(dParent,{w:50,h:50,display:'inline-block'});
 	let picker = new JSColor(elem, {
-		alpha:'ff', 
-		closeButton: true, 
+		alpha: 'ff',
+		closeButton: true,
 		value: initialColor,
 		palette: palette,
 	});
@@ -85,18 +85,17 @@ function mColorPicker3(elem, palette, onColor, initialColor) {
 	return picker;
 }
 function mColorPicker2(dParent, palette, onColor, initialColor) {
-	let elem = mDiv(dParent,{w:50,h:50,display:'inline-block'});
+	let elem = mDiv(dParent, { w: 50, h: 50, display: 'inline-block' });
 	let picker = new JSColor(elem, {
-		alpha:'ff', 
-		closeButton: true, 
+		alpha: 'ff',
+		closeButton: true,
 		value: initialColor,
 		palette: palette,
 	});
 	// picker.onChange = ()=>{let c = picker.toHEXAString(); onColor(c);console.log('picked',c);}
-	picker.onInput = ()=>{let c = picker.toHEXAString(); onColor(c);console.log('picked',c);}
+	picker.onInput = () => { let c = picker.toHEXAString(); onColor(c); console.log('picked', c); }
 	return picker;
 }
-
 function mColorPicker1(dParent, palette, onColor) {
 	let dPalette = mDiv(dParent, { margin: 4 }); mFlex(dPalette);
 	let items = [];
@@ -123,10 +122,10 @@ function mColorPicker1(dParent, palette, onColor) {
 
 	//add a real html colopicker item
 	//add a transparency item
-	let elem = mCreate('input'); mAppend(dPalette,elem);
+	let elem = mCreate('input'); mAppend(dPalette, elem);
 	let alphaPicker = new JSColor(elem, {});
-	let alphaItem = {isSelected: false};
-	alphaPicker.onChange = ()=>{alphaItem.color=elem.value; onColor(elem.value);}
+	let alphaItem = { isSelected: false };
+	alphaPicker.onChange = () => { alphaItem.color = elem.value; onColor(elem.value); }
 	alphaItem.picker = alphaPicker;
 	iAdd(alphaItem, { div: elem });
 	items.push(alphaItem);
@@ -134,35 +133,171 @@ function mColorPicker1(dParent, palette, onColor) {
 
 	return picker;
 }
-
 function mCreate(tag, styles, id) { let d = document.createElement(tag); if (isdef(id)) d.id = id; if (isdef(styles)) mStyleX(d, styles); return d; }
 function mDestroy(elem) { if (isString(elem)) elem = mById(elem); purge(elem); } // elem.parentNode.removeChild(elem); }
-function mDiv(dParent = null, styles, id, inner) { let d = mCreate('div'); if (dParent) mAppend(dParent, d); if (isdef(styles)) mStyleX(d, styles); if (isdef(id)) d.id = id; if (isdef(inner)) d.innerHTML = inner; return d; }
+function mDiv(dParent, styles, id, inner, classes) {
+	let d = mCreate('div');
+	if (dParent) mAppend(dParent, d);
+	if (isdef(styles)) mStyleX(d, styles);
+	if (isdef(classes)) mClass(d, ...classes);
+	if (isdef(id)) d.id = id;
+	if (isdef(inner)) d.innerHTML = inner;
+	return d;
+}
 function mDiv100(dParent, styles, id) { let d = mDiv(dParent, styles, id); mSize(d, 100, 100, '%'); return d; }
 function mDover(dParent) { let d = mDiv(dParent); mIfNotRelative(dParent); mStyleX(d, { position: 'absolute', w: '100%', h: '100%' }); return d; }
-function mEditableOnEdited(id, dParent, label, initialVal, onEdited, onOpening) {
-	let inp = mEditableInput(dParent, label, initialVal);
+function unfocusOnEnter(ev) {
+	if (ev.key === 'Enter') {
+		ev.preventDefault();
+		//console.log('ENTER!', G.settings.rows)
+		mBy('dummy').focus();
+	}
+}
+function selectText(el) {
+	var sel, range;
+	if (window.getSelection && document.createRange) { //Browser compatibility
+		sel = window.getSelection();
+		if (sel.toString() == '') { //no text selection
+			window.setTimeout(function () {
+				range = document.createRange(); //range object
+				range.selectNodeContents(el); //sets Range
+				sel.removeAllRanges(); //remove all ranges from selection
+				sel.addRange(range);//add Range to a Selection.
+			}, 1);
+		}
+	} else if (document.selection) { //older ie
+		sel = document.selection.createRange();
+		if (sel.text == '') { //no text selection
+			range = document.body.createTextRange();//Creates TextRange object
+			range.moveToElementText(el);//sets Range
+			range.select(); //make selection.
+		}
+	}
+}
+function incInput(inp, n = 1) {
+	let val = Number(inp.innerHTML);
+	val += n;
+	inp.innerHTML = val;
+}
+function mEditRange(label, value, min, max,step, dParent, handler, styles, classes, id, triggerOnChange = true) {
+	let d = mDiv(dParent, styles);
+	let hpad = valf(styles.hpadding, 4);
+	let dLabel = mDiv(d, { w: '30%', align: 'right', hpadding: hpad, display: 'inline-block' }, null, label); //createElementFromHTML(`<label>${label}</label>`);
+	let inpText = createElementFromHTML(`<input type='number'  step=${step} min="${min}" max="${max}" value="${value}" ></input>`);
+	let inp = createElementFromHTML(`<input type="range" step=${step} min="${min}" max="${max}" value="${value}" ></input>`);
+	// let inp = createElementFromHTML(`<div contenteditable="true" spellcheck="false">${value}</div>	`)
+	mAppend(d, inpText);
+	mAppend(d, inp);
+	// let button = mButton('+', triggerOnChange ? ev => { incInput(inp); handler(inp.innerHTML, ev); } : ev => { incInput(inp); }, d);
+	mStyleX(inpText, { display: 'inline', w: '20%', align:'left', hpadding: hpad });
+	mStyleX(inp, { display: 'inline', w: '40%', hpadding: hpad });
+
+	inpText.onchange= (ev)=>{inp.value=inpText.value;handler(inpText.value,ev);};
+	// inpText.addEventListener('keydown', unfocusOnEnter);
+	// inpText.addEventListener('focusout', ev => { inp.value = inpText.value;handler(inp.innerHTML, ev); });
+	inpText.onclick = ev => selectText(ev.target);
+	inp.onchange = (ev)=>{inpText.value=inp.value;handler(inpText.value,ev);};
+	if (isdef(classes)) mClass(inp, ...classes);
+	if (isdef(id)) inp.id = id;
+	return inpText;
+}
+
+function mEditNumber(label, value, dParent, handler, styles, classes, id, triggerOnChange = true) {
+	let d = mDiv(dParent, styles);
+	let hpad = valf(styles.hpadding, 4);
+	let dLabel = mDiv(d, { w: '50%', align: 'right', hpadding: hpad, display: 'inline-block' }, null, label); //createElementFromHTML(`<label>${label}</label>`);
+
+	let inp = createElementFromHTML(`<div contenteditable="true" spellcheck="false">${value}</div>	`)
+	mAppend(d, inp);
+	let button = mButton('+', triggerOnChange ? ev => { incInput(inp); handler(inp.innerHTML, ev); }
+		: ev => { incInput(inp); }, d);
+	mStyleX(inp, { display: 'inline-block', w: '40%', align: 'left', hpadding: hpad });
+	inp.addEventListener('keydown', unfocusOnEnter);
+	inp.addEventListener('focusout', ev => { handler(inp.innerHTML, ev); });
+	inp.onclick = ev => selectText(ev.target);
+
+	if (isdef(classes)) mClass(inp, ...classes);
+	if (isdef(id)) inp.id = id;
+	return inp;
+}
+
+function mEdit(label, value, dParent, handler, styles, classes, id) {
+
+	let d = mDiv(dParent, styles);
+	let hpad = valf(styles.hpadding, 4);
+	let dLabel = mDiv(d, { w: '50%', align: 'right', hpadding: hpad, display: 'inline-block' }, null, label); //createElementFromHTML(`<label>${label}</label>`);
+
+	let inp = createElementFromHTML(`<div contenteditable="true" spellcheck="false">${value}</div>	`)
+	mAppend(d, inp);
+	mStyleX(inp, { display: 'inline-block', w: '50%', align: 'left', hpadding: hpad });
+	inp.addEventListener('keydown', unfocusOnEnter);
+	inp.addEventListener('focusout', ev => { handler(inp.innerHTML, ev); });
+	inp.onclick = ev => selectText(ev.target);
+
+	if (isdef(classes)) mClass(inp, ...classes);
+	if (isdef(id)) inp.id = id;
+	return inp;
+}
+function mEditX(label, val, dParent, styles, classes, handler, id, opt = {}) {
+	let defOptions = {
+		alignLabel: 'right',
+		fgLabel: 'silver',
+		wminLabel: 120,
+		alignInput: 'left',
+		fgInput: 'white',
+		wminInput: 50,
+		wminRight: 120,
+		align: 'center',
+
+	}
+	addKeys(defOptions, opt);
+	let wminTotal = wminLabel + wminRight;
+	if (nundef(styles)) styles = {};
+	if (nundef(styles.wmin)) styles.wmin = 0;
+	styles.wmin = Math.max(styles.wmin, wminTotal);
+	styles.align = opt.align;
+	let dOuter = mDiv(dParent, styles, id, null, classes);
+	let dLabel = mDiv(dOuter, { fg: opt.fgLabel, wmin: opt.wminLabel, align: opt.alignLabel }, null, label);
+	let dInput = mDiv(dOuter, { contenteditable: true, spellcheck: false, fg: opt.fgInput, wmin: opt.wminInput, align: opt.alignInput }, null, val);
+	dInput.onfocusout = ev => handler(dInput.innerHTML, ev);
+	dInput.onkeydown = (ev) => {
+		if (ev.key === 'Enter') {
+			ev.preventDefault();
+			mBy('dummy').focus();
+		}
+	}
+	return dInput;
+}
+function mEditableOnEdited(id, dParent, label, initialVal, onEdited, onOpening, styles, classes) {
+	let inp = mEditableInput(dParent, label, initialVal, styles, classes);
 	inp.id = id;
 	if (isdef(onOpening)) { inp.addEventListener('focus', ev => onOpening(ev)); }
 	inp.addEventListener('focusout', ev => {
-		//unselect text in span
 		window.getSelection().removeAllRanges();
 		if (isdef(onEdited)) onEdited(inp.innerHTML, ev);
-	}); //(ev) => { onChange(ev,isCaseSensitive?inp.innerHTML:inp.innerHTML.toLowerCase()); });
+	});
 	return inp;
 }
-function mEditableInput(dParent, label, val) {
+function mEditableInput(dParent, label, val, styles, classes, id) {
 	let labelElem = createElementFromHTML(`<span>${label}</span>	`)
 	let elem = createElementFromHTML(`<span contenteditable="true" spellcheck="false">${val}</span>	`)
 	elem.addEventListener('keydown', (ev) => {
 		if (ev.key === 'Enter') {
 			ev.preventDefault();
 			mBy('dummy').focus();
+			//if (isdef(handler)) handler(elem.innerHTML, ev); //das ist schon bei mEditableInputOnEdited!!!
 		}
 	});
 	let dui = mDiv(dParent, { margin: 2 });
 	mAppend(dui, labelElem);
 	mAppend(dui, elem);
+	if (isdef(styles)) {
+		if (isdef(styles.wInput)) mStyleX(elem, { wmin: styles.wInput });
+		mStyleX(elem, styles);
+	}
+	if (isdef(classes)) mStyleX(elem, ...classes);
+	if (isdef(id)) elem.id = id;
+
 	return elem;
 }
 function mFlexWrap(d) { mFlex(d, 'w'); }
@@ -219,12 +354,13 @@ function mImg(path, dParent, styles, classes, callback) {
 	//<img src="kiwi.svg" alt="Kiwi standing on oval"></img>
 }
 function mInner(html, dParent, styles) { dParent.innerHTML = html; if (isdef(styles)) mStyleX(dParent, styles); }
-function mInput(label, value, dParent, styles, id) {
-	let inp = createElementFromHTML(`<input type="text" class="input" value="${value}" />`);
+function mInput(label, value, dParent, styles, classes, id) {
+	let inp = createElementFromHTML(`<input type="text" value="${value}" />`);
 	let labelui = createElementFromHTML(`<label>${label}</label>`);
 	mAppend(dParent, labelui);
 	mAppend(labelui, inp);
 	if (isdef(styles)) mStyleX(labelui, styles);
+	if (isdef(classes)) mClass(inp, ...classes);
 	if (isdef(id)) inp.id = id;
 	return inp;
 }
@@ -309,7 +445,7 @@ function mStyleX(elem, styles, unit = 'px') {
 	}
 	if (isdef(styles.vmargin) && isdef(styles.hmargin)) {
 		styles.margin = styles.vmargin + unit + ' ' + styles.hmargin + unit;
-		console.log('::::::::::::::', styles.margin)
+		//console.log('::::::::::::::', styles.margin)
 	}
 	if (isdef(styles.vpadding) || isdef(styles.hpadding)) {
 
@@ -1795,7 +1931,7 @@ example:
 	functionWithSetTimeouts (after last timeout flag should be set)
 	while (!flag) { await sleepX(3000); }
 	... continuing code after last timeout!
-
+	
 	*/
 	//#endregion 
 	return new Promise(r => setTimeout(r, msecs));
@@ -2542,6 +2678,7 @@ function arrWithout(a, b) { return arrMinus(a, b); }
 
 function classByName(name) { return eval(name); }
 function copyKeys(ofrom, oto, except = {}, only) {
+	//console.log(ofrom)
 	let keys = isdef(only) ? only : Object.keys(ofrom);
 	for (const k of keys) {
 		if (isdef(except[k])) continue;
@@ -3574,7 +3711,7 @@ function initServerPool(settings, state, perlenDict) {
 	return maxPoolIndex;
 }
 function addToPool(pool, poolArr, perle, index) {
-	let p = pool[index] = { key: perle.path, index: index };
+	let p = pool[index] = { key: perle.key, index: index };
 	poolArr.push(index);
 	return p;
 }

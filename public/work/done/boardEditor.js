@@ -12,9 +12,9 @@ class FileUploadForm {
 	bretter(){this.createHtml('bretter');}
 	perlen(){this.createHtml('perlen');}
 	createHtml(route){
-		let elem = createElementFromHTML(`
+			// <p>${this.title}!</p>
+			let elem = createElementFromHTML(`
 		<div>
-			<h1>${route}!</h1>
 			<form action="/${route}" enctype="multipart/form-data" method="post">
 				<input type="file" name="${route}" accept='image/*' multiple>
 				<input type="submit" value="Upload">

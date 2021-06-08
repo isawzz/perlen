@@ -37,7 +37,7 @@ games:
     poolSelection: random
     numPool: 25
     boardLayout: hex1
-    boardFilename: shapeShifters.png
+    boardFilename: shapeShifters768.png
     backgroundSize: initial # initial | cover 
     sizeBoardHeightToImage: false
     fieldShape: circle
@@ -1216,6 +1216,7 @@ standardSettings:
     idealBg: rgb(76, 127, 206)
     boardLayout: hex1
     boardFilename: dateTree.jpg
+    boardRotation: 0
     fieldShape: circle
     fieldColor: '#ffffff80'
     wField: 101

@@ -15,11 +15,20 @@ async function startTesting() {
 }
 function runTest() {
 
-	hexBoardTests();
+	editLayoutTests();//hexBoardTests();
+
+}
+
+async function editLayoutTests() {
+	DB = await route_path_yaml_dict('./PERLENDATA/data.yaml');
+	lastState = await route_path_yaml_dict('./PERLENDATA/lastState.yaml');
+	G = { settings: lastState.settings, dParent: dTable, clientBoard:{} };
+	applyStandard(G.dParent,G.settings);
+	onClickEditLayout();
 }
 
 //#region hex board test + function!
-function hexBoardTests(){
+function hexBoardTests() {
 	let w = window.innerWidth;
 	let sz = 100;
 	let cols = math.floor(w / 100);

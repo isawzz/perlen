@@ -1,8 +1,12 @@
+function openAux(title) {
+	show(dAux); clearElement(dAuxContent);
+	dAuxTitle.innerHTML = title;
+}
+
 function onClickUploadBoard() {
 	//hier gib das zeug vom anderen hin!
-	show(dAux);
-	clearElement(dAux);
-	let form1 = new FileUploadForm(dAux, 'Upload Board Image', 'bretter',
+	openAux('upload board image');
+	let form1 = new FileUploadForm(dAuxContent, 'Upload Board Image', 'bretter',
 		filename => {
 			if (!filename) console.log('cancel!')
 			else console.log('file ' + filename + ' uploaded successfully!');
@@ -11,8 +15,8 @@ function onClickUploadBoard() {
 }
 function onClickUploadPerlen() {
 	//hier gib das zeug vom anderen hin!
-	show(dAux); clearElement(dAux); //mStyleX(dAux,{wmin:'30%'});
-	let form1 = new FileUploadForm(dAux, 'Upload Perlen Images', 'perlen',
+	openAux('upload perlen images');
+	let form1 = new FileUploadForm(dAuxContent, 'Upload Perlen Images', 'perlen',
 		filename => {
 			if (!filename) console.log('cancel!')
 			else console.log('file ' + filename + ' uploaded successfully!');
@@ -20,76 +24,99 @@ function onClickUploadPerlen() {
 		});
 }
 function onClickChooseBoard() {
-	show(dAux);
-	clearElement(dAux);
-	mDiv(dAux, {}, null, '<h1>click board to select!</h1>');
+	openAux('click board to select');
 	let boards = G.settings.boardFilenames;
-	console.log(boards);
+	//console.log(boards);
 	for (const b of boards) {
-		let img = mImg(PERLENPATH_FRONT + 'bretter/' + b, dAux, { h: 200, margin: 8, 'vertical-align': 'baseline' });
+		let img = mImg(PERLENPATH_FRONT + 'bretter/' + b, dAuxContent, { h: 200, margin: 8, 'vertical-align': 'baseline' });
 		img.onclick = () => { hide(dAux); G.chooseBoard(b); }
 	}
 	//add empty frame for empty
-	let img = mDiv(dAux, { display: 'inline-block', border: 'black', w: 300, h: 200, margin: 8, box: true });
+	let img = mDiv(dAuxContent, { display: 'inline-block', border: 'black', w: 300, h: 200, margin: 8, box: true });
 	img.onclick = () => { hide(dAux); G.chooseBoard('none'); }
 }
 function onClickPrefabGallery() {
-	show(dAux); clearElement(dAux); mDiv(dAux, {}, null, '<h1>choose layout of fields on board</h1>');
+	openAux('choose board + layout');
 	let standards = DB.standardSettings;
 	let boardExamples = {};
 	for (const stdName in standards) {
 		let std = standards[stdName];
-		let d = mDiv(dAux,{margin:10});
+		let d = mDiv(dAuxContent, { margin: 10 });
 		addKeys(G.settings, std);
 		//console.log('std',std,'\nG.settings',G.settings);
 		//break;
 
-		let b=applyStandard(d, std);
+		let b = applyStandard(d, std, 400);
 
-		boardExamples[stdName]={
+		boardExamples[stdName] = {
 			key: stdName,
-			board:b,
-			settings:std,
-			colorPicker:b.colorPicker,
-			dParent:d,
+			board: b,
+			settings: std,
+			colorPicker: b.colorPicker,
+			dParent: d,
 
 		}
 	}
 	console.log(boardExamples);
 }
-
-
-function onClickChooseLayout() {
-	show(dAux); clearElement(dAux); mDiv(dAux, {}, null, '<h1>choose layout of fields on board</h1>');
-	let standards = DB.standardSettings;
-	let boardExamples = {};
-	//console.log(standards);
-	for (const stdName in standards) {
-		let std = standards[stdName];
-		if (std.boardFilename == 'shapeShifters.png') continue;
-		let d = mDiv(dAux);
-		addKeys(G.settings, std);
-		//console.log('std',std,'\nG.settings',G.settings);
-		//break;
-
-		let b=applyStandard(d, std);
-
-		boardExamples[stdName]={
-			key: stdName,
-			board:b,
-			settings:std,
-			colorPicker:b.colorPicker,
-			dParent:d,
-
+function selectTextOrig(id) {
+	var sel, range;
+	var el = document.getElementById(id); //get element id
+	if (window.getSelection && document.createRange) { //Browser compatibility
+		sel = window.getSelection();
+		if (sel.toString() == '') { //no text selection
+			window.setTimeout(function () {
+				range = document.createRange(); //range object
+				range.selectNodeContents(el); //sets Range
+				sel.removeAllRanges(); //remove all ranges from selection
+				sel.addRange(range);//add Range to a Selection.
+			}, 1);
 		}
-		//break;
-		// let img = mImg(PERLENPATH_FRONT + 'bretter/' + b, dAux, { h: 200, margin: 8, 'vertical-align': 'baseline' });
-		// img.onclick = () => { hide(dAux); G.chooseBoard(b); }
+	} else if (document.selection) { //older ie
+		sel = document.selection.createRange();
+		if (sel.text == '') { //no text selection
+			range = document.body.createTextRange();//Creates TextRange object
+			range.moveToElementText(el);//sets Range
+			range.select(); //make selection.
+		}
 	}
-	console.log(boardExamples);
-	//add empty frame for empty
-	// let img = mDiv(dAux, { display: 'inline-block', border: 'black', w: 300, h: 200, margin: 8, box: true });
-	// img.onclick = () => { hide(dAux); G.chooseBoard('none'); }
 }
 
+function setAndTest(s, b, prop, val) {
+	s[prop] = val;
+	console.log('result', s);
+
+	clearElement(G.dParent);
+	//copyKeys(s,G.settings);
+	G.clientBoard = applyStandard(G.dParent, G.settings);
+
+
+}
+function setApply(prop, val) {
+	console.log('hallo!', prop, val);
+	// return;
+	if (isNumber(val)) val = Number(val);
+	let s = G.settings;
+	s[prop] = val;
+	clearElement(G.dParent);
+	G.clientBoard = applyStandard(G.dParent, s);
+}
+function onClickEditLayout() {
+	openAux('Settings');
+	let [s, b] = [G.settings, G.clientBoard];
+	let styles = { w: 300, align: 'center', hmargin: 20, vmargin: 6, bg: 'green' };
+	let inpRows = mEditRange('rows: ', s.rows, 1, 20, 1, dAuxContent, (a) => { setApply('rows', a) }, styles);
+	let inpCols = mEditRange('cols: ', s.cols, 1, 20, 1, dAuxContent, (a) => { setApply('cols', a) }, styles);
+	let inpRot = mEditRange('rotation: ', s.boardRotation, 0, 90, 1, dAuxContent, (a) => { setApply('boardRotation', a) }, styles);
+	let inpWidth = mEditRange('width: ', s.wField, 10, 200, 2, dAuxContent, (a) => { setApply('wField', a) }, styles);
+	let inpHeight = mEditRange('height: ', s.hField, 10, 200, 2, dAuxContent, (a) => { setApply('hField', a) }, styles);
+	// let inpRows1=mEdit('rows: ', s.rows, dAuxContent,(a)=>{setAndTest(s,b,'rows',Number(a))}, styles);
+	// let inpCols=mEdit('cols: ', s.cols, dAuxContent,(a)=>{setAndTest(s,b,'cols',Number(a))}, styles);
+	// let inpRot=mEditNumber('rotation: ', s.boardRotation, dAuxContent,(a)=>{setAndTest(s,b,'boardRotation',Number(a))}, styles);
+	//let inpRows=mEdit('rows: ', s.rows, dAuxContent, {maleft:50});
+}
+function onClickPublishLayout(){
+	openAux('enter name for prefab');
+	Socket.emit('settings',{settings:G.settings});
+}
 

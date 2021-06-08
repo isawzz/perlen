@@ -4,22 +4,22 @@ settings:
   poolSelection: random
   numPool: 1
   boardLayout: hex1
-  boardFilename: brett20_43.png
+  boardFilename: brett10.png
   backgroundSize: initial
   sizeBoardHeightToImage: true
   fieldShape: circle
   fieldColor: "#ffffff80"
-  wField: 101
-  hField: 117
-  wGap: 15
-  hGap: 30
+  wField: 90
+  hField: 104
+  wGap: 25
+  hGap: 32
   rows: 7
-  cols: 6
+  cols: 4
   boardLayoutFile: null
-  boardRotation: 0
+  boardRotation: 20
   wFieldArea: 768
   hFieldArea: 768
-  boardMarginLeft: 0
+  boardMarginLeft: -4
   boardMarginTop: 0
   bgPool: transparent
   fgPool: "#ffffffff"
@@ -27,17 +27,85 @@ settings:
   fgBoard: black
   szPerle: 75
   fzLabel: 16
-  nFields: 43
+  nFields: 37
   layout: hex1
   labelPos: hover
   wBoard: 100%
   hBoard: 768
+  naturalImageSize:
+    w: 768
+    h: 768
 state:
   pool:
     "0":
-      key: agent
+      key: ai
       index: 0
-  poolArr: []
+    "1":
+      key: begeisterung
+      index: 1
+    "2":
+      key: agent
+      index: 2
+    "3":
+      key: aktie
+      index: 3
+    "4":
+      key: alchemie
+      index: 4
+    "5":
+      key: alles steigt aus der quelle
+      index: 5
+    "6":
+      key: cia
+      index: 6
+    "7":
+      key: collectivism
+      index: 7
+    "8":
+      key: consensus building
+      index: 8
+    "9":
+      key: culture wars
+      index: 9
+    "10":
+      key: dark ages
+      index: 10
+    "11":
+      key: das große rote megaphon
+      index: 11
+    "12":
+      key: das leben ein film
+      index: 12
+    "13":
+      key: das mehrstöckige haus
+      index: 13
+    "14":
+      key: demokratie
+      index: 14
+    "15":
+      key: der eiserne vorhang
+      index: 15
+    "16":
+      key: der schwarze drachen tod
+      index: 16
+    "17":
+      key: deutsch
+      index: 17
+  poolArr:
+    - 11
+    - 1
+    - 2
+    - 3
+    - 4
+    - 5
+    - 6
+    - 8
+    - 12
+    - 13
+    - 14
+    - 15
+    - 16
+    - 17
   boardArr:
     - null
     - null
@@ -57,33 +125,19 @@ state:
     - null
     - null
     - null
+    - 0
     - null
     - null
     - null
     - null
     - null
+    - 10
+    - 9
     - null
     - null
     - null
     - null
-    - null
-    - null
-    - null
-    - null
-    - null
-    - null
-    - null
-    - null
-    - null
-    - null
-    - null
-    - null
-    - null
-    - null
-    - null
-    - null
-    - null
-    - null
+    - 7
     - null
     - null
     - null

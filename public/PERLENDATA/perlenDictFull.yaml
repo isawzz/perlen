@@ -1,0 +1,20 @@
+agent:
+  key: agent
+  path: agent.png
+  text: agent
+ai:
+  key: ai
+  path: ai.png
+  text: AI
+ai.png:
+  text: ai
+  key: ai
+  path: ai.png
+aktie:
+  text: aktie
+  key: aktie
+  path: aktie
+alchemie:
+  text: alchemie
+  key: alchemie
+  path: alchemie

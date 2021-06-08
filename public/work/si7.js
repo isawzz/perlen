@@ -6,16 +6,11 @@ function simplestPerlenGame() {
 	show('dGameScreen');
 	setTitle('Glasperlenspiel');
 	setSubtitle('logged in as ' + Username);
-
 	let color = USERNAME_SELECTION == 'local' ? localStorage.getItem('BaseColor') : null;
 	setNewBackgroundColor(color);
 	mStyleX(document.body, { opacity: 1 });
 	initTable(null, 2); initSidebar(); initAux(); initScore();
 	ColorThiefObject = new ColorThief();
-
-
-	//bis hier ist alles so fuer alle spiel!
-	//*** hier PerlenGame starts von Client aus!
 	if (PERLEN_EDITOR_OPEN_AT_START) createPerlenEditor();
 	sendStartOrJoinPerlenGame();
 }
@@ -27,24 +22,22 @@ function sendStartOrJoinPerlenGame() {
 	Socket.emit('startOrJoinPerlen', data);
 	window.onkeydown = keyDownHandler;
 	window.onkeyup = keyUpHandler;
-	mBy('sidebar').ondblclick = togglePerlenEditor;
+	//mBy('sidebar').onmousedown = ()=>hide(dAux);
+	// mBy('table').onmousedown = ()=>hide(dAux);
+	// dAux.onmousedown = (ev)=>ev.stopPropagation();
+	// mBy('sidebar').ondblclick = togglePerlenEditor;
 	G = VERSION == 7 ? new SimpleClass7() : new SimpleClass();
 	Settings = new PerlenSettingsClass(G.settings, U, mBy('dSettingsWindow'));
-	//console.log('G created');
 	if (!USESOCKETS) G.presentGameState();
-	// if (!USESOCKETS) G.presentGameState({
-	// 	settings: DB.games.gPerlen2.settings,
-	// 	state: createFakeState(),
-	// });
 }
 //skip next 2 steps!
 function handleInitialPool(data) {
 	console.assert(isdef(G), 'G not defined!!!!!!!!!!!')
 	//if (nundef(G.settings) && isdef(data.settings)) 
 	if (isdef(data.settings) && isdef(G.settings)) copyKeys(data.settings, G.settings);
-	else if (isdef(data.settings)) copyKeys(data.settings,G.settings);
+	else if (isdef(data.settings)) copyKeys(data.settings, G.settings);
 	else if (isdef(G.settings)) G.settings.individualSelection = true;
-	else if (nundef(data.settings) && nundef(G.settings)) copyKeys({ individualSelection: true },G.settings);
+	else if (nundef(data.settings) && nundef(G.settings)) copyKeys({ individualSelection: true }, G.settings);
 	G.initialPoolSelected = false;
 	logClientReceive('initialPool', data);
 	setTitle(data.instruction);

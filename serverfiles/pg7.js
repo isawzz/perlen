@@ -11,8 +11,12 @@ var Verbose = false;
 const NO_LAST_STATE = false;
 class GP2 {
 	constructor(io, perlenDict, DB, lastState) {
+		if (Verbose) {
+			console.log('lastState defined', base.isdef(lastState));
+			if (base.isdef(lastState)) console.log(Object.keys(lastState.state.pool).length);
+		}
 		this.io = io;
-		this.perlenDict = perlenDict;
+		this.perlenDictFull = perlenDict;
 		this.db = DB;
 		this.settings = base.jsCopy(DB.games.gPerlen2);
 
@@ -20,23 +24,91 @@ class GP2 {
 		this.lastState = lastState;
 		base.copyKeys(lastState.settings, this.settings);
 
+		this.ensureNoDuplicatesInLastState();
+
 		//initialize settings.boardFilenames from directory!
 		utils.getFilenames(path.join(__dirname, PerlenPath + 'bretter'),
 			filenames => {
-				let s = this.settings;
-				s.boardFilenames = filenames;
-				if (s.boardFilename != 'none' && !(filenames.includes(s.boardFilename))) {
-					//eg., this file has been deleted!
-					console.log('board file deleted!!!! =>replacing board!', s.boardFilename);
-					this.lastState.boardFilename = s.boardFilename = filenames[0];
-				}
-				this.weiter();
+				this.ensureBoardFilename(filenames);
+				utils.getFilenames(path.join(__dirname, PerlenPath + 'perlen'),
+					perlen => {
+						this.ensurePerlenDict(perlen);
+						this.weiter();
+					});
 			});
+	}
+	ensureBoardFilename(filenames) {
+		let s = this.settings;
+		s.boardFilenames = filenames;
+		if (s.boardFilename != 'none' && !(filenames.includes(s.boardFilename))) {
+			//eg., this file has been deleted!
+			//console.log('board file deleted!!!! =>replacing board!', s.boardFilename);
+			this.lastState.boardFilename = s.boardFilename = filenames[0];
+		}
+		log('boardFilename ok:', s.boardFilename);
+	}
+	ensurePerlenDict(perlen) {
+		//let s = this.settings;
+		let modified = false;
+		this.perlenDict = {};
+		for (const f of perlen) {
+			//console.log('===>f', f)
+			let key = base.stringBefore(f, '.');
+			//console.log('===>k', key);
+			let perle = this.perlenDictFull[key];
+			//console.log('===>p', perle);
+			if (base.nundef(perle)) {
+				modified = true;
+				perle = {
+					text: base.stringBefore(key, '.'),
+					key: base.stringBefore(key, '.'),
+					path: key,
+				};
+			}
+			this.perlenDict[key] = perle;
+			this.perlenDictFull[key] = perle;
+		}
+		if (modified) {
+			console.log('*save perlenDict*', Object.keys(this.perlenDict).length)
+			utils.toYamlFile(this.perlenDictFull, path.join(__dirname, PerlenPath + 'perlenDictFull.yaml'));
+			utils.toYamlFile(this.perlenDict, path.join(__dirname, PerlenPath + 'perlenDict.yaml'));
+		}
+
+		let pool = this.lastState.pool;
+		let barr = this.lastState.state.boardArr;
+		let nFields = base.isdef(barr) ? barr.length : 0;
+		let poolCorrupted = false;
+		for (const idx in pool) {
+			if (nundef(this.perlenDict[pool[idx].key])) {
+				poolCorrupted = true;
+				this.lastState.state = { boardArr: new Array(nFields), pool: {}, poolArr: [] };
+				break;
+
+			}
+		}
+	}
+	ensureNoDuplicatesInLastState() {
+		let pool = this.lastState.state.pool;
+		if (base.nundef(pool)) return;
+		let di = {};
+		let newPool = {};
+		let i = 0;
+		for (const key in pool) {
+			let p = pool[key];
+			if (base.nundef(di[p.key])) { newPool[i] = { key: p.key, index: i }; i += 1; di[p.key] = true; }
+		}
+		this.lastState.state.pool = newPool;
+		console.log('pool ok:', Object.keys(newPool).length, ' - old pool', Object.keys(pool).length);
 	}
 	weiter() {
 		let s = this.settings, lastState = this.lastState;
-		if (Verbose) console.log('boards', this.settings.boardFilenames);
-		//console.log('settings',this.settings)
+		if (Verbose) {
+			console.log('boards', this.settings.boardFilenames);
+			console.log('perlen', Object.keys(this.perlenDict));
+			console.log('lastState pool', Object.keys(lastState.state.pool).length);
+
+		}
+		log('*** THE END ***');
 		this.state = {};
 
 		this.initState(lastState.state, lastState.settings);
@@ -54,6 +126,7 @@ class GP2 {
 			//console.log('state', state.pool);
 			this.maxPoolIndex = Object.keys(state.pool).length;
 		} else {
+
 			this.maxPoolIndex = base.initServerPool(this.settings, this.state, this.perlenDict);
 			this.state.boardArr = [];
 		}
@@ -67,17 +140,19 @@ class GP2 {
 		this.players[id] = pl;
 		return pl;
 	}
-	addPerle(key) {
-		console.assert(key == key.toLowerCase(), 'FILENAME CASING!!!!');
+	addPerle(filename, addToCurrentPool) {
+		console.log('add new perle', filename)
+		console.assert(filename == filename.toLowerCase(), 'FILENAME CASING!!!!');
 		let emitPool = false, savePerlen = false;
 		let perle;
+		let key = base.stringBefore(filename, '.');
 		if (!(key in this.perlenDict)) {
 			emitPool = true;
 			savePerlen = true;
 			perle = {
-				text: base.stringBefore(key, '.'),
-				key: base.stringBefore(key, '.'),
-				path: key,
+				text: key,
+				key: key,
+				path: filename,
 			};
 			this.perlenDict[key] = perle;
 		}
@@ -85,16 +160,20 @@ class GP2 {
 
 		console.assert(base.isdef(perle), 'KEINE PERLE!!!!!!!!!!!!!! ' + key);
 
-		let p = base.firstCondDict(this.state.pool, x => x.key == key);
-		if (!p) {
-			base.addToPool(this.state.pool, this.state.poolArr, this.perlenDict[key], this.maxPoolIndex);
-			this.maxPoolIndex += 1;
-			emitPool = true;
+		if (addToCurrentPool) {
+			let p = base.firstCondDict(this.state.pool, x => x.key == key);
+			if (!p) {
+				base.addToPool(this.state.pool, this.state.poolArr, this.perlenDict[key], this.maxPoolIndex);
+				this.maxPoolIndex += 1;
+				this.safeEmitState(['pool','perlenDict']);
+			}
 		}
-		if (savePerlen) { savePerlenDictToFile(); }
-		return emitPool;
+		if (savePerlen) {
+			utils.toYamlFile(this.perlenDict, path.join(__dirname, PerlenPath + 'perlenDict.yaml'));
+		}
+		
 	}
-	addBoard(filename){
+	addBoard(filename) {
 		this.settings.boardFilenames.push(filename);
 		this.safeEmitState(['settings']);
 
@@ -191,13 +270,41 @@ class GP2 {
 		this.safeEmitState();
 	}
 
-	handleNewBoard(client, x){
+	handleChooseBoard(client, x) {
 		this.settings.boardFilename = x.boardFilename;
 		this.safeEmitState(['settings']);
 	}
+	handleSettings(client, x) {
+		logReceive('settings', x.settings.nFields);
+		base.copyKeys(x.settings, this.settings);
+
+		let barr = this.state.boardArr;
+		let s = this.settings;
+		if (barr.length != s.nFields) {
+			if (base.isEmpty(barr) || !base.firstCond(barr, a => a != null)) this.state.boardArr = new Array(s.nFields);
+			else if (barr.length < s.nFields) {
+				for (let i = barr.length; i < snnFields; i++) this.state.boardArr.push(null);
+			} else {
+				// verkuerzung von boardArr!
+				let nBarr = barr.length;
+				let extras = [];
+				for (let i = s.nFields; i < barr.length; i++) {
+					if (base.isdef(barr[i])) extras.push(barr[i]);
+				}
+				for (const idx of extras) { this.state.poolArr.push(idx); }
+				this.state.boardArr = this.state.boardArr.slice(0, s.nFields);
+			}
+		}
+		//console.log('nFields',s.nFields);
+		//console.log('board',this.state.boardArr.length);
+		//console.log('pool',this.state.poolArr.length);
+
+		this.safeEmitState(['settings']);
+	}
 	handleSyncBoardLayout(client, x) {
+		//return;
 		logReceive('syncBoardLayout', x);
-		console.log('HANDLE BOARD', x)
+		//console.log('HANDLE BOARD', x)
 		if ('boardFilename' in x) { this.settings.boardFilename = x.boardFilename; }
 		if ('nFields' in x) { this.state.boardArr = new Array(x.nFields); }
 		if ('rows' in x) { this.settings.rows = x.rows; }
@@ -243,10 +350,10 @@ function decodeBase64Image(dataString) {
 
 	return response;
 }
-function savePerlenDictToFile() {
-	utils.toYamlFile(PerlenDict, path.join(__dirname, PerlenPath + 'perlenDict.yaml'));
-}
-function log() { if (Verbose) console.log('perlen: ', ...arguments); }
+// function savePerlenDictToFile() {
+// 	utils.toYamlFile(PerlenDict, path.join(__dirname, PerlenPath + 'perlenDict.yaml'));
+// }
+function log() { if (Verbose) console.log('pg7: ', ...arguments); }
 function logReceive(type,) { MessageCounter++; log('#' + MessageCounter, 'receive', ...arguments); }
 function logSend(type) { MessageCounter++; log('#' + MessageCounter, 'send', ...arguments); }
 

@@ -15,6 +15,7 @@ const NGROK = false; //'http://849aec381695.ngrok.io/'; // MUSS / am ende!!!
 const HEROKU = false;
 const USERNAME_SELECTION = 'random'; // random | local | nil | gul | ma ...
 const VERSION = 7;
+const UITEST = false;
 
 var USESOCKETS = true; //false ist wahtscheinlich broken!
 const JUST_PERLEN_GAME = true;
@@ -35,7 +36,7 @@ var Settings, SettingsList, SettingsChanged, SelectedMenuKey; //var G, T, P, U, 
 var Daat = {}, DA = {}, Items, ItemsByKey;
 var Players, PlayerOnTurn, GC, GameCounter;
 var PerlenDict, BaseColor, HeaderColor, SidebarColor, IsControlKeyDown = false
-var dTable, dAux;
+var dTable, dAux, dAuxContent;
 var ColorThiefObject, SelectedItem, SelectedColor;
 
 var BestMinusScore = Infinity, BestMinusState, BestPlusScore = -Infinity, BestPlusState;

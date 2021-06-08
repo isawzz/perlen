@@ -25,7 +25,7 @@ const Clients = {};
 function initUserManager(serverSocket, db) {
 	io = serverSocket;
 	DB = db;
-	//log('users registered:', Object.keys(db.users));
+	log('users registered:', Object.keys(db.users));
 }
 function handleConnectionSendClientId(client) {
 	let id = client.id;
@@ -58,7 +58,7 @@ function handleDisconnected(client) {
 	logReceive('disconnect');
 	logBroadcast('userLeft');
 	io.emit('userLeft', 'user ' + name + ' left!');
-	//log('connected:', getConnectedClientNames(), NumConnected);
+	log('connected:', getConnectedClientNames(), NumConnected);
 
 }
 function handleUserMessage(client, x) {

@@ -1,13 +1,15 @@
-function applyStandard(dParent, s) {
+
+function applyStandard(dParent, s, h = 768, topFrame = 0) {
 	let b = { boardFilename: s.boardFilename };
-	let hBoard = 300, wBoard = 600;
+	let hBoard = h, wBoard = 2 * h;
 	let scale = hBoard / valf(s.hBoard, 768);
 	calcLayoutParameters(s, b, scale);
-	let d0 = b.d0 = mDiv(dParent, { w: wBoard + 100, h: hBoard + 100 }, 'd0_' + b.boardFilename); mCenterCenterFlex(d0);
+	let d0 = b.d0 = mDiv(dParent, { w: wBoard + 100, h: hBoard + topFrame }, 'd0_' + b.boardFilename); mCenterCenterFlex(d0);
 	let dOuter = b.dOuter = mDiv(d0, {}, 'dOuter_' + b.boardFilename);
 	mCenterCenterFlex(dOuter);
 	loadBoardImage(dParent, s, b, scale);
 	createFields(s, b, scale);
+	//console.log('b.fields',b.fields)
 	return b;
 }
 function calcLayoutParameters(s, b, scale = 1) {
@@ -24,7 +26,7 @@ function calcLayoutParameters(s, b, scale = 1) {
 
 	let [centers, wNeeded, hNeeded] = getCentersFromRowsCols(layout, rows, cols, wCell, hCell);
 
-	s.nFields = centers.length;
+	s.nFields = centers.length; //JA!
 
 	//console.log('layout', layout, 'wNeeded', wNeeded, 'hNeeded', hNeeded);
 	//console.log('nFields', s.nFields, 'rows', rows, 'cols', cols);
@@ -132,14 +134,13 @@ function loadBoardImage(dOneBoard, s, b, scale) {
 
 		let cornerColor = isdef(s.idealBg) ? s.idealBg : getCornerPixelColor(img);
 
-		let sz = s.naturalImageSize = { w: img.naturalWidth, h: img.naturalHeight };
+		let sz = s.naturalImageSize = b.imgSize = { w: img.naturalWidth, h: img.naturalHeight };
 		let szi = s.backgroundSize;
 		if (szi == 'initial' && scale != 1) szi = getScaledSizeCss(sz, scale);
 		b.dOuter.style.backgroundImage = `url(${img.src})`;
 		mStyleX(b.dOuter, { 'background-size': szi, 'background-repeat': 'no-repeat', 'background-position': 'center center' });
-		mStyleX(b.dOuter, { w: sz.w * scale, h: sz.h * scale });
-		//mStyleX(b.dOuter, { w: 200, h: 100 });
-		//mStyleX(b.d0,{w:szi.w*2,h:sz.h*1.5});
+		let [wb, hb] = [Math.max(sz.w * scale, b.wNeeded), Math.max(sz.h * scale, b.hNeeded)];
+		mStyleX(b.dOuter, { w: wb, h: hb });
 		setLinearBackground(b.d0, cornerColor, 10);
 		b.img = img;
 	}
