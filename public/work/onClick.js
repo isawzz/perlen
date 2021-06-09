@@ -59,6 +59,7 @@ function onClickPrefabGallery() {
 	}
 	console.log(boardExamples);
 }
+
 function selectTextOrig(id) {
 	var sel, range;
 	var el = document.getElementById(id); //get element id
@@ -81,42 +82,60 @@ function selectTextOrig(id) {
 		}
 	}
 }
-
 function setAndTest(s, b, prop, val) {
 	s[prop] = val;
 	console.log('result', s);
-
 	clearElement(G.dParent);
 	//copyKeys(s,G.settings);
 	G.clientBoard = applyStandard(G.dParent, G.settings);
-
-
 }
 function setApply(prop, val) {
-	console.log('hallo!', prop, val);
+	//console.log('hallo!', prop, val);
 	// return;
 	if (isNumber(val)) val = Number(val);
 	let s = G.settings;
 	s[prop] = val;
+	//clearElement(G.dParent);
+	G.clientBoard = applySettings(G.clientBoard, s);
+}
+function calcFieldGaps(sz) {
+	sz = Number(sz);
+	let s = G.settings;
+	s.wGap = s.wField - sz;
+	s.hGap = s.hField - sz;
 	clearElement(G.dParent);
 	G.clientBoard = applyStandard(G.dParent, s);
 }
 function onClickEditLayout() {
-	openAux('Settings');
+	openAux('board settings');
+	let wWidget = 350;
 	let [s, b] = [G.settings, G.clientBoard];
-	let styles = { w: 300, align: 'center', hmargin: 20, vmargin: 6, bg: 'green' };
+	let styles = { w: wWidget, align: 'center', hmargin: 20, vmargin: 6 };
 	let inpRows = mEditRange('rows: ', s.rows, 1, 20, 1, dAuxContent, (a) => { setApply('rows', a) }, styles);
 	let inpCols = mEditRange('cols: ', s.cols, 1, 20, 1, dAuxContent, (a) => { setApply('cols', a) }, styles);
 	let inpRot = mEditRange('rotation: ', s.boardRotation, 0, 90, 1, dAuxContent, (a) => { setApply('boardRotation', a) }, styles);
-	let inpWidth = mEditRange('width: ', s.wField, 10, 200, 2, dAuxContent, (a) => { setApply('wField', a) }, styles);
-	let inpHeight = mEditRange('height: ', s.hField, 10, 200, 2, dAuxContent, (a) => { setApply('hField', a) }, styles);
+	let inpWidth = mEditRange('width: ', s.wField, 10, 200, 1, dAuxContent, (a) => { setApply('wField', a) }, styles);
+	let inpHeight = mEditRange('height: ', s.hField, 10, 200, 1, dAuxContent, (a) => { setApply('hField', a) }, styles);
+	let inpXOffset = mEditRange('x-offset: ', s.boardMarginLeft, -100, 100, 1, dAuxContent, (a) => { setApply('boardMarginLeft', a) }, styles);
+	let inpYOffset = mEditRange('y-offset: ', s.boardMarginTop, -100, 100, 1, dAuxContent, (a) => { setApply('boardMarginTop', a) }, styles);
+	let inpFieldSize = mEditRange('field size: ', s.wField - s.wGap, 10, 200, 1, dAuxContent, (a) => { calcFieldGaps(a) }, styles);
+	let inpFieldColor = mColorPickerControl('field color: ', s.fieldColor, b.img, dAuxContent, (a) => { setApply('fieldColor', a) }, styles);
+	let inpBaseColor = mColorPickerControl('background: ', s.baseColor, b.img, dAuxContent, setNewBackgroundColor, styles);
+	//s.fieldColor
+	//let dColor = mDiv(dAuxContent,{w: wWidget},null,'field color');
+	//mColorPicker3(dColor, getPaletteFromImage(G.clientBoard.img), (a) => { setApply('fieldColor', a) }, s.fieldColor);
 	// let inpRows1=mEdit('rows: ', s.rows, dAuxContent,(a)=>{setAndTest(s,b,'rows',Number(a))}, styles);
 	// let inpCols=mEdit('cols: ', s.cols, dAuxContent,(a)=>{setAndTest(s,b,'cols',Number(a))}, styles);
 	// let inpRot=mEditNumber('rotation: ', s.boardRotation, dAuxContent,(a)=>{setAndTest(s,b,'boardRotation',Number(a))}, styles);
-	//let inpRows=mEdit('rows: ', s.rows, dAuxContent, {maleft:50});
+	// let inpRows=mEdit('rows: ', s.rows, dAuxContent, {maleft:50});
 }
-function onClickPublishLayout(){
-	openAux('enter name for prefab');
-	Socket.emit('settings',{settings:G.settings});
+
+function onClickActivateLayout() {
+	//openAux('enter name for prefab');
+	Socket.emit('settings', { settings: G.settings });
+}
+function onClickReset() {
+	//sendReset(isdef(G) ? G.settings : DB.games.gPerlen2.settings);
+
 }
 

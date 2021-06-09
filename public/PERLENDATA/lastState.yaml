@@ -4,23 +4,23 @@ settings:
   poolSelection: random
   numPool: 1
   boardLayout: hex1
-  boardFilename: brett10.png
+  boardFilename: brett20_43.png
   backgroundSize: initial
   sizeBoardHeightToImage: true
   fieldShape: circle
-  fieldColor: "#ffffff80"
-  wField: 90
-  hField: 104
-  wGap: 25
-  hGap: 32
+  fieldColor: "#50769929"
+  wField: 102
+  hField: 118
+  wGap: 17
+  hGap: 33
   rows: 7
   cols: 4
   boardLayoutFile: null
-  boardRotation: 20
+  boardRotation: 0
   wFieldArea: 768
   hFieldArea: 768
-  boardMarginLeft: -4
-  boardMarginTop: 0
+  boardMarginLeft: -2
+  boardMarginTop: -9
   bgPool: transparent
   fgPool: "#ffffffff"
   bgBoard: silver
@@ -92,20 +92,15 @@ state:
       key: deutsch
       index: 17
   poolArr:
-    - 11
-    - 1
     - 2
     - 3
     - 4
-    - 5
-    - 6
-    - 8
     - 12
     - 13
-    - 14
     - 15
     - 16
     - 17
+    - 8
   boardArr:
     - null
     - null
@@ -122,25 +117,25 @@ state:
     - null
     - null
     - null
-    - null
-    - null
-    - null
-    - 0
-    - null
+    - 11
     - null
     - null
     - null
     - null
-    - 10
-    - 9
     - null
     - null
     - null
     - null
-    - 7
+    - 5
+    - 6
     - null
     - null
     - null
     - null
+    - null
+    - 1
+    - null
+    - null
+    - 14
     - null
     - null

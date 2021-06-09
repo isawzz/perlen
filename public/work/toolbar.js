@@ -29,7 +29,7 @@ class ToolbarClass{
 		this.addButton('chooseBoard',onClickChooseBoard,'choose board');
 		this.addButton('prefabGallery',onClickPrefabGallery,'prefab gallery');
 		this.addButton('editLayout',onClickEditLayout,'EDIT layout');
-		this.addButton('publishLayout',onClickPublishLayout,'publish layout');
+		this.addButton('activateLayout',onClickActivateLayout,'activate layout');
 		
 	}
 }

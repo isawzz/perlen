@@ -80,8 +80,8 @@ function mColorPicker3(elem, palette, onColor, initialColor) {
 		value: initialColor,
 		palette: palette,
 	});
-	// picker.onChange = ()=>{let c = picker.toHEXAString(); onColor(c);console.log('picked',c);}
-	//picker.onInput = ()=>{let c = picker.toHEXAString(); onColor(c);console.log('picked',c);}
+	//picker.onChange = ()=>{let c = picker.toHEXAString(); onColor(c);console.log('picked',c);}
+	picker.onInput = () => { let c = picker.toHEXAString(); onColor(c); console.log('picked', c); }
 	return picker;
 }
 function mColorPicker2(dParent, palette, onColor, initialColor) {
@@ -179,7 +179,25 @@ function incInput(inp, n = 1) {
 	val += n;
 	inp.innerHTML = val;
 }
-function mEditRange(label, value, min, max,step, dParent, handler, styles, classes, id, triggerOnChange = true) {
+function mColorPickerControl(label, value, targetImage, dParent, handler, styles) {
+	let d = mDiv(dParent, styles);
+	let hpad = valf(styles.hpadding, 6);
+	let dLabel = mDiv(d, {'vertical-align': 'top', w: '35%', align: 'right', hpadding: hpad, display: 'inline-block' }, null, label);
+	let palette = getPaletteFromImage(targetImage);
+	// let inp = mColorPicker3(d, palette, handler, value);
+	// //let elem = mDiv(dParent,{w:50,h:50,display:'inline-block'});
+	let elem = mDiv(d, { w: '55%', hpadding: hpad, h: 24, rounding:hpad, display: 'inline-block' });
+	let inp = new JSColor(elem, {
+		alpha: 'ff',
+		closeButton: true,
+		value: value,
+		palette: palette,
+	});
+	//inp.onChange = ()=>{let c = inp.toHEXAString(); onColor(c);}
+	inp.onInput = () => { let c = inp.toHEXAString(); handler(c); }
+	return inp;
+}
+function mEditRange(label, value, min, max, step, dParent, handler, styles, classes, id, triggerOnChange = true) {
 	let d = mDiv(dParent, styles);
 	let hpad = valf(styles.hpadding, 4);
 	let dLabel = mDiv(d, { w: '30%', align: 'right', hpadding: hpad, display: 'inline-block' }, null, label); //createElementFromHTML(`<label>${label}</label>`);
@@ -189,14 +207,14 @@ function mEditRange(label, value, min, max,step, dParent, handler, styles, class
 	mAppend(d, inpText);
 	mAppend(d, inp);
 	// let button = mButton('+', triggerOnChange ? ev => { incInput(inp); handler(inp.innerHTML, ev); } : ev => { incInput(inp); }, d);
-	mStyleX(inpText, { display: 'inline', w: '20%', align:'left', hpadding: hpad });
+	mStyleX(inpText, { display: 'inline', w: '20%', align: 'left', hpadding: hpad });
 	mStyleX(inp, { display: 'inline', w: '40%', hpadding: hpad });
 
-	inpText.onchange= (ev)=>{inp.value=inpText.value;handler(inpText.value,ev);};
+	inpText.onchange = (ev) => { inp.value = inpText.value; handler(inpText.value, ev); };
 	// inpText.addEventListener('keydown', unfocusOnEnter);
 	// inpText.addEventListener('focusout', ev => { inp.value = inpText.value;handler(inp.innerHTML, ev); });
 	inpText.onclick = ev => selectText(ev.target);
-	inp.onchange = (ev)=>{inpText.value=inp.value;handler(inpText.value,ev);};
+	inp.onchange = (ev) => { inpText.value = inp.value; handler(inpText.value, ev); };
 	if (isdef(classes)) mClass(inp, ...classes);
 	if (isdef(id)) inp.id = id;
 	return inpText;

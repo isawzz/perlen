@@ -10,12 +10,12 @@ class SimpleClass7 {
 	presentGameState(data) {
 
 		//setTimeout(		onClickEditLayout,200		);
-		console.log('_________________________gs',StepCounter);StepCounter += 1;
+		console.log('_________________________gs', StepCounter); StepCounter += 1;
 
 		mStyleX(dTable, { h: window.innerHeight });
 
 		let [settings, state] = this.processData(data);
-		if (settings == Settings.o && Settings.o == this.settings) console.log('...settings ok'); else console.assert(settings == Settings && Settings == this.settings,'hallo settings FALSCH!!!!!!!!!!!!!')
+		if (settings == Settings.o && Settings.o == this.settings) console.log('...settings ok'); else console.assert(settings == Settings && Settings == this.settings, 'hallo settings FALSCH!!!!!!!!!!!!!')
 		let needToLoadBoard = nundef(this.clientBoard) || this.clientBoard.boardFilename != settings.boardFilename;
 		//timit = new TimeIt('*');
 
@@ -23,7 +23,7 @@ class SimpleClass7 {
 
 		if (needToLoadBoard) {
 			clearElement(this.dParent);
-			this.clientBoard = applyStandard(this.dParent,this.settings);
+			this.clientBoard = applyStandard(this.dParent, this.settings);
 
 			if (!this.inSyncWithServer()) return; else console.log('...sync ok!');
 
@@ -151,9 +151,9 @@ class SimpleClass7 {
 		if (nundef(this.state)) this.state = {}; copyKeys(data.state, this.state);
 
 		if (isdef(data.settings)) {
-			console.assert(isdef(this.settings),'processData G.settings is NOT defined after constructor!!!!!')
+			console.assert(isdef(this.settings), 'processData G.settings is NOT defined after constructor!!!!!')
 			copyKeys(data.settings, this.settings);
-		} 
+		}
 
 		if (isdef(data.perlenDict)) { PerlenDict = this.perlenDict = data.perlenDict; }
 
@@ -174,7 +174,7 @@ class SimpleClass7 {
 	}
 	setInitialPoolSelected() { this.initialPoolSelected = true; setTitle('Glasperlenspiel'); }
 	inSyncWithServer() {
-		
+
 		//return;
 		let [b, s, st] = [this.clientBoard, this.settings, this.state];
 		//console.log('sync:','\nboard',b,'\nsettings',s,'\nstate',st);
@@ -183,7 +183,7 @@ class SimpleClass7 {
 		if (s.rows != b.rows || s.cols != b.cols) { corr.rows = s.rows = b.rows; corr.cols = s.cols = b.cols; }
 		if (!isEmpty(Object.keys(corr))) {
 			console.log('sending syncBoardLayout!!! corr', corr)
-			Socket.emit('settings',{settings:this.settings});
+			Socket.emit('settings', { settings: this.settings });
 			// Socket.emit('syncBoardLayout', { nFields: b.nFields, rows: b.rows, cols: b.cols, layout: b.layout, boardFilename: b.boardFilename });
 			return false;
 		}

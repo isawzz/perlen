@@ -141,8 +141,10 @@ class GP2 {
 		return pl;
 	}
 	addPerle(filename, addToCurrentPool) {
-		console.log('add new perle', filename)
-		console.assert(filename == filename.toLowerCase(), 'FILENAME CASING!!!!');
+		if (Verbose) {
+			console.log('add new perle', filename)
+			console.assert(filename == filename.toLowerCase(), 'FILENAME CASING!!!!');
+		}
 		let emitPool = false, savePerlen = false;
 		let perle;
 		let key = base.stringBefore(filename, '.');
@@ -165,13 +167,13 @@ class GP2 {
 			if (!p) {
 				base.addToPool(this.state.pool, this.state.poolArr, this.perlenDict[key], this.maxPoolIndex);
 				this.maxPoolIndex += 1;
-				this.safeEmitState(['pool','perlenDict']);
+				this.safeEmitState(['pool', 'perlenDict']);
 			}
 		}
 		if (savePerlen) {
 			utils.toYamlFile(this.perlenDict, path.join(__dirname, PerlenPath + 'perlenDict.yaml'));
 		}
-		
+
 	}
 	addBoard(filename) {
 		this.settings.boardFilenames.push(filename);
