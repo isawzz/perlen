@@ -3,6 +3,7 @@ var StepCounter = 0;
 class SimpleClass7 {
 	constructor() {
 		this.dParent = dTable;
+		
 		this.initialPoolSelected = false;
 		this.settings = {};
 		openToolbar();
@@ -16,29 +17,34 @@ class SimpleClass7 {
 
 		let [settings, state] = this.processData(data);
 		if (settings == Settings.o && Settings.o == this.settings) console.log('...settings ok'); else console.assert(settings == Settings && Settings == this.settings, 'hallo settings FALSCH!!!!!!!!!!!!!')
-		let needToLoadBoard = nundef(this.clientBoard) || this.clientBoard.boardFilename != settings.boardFilename;
+		let needToLoadBoard = this.needUiRedraw || nundef(this.clientBoard) || this.clientBoard.boardFilename != settings.boardFilename;
+		this.needUiRedraw = needToLoadBoard;//timit = new TimeIt('*');
 
-		// *** jetzt sind settings,state,perleDict,pool,needToLoadBoard up-to-date ***
+		//jetzt sind settings,state,perleDict,pool,needToLoadBoard up-to-date
 
-		if (needToLoadBoard) {
-			clearElement(this.dParent);this.dPool=null;
+		if (needToLoadBoard) { //|| this.needUiRedraw) {
+			clearElement(this.dParent);
 			this.clientBoard = applyStandard(this.dParent, this.settings);
 			if (!this.inSyncWithServer()) return; else console.log('...sync ok!');
-		}
-		if (nundef(this.dPool)) {
-			mLinebreak(this.dParent, 30);
-			let dPool = this.dPool = mDiv(this.dParent);
+			this.createPoolDiv();
 		} else {
 			console.log('...sync ok (no board)');
 			this.clearBoard();
 			this.clearPool();
 		}
+
 		this.presentPerlen();
 		this.activateDD();
 		if (settings.poolSelection != 'random' && this.initialPoolSelected == false) {
 			createPerlenEditor();
 			setTitle(data.instruction);
 		}
+	}
+	createPoolDiv(){
+		if (!this.needUiRedraw) return;
+		mLinebreak(this.dParent, 30);
+		this.dPool = mDiv(this.dParent);
+		this.needUiRedraw = false;
 	}
 	chooseBoard(boardFilename) {
 		if (boardFilename == this.settings.boardFilename) return;
@@ -62,6 +68,7 @@ class SimpleClass7 {
 		}
 		if (s.boardRotation != 0) { dCells.style.transform = `rotate(${s.boardRotation}deg)`; }
 	}
+	clearParentDiv(){		this.needUiRedraw=true;		clearElement(this.dParent);	}
 	clearBoard() {
 		let b = this.clientBoard;
 		for (const f of b.fields) {
@@ -190,4 +197,5 @@ class SimpleClass7 {
 
 
 }
+
 

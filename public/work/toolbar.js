@@ -4,7 +4,6 @@ function openToolbar(){
 	show(d);
 	mStyleX(d,{w:100});
 	Toolbar = new ToolbarClass(d);
-
 }
 
 class ToolbarClass{
@@ -30,6 +29,10 @@ class ToolbarClass{
 		this.addButton('prefabGallery',onClickPrefabGallery,'prefab gallery');
 		this.addButton('editLayout',onClickEditLayout,'EDIT layout');
 		this.addButton('activateLayout',onClickActivateLayout,'activate layout');
+		this.addButton('clearPerlenpool',onClickClearPerlenpool,'clear perlenpool');
+		this.addButton('clearAllPerlen',onClickClearAllPerlen,'clear all perlen');
+		this.addButton('clearBoard',onClickClearBoard,'clear board');
+		this.addButton('addToPool',onClickAddToPool,'add to pool');
 		
 	}
 }

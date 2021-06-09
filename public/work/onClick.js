@@ -46,7 +46,7 @@ function onClickPrefabGallery() {
 		//console.log('std',std,'\nG.settings',G.settings);
 		//break;
 
-		let b = applyStandard(d, std, 400);
+		let b = applyStandard(d, std, 200, 100);
 
 		boardExamples[stdName] = {
 			key: stdName,
@@ -82,13 +82,6 @@ function selectTextOrig(id) {
 		}
 	}
 }
-function setAndTest(s, b, prop, val) {
-	s[prop] = val;
-	console.log('result', s);
-	clearElement(G.dParent);
-	//copyKeys(s,G.settings);
-	G.clientBoard = applyStandard(G.dParent, G.settings);
-}
 function setApply(prop, val) {
 	//console.log('hallo!', prop, val);
 	// return;
@@ -103,8 +96,8 @@ function calcFieldGaps(sz) {
 	let s = G.settings;
 	s.wGap = s.wField - sz;
 	s.hGap = s.hField - sz;
-	clearElement(G.dParent);
-	G.clientBoard = applyStandard(G.dParent, s);
+	//clearElement(G.dParent);
+	G.clientBoard = applySettings(G.cleantBoard, s);
 }
 function onClickEditLayout() {
 	openAux('board settings');
@@ -121,19 +114,29 @@ function onClickEditLayout() {
 	let inpFieldSize = mEditRange('field size: ', s.wField - s.wGap, 10, 200, 1, dAuxContent, (a) => { calcFieldGaps(a) }, styles);
 	let inpFieldColor = mColorPickerControl('field color: ', s.fieldColor, b.img, dAuxContent, (a) => { setApply('fieldColor', a) }, styles);
 	let inpBaseColor = mColorPickerControl('background: ', s.baseColor, b.img, dAuxContent, setNewBackgroundColor, styles);
-	//s.fieldColor
-	//let dColor = mDiv(dAuxContent,{w: wWidget},null,'field color');
-	//mColorPicker3(dColor, getPaletteFromImage(G.clientBoard.img), (a) => { setApply('fieldColor', a) }, s.fieldColor);
-	// let inpRows1=mEdit('rows: ', s.rows, dAuxContent,(a)=>{setAndTest(s,b,'rows',Number(a))}, styles);
-	// let inpCols=mEdit('cols: ', s.cols, dAuxContent,(a)=>{setAndTest(s,b,'cols',Number(a))}, styles);
-	// let inpRot=mEditNumber('rotation: ', s.boardRotation, dAuxContent,(a)=>{setAndTest(s,b,'boardRotation',Number(a))}, styles);
-	// let inpRows=mEdit('rows: ', s.rows, dAuxContent, {maleft:50});
 }
 
 function onClickActivateLayout() {
 	//openAux('enter name for prefab');
+	//G.createPoolDiv();
 	Socket.emit('settings', { settings: G.settings });
 }
+
+function onClickClearPerlenpool(){
+	//perlen im pool werden destroyed
+	//die am board bleiben
+}
+function onClickClearBoard(){
+
+}
+function onClickClearAllPerlen(){
+	//perlen im pool werden destroyed
+	//die am board bleiben
+}
+function onClickAddToPool(){
+
+}
+
 function onClickReset() {
 	//sendReset(isdef(G) ? G.settings : DB.games.gPerlen2.settings);
 

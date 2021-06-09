@@ -17,6 +17,8 @@ function applyStandard(dParent, s, h = 768, topFrame = 0) {
 	calcLayoutParameters(s, b, scale);
 	let d0 = b.d0 = mDiv(dParent, { w: wBoard + 100, h: hBoard + topFrame }, 'd0_' + b.boardFilename); mCenterCenterFlex(d0);
 	let dOuter = b.dOuter = mDiv(d0, {}, 'dOuter_' + b.boardFilename);
+	// let d0 = b.d0 = mDiv(dParent, { w: wBoard + 100, h: hBoard + topFrame }, 'd0_' + b.boardFilename); mCenterCenterFlex(d0);
+	// let dOuter = b.dOuter = mDiv(dParent, {}, 'dOuter_' + b.boardFilename);
 	mCenterCenterFlex(dOuter);
 	loadBoardImage(dParent, s, b, scale, topFrame != 0);
 	if (isRealBoard) setNewBackgroundColor(s.baseColor);
