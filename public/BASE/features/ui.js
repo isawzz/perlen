@@ -119,6 +119,7 @@ function setNewBackgroundColor(bg) {
 	mStyleX(mBy('sidebar'), { bg: SidebarColor });
 	mStyleX(mBy('dAux'), { bg: SidebarColor });
 	localStorage.setItem('BaseColor', BaseColor);
+	if (isdef(G)) G.settings.baseColor = bg;
 }
 
 
