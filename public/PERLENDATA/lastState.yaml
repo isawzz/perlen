@@ -2,19 +2,19 @@ settings:
   baseColor: "#11132FFF"
   boardStandard: none
   poolSelection: random
-  numPool: 1
+  numPool: 10
   boardLayout: hex1
   boardFilename: brett18_56.png
   backgroundSize: initial
   sizeBoardHeightToImage: true
   fieldShape: circle
-  fieldColor: "#26639929"
+  fieldColor: "#99089900"
   wField: 102
   hField: 118
-  wGap: 9
-  hGap: 25
-  rows: 7
-  cols: 4
+  wGap: -42
+  hGap: -26
+  rows: 8
+  cols: 14
   boardLayoutFile: null
   boardRotation: 0
   wFieldArea: 768
@@ -27,82 +27,57 @@ settings:
   fgBoard: black
   szPerle: 75
   fzLabel: 16
-  nFields: 37
+  nFields: 128
   layout: hex1
   labelPos: hover
+  freeForm: true
   wBoard: 100%
   hBoard: 768
   naturalImageSize:
-    w: 768
+    w: 1536
     h: 768
 state:
   pool:
     "0":
-      key: ai
+      key: alles steigt aus der quelle
       index: 0
     "1":
-      key: begeisterung
+      key: das große rote megaphon
       index: 1
     "2":
-      key: agent
+      key: erziehung
       index: 2
     "3":
-      key: aktie
+      key: der schwarze drachen tod
       index: 3
     "4":
-      key: alchemie
+      key: european theatre
       index: 4
     "5":
-      key: alles steigt aus der quelle
+      key: culture wars
       index: 5
     "6":
-      key: cia
+      key: evolution
       index: 6
     "7":
-      key: collectivism
+      key: diskussion
       index: 7
     "8":
-      key: consensus building
+      key: english
       index: 8
     "9":
-      key: culture wars
-      index: 9
-    "10":
       key: dark ages
-      index: 10
-    "11":
-      key: das große rote megaphon
-      index: 11
-    "12":
-      key: das leben ein film
-      index: 12
-    "13":
-      key: das mehrstöckige haus
-      index: 13
-    "14":
-      key: demokratie
-      index: 14
-    "15":
-      key: der eiserne vorhang
-      index: 15
-    "16":
-      key: der schwarze drachen tod
-      index: 16
-    "17":
-      key: deutsch
-      index: 17
+      index: 9
   poolArr:
     - 4
-    - 5
-    - 11
-    - 3
-    - 1
-    - 14
-    - 2
-    - 12
-    - 15
-    - 16
     - 8
+    - 3
+    - 5
+    - 7
+    - 2
+    - 1
+    - 6
+    - 9
   boardArr:
     - null
     - null
@@ -125,11 +100,104 @@ state:
     - null
     - null
     - null
-    - 13
     - null
     - null
-    - 6
-    - 17
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - - 0
+      - 30.5
+      - 91
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
     - null
     - null
     - null

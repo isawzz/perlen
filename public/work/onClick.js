@@ -97,7 +97,7 @@ function calcFieldGaps(sz) {
 	s.wGap = s.wField - sz;
 	s.hGap = s.hField - sz;
 	//clearElement(G.dParent);
-	G.clientBoard = applySettings(G.cleantBoard, s);
+	G.clientBoard = applySettings(G.clientBoard, s);
 }
 function onClickEditLayout() {
 	openAux('board settings');
@@ -127,7 +127,7 @@ function onClickClearPerlenpool(){
 	//die am board bleiben
 }
 function onClickClearBoard(){
-
+	G.clearBoard();
 }
 function onClickClearAllPerlen(){
 	//perlen im pool werden destroyed

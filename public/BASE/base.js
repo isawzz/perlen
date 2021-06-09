@@ -182,11 +182,11 @@ function incInput(inp, n = 1) {
 function mColorPickerControl(label, value, targetImage, dParent, handler, styles) {
 	let d = mDiv(dParent, styles);
 	let hpad = valf(styles.hpadding, 6);
-	let dLabel = mDiv(d, {'vertical-align': 'top', w: '35%', align: 'right', hpadding: hpad, display: 'inline-block' }, null, label);
+	let dLabel = mDiv(d, { 'vertical-align': 'top', w: '35%', align: 'right', hpadding: hpad, display: 'inline-block' }, null, label);
 	let palette = getPaletteFromImage(targetImage);
 	// let inp = mColorPicker3(d, palette, handler, value);
 	// //let elem = mDiv(dParent,{w:50,h:50,display:'inline-block'});
-	let elem = mDiv(d, { w: '55%', hpadding: hpad, h: 24, rounding:hpad, display: 'inline-block' });
+	let elem = mDiv(d, { w: '55%', hpadding: hpad, h: 24, rounding: hpad, display: 'inline-block' });
 	let inp = new JSColor(elem, {
 		alpha: 'ff',
 		closeButton: true,
@@ -1998,7 +1998,7 @@ function ddStart(ev, source, isCopy = true, clearTarget = false) {
 	mAppend(document.body, clone);//mClass(clone, 'letter')
 	mClass(clone, 'dragelem');//der clone muss class 'dragelem' sein
 	mStyleX(clone, { left: ev.clientX - ev.offsetX, top: ev.clientY - ev.offsetY });//der clone wird richtig plaziert
-	clone.drag = { offsetX: ev.offsetX, offsetY: ev.offsetY };
+	DDInfo.dragOffset = clone.drag = { offsetX: ev.offsetX, offsetY: ev.offsetY };
 	// von jetzt an un solange DragElem != null ist muss der clone sich mit der maus mitbewegen
 	document.body.onmousemove = onMovingCloneAround;
 	document.body.onmouseup = onReleaseClone;// ev=>console.log('mouse up')
@@ -2029,7 +2029,19 @@ function onReleaseClone(ev) {
 			//console.log('YES!',firstCond(els,x=>x==dTarget))
 			//if (DragElem.clearTarget) clearElement(dTarget);
 			if (isdef(dropHandler)) {
-				dropHandler(source, target, DragElem.isCopy, DragElem.clearTarget);
+				let cDrop = { x: ev.clientX, y: ev.clientY };
+				let rTarget = getRect(dTarget);
+				let cTarget = { x: rTarget.x + rTarget.w / 2, y: rTarget.y + rTarget.h / 2 };
+				//let ct1=getCenter(dTarget);
+				//console.log('rTarget', rTarget, '\ncTarget', cTarget, '\ncDrop', cDrop);//, '\nct1',ct1)
+				//console.assert(cTarget.x==ct1.x && cTarget.y==ct1.y,'onReleaseClone: getCenter GEHT NICHT!!!');
+				let [dx, dy] = [cDrop.x - cTarget.x, cDrop.y - cTarget.y];
+				//console.log('dx,dx',dx,dy);
+				let [ddx,ddy]=[DragElem.drag.offsetX,DragElem.drag.offsetY];
+				//console.log('offx,offy',ddx,ddy);
+				//[dx,dy]=[dx-ddx,dy-ddy];
+				//console.log('nach -offs: dx,dx',dx,dy);
+				dropHandler(source, target, DragElem.isCopy, DragElem.clearTarget, dx, dy, ev, DragElem);
 			}
 			//console.log('dropped', source.name, 'on target', target);
 			break; //as soon as found a target, stop looking for more targets!
@@ -2650,6 +2662,21 @@ function arrMinMax(arr, func) {
 	return { min: min, imin: imin, max: max, imax: imax };
 }
 function arrMinus(a, b) { let res = a.filter(x => !b.includes(x)); return res; }
+function arrNoDuplicates(arr){
+	//only keeps unique literals in result! non-literals are removed!
+	let di = {};
+	let arrNew = [];
+	for(const el of arr){
+		// console.log('el',el,'isLiteral',isLiteral(el),!isLiteral(el));
+		if (!isLiteral(el)) continue;
+		// console.log('isdef(di[el])',isdef(di[el]));
+		if (isdef(di[el])) continue;
+		di[el]=true;
+		arrNew.push(el);
+	}
+	// console.log(arrNew)
+	return arrNew;
+}
 function arrPlus(a, b) { let res = a.concat(b); return res; }
 function arrRange(from = 1, to = 10, step = 1) { let res = []; for (let i = from; i <= to; i += step)res.push(i); return res; }
 
@@ -3784,12 +3811,12 @@ if (this && typeof module == "object" && module.exports && this === module.expor
 		initServerPool, addToPool,//initServerBoard,
 
 		//helpers:
-		allNumbers, arrTake,
+		allNumbers, arrTake, arrNoDuplicates,
 		capitalize, choose, chooseRandom, copyKeys,
 		dict2list,
 		firstCond, firstCondDict, firstCondDictKey, formatDate,
 		getFilename, getPublicPath,
-		isdef, isEmpty, jsCopy,
+		isdef, isEmpty, jsCopy, isLiteral, isList,
 		nundef,
 		range, randomNumber, removeInPlace,
 		stringBefore, stringAfter, stringAfterLast,

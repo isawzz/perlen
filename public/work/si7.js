@@ -2,6 +2,9 @@ var VerboseSimpleClass = false;
 
 //#region perlen game start here!
 function simplestPerlenGame() {
+
+	// console.log('arrno',arrNoDuplicates([1,2,3,4,5,3,2,4,1]));
+
 	hide('dMainContent');
 	show('dGameScreen');
 	setTitle('Glasperlenspiel');
@@ -55,9 +58,21 @@ function handleGameState(data) {
 
 function sendMovePerle(perle, fFrom, fTo, dis) {
 	//console.log('===> PLACE')
-	let data = { iPerle: perle.index, iFrom: fFrom.index, iTo: fTo.index, displaced: isdef(dis) ? dis.index : null, username: Username };
+	let data = { dxy:perle.dxy, iPerle: perle.index, iFrom: fFrom.index, iTo: fTo.index, displaced: isdef(dis) ? dis.index : null, username: Username };
 	logClientSend('movePerle', data);
 	Socket.emit('movePerle', data);
+}
+function sendMoveField(f) {
+	//console.log('===> PLACE')
+	let data = { dxy:f.item.dxy, iField: f.index, username: Username };
+	logClientSend('moveField', data);
+	Socket.emit('moveField', data);
+}
+function sendRemovePerlen(plist, fields) {
+	console.log('===> remove list',plist,fields);
+	let data = { iPerlen: plist.map(x=>x.index), iFroms: fields.map(x=>x.index), username: Username };
+	logClientSend('removePerlen', data);
+	Socket.emit('removePerlen', data);
 }
 function sendRemovePerle(perle, fFrom) {
 	//console.log('===> PLACE')
@@ -67,10 +82,11 @@ function sendRemovePerle(perle, fFrom) {
 }
 function sendPlacePerle(perle, field, dis) {
 	//console.log('hallo sending move')
-	let data = { iPerle: perle.index, iField: field.index, displaced: isdef(dis) ? dis.index : null, username: Username };
+	let data = { dxy:perle.dxy, iPerle: perle.index, iField: field.index, displaced: isdef(dis) ? dis.index : null, username: Username };
 	logClientSend('placePerle', data);
 	Socket.emit('placePerle', data);
 }
+//unused!
 function sendRelayout(rows, cols, boardArr, poolArr) {
 	//console.log('hallo sending relayout');
 	let data = { rows: rows, cols: cols, boardArr: boardArr, username: Username };

@@ -93,8 +93,10 @@ io.on('connection', client => {
 
 	// //the following messages are handled by 'simple' (module or class)
 	client.on('movePerle', x => simple.handleMovePerle(client, x));
+	client.on('moveField', x => simple.handleMoveField(client, x));
 	client.on('placePerle', x => simple.handlePlacePerle(client, x));
 	client.on('removePerle', x => simple.handleRemovePerle(client, x));
+	client.on('removePerlen', x => simple.handleRemovePerlen(client, x));
 	client.on('startOrJoinPerlen', x => simple.handleStartOrJoin(client, x));
 
 	client.on('chooseBoard', x => simple.handleChooseBoard(client, x));

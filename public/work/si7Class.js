@@ -15,22 +15,22 @@ class SimpleClass7 {
 		mStyleX(dTable, { h: window.innerHeight });
 
 		let [settings, state] = this.processData(data);
-		if (settings == Settings.o && Settings.o == this.settings) console.log('...settings ok'); else console.assert(settings == Settings && Settings == this.settings, 'hallo settings FALSCH!!!!!!!!!!!!!')
+		//if (settings == Settings.o && Settings.o == this.settings) console.log('...settings ok'); else console.assert(settings == Settings && Settings == this.settings, 'hallo settings FALSCH!!!!!!!!!!!!!')
 		let needToLoadBoard = nundef(this.clientBoard) || this.clientBoard.boardFilename != settings.boardFilename;
 
 		// *** jetzt sind settings,state,perleDict,pool,needToLoadBoard up-to-date ***
 
 		if (needToLoadBoard) {
-			clearElement(this.dParent);this.dPool=null;
+			clearElement(this.dParent); this.dPool = null;
 			this.clientBoard = applyStandard(this.dParent, this.settings);
-			if (!this.inSyncWithServer()) return; else console.log('...sync ok!');
+			if (!this.inSyncWithServer()) return; //else console.log('...sync ok!');
 		}
 		if (nundef(this.dPool)) {
 			mLinebreak(this.dParent, 30);
 			let dPool = this.dPool = mDiv(this.dParent);
 		} else {
-			console.log('...sync ok (no board)');
-			this.clearBoard();
+			//console.log('...sync ok (no board)');
+			this.clearBoardUI();
 			this.clearPool();
 		}
 		this.presentPerlen();
@@ -62,22 +62,32 @@ class SimpleClass7 {
 		}
 		if (s.boardRotation != 0) { dCells.style.transform = `rotate(${s.boardRotation}deg)`; }
 	}
-	clearBoard() {
+	clearBoardUI() {
 		let b = this.clientBoard;
+		let [perlen, fields] = [[], []];
 		for (const f of b.fields) {
 
 			let p = f.item;
-			if (isList(p)) {
+			if (isList(p)) { //BUG!!!!!! WORK AROUND
 				//console.log(f);
 				//console.log(p);
 				continue;
 			}
 			if (isdef(p)) {
 				//console.log('removing',p,iDiv(p))
+				if (isdef(p.dxy)) { this.resetCenter(f); }
 				iDiv(p).remove();
 				f.item = null;
+				perlen.push(p);
+				fields.push(f);
 			}
 		}
+		return [perlen, fields];
+	}
+	clearBoard() {
+		let [perlen, fields] = this.clearBoardUI();
+		console.log('sending remove all perlen command', perlen, fields);
+		sendRemovePerlen(perlen, fields);
 	}
 	clearPool() { clearElement(this.dPool); }
 	presentPerlen() {
@@ -87,17 +97,27 @@ class SimpleClass7 {
 		for (let i = 0; i < poolArr.length; i++) {
 			let iPerle = poolArr[i]; //console.log('iPerle', iPerle, perlenByIndex, perlenByIndex[iPerle]);
 			let perle = perlenByIndex[iPerle]; //console.log('perle', perle)
+			if (nundef(perle)) {
+				//BUGBUGBUG
+				console.log(perlenByIndex, perlenByIndex, 'perlenDict', this.perlenDict, '\nboardArr', boardArr, '\npoolArr', poolArr)
+			}
 			perle.field = null;
 			let ui = createPerle(perle, dParent, 64, 1.3, .4);
 		}
 		for (let i = 0; i < boardArr.length; i++) {
-			let iPerle = boardArr[i];
+			// let iPerle = boardArr[i];
+			let pin = boardArr[i];
+			let iPerle = isList(pin) ? pin[0] : pin; //
 			if (iPerle == null) continue;
 			let perle = perlenByIndex[iPerle]; //console.log('perle auf dem board', perle)
 			let field = b.fields[i];
 			perle.field = field;
 			field.item = perle;
 			let ui = createPerle(perle, iDiv(field), 64, 1.3, .4);
+			if (isList(pin)) {
+				//console.log('got move info', pin)
+				G.moveCenter(field, perle, pin[1], pin[2]);
+			}
 			//perle.key='gelb';
 			if (isFarbPerle(perle)) {
 				let bg = GermanToEnglish[perle.key];
@@ -117,7 +137,7 @@ class SimpleClass7 {
 		enableDD(this.perlenListeImSpiel, fields.map(x => x), this.onDropPerleSimplest.bind(this), false, false, dragStartPreventionOnSidebarOpen);
 		addDDTarget({ item: this.state.poolArr, div: this.dParent }, false, false);
 	}
-	onDropPerleSimplest(source, target) {
+	onDropOrig(source, target) {
 		//console.log('dropHandler!',source,'\ntarget',target)
 		if (target.item == this.state.poolArr) {
 			//console.log('===>perle',source,'needs to go back to pool!');
@@ -138,7 +158,129 @@ class SimpleClass7 {
 				sendPlacePerle(source, target, displaced);
 			}
 		}
+	}
+	onDropPerleSimplest(source, target, isCopy, clearTarget, dx, dy, ev, clone) {
+		if (!this.settings.freeForm){
+			this.onDropOrig(source,target);
+		}else if (target.item == this.state.poolArr) {
+			//console.log('===>perle',source,'needs to go back to pool!');
+			let f = source.field;
+			if (isdef(f)) sendRemovePerle(source, f);
+		}else{
+			this.onDropFreeForm(source,target,ev, clone);
+		}
+	}
+	onDropFreeForm(source,target,ev,clone){
 
+		let perle = source;
+		let dField = iDiv(target);
+		let dPerle = iDiv(source);
+		let rField = getRect(dField);
+		let rPerle = getRect(dPerle);
+		////let rPerle = getRect(iDiv(source))
+		//console.log('rect of field',rField);
+		//console.log('ev',ev);
+		//console.log('DDInfo.dragOffset',DDInfo.dragOffset);
+		let d=iDiv(perle);
+		let drop={x:ev.clientX,y:ev.clientY};
+		let [dx,dy]=[DDInfo.dragOffset.offsetX,DDInfo.dragOffset.offsetY];
+		let [x,y,w,h]=[drop.x,drop.y,rField.w,rField.h];
+		// //let d1=mDiv(dTable,{position:'fixed',bg:'yellow',left:x,top:y,w:w,h:h});
+		// //let d2=mDiv(dTable,{position:'fixed',bg:'orange',left:x+dx,top:y+dy,w:w,h:h});
+		//let d3=mDiv(dTable,{position:'fixed',bg:'red',left:x-dx,top:y-dy,w:w,h:h});
+
+		let dw=Math.abs(rPerle.w-rField.w);
+		let dh=Math.abs(rPerle.h-rField.h);
+		dw/=2,dh/=2;
+		//let d4=mDiv(dTable,{rounding:'50%',position:'fixed',bg:'#00ff0080',left:x-dx-dw,top:y-dy-dh,w:w,h:h});
+
+		let [xFinal,yFinal]=[x-dx-dw,y-dy-dh];
+		//d4 hat correct ccords
+		//reche die auf coords relative to field parent um
+		let dFieldParent = dField.parentNode;
+		let rParent = getRect(dFieldParent);
+
+		console.log('parent info',dFieldParent,rParent);
+
+		let xField = xFinal-rParent.x;
+		let yField = yFinal-rParent.y;
+		let [cxFinal,cyFinal]=[xField+w/2,yField+h/2];
+		console.log('field',target);
+		let dxy={x:cxFinal-target.center.x,y:cyFinal-target.center.y};
+
+		mStyleX(dField,{left:xField,top:yField}); //,bg:'blue'});
+		target.dxy=source.dxy=dxy;
+		//es muss noch die haelfte der size diff zwischen perle und field abgezogen werden
+		// mStyleX(d,{left:x,top:y,w:w,h:h,position:'fixed'});
+		// mStyleX(d,{left:x+dx,top:y+dy,w:w,h:h,position:'fixed'});
+		// mStyleX(d,{left:x+dx,top:y+dy,w:w,h:h,position:'fixed'});
+
+		let displaced = null;
+		if (target.item == source) sendMoveField(target);
+		else if (isdef(target.item)) displaced = target.item;
+
+		if (isdef(source.field)) {
+			let f = source.field;
+			sendMovePerle(source, f, target, displaced);
+		} else {
+			//console.log('sending place ')
+			sendPlacePerle(source, target, displaced);
+		}
+		return;
+	}
+	onDropPerleSimplest_BROKEN(source, target, isCopy, clearTarget, dx, dy, ev, clone) {
+		//console.log('dropHandler!',source,'\ntarget',target)
+		console.log('DROP!!! dx,dy', dx, dy);
+		let isFreeForm = this.settings.freeForm
+		if (isFreeForm && isField(target)) {
+
+			this.moveCenter(target, source, dx, dy);
+		}
+		if (target.item == this.state.poolArr) {
+			//console.log('===>perle',source,'needs to go back to pool!');
+			let f = source.field;
+			if (isdef(f)) sendRemovePerle(source, f);
+		} else {
+			let displaced = null;
+			if (isdef(target.item)) {
+				let p = target.item;
+				if (isFreeForm && p == source) {
+					//allow perle to be dropped onto itself!
+					//in this case, just modify dxy
+					sendMoveField(target);
+				} else {
+					if (p == source) return;
+					displaced = p;
+				}
+			}
+			if (isdef(source.field)) {
+				let f = source.field;
+				sendMovePerle(source, f, target, displaced);
+			} else {
+				//console.log('sending place ')
+				sendPlacePerle(source, target, displaced);
+			}
+		}
+
+	}
+	moveCenter(target, source, dx, dy) {
+		//console.log('moveCenter', target, source, dx, dy)
+		let dTarget = iDiv(target);
+		let center = target.center;
+		let newCenter = { x: center.x + dx, y: center.y + dy };
+		target.dxy = { x: dx, y: dy };
+		let rect = getRect(dTarget);
+		mStyleX(dTarget, { left: newCenter.x - rect.w / 2, top: newCenter.y - rect.h / 2 });
+		source.dxy = { x: dx, y: dy };
+
+	}
+	resetCenter(target) {
+		let dTarget = iDiv(target);
+		let center = target.center;
+		let rect = getRect(dTarget);
+		mStyleX(dTarget, { left: center.x - rect.w / 2, top: center.y - rect.h / 2 });
+		delete target.dxy;
+		if (isdef(target.item)) delete target.item.dxy;
 	}
 
 	processData(data) {

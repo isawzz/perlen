@@ -89,6 +89,8 @@ class GP2 {
 	}
 	ensureNoDuplicatesInLastState() {
 		let pool = this.lastState.state.pool;
+		let poolArr = this.lastState.state.poolArr;
+		let st=this.lastState.state;
 		if (base.nundef(pool)) return;
 		let di = {};
 		let newPool = {};
@@ -97,8 +99,12 @@ class GP2 {
 			let p = pool[key];
 			if (base.nundef(di[p.key])) { newPool[i] = { key: p.key, index: i }; i += 1; di[p.key] = true; }
 		}
-		this.lastState.state.pool = newPool;
+		st.pool = newPool;
+
+		st.poolArr = base.arrNoDuplicates(poolArr);
+
 		console.log('pool ok:', Object.keys(newPool).length, ' - old pool', Object.keys(pool).length);
+		console.log('poolArr:', st.poolArr.join());
 	}
 	weiter() {
 		let s = this.settings, lastState = this.lastState;
@@ -123,7 +129,7 @@ class GP2 {
 		base.copyKeys(settings, this.settings);
 		// console.log('settings', this.settings);
 		if (base.isdef(state.pool)) {
-			//console.log('state', state.pool);
+			console.log('state', Object.keys(state.pool).length);
 			this.maxPoolIndex = Object.keys(state.pool).length;
 		} else {
 
@@ -220,6 +226,18 @@ class GP2 {
 			this.safeEmitState(['perlenDict', 'settings', 'pool']);
 		}
 	}
+	handleMoveField(client, x) {
+		let iField = x.iField;
+		let dxy=x.dxy;
+		//update board state!
+		let boardArr = this.state.boardArr;
+		let el = boardArr[iField];
+		if (base.isList(el)) el=[el[0],el[1]+dxy.x,el[2]+dxy.y];
+		else el=[el,dxy.x,dxy.y];
+		boardArr.iField=el;
+
+		this.safeEmitState();
+	}
 	handleMovePerle(client, x) {
 		let iPerle = x.iPerle;
 		let iFrom = x.iFrom;
@@ -231,7 +249,10 @@ class GP2 {
 		//update board state!
 		let boardArr = this.state.boardArr;
 		boardArr[iFrom] = null;
-		boardArr[iTo] = iPerle;
+		//boardArr[iTo] = iPerle;
+		//console.log(base.isdef(x.dxy),x.dxy)
+		boardArr[iTo] = x.dxy ? [iPerle, x.dxy.x, x.dxy.y] : iPerle;
+		//boardArr[iTo] = x.dxy ? [iPerle, x.x, x.y] : iPerle;
 
 		this.state.boardArr = boardArr;
 
@@ -243,7 +264,7 @@ class GP2 {
 		this.safeEmitState();
 	}
 	handlePlacePerle(client, x) {
-		//console.log('x', x, 'this.state', this.state);
+		//console.log('PLACE! x', x);
 		let iPerle = x.iPerle;
 		let iField = x.iField;
 		let username = x.username;
@@ -253,22 +274,34 @@ class GP2 {
 		base.removeInPlace(state.poolArr, iPerle);
 		if (base.isdef(x.displaced)) { state.poolArr.unshift(x.displaced); }
 
-		state.boardArr[iField] = iPerle;
+		//state.boardArr[iField] = iPerle;
+		state.boardArr[iField] = x.dxy ? [iPerle, x.dxy.x, x.dxy.y] : iPerle;
 
+		//console.log('boardArr',state.boardArr)
 		this.safeEmitState();
 
+	}
+	handleRemovePerlen(client, x) {
+		logReceive('removePerlen', x);
+		//console.log('rem!')
+		let iPerlen = x.iPerlen;
+		let iFroms = x.iFroms;
+		for (let i = 0; i < iPerlen.length; i++) {
+			let iPerle = iPerlen[i];
+			let iFrom = iFroms[i];
+			this.removePerle(iPerle, iFrom);
+		}
+		this.safeEmitState();
+	}
+	removePerle(iPerle, iFrom) {
+		this.state.boardArr[iFrom] = null;//update board state!
+		this.state.poolArr.unshift(iPerle);
 	}
 	handleRemovePerle(client, x) {
 		logReceive('removePerle', x);
 		let iPerle = x.iPerle;
 		let iFrom = x.iFrom;
-		//let state = this.state;
-
-		this.state.boardArr[iFrom] = null;//update board state!
-		this.state.poolArr.unshift(iPerle);
-
-		//console.log('poolArr', this.state.poolArr);
-
+		this.removePerle(iPerle, iFrom);
 		this.safeEmitState();
 	}
 
@@ -285,7 +318,7 @@ class GP2 {
 		if (barr.length != s.nFields) {
 			if (base.isEmpty(barr) || !base.firstCond(barr, a => a != null)) this.state.boardArr = new Array(s.nFields);
 			else if (barr.length < s.nFields) {
-				for (let i = barr.length; i < snnFields; i++) this.state.boardArr.push(null);
+				for (let i = barr.length; i < s.nFields; i++) this.state.boardArr.push(null);
 			} else {
 				// verkuerzung von boardArr!
 				let nBarr = barr.length;

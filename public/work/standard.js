@@ -8,7 +8,7 @@ function applySettings(b, s, h=768, topFrame = 0) {
 	//console.log('b.fields',b.fields)
 	return b;
 }
-
+function isField(x){return x.isField == true;}
 function applyStandard(dParent, s, h = 768, topFrame = 0) {
 	let isRealBoard = topFrame == 0;
 	let b = { boardFilename: s.boardFilename };
@@ -73,7 +73,7 @@ function createFields(s, b, scale) {
 		let top = p.y - dy + hGap / 2;
 		let dItem = mDiv(dCells, { position: 'absolute', left: left, top: top, display: 'inline', w: wCell - wGap, h: hCell - hGap, rounding: '50%', bg: bg });
 		mCenterCenterFlex(dItem)
-		let f = { div: dItem, index: i, center: p }; i += 1;
+		let f = { div: dItem, index: i, center: p, isField: true }; i += 1;
 		fields.push(f);
 	}
 	if (s.boardRotation != 0) { dCells.style.transform = `rotate(${s.boardRotation}deg)`; }
