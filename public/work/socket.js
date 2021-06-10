@@ -21,6 +21,7 @@ function initSocket() {
 	Socket.on('userMessage', handleUserMessage);
 
 	Socket.on('gameState', handleGameState);
+	Socket.on('dbUpdate',handleDbUpdate);
 
 	Socket.on('mouse', handleMouse);
 	Socket.on('show', handleShow);

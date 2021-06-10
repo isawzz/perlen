@@ -123,7 +123,7 @@ class GP2 {
 		this.randomIndices = this.mapIndices(oldToNewIndex, randomIndices);
 
 		console.log('pool ok:', Object.keys(newPool).length, ' - old pool', Object.keys(pool).length);
-		console.log('poolArr:', st.poolArr.join());
+		if (Verbose) console.log('poolArr:', st.poolArr.join());
 	}
 	mapIndices(di, oldArr) {
 		let arr = [];
@@ -350,7 +350,7 @@ class GP2 {
 				}
 				for (const idx of extras) {
 					if (base.isList(idx)) {
-						console.log('YEAHHHH', idx);
+						//console.log('YEAHHHH', idx);
 						this.state.poolArr.push(idx[0]);
 					} else this.state.poolArr.push(idx);
 				}
@@ -411,9 +411,9 @@ class GP2 {
 			let n = x.n;
 			let inter = base.intersection(this.state.poolArr, this.randomIndices);
 			let keys = base.choose(inter, n);
-			console.log('rr','n',n,'\ninter',inter,'\nkeys',keys)
+			//console.log('rr','n',n,'\ninter',inter,'\nkeys',keys)
 			for (let p of keys) {
-				console.log('removing',this.state.pool[p].key);
+				//console.log('removing',this.state.pool[p].key);
 				base.removeInPlace(this.randomIndices, p);
 				base.removeInPlace(this.state.poolArr, p);
 				delete this.state.pool[p];
@@ -441,6 +441,13 @@ class GP2 {
 		this.state.boardArr = [];
 		this.randomIndices = Object.keys(this.state.pool).map(x => Number(x));
 		this.safeEmitState(['pool'])
+	}
+	handlePrefab(client,x){
+		let name = x.name;
+		let settings = x.settings;
+		this.db.standardSettings[name]=settings;
+		utils.toYamlFile(this.db,path.join(__dirname, PerlenPath + 'data.yaml'));//PerlenPath+'data.yaml');
+		this.io.emit('dbUpdate',{standardSettings:this.db.standardSettings});
 	}
 
 	sendMessage(username, msg) { this.io.emit('userMessage', { username: username, msg: msg }); }

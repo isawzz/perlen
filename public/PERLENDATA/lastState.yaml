@@ -1,21 +1,31 @@
-randomIndices: []
+randomIndices:
+  - 0
+  - 1
+  - 2
+  - 3
+  - 4
+  - 5
+  - 6
+  - 7
+  - 8
+  - 9
 settings:
-  rows: 5
-  cols: 3
-  boardMarginLeft: 0
+  rows: 7
+  cols: 4
+  boardMarginLeft: -4
   boardMarginTop: 0
-  boardRotation: 0
-  dxCenter: 101
-  dyCenter: 116
+  boardRotation: 20
+  dxCenter: 90
+  dyCenter: 104
   szField: 60
   szPerle: 100
   szPoolPerle: 50
-  fieldColor: "#ffffff20"
-  baseColor: rgb(76, 127, 206)
+  fieldColor: "#ffffff80"
+  baseColor: "#1D1351FF"
   boardLayout: hex1
   freeForm: false
   uniformRows: false
-  boardFilename: brett19_09.png
+  boardFilename: brett03.png
   wGap: 15
   hGap: 13
   backgroundSize: initial
@@ -29,7 +39,7 @@ settings:
   bgBoard: silver
   fgBoard: black
   fzLabel: 16
-  nFields: 19
+  nFields: 37
   wBoard: 100%
   hBoard: 768
   boardStandard: none
@@ -42,22 +52,42 @@ settings:
   idealBg: rgb(76, 127, 206)
 state:
   pool:
-    "12":
-      key: english
-      index: 12
-    "13":
-      key: wasser
-      index: 13
-    "14":
-      key: wintersonne
-      index: 14
-    "15":
-      key: wissen
-      index: 15
+    "0":
+      key: verschwörungstheorie
+      index: 0
+    "1":
+      key: überleben
+      index: 1
+    "2":
+      key: zart
+      index: 2
+    "3":
+      key: vorurteil
+      index: 3
+    "4":
+      key: violett
+      index: 4
+    "5":
+      key: european theatre
+      index: 5
+    "6":
+      key: culture wars
+      index: 6
+    "7":
+      key: das große rote megaphon
+      index: 7
+    "8":
+      key: cia
+      index: 8
+    "9":
+      key: wissenswirtschaft
+      index: 9
   poolArr:
-    - 13
-    - 14
-    - 15
+    - 2
+    - 3
+    - 6
+    - 8
+    - 9
   boardArr:
     - null
     - null
@@ -68,13 +98,31 @@ state:
     - null
     - null
     - null
-    - 12
+    - null
+    - null
+    - 7
     - null
     - null
     - null
     - null
     - null
     - null
+    - 4
+    - null
+    - null
+    - null
+    - 0
+    - 1
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - 5
     - null
     - null
     - null

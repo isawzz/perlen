@@ -353,6 +353,11 @@ function handleGameState(data) {
 	//console.log('data',data)
 	G.presentGameState(data);
 }
+function handleDbUpdate(data) {
+	logClientReceive('dbUpdate', data);
+	//console.log('data',data)
+	DB.standardSettings = data.standardSettings;
+}
 
 function sendMovePerle(perle, fFrom, fTo, dis) {
 	//console.log('===> PLACE')

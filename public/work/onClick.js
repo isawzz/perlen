@@ -13,7 +13,7 @@ function closeAux() {
 }
 function resetActiveButton() {
 	if (ActiveButton != null) {
-		console.log(ActiveButton);
+		//console.log(ActiveButton);
 		//cancel active thing
 		//console.log(ActiveButton, ActiveButton.id)
 		let ba = ActiveButton;
@@ -24,7 +24,7 @@ function resetActiveButton() {
 		ba.innerHTML = caption;
 		ActiveButton = null;
 	} else {
-		console.log('ActiveButton is null!!!')
+		//console.log('ActiveButton is null!!!')
 	}
 }
 function setActiveButton(button) {
@@ -97,12 +97,13 @@ function onClickPrefabGallery() {
 
 		}
 		d.onclick = () => {
+			DA.lastPrefabName = stdName;
 			copyKeys(std, G.settings);
 			Socket.emit('settings', { settings: G.settings });
 			closeAux();
 		}
 	}
-	console.log(boardExamples);
+	//console.log(boardExamples);
 }
 
 function onClickActivateLayout() { closeAux(); Socket.emit('settings', { settings: G.settings }); }
@@ -136,7 +137,12 @@ function onClickModifyLayout(ev) {
 		}, styles);
 	let inpfreeForm = mCheckbox('free drop: ', s.freeForm ? true : false, dAuxContent, (a) => { setApply('freeForm', a == 1 ? true : false) }, styles);
 }
+function onClickSaveAsPrefab(){
+	let prefabName = prompt('enter name: ', DA.lastPrefabName);
+	Socket.emit('prefab',{name:prefabName,settings:G.settings});
+	closeAux();
 
+}
 
 function onClickClearPerlenpool() {
 	//perlen im pool werden destroyed

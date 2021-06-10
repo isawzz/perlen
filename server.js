@@ -101,6 +101,7 @@ io.on('connection', client => {
 
 	client.on('chooseBoard', x => simple.handleChooseBoard(client, x));
 	client.on('settings', x => simple.handleSettings(client, x));
+	client.on('prefab', x => simple.handlePrefab(client, x));
 	client.on('reset', x => simple.handleReset(client, x));
 
 	client.on('poolChange', x => simple.handlePoolChange(client, x));

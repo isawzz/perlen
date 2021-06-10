@@ -25,18 +25,23 @@ class ToolbarClass{
 	populate(){
 		this.addButton('uploadBoard',onClickUploadBoard,'upload board');
 		this.addButton('uploadPerlen',onClickUploadPerlen,'upload perlen');
+		mLinebreak(this.dParent)
 		this.addButton('chooseBoard',onClickChooseBoard,'choose board');
 		this.addButton('prefabGallery',onClickPrefabGallery,'prefab gallery');
 		this.addButton('modifyLayout',onClickModifyLayout,'modify layout');
-		// this.addButton('activateLayout',onClickActivateLayout,'activate layout');
-		this.addButton('clearPerlenpool',onClickClearPerlenpool,'clear perlenpool');
-		// this.addButton('clearAllPerlen',onClickClearAllPerlen,'clear all perlen');
+		this.addButton('saveAsPrefab',onClickSaveAsPrefab,'save as prefab');
+		mLinebreak(this.dParent)
 		this.addButton('clearBoard',onClickClearBoard,'clear board');
+		this.addButton('clearPerlenpool',onClickClearPerlenpool,'clear perlenpool');
+		this.addButton('remove10Random',onClickRemove10Random,'remove random');
+		this.addButton('resetAll',onClickResetAll,'reset all perlen');
+		// this.addButton('activateLayout',onClickActivateLayout,'activate layout');
+		// this.addButton('clearAllPerlen',onClickClearAllPerlen,'clear all perlen');
+		mLinebreak(this.dParent)
 		this.addButton('addToPool',onClickAddToPool,'add to pool');
 		// this.addButton('addToPool',onClickAddToPool,'add to pool');
 		this.addButton('add10Random',onClickAdd10Random,'add 10 random');
-		this.addButton('remove10Random',onClickRemove10Random,'remove random');
-		this.addButton('resetAll',onClickResetAll,'reset all perlen');
+		mLinebreak(this.dParent)
 		
 	}
 }

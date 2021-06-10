@@ -166,7 +166,7 @@ function loadBoardImage(dOneBoard, s, b, scale, useCornerColor=false) {
 	var img = mCreate('img');
 	img.onload = ev => {
 
-		let cornerColor = isdef(s.idealBg) ? s.idealBg : getCornerPixelColor(img);
+//		let cornerColor = isdef(s.idealBg) ? s.idealBg : getCornerPixelColor(img);
 
 		let sz = s.naturalImageSize = b.imgSize = { w: img.naturalWidth, h: img.naturalHeight };
 		let szi = s.backgroundSize;
@@ -175,7 +175,7 @@ function loadBoardImage(dOneBoard, s, b, scale, useCornerColor=false) {
 		mStyleX(b.dOuter, { 'background-size': szi, 'background-repeat': 'no-repeat', 'background-position': 'center center' });
 		let [wb, hb] = [Math.max(sz.w * scale, b.wNeeded), Math.max(sz.h * scale, b.hNeeded)];
 		mStyleX(b.dOuter, { wmin: wb, hmin: hb });
-		if (useCornerColor) setLinearBackground(b.d0, cornerColor, 10);
+		if (useCornerColor) setLinearBackground(b.d0, s.baseColor, 10);
 		b.img = img;
 	}
 	img.src = path;
