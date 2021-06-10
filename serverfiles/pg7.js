@@ -90,7 +90,7 @@ class GP2 {
 	ensureNoDuplicatesInLastState() {
 		let pool = this.lastState.state.pool;
 		let poolArr = this.lastState.state.poolArr;
-		let st=this.lastState.state;
+		let st = this.lastState.state;
 		if (base.nundef(pool)) return;
 		let di = {};
 		let newPool = {};
@@ -228,13 +228,13 @@ class GP2 {
 	}
 	handleMoveField(client, x) {
 		let iField = x.iField;
-		let dxy=x.dxy;
+		let dxy = x.dxy;
 		//update board state!
 		let boardArr = this.state.boardArr;
 		let el = boardArr[iField];
-		if (base.isList(el)) el=[el[0],el[1]+dxy.x,el[2]+dxy.y];
-		else el=[el,dxy.x,dxy.y];
-		boardArr.iField=el;
+		if (base.isList(el)) el = [el[0], el[1] + dxy.x, el[2] + dxy.y];
+		else el = [el, dxy.x, dxy.y];
+		boardArr.iField = el;
 
 		this.safeEmitState();
 	}
@@ -326,7 +326,12 @@ class GP2 {
 				for (let i = s.nFields; i < barr.length; i++) {
 					if (base.isdef(barr[i])) extras.push(barr[i]);
 				}
-				for (const idx of extras) { this.state.poolArr.push(idx); }
+				for (const idx of extras) {
+					if (base.isList(idx)) {
+						console.log('YEAHHHH', idx);
+						this.state.poolArr.push(idx[0]);
+					} else this.state.poolArr.push(idx);
+				}
 				this.state.boardArr = this.state.boardArr.slice(0, s.nFields);
 			}
 		}

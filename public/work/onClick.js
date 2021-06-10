@@ -3,6 +3,15 @@ function openAux(title) {
 	dAuxTitle.innerHTML = title;
 }
 
+function onClickToolbarButton() {
+	if (isVisible('sidebar')) {
+		hide('sidebar');
+		mStyleX(dTable,{w:'calc( 100% - 120 )'});
+	} else {
+		show('sidebar');
+		mStyleX(dTable,{w:'100%'});
+	}
+}
 function onClickUploadBoard() {
 	//hier gib das zeug vom anderen hin!
 	openAux('upload board image');
@@ -99,6 +108,8 @@ function calcFieldGaps(sz) {
 	//clearElement(G.dParent);
 	G.clientBoard = applySettings(G.clientBoard, s);
 }
+
+
 function onClickEditLayout() {
 	openAux('board settings');
 	let wWidget = 350;
@@ -114,6 +125,11 @@ function onClickEditLayout() {
 	let inpFieldSize = mEditRange('field size: ', s.wField - s.wGap, 10, 200, 1, dAuxContent, (a) => { calcFieldGaps(a) }, styles);
 	let inpFieldColor = mColorPickerControl('field color: ', s.fieldColor, b.img, dAuxContent, (a) => { setApply('fieldColor', a) }, styles);
 	let inpBaseColor = mColorPickerControl('background: ', s.baseColor, b.img, dAuxContent, setNewBackgroundColor, styles);
+	let inpFullCover = mCheckbox('full cover: ', s.boardLayout == 'hex1' ? false : true, dAuxContent,
+		(a) => {
+			setApply('boardLayout', a ? 'hex' : 'hex1');
+			console.log('a', a)
+		}, styles);
 }
 
 function onClickActivateLayout() {
@@ -122,18 +138,18 @@ function onClickActivateLayout() {
 	Socket.emit('settings', { settings: G.settings });
 }
 
-function onClickClearPerlenpool(){
+function onClickClearPerlenpool() {
 	//perlen im pool werden destroyed
 	//die am board bleiben
 }
-function onClickClearBoard(){
+function onClickClearBoard() {
 	G.clearBoard();
 }
-function onClickClearAllPerlen(){
+function onClickClearAllPerlen() {
 	//perlen im pool werden destroyed
 	//die am board bleiben
 }
-function onClickAddToPool(){
+function onClickAddToPool() {
 
 }
 

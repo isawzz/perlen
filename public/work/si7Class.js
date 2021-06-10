@@ -15,6 +15,9 @@ class SimpleClass7 {
 		mStyleX(dTable, { h: window.innerHeight });
 
 		let [settings, state] = this.processData(data);
+
+		console.assert(state.poolArr.map(x=>!isList(x)),'BUGBUGBUGBUGBUGBUGBUG!!!')
+
 		//if (settings == Settings.o && Settings.o == this.settings) console.log('...settings ok'); else console.assert(settings == Settings && Settings == this.settings, 'hallo settings FALSCH!!!!!!!!!!!!!')
 		let needToLoadBoard = nundef(this.clientBoard) || this.clientBoard.boardFilename != settings.boardFilename;
 
@@ -35,10 +38,6 @@ class SimpleClass7 {
 		}
 		this.presentPerlen();
 		this.activateDD();
-		if (settings.poolSelection != 'random' && this.initialPoolSelected == false) {
-			createPerlenEditor();
-			setTitle(data.instruction);
-		}
 	}
 	chooseBoard(boardFilename) {
 		if (boardFilename == this.settings.boardFilename) return;
@@ -96,16 +95,17 @@ class SimpleClass7 {
 		let dParent = this.dPool;
 		for (let i = 0; i < poolArr.length; i++) {
 			let iPerle = poolArr[i]; //console.log('iPerle', iPerle, perlenByIndex, perlenByIndex[iPerle]);
+			console.assert(!isList(iPerle),'BUGBUGBUGBUGBUG!!!!!!')
 			let perle = perlenByIndex[iPerle]; //console.log('perle', perle)
 			if (nundef(perle)) {
 				//BUGBUGBUG
+
 				console.log(perlenByIndex, perlenByIndex, 'perlenDict', this.perlenDict, '\nboardArr', boardArr, '\npoolArr', poolArr)
 			}
 			perle.field = null;
 			let ui = createPerle(perle, dParent, 64, 1.3, .4);
 		}
 		for (let i = 0; i < boardArr.length; i++) {
-			// let iPerle = boardArr[i];
 			let pin = boardArr[i];
 			let iPerle = isList(pin) ? pin[0] : pin; //
 			if (iPerle == null) continue;
@@ -114,9 +114,11 @@ class SimpleClass7 {
 			perle.field = field;
 			field.item = perle;
 			let ui = createPerle(perle, iDiv(field), 64, 1.3, .4);
+			
+
 			if (isList(pin)) {
 				//console.log('got move info', pin)
-				G.moveCenter(field, perle, pin[1], pin[2]);
+				this.moveCenter(field, perle, pin[1], pin[2]);
 			}
 			//perle.key='gelb';
 			if (isFarbPerle(perle)) {
@@ -228,41 +230,6 @@ class SimpleClass7 {
 		}
 		return;
 	}
-	onDropPerleSimplest_BROKEN(source, target, isCopy, clearTarget, dx, dy, ev, clone) {
-		//console.log('dropHandler!',source,'\ntarget',target)
-		console.log('DROP!!! dx,dy', dx, dy);
-		let isFreeForm = this.settings.freeForm
-		if (isFreeForm && isField(target)) {
-
-			this.moveCenter(target, source, dx, dy);
-		}
-		if (target.item == this.state.poolArr) {
-			//console.log('===>perle',source,'needs to go back to pool!');
-			let f = source.field;
-			if (isdef(f)) sendRemovePerle(source, f);
-		} else {
-			let displaced = null;
-			if (isdef(target.item)) {
-				let p = target.item;
-				if (isFreeForm && p == source) {
-					//allow perle to be dropped onto itself!
-					//in this case, just modify dxy
-					sendMoveField(target);
-				} else {
-					if (p == source) return;
-					displaced = p;
-				}
-			}
-			if (isdef(source.field)) {
-				let f = source.field;
-				sendMovePerle(source, f, target, displaced);
-			} else {
-				//console.log('sending place ')
-				sendPlacePerle(source, target, displaced);
-			}
-		}
-
-	}
 	moveCenter(target, source, dx, dy) {
 		//console.log('moveCenter', target, source, dx, dy)
 		let dTarget = iDiv(target);
@@ -332,4 +299,193 @@ class SimpleClass7 {
 
 
 }
+
+//#region perlen game start here!
+function simplestPerlenGame() {
+
+	// console.log('arrno',arrNoDuplicates([1,2,3,4,5,3,2,4,1]));
+
+	hide('dMainContent');
+	show('dGameScreen');
+	setTitle('Glasperlenspiel');
+	setSubtitle('logged in as ' + Username);
+	let color = USERNAME_SELECTION == 'local' ? localStorage.getItem('BaseColor') : null;
+	setNewBackgroundColor(color);
+	mStyleX(document.body, { opacity: 1 });
+	initTable(null, 2); initSidebar(); initAux(); initScore();
+	ColorThiefObject = new ColorThief();
+	if (PERLEN_EDITOR_OPEN_AT_START) createPerlenEditor();
+	sendStartOrJoinPerlenGame();
+}
+function sendStartOrJoinPerlenGame() {
+	if (STARTED) { console.log('REENTRACE PROBLEM!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!'); return; }
+	STARTED = true;
+	let data = Username;
+	logClientSend('startOrJoinPerlen', data);
+	Socket.emit('startOrJoinPerlen', data);
+	window.onkeydown = keyDownHandler;
+	window.onkeyup = keyUpHandler;
+	//mBy('sidebar').onmousedown = ()=>hide(dAux);
+	// mBy('table').onmousedown = ()=>hide(dAux);
+	// dAux.onmousedown = (ev)=>ev.stopPropagation();
+	// mBy('sidebar').ondblclick = togglePerlenEditor;
+	mBy('sidebar').ondblclick = ()=>{hide('sidebar')};
+	G = VERSION == 7 ? new SimpleClass7() : new SimpleClass();
+	Settings = new PerlenSettingsClass(G.settings, U, mBy('dSettingsWindow'));
+	if (!USESOCKETS) G.presentGameState();
+}
+//skip next 2 steps!
+function handleInitialPool(data) {
+	console.assert(isdef(G), 'G not defined!!!!!!!!!!!')
+	//if (nundef(G.settings) && isdef(data.settings)) 
+	if (isdef(data.settings) && isdef(G.settings)) copyKeys(data.settings, G.settings);
+	else if (isdef(data.settings)) copyKeys(data.settings, G.settings);
+	else if (isdef(G.settings)) G.settings.individualSelection = true;
+	else if (nundef(data.settings) && nundef(G.settings)) copyKeys({ individualSelection: true }, G.settings);
+	G.initialPoolSelected = false;
+	logClientReceive('initialPool', data);
+	setTitle(data.instruction);
+	G.presentGameState(data);
+	createPerlenEditor();
+
+}
+//handling socket messages for perlen game
+
+function handleGameState(data) {
+	logClientReceive('gameState', data);
+	//console.log('data',data)
+	G.presentGameState(data);
+}
+
+function sendMovePerle(perle, fFrom, fTo, dis) {
+	//console.log('===> PLACE')
+	let data = { dxy:perle.dxy, iPerle: perle.index, iFrom: fFrom.index, iTo: fTo.index, displaced: isdef(dis) ? dis.index : null, username: Username };
+	logClientSend('movePerle', data);
+	Socket.emit('movePerle', data);
+}
+function sendMoveField(f) {
+	//console.log('===> PLACE')
+	let data = { dxy:f.item.dxy, iField: f.index, username: Username };
+	logClientSend('moveField', data);
+	Socket.emit('moveField', data);
+}
+function sendRemovePerlen(plist, fields) {
+	console.log('===> remove list',plist,fields);
+	let data = { iPerlen: plist.map(x=>x.index), iFroms: fields.map(x=>x.index), username: Username };
+	logClientSend('removePerlen', data);
+	Socket.emit('removePerlen', data);
+}
+function sendRemovePerle(perle, fFrom) {
+	//console.log('===> PLACE')
+	let data = { iPerle: perle.index, iFrom: fFrom.index, username: Username };
+	logClientSend('removePerle', data);
+	Socket.emit('removePerle', data);
+}
+function sendPlacePerle(perle, field, dis) {
+	//console.log('hallo sending move')
+	let data = { dxy:perle.dxy, iPerle: perle.index, iField: field.index, displaced: isdef(dis) ? dis.index : null, username: Username };
+	logClientSend('placePerle', data);
+	Socket.emit('placePerle', data);
+}
+//unused!
+function sendRelayout(rows, cols, boardArr, poolArr) {
+	//console.log('hallo sending relayout');
+	let data = { rows: rows, cols: cols, boardArr: boardArr, username: Username };
+	if (isdef(poolArr)) data.poolArr = poolArr;
+	logClientSend('relayout', data);
+	Socket.emit('relayout', data);
+}
+
+//#endregion
+
+//#region key handlers, mouse enter exit perle handlerrs
+function onEnterPerle(perle) {
+	if (IsControlKeyDown) {
+		//if (MAGNIFIER_IMAGE) iMagnifyCancel();
+		iMagnify(perle);
+	}
+}
+function onExitPerle() { if (IsControlKeyDown) iMagnifyCancel(); }
+function keyUpHandler(ev) {
+	//ev.preventDefault();
+	//var keyCode = ev.keyCode || ev.which;
+	//console.log('keyCode',keyCode,'ev.key',ev.key);
+	if (ev.key == 'Control') {
+		IsControlKeyDown = false;
+		iMagnifyCancel();
+	}
+	if (ev.key == 'Alt' && isdef(Socket)) { Socket.emit('hide', { username: Username }); }
+
+	if (ev.code == 'Escape' && isVisible('dAux')) {
+		console.log('hiding dAux!')
+		hide('dAux');
+	}
+	//else if (keyCode == 112) { show('dHelpWindow'); }
+}
+function keyDownHandler(ev) {
+
+	if (IsControlKeyDown && MAGNIFIER_IMAGE) return;
+	if (!MAGNIFIER_IMAGE && ev.key == 'Control') {
+		IsControlKeyDown = true;
+		let elements = document.querySelectorAll(":hover");
+		//console.log('elements under mouse',elements);
+		//check if perle is under mouse!
+		for (const el of elements) {
+			let id = el.id;
+			if (isdef(id) && isdef(Items[id]) && Items[id].type == 'perle') {
+				iMagnify(Items[id]); return;
+			}
+
+		}
+	}
+	if (ev.key == 'Alt' && isdef(Socket)) { Socket.emit('show', { username: Username }); }
+
+}
+
+//#endregion
+
+
+function createPerle(perle, dParent, sz = 64, wf = 1.3, hf = 0.4, useNewImage = false) {
+	let d = makePerleDiv(perle,
+		{ wmin: sz + 4, h: sz * (1 + hf) + 4 },
+		{ w: sz, h: sz }, { wmax: sz * wf, hmax: sz * hf, fz: sz / 6 },
+		'b', true, null, useNewImage);
+	mAppend(dParent, d);
+	//console.log('perle', perle);
+
+	if (perle.field != null) { //board perle!
+		perle.live.dLabel.remove();
+		let img = perle.live.dImg;
+
+		let d = iDiv(perle);
+		let rect = getRect(img);
+
+		//console.log('img', img, rect)
+		//console.log('d', d, getRect(d))
+
+		let szField = G.settings.wField - G.settings.wGap;
+		let szPerle = isdef(G.settings.szPerle)?szField * G.settings.szPerle /100:100;
+		let sz = Math.max(szPerle,80);
+		let [wf, hf] = [sz, sz];
+		if (isFarbPerle(perle)) mStyleX(img, { w: 1, h: 1 }); 
+		else mStyleX(img, { w: wf, h: hf });
+		mStyleX(d, { bg: 'transparent' });
+	} else {
+		//styling for pool perle
+		let d = iDiv(perle);
+		mStyleX(d, { opacity: .6 });
+
+	}
+
+	return d;
+}
+function dragStartPreventionOnSidebarOpen() {
+	if (isdef(mBy('drop-region'))) {
+		alert('please close sidebar (by DOUBLECLICK on it) before proceeding!');
+		return false;
+	}
+	return true;
+}
+function isFarbPerle(perle) { return isGermanColorName(perle.key); }
+function mPath(p) { return PERLENPATH_FRONT + '/perlen/' + p.path; }
 

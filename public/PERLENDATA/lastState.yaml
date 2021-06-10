@@ -1,20 +1,20 @@
 settings:
-  baseColor: "#11132FFF"
+  baseColor: "#BDAF89FF"
   boardStandard: none
   poolSelection: random
   numPool: 10
-  boardLayout: hex1
-  boardFilename: brett18_56.png
+  boardLayout: hex
+  boardFilename: dateTree.jpg
   backgroundSize: initial
   sizeBoardHeightToImage: true
   fieldShape: circle
-  fieldColor: "#99089900"
-  wField: 102
-  hField: 118
-  wGap: -42
-  hGap: -26
+  fieldColor: "#282B9975"
+  wField: 131
+  hField: 63
+  wGap: 61
+  hGap: -4
   rows: 8
-  cols: 14
+  cols: 2
   boardLayoutFile: null
   boardRotation: 0
   wFieldArea: 768
@@ -27,14 +27,13 @@ settings:
   fgBoard: black
   szPerle: 75
   fzLabel: 16
-  nFields: 128
-  layout: hex1
+  nFields: 12
   labelPos: hover
   freeForm: true
   wBoard: 100%
   hBoard: 768
   naturalImageSize:
-    w: 1536
+    w: 1366
     h: 768
 state:
   pool:
@@ -53,150 +52,13 @@ state:
     "4":
       key: european theatre
       index: 4
-    "5":
-      key: culture wars
-      index: 5
-    "6":
-      key: evolution
-      index: 6
-    "7":
-      key: diskussion
-      index: 7
-    "8":
-      key: english
-      index: 8
-    "9":
-      key: dark ages
-      index: 9
   poolArr:
-    - 4
-    - 8
     - 3
-    - 5
-    - 7
+    - 4
     - 2
+    - 0
     - 1
-    - 6
-    - 9
   boardArr:
-    - null
-    - null
-    - null
-    - null
-    - null
-    - null
-    - null
-    - null
-    - null
-    - null
-    - null
-    - null
-    - null
-    - null
-    - null
-    - null
-    - null
-    - null
-    - null
-    - null
-    - null
-    - null
-    - null
-    - null
-    - null
-    - null
-    - null
-    - null
-    - null
-    - null
-    - null
-    - null
-    - null
-    - null
-    - null
-    - null
-    - null
-    - null
-    - null
-    - null
-    - null
-    - null
-    - null
-    - null
-    - null
-    - null
-    - null
-    - null
-    - null
-    - null
-    - null
-    - null
-    - null
-    - null
-    - null
-    - null
-    - null
-    - null
-    - null
-    - null
-    - null
-    - null
-    - null
-    - null
-    - null
-    - null
-    - null
-    - null
-    - null
-    - null
-    - null
-    - null
-    - null
-    - null
-    - null
-    - null
-    - null
-    - null
-    - null
-    - null
-    - null
-    - null
-    - null
-    - null
-    - null
-    - null
-    - null
-    - null
-    - null
-    - null
-    - null
-    - null
-    - null
-    - null
-    - null
-    - null
-    - null
-    - null
-    - null
-    - null
-    - null
-    - null
-    - - 0
-      - 30.5
-      - 91
-    - null
-    - null
-    - null
-    - null
-    - null
-    - null
-    - null
-    - null
-    - null
-    - null
-    - null
-    - null
-    - null
     - null
     - null
     - null

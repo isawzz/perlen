@@ -25,21 +25,21 @@ function mCenterFlex(d, hCenter = true, vCenter = false, wrap = true) {
 	if (wrap) styles['flex-wrap'] = 'wrap';
 	mStyleX(d, styles);
 }
-function mCheckbox(label, val, dParent, styles = {}, id) {
-	let d = mDiv(dParent, { display: 'inline-block', align: 'left' });
-	// let val = lookup(this.o, skeys);
-	// if (nundef(val)) val = init;
-	let inp = createElementFromHTML(
-		`<input type="checkbox" class="checkbox" ${(val === true ? 'checked=true' : '')} >`
-	);
-	if (isdef(id)) inp.id = id;
-	let labelui = createElementFromHTML(`<label>${label}</label>`);
-	mAppend(d, labelui);
-	mAppend(labelui, inp);
-	mStyleX(inp, styles);
-	mClass(inp, 'input');
-	return inp;
-}
+// function mCheckbox(label, val, dParent, styles = {}, id) {
+// 	let d = mDiv(dParent, { display: 'inline-block', align: 'left' });
+// 	// let val = lookup(this.o, skeys);
+// 	// if (nundef(val)) val = init;
+// 	let inp = createElementFromHTML(
+// 		`<input type="checkbox" class="checkbox" ${(val === true ? 'checked=true' : '')} >`
+// 	);
+// 	if (isdef(id)) inp.id = id;
+// 	let labelui = createElementFromHTML(`<label>${label}</label>`);
+// 	mAppend(d, labelui);
+// 	mAppend(labelui, inp);
+// 	mStyleX(inp, styles);
+// 	mClass(inp, 'input');
+// 	return inp;
+// }
 function mClass(d) { for (let i = 1; i < arguments.length; i++) d.classList.add(arguments[i]); }
 function mContainer(d, styles = {}) {
 	let defOuterStyles = {
@@ -178,6 +178,20 @@ function incInput(inp, n = 1) {
 	let val = Number(inp.innerHTML);
 	val += n;
 	inp.innerHTML = val;
+}
+function mCheckbox(label, val, dParent, handler, styles) {
+	styles.align = 'left';
+	let d = mDiv(dParent, styles);
+	let hpad = valf(styles.hpadding, 4);
+	let dLabel = mDiv(d, { w: '40%', align: 'right', hpadding: hpad, display: 'inline-block' }, null, label); //createElementFromHTML(`<label>${label}</label>`);
+	let d2 = mDiv(d, { display: 'inline', w: '50%', hpadding: hpad });
+	let inp = createElementFromHTML(
+		`<input type="checkbox" class="checkbox" ` + (val === true ? 'checked=true' : '') + ` >`);
+	mAppend(d2, inp);
+
+	inp.onchange = (ev) => { handler(inp.checked, ev); };
+	// inp.onchange = handler;
+	return inp;
 }
 function mColorPickerControl(label, value, targetImage, dParent, handler, styles) {
 	let d = mDiv(dParent, styles);
@@ -2037,7 +2051,7 @@ function onReleaseClone(ev) {
 				//console.assert(cTarget.x==ct1.x && cTarget.y==ct1.y,'onReleaseClone: getCenter GEHT NICHT!!!');
 				let [dx, dy] = [cDrop.x - cTarget.x, cDrop.y - cTarget.y];
 				//console.log('dx,dx',dx,dy);
-				let [ddx,ddy]=[DragElem.drag.offsetX,DragElem.drag.offsetY];
+				let [ddx, ddy] = [DragElem.drag.offsetX, DragElem.drag.offsetY];
 				//console.log('offx,offy',ddx,ddy);
 				//[dx,dy]=[dx-ddx,dy-ddy];
 				//console.log('nach -offs: dx,dx',dx,dy);
@@ -2662,16 +2676,16 @@ function arrMinMax(arr, func) {
 	return { min: min, imin: imin, max: max, imax: imax };
 }
 function arrMinus(a, b) { let res = a.filter(x => !b.includes(x)); return res; }
-function arrNoDuplicates(arr){
+function arrNoDuplicates(arr) {
 	//only keeps unique literals in result! non-literals are removed!
 	let di = {};
 	let arrNew = [];
-	for(const el of arr){
+	for (const el of arr) {
 		// console.log('el',el,'isLiteral',isLiteral(el),!isLiteral(el));
 		if (!isLiteral(el)) continue;
 		// console.log('isdef(di[el])',isdef(di[el]));
 		if (isdef(di[el])) continue;
-		di[el]=true;
+		di[el] = true;
 		arrNew.push(el);
 	}
 	// console.log(arrNew)

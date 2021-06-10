@@ -62,7 +62,6 @@ games:
     szPerle: 75
     fzLabel: 16
     nFields: 43
-    layout: circle
     labelPos: hover # none | top | bottom | middle | hover
   gAbacus:
     friendly: 'Abacus'

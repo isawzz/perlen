@@ -258,7 +258,7 @@
 	appearance: none;
 	/* border-radius: 50%; */
 	width: 76px;
-	height: 18px;
+	min-height: 18px;
 	border: 1px solid #999;
 	color: #999;
 	text-align: center;

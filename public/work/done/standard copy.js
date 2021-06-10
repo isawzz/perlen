@@ -15,16 +15,10 @@ function applyStandard(dParent, s, h = 768, topFrame = 0) {
 	let hBoard = h, wBoard = 2 * h;
 	let scale = hBoard / valf(s.hBoard, 768);
 	calcLayoutParameters(s, b, scale);
-	let d0;
-	if (isRealBoard){
-		//console.log('hallo!!!!!!!')
-		d0 = b.d0 = mDiv(dParent, { h: hBoard }); 
-	}else{
-		//console.log('NEIN!!!!!!!!!!')
-		d0 = b.d0 = mDiv(dParent, { w: wBoard + 100, h: hBoard + topFrame }, 'd0_' + b.boardFilename); 
-	}
-	mCenterCenterFlex(d0);
+	let d0 = b.d0 = mDiv(dParent, { w: wBoard + 100, h: hBoard + topFrame }, 'd0_' + b.boardFilename); mCenterCenterFlex(d0);
 	let dOuter = b.dOuter = mDiv(d0, {}, 'dOuter_' + b.boardFilename);
+	// let d0 = b.d0 = mDiv(dParent, { w: wBoard + 100, h: hBoard + topFrame }, 'd0_' + b.boardFilename); mCenterCenterFlex(d0);
+	// let dOuter = b.dOuter = mDiv(dParent, {}, 'dOuter_' + b.boardFilename);
 	mCenterCenterFlex(dOuter);
 	loadBoardImage(dParent, s, b, scale, topFrame != 0);
 	if (isRealBoard) setNewBackgroundColor(s.baseColor);
@@ -146,6 +140,7 @@ function getBoardBackgroundPicker(b) {
 
 }
 function loadBoardImage(dOneBoard, s, b, scale, useCornerColor=false) {
+	//aendert NICHT b.d0 size!!!
 	let boardFilename = s.boardFilename;
 	if (boardFilename == 'none') { return; }
 
@@ -161,7 +156,7 @@ function loadBoardImage(dOneBoard, s, b, scale, useCornerColor=false) {
 		b.dOuter.style.backgroundImage = `url(${img.src})`;
 		mStyleX(b.dOuter, { 'background-size': szi, 'background-repeat': 'no-repeat', 'background-position': 'center center' });
 		let [wb, hb] = [Math.max(sz.w * scale, b.wNeeded), Math.max(sz.h * scale, b.hNeeded)];
-		mStyleX(b.dOuter, { wmin: wb, hmin: hb });
+		mStyleX(b.dOuter, { w: wb, h: hb });
 		if (useCornerColor) setLinearBackground(b.d0, cornerColor, 10);
 		b.img = img;
 	}

@@ -46,6 +46,7 @@
 	<body style="opacity:0">
 		<div id="dHeader" style="background-color: var(--dark-blue); padding-top: 10px">
 			<div id='dButtonsLeft' style="position: absolute; left:0px; padding:10px; display:flex">
+				<div id='dToolbarButton' onclick='onClickToolbarButton()' class='toolbarButtonClass'>🪔</div>
 				<!-- <input data-jscolor="{}" value="#3399FF"> -->
 				<!-- <div id='dSettingsButton' onclick='onClickSettings()' class='toolbarButtonClass'>⚙️</div> -->
 				<!-- <div id='dBoardSelection' onclick='onClickUploadBoard()' class='toolbarButtonClass'>board</div> -->
@@ -57,7 +58,7 @@
 			<div id='dTempleLobby' style="display: none; position: absolute; margin: 10px; padding: 20px" onclick='onClickTempleLobby()'>🏛️</div>
 			<div id='dButtonsRight' style="position: absolute; right:0px; padding:10px; display:flex">
 				<!-- <div id='dResetButton'  onclick='onClickReset()' class='toolbarButtonClass'>♻️</div>	-->			
-				<div id='dHelpButton'  onclick='show("dHelpWindow");' class='toolbarButtonClass'>🪔</div> 
+				<!-- <div id='dHelpButton'  onclick='show("dHelpWindow");' class='toolbarButtonClass'>🪔</div>  -->
 				<div id='dColorButton' onclick='setNewBackgroundColor();' class='toolbarButtonClass'>🎨</div>
 			</div>
 			<div class="flex-column flex-center">
@@ -99,12 +100,12 @@
 
 		<div id="dGameScreen" style="display: none" class="flex-grow-1 flex">
 			<!-- <div id="md" style="height:100%;width:100%;background:green"> -->
-			<div id="sidebar"></div>
+			<div id="sidebar" style='z-index:1001'></div>
 			<div id="rightSide">
 				<div id="table" class="flexWrap"></div>
 			</div>
 		</div>
-		<div id='dAux' style='display:none;'>
+		<div id='dAux' style='display:none;z-index:1002'>
 			<button onclick='hide(dAux)' class='button' style="position:absolute;left:0;top:0;border:none;background:transparent;outline:none;color:white">&#10005;</button>
 			<h1 id='dAuxTitle' style="margin:20px 50px">Hallo</h1>
 			<div id='dAuxContent' style="margin:20px"></div>
@@ -135,7 +136,7 @@
 				<button style="margin-top:10px;padding:4px 14px" class="buttonClass" onclick="hide('dHelpWindow');">close</button>
 			</div>
 		</div>
-		<div id='dSettingsWindow' style="display:none;font-size:16px;background:dimgray;width:420px;z-index:1200;position:fixed;left:20px;top:20px;padding:10px;border-radius:10px">
+		<div id='dSettingsWindow' style="display:none;font-size:16px;background:dimgray;width:420px;z-index:1003;position:fixed;left:20px;top:20px;padding:10px;border-radius:10px">
 			<h4>Settings:</h4>
 			<div id='dSettingsContent'></div>
 			<div style='text-align:center'>
@@ -175,7 +176,7 @@
 		<script src="./work/fake.js"></script>
 		<script src="./work/item.js"></script>
 		<script src="./work/onClick.js"></script>
-		<script src="./work/si7.js"></script>
+		<!-- <script src="./work/si7.js"></script> -->
 		<script src="./work/si7Class.js"></script>
 		<script src="./work/socket.js"></script>
 		<script src="./work/standard.js"></script>
