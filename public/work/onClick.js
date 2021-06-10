@@ -92,19 +92,16 @@ function selectTextOrig(id) {
 	}
 }
 function setApply(prop, val) {
-	//console.log('hallo!', prop, val);
-	// return;
-	if (isNumber(val)) val = Number(val);
 	let s = G.settings;
+	if (isNumber(val)) val = Number(val); //if (val === true || val === false)
 	s[prop] = val;
-	//clearElement(G.dParent);
 	G.clientBoard = applySettings(G.clientBoard, s);
 }
 function calcFieldGaps(sz) {
 	sz = Number(sz);
 	let s = G.settings;
-	s.wGap = s.wField - sz;
-	s.hGap = s.hField - sz;
+	s.wGap = s.dxCenter - sz;
+	s.hGap = s.dyCenter - sz;
 	//clearElement(G.dParent);
 	G.clientBoard = applySettings(G.clientBoard, s);
 }
@@ -112,25 +109,30 @@ function calcFieldGaps(sz) {
 
 function onClickEditLayout() {
 	openAux('board settings');
-	let wWidget = 350;
+	let wWidget = 380;
 	let [s, b] = [G.settings, G.clientBoard];
-	let styles = { w: wWidget, align: 'center', hmargin: 20, vmargin: 6 };
+	let styles = { w: wWidget, align: 'center', margin:6 };
 	let inpRows = mEditRange('rows: ', s.rows, 1, 20, 1, dAuxContent, (a) => { setApply('rows', a) }, styles);
 	let inpCols = mEditRange('cols: ', s.cols, 1, 20, 1, dAuxContent, (a) => { setApply('cols', a) }, styles);
-	let inpRot = mEditRange('rotation: ', s.boardRotation, 0, 90, 1, dAuxContent, (a) => { setApply('boardRotation', a) }, styles);
-	let inpWidth = mEditRange('width: ', s.wField, 10, 200, 1, dAuxContent, (a) => { setApply('wField', a) }, styles);
-	let inpHeight = mEditRange('height: ', s.hField, 10, 200, 1, dAuxContent, (a) => { setApply('hField', a) }, styles);
 	let inpXOffset = mEditRange('x-offset: ', s.boardMarginLeft, -100, 100, 1, dAuxContent, (a) => { setApply('boardMarginLeft', a) }, styles);
 	let inpYOffset = mEditRange('y-offset: ', s.boardMarginTop, -100, 100, 1, dAuxContent, (a) => { setApply('boardMarginTop', a) }, styles);
-	let inpFieldSize = mEditRange('field size: ', s.wField - s.wGap, 10, 200, 1, dAuxContent, (a) => { calcFieldGaps(a) }, styles);
+	let inpRot = mEditRange('rotation: ', s.boardRotation, 0, 90, 1, dAuxContent, (a) => { setApply('boardRotation', a) }, styles);
+
+	let inpFieldSize = mEditRange('field size: ', s.szField, 10, 200, 1, dAuxContent, (a) => { setApply('szField', a) }, styles);
+	let inpSzPerle = mEditRange('perle %: ', s.szPerle, 50, 100, 1, dAuxContent, (a) => { setApply('szPerle', a) }, styles);
+	let inpszPoolPerle = mEditRange('pool perle: ', s.szPoolPerle, 40, 140, 1, dAuxContent, (a) => { setApply('szPoolPerle', a) }, styles);
+	let inpWidth = mEditRange('center dx: ', s.dxCenter, 10, 200, 1, dAuxContent, (a) => { setApply('dxCenter', a) }, styles);
+	let inpHeight = mEditRange('center dy: ', s.dyCenter, 10, 200, 1, dAuxContent, (a) => { setApply('dyCenter', a) }, styles);
+
 	let inpFieldColor = mColorPickerControl('field color: ', s.fieldColor, b.img, dAuxContent, (a) => { setApply('fieldColor', a) }, styles);
 	let inpBaseColor = mColorPickerControl('background: ', s.baseColor, b.img, dAuxContent, setNewBackgroundColor, styles);
-	let inpFullCover = mCheckbox('full cover: ', s.boardLayout == 'hex1' ? false : true, dAuxContent,
+	let inpFullCover = mCheckbox('complete rows: ', s.boardLayout == 'hex1' ? false : true, dAuxContent,
 		(a) => {
 			setApply('boardLayout', a ? 'hex' : 'hex1');
-			console.log('a', a)
+			//console.log('a', a)
 		}, styles);
-}
+		let inpfreeForm = mCheckbox('free drop: ', s.freeForm?true:false, dAuxContent, (a) => { setApply('freeForm', a==1?true:false) },styles);
+	}
 
 function onClickActivateLayout() {
 	//openAux('enter name for prefab');

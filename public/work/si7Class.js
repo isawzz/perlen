@@ -10,13 +10,14 @@ class SimpleClass7 {
 	presentGameState(data) {
 
 		//setTimeout(		onClickEditLayout,200		);
+		//console.log('kkkkkkk',1 !== true, isNumber(true),true===1);
 		console.log('_________________________gs', StepCounter); StepCounter += 1;
 
 		mStyleX(dTable, { h: window.innerHeight });
 
 		let [settings, state] = this.processData(data);
 
-		console.assert(state.poolArr.map(x=>!isList(x)),'BUGBUGBUGBUGBUGBUGBUG!!!')
+		console.assert(state.poolArr.map(x => !isList(x)), 'BUGBUGBUGBUGBUGBUGBUG!!!')
 
 		//if (settings == Settings.o && Settings.o == this.settings) console.log('...settings ok'); else console.assert(settings == Settings && Settings == this.settings, 'hallo settings FALSCH!!!!!!!!!!!!!')
 		let needToLoadBoard = nundef(this.clientBoard) || this.clientBoard.boardFilename != settings.boardFilename;
@@ -47,7 +48,7 @@ class SimpleClass7 {
 		let [b, s] = [this.clientBoard, this.settings];
 		let dCells = b.dCells = mDiv(b.dOuter, { matop: s.boardMarginTop, maleft: s.boardMarginLeft, w: b.wNeeded, h: b.hNeeded, position: 'relative' }); //, bg: 'green' });
 
-		let [wCell, hCell, wGap, hGap] = [s.wField, s.hField, s.wGap, s.hGap];
+		let [wCell, hCell, wGap, hGap] = [s.dxCenter, s.dyCenter, s.wGap, s.hGap];
 		//console.log(wCell, hCell);
 		let fields = b.fields = [], i = 0, dx = wCell / 2, dy = hCell / 2;
 		let bg = s.fieldColor;
@@ -95,7 +96,7 @@ class SimpleClass7 {
 		let dParent = this.dPool;
 		for (let i = 0; i < poolArr.length; i++) {
 			let iPerle = poolArr[i]; //console.log('iPerle', iPerle, perlenByIndex, perlenByIndex[iPerle]);
-			console.assert(!isList(iPerle),'BUGBUGBUGBUGBUG!!!!!!')
+			console.assert(!isList(iPerle), 'BUGBUGBUGBUGBUG!!!!!!')
 			let perle = perlenByIndex[iPerle]; //console.log('perle', perle)
 			if (nundef(perle)) {
 				//BUGBUGBUG
@@ -114,7 +115,7 @@ class SimpleClass7 {
 			perle.field = field;
 			field.item = perle;
 			let ui = createPerle(perle, iDiv(field), 64, 1.3, .4);
-			
+
 
 			if (isList(pin)) {
 				//console.log('got move info', pin)
@@ -162,17 +163,18 @@ class SimpleClass7 {
 		}
 	}
 	onDropPerleSimplest(source, target, isCopy, clearTarget, dx, dy, ev, clone) {
-		if (!this.settings.freeForm){
-			this.onDropOrig(source,target);
-		}else if (target.item == this.state.poolArr) {
+		//console.log('freeForm?',this.settings.freeForm)
+		if (!this.settings.freeForm) {
+			this.onDropOrig(source, target);
+		} else if (target.item == this.state.poolArr) {
 			//console.log('===>perle',source,'needs to go back to pool!');
 			let f = source.field;
 			if (isdef(f)) sendRemovePerle(source, f);
-		}else{
-			this.onDropFreeForm(source,target,ev, clone);
+		} else {
+			this.onDropFreeForm(source, target, ev, clone);
 		}
 	}
-	onDropFreeForm(source,target,ev,clone){
+	onDropFreeForm(source, target, ev, clone) {
 
 		let perle = source;
 		let dField = iDiv(target);
@@ -183,35 +185,35 @@ class SimpleClass7 {
 		//console.log('rect of field',rField);
 		//console.log('ev',ev);
 		//console.log('DDInfo.dragOffset',DDInfo.dragOffset);
-		let d=iDiv(perle);
-		let drop={x:ev.clientX,y:ev.clientY};
-		let [dx,dy]=[DDInfo.dragOffset.offsetX,DDInfo.dragOffset.offsetY];
-		let [x,y,w,h]=[drop.x,drop.y,rField.w,rField.h];
+		let d = iDiv(perle);
+		let drop = { x: ev.clientX, y: ev.clientY };
+		let [dx, dy] = [DDInfo.dragOffset.offsetX, DDInfo.dragOffset.offsetY];
+		let [x, y, w, h] = [drop.x, drop.y, rField.w, rField.h];
 		// //let d1=mDiv(dTable,{position:'fixed',bg:'yellow',left:x,top:y,w:w,h:h});
 		// //let d2=mDiv(dTable,{position:'fixed',bg:'orange',left:x+dx,top:y+dy,w:w,h:h});
 		//let d3=mDiv(dTable,{position:'fixed',bg:'red',left:x-dx,top:y-dy,w:w,h:h});
 
-		let dw=Math.abs(rPerle.w-rField.w);
-		let dh=Math.abs(rPerle.h-rField.h);
-		dw/=2,dh/=2;
+		let dw = Math.abs(rPerle.w - rField.w);
+		let dh = Math.abs(rPerle.h - rField.h);
+		dw /= 2, dh /= 2;
 		//let d4=mDiv(dTable,{rounding:'50%',position:'fixed',bg:'#00ff0080',left:x-dx-dw,top:y-dy-dh,w:w,h:h});
 
-		let [xFinal,yFinal]=[x-dx-dw,y-dy-dh];
+		let [xFinal, yFinal] = [x - dx - dw, y - dy - dh];
 		//d4 hat correct ccords
 		//reche die auf coords relative to field parent um
 		let dFieldParent = dField.parentNode;
 		let rParent = getRect(dFieldParent);
 
-		console.log('parent info',dFieldParent,rParent);
+		//console.log('parent info', dFieldParent, rParent);
 
-		let xField = xFinal-rParent.x;
-		let yField = yFinal-rParent.y;
-		let [cxFinal,cyFinal]=[xField+w/2,yField+h/2];
-		console.log('field',target);
-		let dxy={x:cxFinal-target.center.x,y:cyFinal-target.center.y};
+		let xField = xFinal - rParent.x;
+		let yField = yFinal - rParent.y;
+		let [cxFinal, cyFinal] = [xField + w / 2, yField + h / 2];
+		//console.log('field', target);
+		let dxy = { x: cxFinal - target.center.x, y: cyFinal - target.center.y };
 
-		mStyleX(dField,{left:xField,top:yField}); //,bg:'blue'});
-		target.dxy=source.dxy=dxy;
+		mStyleX(dField, { left: xField, top: yField }); //,bg:'blue'});
+		target.dxy = source.dxy = dxy;
 		//es muss noch die haelfte der size diff zwischen perle und field abgezogen werden
 		// mStyleX(d,{left:x,top:y,w:w,h:h,position:'fixed'});
 		// mStyleX(d,{left:x+dx,top:y+dy,w:w,h:h,position:'fixed'});
@@ -329,7 +331,7 @@ function sendStartOrJoinPerlenGame() {
 	// mBy('table').onmousedown = ()=>hide(dAux);
 	// dAux.onmousedown = (ev)=>ev.stopPropagation();
 	// mBy('sidebar').ondblclick = togglePerlenEditor;
-	mBy('sidebar').ondblclick = ()=>{hide('sidebar')};
+	mBy('sidebar').ondblclick = () => { hide('sidebar') };
 	G = VERSION == 7 ? new SimpleClass7() : new SimpleClass();
 	Settings = new PerlenSettingsClass(G.settings, U, mBy('dSettingsWindow'));
 	if (!USESOCKETS) G.presentGameState();
@@ -359,19 +361,19 @@ function handleGameState(data) {
 
 function sendMovePerle(perle, fFrom, fTo, dis) {
 	//console.log('===> PLACE')
-	let data = { dxy:perle.dxy, iPerle: perle.index, iFrom: fFrom.index, iTo: fTo.index, displaced: isdef(dis) ? dis.index : null, username: Username };
+	let data = { dxy: perle.dxy, iPerle: perle.index, iFrom: fFrom.index, iTo: fTo.index, displaced: isdef(dis) ? dis.index : null, username: Username };
 	logClientSend('movePerle', data);
 	Socket.emit('movePerle', data);
 }
 function sendMoveField(f) {
 	//console.log('===> PLACE')
-	let data = { dxy:f.item.dxy, iField: f.index, username: Username };
+	let data = { dxy: f.item.dxy, iField: f.index, username: Username };
 	logClientSend('moveField', data);
 	Socket.emit('moveField', data);
 }
 function sendRemovePerlen(plist, fields) {
-	console.log('===> remove list',plist,fields);
-	let data = { iPerlen: plist.map(x=>x.index), iFroms: fields.map(x=>x.index), username: Username };
+	console.log('===> remove list', plist, fields);
+	let data = { iPerlen: plist.map(x => x.index), iFroms: fields.map(x => x.index), username: Username };
 	logClientSend('removePerlen', data);
 	Socket.emit('removePerlen', data);
 }
@@ -383,7 +385,7 @@ function sendRemovePerle(perle, fFrom) {
 }
 function sendPlacePerle(perle, field, dis) {
 	//console.log('hallo sending move')
-	let data = { dxy:perle.dxy, iPerle: perle.index, iField: field.index, displaced: isdef(dis) ? dis.index : null, username: Username };
+	let data = { dxy: perle.dxy, iPerle: perle.index, iField: field.index, displaced: isdef(dis) ? dis.index : null, username: Username };
 	logClientSend('placePerle', data);
 	Socket.emit('placePerle', data);
 }
@@ -453,6 +455,7 @@ function createPerle(perle, dParent, sz = 64, wf = 1.3, hf = 0.4, useNewImage = 
 	mAppend(dParent, d);
 	//console.log('perle', perle);
 
+	//console.log('createPerle freeForm:',G.settings.freeForm)
 	if (perle.field != null) { //board perle!
 		perle.live.dLabel.remove();
 		let img = perle.live.dImg;
@@ -463,17 +466,23 @@ function createPerle(perle, dParent, sz = 64, wf = 1.3, hf = 0.4, useNewImage = 
 		//console.log('img', img, rect)
 		//console.log('d', d, getRect(d))
 
-		let szField = G.settings.wField - G.settings.wGap;
-		let szPerle = isdef(G.settings.szPerle)?szField * G.settings.szPerle /100:100;
-		let sz = Math.max(szPerle,80);
-		let [wf, hf] = [sz, sz];
-		if (isFarbPerle(perle)) mStyleX(img, { w: 1, h: 1 }); 
-		else mStyleX(img, { w: wf, h: hf });
-		mStyleX(d, { bg: 'transparent' });
+		let szField = G.settings.szField; //dxCenter - G.settings.wGap;
+		let sz = G.settings.szPerle * szField / 100;
+		// let sz = (G.settings.freeForm) ? szField
+		// 	: isdef(G.settings.szPerle) ? szField * G.settings.szPerle / 100
+		// 		: 100;
+		//sz = Math.max(sz, 50);
+		if (isFarbPerle(perle)) mStyleX(img, { w: 1, h: 1 });
+		else mStyleX(img, { w: sz, h: sz });
+		mStyleX(d, { bg: 'transparent',w:sz,h:sz });
 	} else {
 		//styling for pool perle
 		let d = iDiv(perle);
 		mStyleX(d, { opacity: .6 });
+		let sz = G.settings.szPoolPerle;
+		if (isdef(sz)){
+			mStyleX(d.firstChild,{w: sz,h:sz});
+		}
 
 	}
 

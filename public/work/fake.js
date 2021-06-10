@@ -1,5 +1,5 @@
 function calcNFields(s) {
-	let [layout, wCell, hCell, rows, cols] = [s.boardLayout, s.wField, s.hField, s.rows, s.cols];
+	let [layout, wCell, hCell, rows, cols] = [s.boardLayout, s.dxCenter, s.dyCenter, s.rows, s.cols];
 	let boardSize = { w: s.wFieldArea, h: s.hFieldArea };
 	let [w,h]=[boardSize.w,boardSize.h];
 
@@ -39,7 +39,7 @@ function calcNFields(s) {
 
 function createClientBoardNew(o, s) {//filename, layout, wCell = 140, hCell = 140, wgap = 20, hgap=20) {
 
-	let [layout, wCell, hCell, wGap, hGap] = [s.boardLayout, s.wField, s.hField, s.wGap, s.hGap];
+	let [layout, wCell, hCell, wGap, hGap] = [s.boardLayout, s.dxCenter, s.dyCenter, s.wGap, s.hGap];
 
 	let dInner = o.dInner;
 	mCenterCenterFlex(dInner);

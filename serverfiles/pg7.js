@@ -311,10 +311,21 @@ class GP2 {
 	}
 	handleSettings(client, x) {
 		logReceive('settings', x.settings.nFields);
+
+		let [s,sNew]=[this.settings,x.settings];
+		//let freeFormReset = s.freeForm && !sNew.freeForm;
+
 		base.copyKeys(x.settings, this.settings);
+		// console.log('freeForm',s.freeForm)
+
+		if (!s.freeForm) {
+			// console.log('freeFormReset!!!')
+			let barr = this.state.boardArr;
+			let newBarr = barr.map(x=>base.isList(x)?x[0]:x);
+			this.state.boardArr = newBarr;
+		}
 
 		let barr = this.state.boardArr;
-		let s = this.settings;
 		if (barr.length != s.nFields) {
 			if (base.isEmpty(barr) || !base.firstCond(barr, a => a != null)) this.state.boardArr = new Array(s.nFields);
 			else if (barr.length < s.nFields) {

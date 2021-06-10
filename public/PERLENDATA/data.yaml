@@ -32,36 +32,41 @@ addons:
       value: 60000000 #1 day interval (1000 minutes)
 games:
   gPerlen2:
-    baseColor: '#191c46'
-    boardStandard: none
-    poolSelection: random
-    numPool: 25
-    boardLayout: hex1
-    boardFilename: shapeShifters768.png
-    backgroundSize: initial # initial | cover 
-    sizeBoardHeightToImage: false
-    fieldShape: circle
-    fieldColor: '#ffffff80'
-    wField: 101
-    hField: 117
-    wGap: 15
-    hGap: 30
-    rows: 7
-    cols: 6
-    boardLayoutFile: null
+    rows: 8
+    cols: 2
+    boardMarginLeft: -2
+    boardMarginTop: -9
     boardRotation: 0
-    wFieldArea: 1000
-    hFieldArea: 1000
-    boardMarginLeft: 0
-    boardMarginTop: 0
-    #perlen
+    dxCenter: 76
+    dyCenter: 76
+    szField: 60
+    szPerle: 100
+    szPoolPerle: 50
+    fieldColor: "#282B9975"
+    baseColor: "#BDAF89FF"
+    boardLayout: hex
+    freeForm: false
+    uniformRows: true
+    boardFilename: dateTree.jpg
+    wGap: -2
+    hGap: -2
+    backgroundSize: initial
+    sizeBoardHeightToImage: true
+    fieldShape: circle
+    boardLayoutFile: null
+    wFieldArea: 768
+    hFieldArea: 768
     bgPool: transparent
-    fgPool: '#ffffffff'
+    fgPool: "#ffffffff"
     bgBoard: silver
     fgBoard: black
-    szPerle: 75
     fzLabel: 16
-    nFields: 43
+    nFields: 12
+    wBoard: 100%
+    hBoard: 768
+    boardStandard: none
+    poolSelection: random
+    numPool: 10
     labelPos: hover # none | top | bottom | middle | hover
   gAbacus:
     friendly: 'Abacus'
@@ -1218,8 +1223,8 @@ standardSettings:
     boardRotation: 0
     fieldShape: circle
     fieldColor: '#ffffff80'
-    wField: 101
-    hField: 117
+    dxCenter: 101
+    dyCenter: 117
     wGap: 15
     hGap: 30
     rows: 7
@@ -1230,8 +1235,8 @@ standardSettings:
     boardRotation: 0
     fieldShape: circle
     fieldColor: '#ff000020'
-    wField: 100
-    hField: 92
+    dxCenter: 100
+    dyCenter: 92
     wGap: 19
     hGap: 19
     rows: 9
@@ -1246,8 +1251,8 @@ standardSettings:
     boardRotation: 0
     fieldShape: circle
     fieldColor: '#ffffff20'
-    wField: 101
-    hField: 116
+    dxCenter: 101
+    dyCenter: 116
     wGap: 20
     hGap: 30
     rows: 5
@@ -1262,8 +1267,8 @@ standardSettings:
     boardRotation: 0
     fieldShape: circle
     fieldColor: transparent
-    wField: 101
-    hField: 117
+    dxCenter: 101
+    dyCenter: 117
     wGap: 15
     hGap: 30
     rows: 7
@@ -1277,8 +1282,8 @@ standardSettings:
     boardFilename: brett18_56.png
     fieldShape: circle
     fieldColor: '#ffffff80'
-    wField: 101
-    hField: 117
+    dxCenter: 101
+    dyCenter: 117
     wGap: 15
     hGap: 30
     rows: 7
@@ -1289,8 +1294,8 @@ standardSettings:
     boardRotation: 20
     fieldShape: circle
     fieldColor: '#ffffff80'
-    wField: 90
-    hField: 104
+    dxCenter: 90
+    dyCenter: 104
     wGap: 25
     hGap: 32
     rows: 7
@@ -1313,8 +1318,8 @@ standardSettings:
     boardRotation: 0
     fieldShape: circle
     fieldColor: '#ffffff80'
-    wField: 102
-    hField: 117
+    dxCenter: 102
+    dyCenter: 117
     wGap: 20
     hGap: 32
     rows: 7

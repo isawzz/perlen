@@ -374,8 +374,8 @@ class PerlenSettingsClass extends SettingsClass {
 		this.setzeEineZahl(nGroupBoardSettings, 'left margin', 20, ['boardMarginLeft']);
 		this.setzeEinenString(nGroupBoardSettings, 'field color', 'transparent', ['fieldColor']);
 		// this.setzeEinOptions(nGroupNumCommonAllGames, 'field shape', ['circle', 'rectangle', 'hex'], ['circle', 'rectangle', 'hex'], 'circle', ['fieldShape']);
-		this.setzeEineZahl(nGroupBoardSettings, 'field width', 100, ['wField']);
-		this.setzeEineZahl(nGroupBoardSettings, 'field height', 120, ['hField']);
+		this.setzeEineZahl(nGroupBoardSettings, 'field width', 100, ['dxCenter']);
+		this.setzeEineZahl(nGroupBoardSettings, 'field height', 120, ['dyCenter']);
 		this.setzeEineZahl(nGroupBoardSettings, 'horizontal gap', 10, ['wGap']);
 		this.setzeEineZahl(nGroupBoardSettings, 'vertical gap', 20, ['hGap']);
 		this.setzeEineZahl(nGroupBoardSettings, 'rows', 7, ['rows']);

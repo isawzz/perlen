@@ -1997,6 +1997,9 @@ function enableDD(sources, targets, dropHandler, isCopy, clearTarget, dragStartH
 	}
 }
 function ddStart(ev, source, isCopy = true, clearTarget = false) {
+
+	//console.log('center',getCenter(iDiv(source)));
+
 	if (!canAct() || isdef(DDInfo.dragStartHandler) && !DDInfo.dragStartHandler(source)) return;
 	ev.preventDefault();
 	ev.stopPropagation();
@@ -2008,6 +2011,7 @@ function ddStart(ev, source, isCopy = true, clearTarget = false) {
 	var clone = DragElem = DDInfo.clone = d.cloneNode(true);
 	// clone.eliminateSource = !isCopy;
 	clone.isCopy = isCopy;
+	//console.log(d,ev.target,clone)
 	clone.clearTarget = clearTarget;
 	mAppend(document.body, clone);//mClass(clone, 'letter')
 	mClass(clone, 'dragelem');//der clone muss class 'dragelem' sein
@@ -3661,7 +3665,7 @@ function isEmpty(arr) {
 function isLetter(s) { return /^[a-zA-Z]$/i.test(s); }
 function isList(arr) { return Array.isArray(arr); }
 function isLiteral(x) { return isString(x) || isNumber(x); }
-function isNumber(x) { return isdef(x) && (x == 0 || x != ' ' && !isNaN(+x)); }
+function isNumber(x) { return x!==true && x!==false && isdef(x) && (x == 0 || x != ' ' && !isNaN(+x)); }
 function isSingleDigit(s) { return /^[0-9]$/i.test(s); }
 function isString(param) { return typeof param == 'string'; }
 function isSvg(elem) { return startsWith(elem.constructor.name, 'SVG'); }

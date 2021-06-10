@@ -1,37 +1,40 @@
 settings:
+  rows: 7
+  cols: 5
+  boardMarginLeft: -2
+  boardMarginTop: -9
+  boardRotation: 0
+  dxCenter: 107
+  dyCenter: 96
+  szField: 107
+  szPerle: 100
+  szPoolPerle: 77
+  fieldColor: "#282B9975"
   baseColor: "#BDAF89FF"
-  boardStandard: none
-  poolSelection: random
-  numPool: 10
-  boardLayout: hex
+  boardLayout: hex1
+  freeForm: false
+  uniformRows: true
   boardFilename: dateTree.jpg
+  wGap: 15
+  hGap: 13
   backgroundSize: initial
   sizeBoardHeightToImage: true
   fieldShape: circle
-  fieldColor: "#282B9975"
-  wField: 131
-  hField: 63
-  wGap: 61
-  hGap: -4
-  rows: 8
-  cols: 2
   boardLayoutFile: null
-  boardRotation: 0
   wFieldArea: 768
   hFieldArea: 768
-  boardMarginLeft: -2
-  boardMarginTop: -9
   bgPool: transparent
   fgPool: "#ffffffff"
   bgBoard: silver
   fgBoard: black
-  szPerle: 75
   fzLabel: 16
-  nFields: 12
-  labelPos: hover
-  freeForm: true
+  nFields: 44
   wBoard: 100%
   hBoard: 768
+  boardStandard: none
+  poolSelection: random
+  numPool: 10
+  labelPos: hover
   naturalImageSize:
     w: 1366
     h: 768
@@ -52,16 +55,12 @@ state:
     "4":
       key: european theatre
       index: 4
-  poolArr:
-    - 3
-    - 4
-    - 2
-    - 0
-    - 1
+  poolArr: []
   boardArr:
     - null
     - null
     - null
+    - 2
     - null
     - null
     - null
@@ -70,4 +69,35 @@ state:
     - null
     - null
     - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - 3
+    - null
+    - null
+    - null
+    - null
+    - 0
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - 1
+    - 4
     - null

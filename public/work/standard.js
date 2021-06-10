@@ -33,27 +33,25 @@ function applyStandard(dParent, s, h = 768, topFrame = 0) {
 	return b;
 }
 function calcLayoutParameters(s, b, scale = 1) {
-	let [layout, wCell, hCell, rows, cols] = [s.boardLayout, s.wField, s.hField, s.rows, s.cols];
+	let [layout, horDist, vertDist, rows, cols] = [s.boardLayout, s.dxCenter, s.dyCenter, s.rows, s.cols];
 
 	let isHexLayout = startsWith(layout, 'hex');
-	let hline = isHexLayout ? hCell * .75 : hCell;
-
-	//if (isHexLayout) layout = s.fullCover? 'hex':'hex1'; 
+	let hline = isHexLayout ? vertDist * .75 : vertDist;
 
 	//determineRowsAndCols
 	//for circle, need to determine which area of board should be covered by fields
 	//this area is s.wFieldArea, s.hFieldArea
 	if (nundef(rows) || layout == 'circle') rows = Math.floor(s.hFieldArea / hline);
-	if (nundef(cols) || layout == 'circle') cols = Math.floor(s.wFieldArea / wCell)
+	if (nundef(cols) || layout == 'circle') cols = Math.floor(s.wFieldArea / horDist)
 
-	let [centers, wNeeded, hNeeded] = getCentersFromRowsCols(layout, rows, cols, wCell, hCell);
+	let [centers, wNeeded, hNeeded] = getCentersFromRowsCols(layout, rows, cols, horDist, vertDist);
 
 	s.nFields = centers.length; //JA!
 
 	//console.log('layout', layout, 'wNeeded', wNeeded, 'hNeeded', hNeeded);
 	//console.log('nFields', s.nFields, 'rows', rows, 'cols', cols);
 	[b.nFields, b.wNeeded, b.hNeeded, b.centers] = [s.nFields, wNeeded, hNeeded, centers];
-	[b.layout, b.rows, b.cols, b.wField, b.hField, b.hline] = [s.boardLayout, rows, cols, wCell, hCell, hline];
+	[b.layout, b.rows, b.cols, b.dxCenter, b.dyCenter, b.hline] = [s.boardLayout, rows, cols, horDist, vertDist, hline];
 
 	if (scale != 1) {
 		//console.log(centers)
@@ -64,8 +62,8 @@ function calcLayoutParameters(s, b, scale = 1) {
 		//centers.map(c => c.x *= scale, c.y *= scale);
 		b.wNeeded *= scale;
 		b.hNeeded *= scale;
-		b.wField *= scale;
-		b.hField *= scale;
+		b.dxCenter *= scale;
+		b.dyCenter *= scale;
 		b.hline *= scale;
 	}
 
@@ -73,7 +71,22 @@ function calcLayoutParameters(s, b, scale = 1) {
 }
 function createFields(s, b, scale) {
 	let dCells = b.dCells = mDiv(b.dOuter, { matop: s.boardMarginTop * scale, maleft: s.boardMarginLeft * scale, w: b.wNeeded, h: b.hNeeded, position: 'relative' }); //, bg: 'green' });
-	let [wCell, hCell, wGap, hGap] = [b.wField, b.hField, s.wGap * scale, s.hGap * scale];
+	let [horDist, vertDist, szField] = [b.dxCenter, b.dyCenter, s.szField];
+	let fields = b.fields = [], i = 0, dx = horDist / 2, dy = vertDist / 2;
+	let bg = s.fieldColor;
+	for (const p of b.centers) {
+		let left = p.x - szField/2;
+		let top = p.y - szField/2;
+		let dItem = mDiv(dCells, { position: 'absolute', left: left, top: top, display: 'inline', w: szField, h: szField, rounding: '50%', bg: bg });
+		mCenterCenterFlex(dItem)
+		let f = { div: dItem, index: i, center: p, isField: true }; i += 1;
+		fields.push(f);
+	}
+	if (s.boardRotation != 0) { dCells.style.transform = `rotate(${s.boardRotation}deg)`; }
+}
+function createFields_dep(s, b, scale) {
+	let dCells = b.dCells = mDiv(b.dOuter, { matop: s.boardMarginTop * scale, maleft: s.boardMarginLeft * scale, w: b.wNeeded, h: b.hNeeded, position: 'relative' }); //, bg: 'green' });
+	let [wCell, hCell, wGap, hGap] = [b.dxCenter, b.dyCenter, s.wGap * scale, s.hGap * scale];
 	let fields = b.fields = [], i = 0, dx = wCell / 2, dy = hCell / 2;
 	let bg = s.fieldColor;
 	for (const p of b.centers) {
