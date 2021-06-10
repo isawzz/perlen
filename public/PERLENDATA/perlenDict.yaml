@@ -102,3 +102,111 @@ geld:
   text: geld
   key: geld
   path: geld.png
+tier:
+  text: tier
+  key: tier
+  path: tier.png
+to be placed:
+  text: to be placed
+  key: to be placed
+  path: to be placed.png
+traum:
+  text: traum
+  key: traum
+  path: traum.png
+überleben:
+  text: überleben
+  key: überleben
+  path: überleben.png
+umgekehrt:
+  text: umgekehrt
+  key: umgekehrt
+  path: umgekehrt.png
+uncertainty:
+  text: uncertainty
+  key: uncertainty
+  path: uncertainty.png
+verschwörungstheorie:
+  text: verschwörungstheorie
+  key: verschwörungstheorie
+  path: verschwörungstheorie.png
+vertreibung aus dem paradies:
+  text: vertreibung aus dem paradies
+  key: vertreibung aus dem paradies
+  path: vertreibung aus dem paradies.png
+violett:
+  text: violett
+  key: violett
+  path: violett.png
+vorurteil:
+  text: vorurteil
+  key: vorurteil
+  path: vorurteil.png
+wald:
+  text: wald
+  key: wald
+  path: wald.png
+wandel:
+  text: wandel
+  key: wandel
+  path: wandel.png
+wasser:
+  text: wasser
+  key: wasser
+  path: wasser.png
+wintersonne:
+  text: wintersonne
+  key: wintersonne
+  path: wintersonne.png
+wissen:
+  text: wissen
+  key: wissen
+  path: wissen.png
+wissensverlust:
+  text: wissensverlust
+  key: wissensverlust
+  path: wissensverlust.png
+wissenswirtschaft:
+  text: wissenswirtschaft
+  key: wissenswirtschaft
+  path: wissenswirtschaft.png
+woke:
+  text: woke
+  key: woke
+  path: woke.png
+wut:
+  text: wut
+  key: wut
+  path: wut.png
+yang:
+  text: yang
+  key: yang
+  path: yang.png
+yin:
+  text: yin
+  key: yin
+  path: yin.png
+zart:
+  text: zart
+  key: zart
+  path: zart.png
+zeit:
+  text: zeit
+  key: zeit
+  path: zeit.png
+zeiträume:
+  text: zeiträume
+  key: zeiträume
+  path: zeiträume.png
+zeitzyklen:
+  text: zeitzyklen
+  key: zeitzyklen
+  path: zeitzyklen.png
+zen:
+  text: zen
+  key: zen
+  path: zen.png
+zukunftsszenarien:
+  text: zukunftsszenarien
+  key: zukunftsszenarien
+  path: zukunftsszenarien.png
