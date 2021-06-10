@@ -48,6 +48,7 @@ games:
     freeForm: false
     uniformRows: true
     boardFilename: dateTree.jpg
+    #rest unused!!!
     wGap: -2
     hGap: -2
     backgroundSize: initial
@@ -1217,114 +1218,128 @@ users:
       userColor: orange
 standardSettings:
   palme:
-    idealBg: rgb(76, 127, 206)
-    boardLayout: hex1
-    boardFilename: dateTree.jpg
-    boardRotation: 0
-    fieldShape: circle
-    fieldColor: '#ffffff80'
-    dxCenter: 101
-    dyCenter: 117
-    wGap: 15
-    hGap: 30
     rows: 7
     cols: 6
-  adversarial:
-    boardLayout: hex1
-    boardFilename: shapeShifters768.png
+    boardMarginLeft: 0
+    boardMarginTop: 0
     boardRotation: 0
-    fieldShape: circle
-    fieldColor: '#ff000020'
-    dxCenter: 100
-    dyCenter: 92
-    wGap: 19
-    hGap: 19
+    dxCenter: 101
+    dyCenter: 117
+    szField: 60
+    szPerle: 100
+    szPoolPerle: 50
+    fieldColor: '#ffffff80'
+    idealBg: rgb(76, 127, 206)
+    baseColor: rgb(76, 127, 206)
+    boardLayout: hex1
+    freeForm: false
+    uniformRows: false
+    boardFilename: dateTree.jpg
+  adversarial:
     rows: 9
     cols: 3
-    wFieldArea: 768
-    hFieldArea: 768
     boardMarginLeft: 0
     boardMarginTop: 0
-  kleinSchwarz:
-    boardLayout: hex1
-    boardFilename: brett19_09.png
     boardRotation: 0
-    fieldShape: circle
-    fieldColor: '#ffffff20'
-    dxCenter: 101
-    dyCenter: 116
-    wGap: 20
-    hGap: 30
+    dxCenter: 100
+    dyCenter: 92
+    szField: 60
+    szPerle: 100
+    szPoolPerle: 50
+    fieldColor: '#ff000020'
+    baseColor: black
+    boardLayout: hex1
+    freeForm: false
+    uniformRows: false
+    boardFilename: shapeShifters768.png
+  kleinSchwarz:
     rows: 5
     cols: 3
-    wFieldArea: 1000
-    hFieldArea: 700
     boardMarginLeft: 0
     boardMarginTop: 0
-  hex51:
-    boardLayout: hex1
-    boardFilename: brett10.png
     boardRotation: 0
-    fieldShape: circle
-    fieldColor: transparent
     dxCenter: 101
-    dyCenter: 117
-    wGap: 15
-    hGap: 30
+    dyCenter: 116
+    szField: 60
+    szPerle: 100
+    szPoolPerle: 50
+    fieldColor: '#ffffff20'
+    idealBg: rgb(76, 127, 206)
+    baseColor: rgb(76, 127, 206)
+    boardLayout: hex1
+    freeForm: false
+    uniformRows: false
+    boardFilename: brett19_09.png
+  hex51:
     rows: 7
     cols: 6
-    wFieldArea: 1000
-    hFieldArea: 768
     boardMarginLeft: 0
     boardMarginTop: -4
-  derWeg:
-    boardLayout: hex1
-    boardFilename: brett18_56.png
-    fieldShape: circle
-    fieldColor: '#ffffff80'
+    boardRotation: 0
     dxCenter: 101
     dyCenter: 117
-    wGap: 15
-    hGap: 30
+    szField: 60
+    szPerle: 75
+    szPoolPerle: 50
+    fieldColor: transparent
+    idealBg: rgb(76, 127, 206)
+    baseColor: rgb(76, 127, 206)
+    boardLayout: hex1
+    freeForm: false
+    uniformRows: false
+    boardFilename: brett10.png
+  derWeg:
     rows: 7
     cols: 6
-  verdreht:
-    boardLayout: hex1
-    boardFilename: brett03.png
-    boardRotation: 20
-    fieldShape: circle
-    fieldColor: '#ffffff80'
-    dxCenter: 90
-    dyCenter: 104
-    wGap: 25
-    hGap: 32
-    rows: 7
-    cols: 4
-    wFieldArea: 768
-    hFieldArea: 768
     boardMarginLeft: -4
     boardMarginTop: 0
-    bgPool: transparent
-    fgPool: '#ffffffff'
-    bgBoard: silver
-    fgBoard: black
-    szPerle: 75
-    fzLabel: 16
-    labelPos: hover
-    nFields: 37
-  rund:
-    boardLayout: hex1
-    boardFilename: brett19_02c.png
-    boardRotation: 0
-    fieldShape: circle
-    fieldColor: '#ffffff80'
-    dxCenter: 102
+    boardRotation: 20
+    dxCenter: 101
     dyCenter: 117
-    wGap: 20
-    hGap: 32
+    szField: 60
+    szPerle: 75
+    szPoolPerle: 50
+    fieldColor: '#ffffff80'
+    idealBg: rgb(76, 127, 206)
+    baseColor: rgb(76, 127, 206)
+    boardLayout: hex1
+    freeForm: false
+    uniformRows: false
+    boardFilename: brett18_56.png
+  verdreht:
     rows: 7
     cols: 4
-    wFieldArea: 1000
-    hFieldArea: 800
+    boardMarginLeft: -4
+    boardMarginTop: 0
+    boardRotation: 20
+    dxCenter: 90
+    dyCenter: 104
+    szField: 60
+    szPerle: 75
+    szPoolPerle: 50
+    fieldColor: '#ffffff80'
+    idealBg: rgb(76, 127, 206)
+    baseColor: rgb(76, 127, 206)
+    boardLayout: hex1
+    freeForm: false
+    uniformRows: false
+    boardFilename: brett03.png
+  rund:
+    rows: 7
+    cols: 4
     boardMarginLeft: 0
     boardMarginTop: -2
+    boardRotation: 0
+    dxCenter: 102
+    dyCenter: 117
+    szField: 60
+    szPerle: 100
+    szPoolPerle: 50
+    fieldColor: '#ffffff80'
+    idealBg: rgb(76, 127, 206)
+    baseColor: rgb(76, 127, 206)
+    boardLayout: hex1
+    freeForm: false
+    uniformRows: false
+    boardFilename: brett19_02c.png
+

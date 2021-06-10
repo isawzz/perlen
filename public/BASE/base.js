@@ -3829,7 +3829,7 @@ if (this && typeof module == "object" && module.exports && this === module.expor
 		initServerPool, addToPool,//initServerBoard,
 
 		//helpers:
-		allNumbers, arrTake, arrNoDuplicates,
+		allNumbers, arrTake, arrNoDuplicates, arrMin, arrMax,
 		capitalize, choose, chooseRandom, copyKeys,
 		dict2list,
 		firstCond, firstCondDict, firstCondDictKey, formatDate,

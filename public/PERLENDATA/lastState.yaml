@@ -1,20 +1,20 @@
 settings:
-  rows: 7
-  cols: 5
-  boardMarginLeft: -2
-  boardMarginTop: -9
+  rows: 9
+  cols: 3
+  boardMarginLeft: 0
+  boardMarginTop: 0
   boardRotation: 0
-  dxCenter: 107
-  dyCenter: 96
-  szField: 107
+  dxCenter: 100
+  dyCenter: 92
+  szField: 60
   szPerle: 100
-  szPoolPerle: 77
-  fieldColor: "#282B9975"
-  baseColor: "#BDAF89FF"
+  szPoolPerle: 50
+  fieldColor: "#ff000020"
+  baseColor: black
   boardLayout: hex1
   freeForm: false
-  uniformRows: true
-  boardFilename: dateTree.jpg
+  uniformRows: false
+  boardFilename: shapeShifters768.png
   wGap: 15
   hGap: 13
   backgroundSize: initial
@@ -28,7 +28,7 @@ settings:
   bgBoard: silver
   fgBoard: black
   fzLabel: 16
-  nFields: 44
+  nFields: 43
   wBoard: 100%
   hBoard: 768
   boardStandard: none
@@ -36,31 +36,31 @@ settings:
   numPool: 10
   labelPos: hover
   naturalImageSize:
-    w: 1366
+    w: 768
     h: 768
+  idealBg: rgb(76, 127, 206)
 state:
   pool:
     "0":
-      key: alles steigt aus der quelle
+      key: collectivism
       index: 0
     "1":
-      key: das große rote megaphon
+      key: endzeit
       index: 1
     "2":
-      key: erziehung
+      key: english
       index: 2
     "3":
-      key: der schwarze drachen tod
+      key: erziehung
       index: 3
-    "4":
-      key: european theatre
-      index: 4
-  poolArr: []
+  poolArr:
+    - 1
+    - 2
+    - 3
   boardArr:
     - null
     - null
     - null
-    - 2
     - null
     - null
     - null
@@ -75,13 +75,6 @@ state:
     - null
     - null
     - null
-    - null
-    - null
-    - null
-    - null
-    - null
-    - null
-    - 3
     - null
     - null
     - null
@@ -98,6 +91,13 @@ state:
     - null
     - null
     - null
-    - 1
-    - 4
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
     - null

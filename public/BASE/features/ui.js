@@ -76,7 +76,7 @@ function initLineBottom() {
 
 //#region MAGNIFY
 var MAGNIFIER_IMAGE;
-function mMagnify(img, item) {
+function iMagnifyX(ui, item, pos) {
 	let path = item.path;
 	if (isdef(MAGNIFIER_IMAGE) && MAGNIFIER_IMAGE.src == path) {
 		console.log('schon offen!!!')
@@ -100,11 +100,52 @@ function mMagnify(img, item) {
 	// let img1 = MAGNIFIER_IMAGE = mImg(path, document.body, { position: 'absolute',left:0,top:0 });
 
 }
+function mMagnify(img, item) {
+	let path = item.path;
+	if (isdef(MAGNIFIER_IMAGE) && MAGNIFIER_IMAGE.src == path) {
+		console.log('schon offen!!!')
+		return;
+	}else if (isdef(MAGNIFIER_IMAGE)) mCancelMagnify();
+
+	let imgSize = 514,fontSize=24;
+	let [w,h,fz]=[imgSize,imgSize+fontSize+10,fontSize];
+	let dPresent=MAGNIFIER_IMAGE = mDiv(document.body, { bg:HeaderColor, position: 'absolute',left:0,top:0,w:w,h:h });
+	let d=dPresent; //mDiv(dPresent);
+	d.style.zIndex=100000;
+	let dText = mText(item.text,d,{color:'white',fz:fz});
+	let dImage = mDiv(d,{rounding:'50%',w:w,h:w});
+	mCenterCenterFlex(dImage);
+	let img1 = mImg(path, dImage,{});
+
+	//let dPresent = mDiv(document.body, { bg:HeaderColor, rounding:'50%', position: 'absolute',left:0,top:0,w:512,h:512 });
+	//mContainer(dPresent);
+	// let img1 = mImg(path, dPresent,{});
+	mCenterCenterFlex(dPresent);
+
+	// let img1 = MAGNIFIER_IMAGE = mImg(path, document.body, { position: 'absolute',left:0,top:0 });
+
+}
 function mCancelMagnify(img, path) {
 	if (isdef(MAGNIFIER_IMAGE)) {MAGNIFIER_IMAGE.remove(); MAGNIFIER_IMAGE=null;}
 }
 function iMagnify(perle){mMagnify(null,perle);}
 function iMagnifyCancel(){mCancelMagnify();}
+		//magnify on hover
+		//magnify richtung oben links
+		// ui.onmouseenter = ev => {
+		// 	if (ev.ctrlKey) {
+		// 		mStyleX(ui, {
+		// 			'transform': `scale(2)`,
+		// 			'transform-origin': 'bottom right',
+		// 		});
+		// 		mStyleX(ui.children[1], { fg: 'black', bg: 'white', align: 'center' });
+		// 	}
+		// };
+		// ui.onmouseleave = ev => {
+		// 	mRemoveStyle(ui, ['transform', 'transform-origin']);
+		// 	mStyleX(ui.children[1], { fg: 'white', bg: 'transparent', });
+		// };
+
 //#endregion
 
 function setTitle(s) { mBy('hTitle').innerHTML = s; }

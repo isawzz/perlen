@@ -35,7 +35,7 @@ class SimpleClass7 {
 		} else {
 			//console.log('...sync ok (no board)');
 			this.clearBoardUI();
-			this.clearPool();
+			this.clearPoolUI();
 		}
 		this.presentPerlen();
 		this.activateDD();
@@ -89,7 +89,7 @@ class SimpleClass7 {
 		console.log('sending remove all perlen command', perlen, fields);
 		sendRemovePerlen(perlen, fields);
 	}
-	clearPool() { clearElement(this.dPool); }
+	clearPoolUI() { clearElement(this.dPool); }
 	presentPerlen() {
 		let [b, s, perlenByIndex, boardArr, poolArr] = [this.clientBoard, this.settings, this.poolEnriched, this.state.boardArr, this.state.poolArr];
 
@@ -101,7 +101,7 @@ class SimpleClass7 {
 			if (nundef(perle)) {
 				//BUGBUGBUG
 
-				console.log(perlenByIndex, perlenByIndex, 'perlenDict', this.perlenDict, '\nboardArr', boardArr, '\npoolArr', poolArr)
+				console.log('BUG!',perlenByIndex, perlenByIndex, 'perlenDict', this.perlenDict, '\nboardArr', boardArr, '\npoolArr', poolArr)
 			}
 			perle.field = null;
 			let ui = createPerle(perle, dParent, 64, 1.3, .4);

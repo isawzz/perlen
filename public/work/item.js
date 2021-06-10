@@ -223,8 +223,10 @@ function makePerleDiv(item, outerStyles, imgStyles, labelStyles, labelPos = null
 	}
 	if (magnify) {
 
-		x.onmouseenter = ev => onEnterPerle(item, ev); // (ev) => { if (ev.ctrlKey) mMagnify(x, item); }
-		x.onmouseleave = ev => onExitPerle(item, ev); //() => mCancelMagnify(x, item.path);
+		// x.onmouseenter = ev => onEnterPerle(item, ev); // (ev) => { if (ev.ctrlKey) mMagnify(x, item); }
+		// x.onmouseleave = ev => onExitPerle(item, ev); //() => mCancelMagnify(x, item.path);
+		x.onmouseenter = ev =>  { if (ev.ctrlKey) mMagnify(x,item); }
+		x.onmouseleave = ev => mCancelMagnify(x, item.path);
 	}
 
 	if (labelPos[0] == 'b') dLabel = mText(item.label, dOuter, labelStyles);

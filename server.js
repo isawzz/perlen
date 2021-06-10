@@ -68,7 +68,7 @@ var upload = multer({ storage: storage });
 app.post('/perlen', upload.array('perlen'), (req, res) => {
 	res.redirect('/');
 	console.log('#files',req.files.length);
-	console.log(Object.keys(req.files[0]));
+	//console.log(Object.keys(req.files[0]));
 	req.files.map(x => simple.addPerle(x.filename,false)); //console.log(x.filename));
 	console.log('perlen#',Object.keys(simple.perlenDict).length);
 });
@@ -101,7 +101,9 @@ io.on('connection', client => {
 
 	client.on('chooseBoard', x => simple.handleChooseBoard(client, x));
 	client.on('settings', x => simple.handleSettings(client, x));
-	client.on('syncBoardLayout', x => simple.handleSyncBoardLayout(client, x));
+	client.on('poolChange', x => simple.handlePoolChange(client, x));
+	client.on('clearPoolarr', x => simple.handleClearPoolarr(client, x));
+	client.on('clearPool', x => simple.handleClearPoolarr(client, x));
 
 });
 

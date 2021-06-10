@@ -71,7 +71,7 @@ function calcLayoutParameters(s, b, scale = 1) {
 }
 function createFields(s, b, scale) {
 	let dCells = b.dCells = mDiv(b.dOuter, { matop: s.boardMarginTop * scale, maleft: s.boardMarginLeft * scale, w: b.wNeeded, h: b.hNeeded, position: 'relative' }); //, bg: 'green' });
-	let [horDist, vertDist, szField] = [b.dxCenter, b.dyCenter, s.szField];
+	let [horDist, vertDist, szField] = [b.dxCenter, b.dyCenter, s.szField*scale];
 	let fields = b.fields = [], i = 0, dx = horDist / 2, dy = vertDist / 2;
 	let bg = s.fieldColor;
 	for (const p of b.centers) {

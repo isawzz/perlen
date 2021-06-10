@@ -95,16 +95,43 @@ class GP2 {
 		let di = {};
 		let newPool = {};
 		let i = 0;
+		let oldToNewIndex = {};
 		for (const key in pool) {
+
+			//achtung hier werden keys veraendert!!!
+			//muss diese keys auch in board veraendern!!!
+			//falls in boardArr sind!
+
+
 			let p = pool[key];
-			if (base.nundef(di[p.key])) { newPool[i] = { key: p.key, index: i }; i += 1; di[p.key] = true; }
+			if (base.nundef(di[p.key])) {
+				newPool[i] = { key: p.key, index: i };
+				oldToNewIndex[key] = i;
+				i += 1;
+				di[p.key] = true;
+			}
 		}
 		st.pool = newPool;
 
 		st.poolArr = base.arrNoDuplicates(poolArr);
 
+		st.poolArr = this.mapIndices(oldToNewIndex, st.poolArr);
+		st.boardArr = this.mapIndices(oldToNewIndex, st.boardArr);
+
 		console.log('pool ok:', Object.keys(newPool).length, ' - old pool', Object.keys(pool).length);
 		console.log('poolArr:', st.poolArr.join());
+	}
+	mapIndices(di, oldArr) {
+		let arr = [];
+		for (const idx of oldArr) {
+			if (base.isList(idx)) {
+				let i = idx[0];
+				if (i in di) arr.push([di[i], idx[1], idx[2]]);
+				else arr.push(idx);
+			} else if (idx in di) { arr.push(di[idx]); }
+			else { arr.push(idx); }
+		}
+		return arr;
 	}
 	weiter() {
 		let s = this.settings, lastState = this.lastState;
@@ -312,7 +339,7 @@ class GP2 {
 	handleSettings(client, x) {
 		logReceive('settings', x.settings.nFields);
 
-		let [s,sNew]=[this.settings,x.settings];
+		let [s, sNew] = [this.settings, x.settings];
 		//let freeFormReset = s.freeForm && !sNew.freeForm;
 
 		base.copyKeys(x.settings, this.settings);
@@ -321,7 +348,7 @@ class GP2 {
 		if (!s.freeForm) {
 			// console.log('freeFormReset!!!')
 			let barr = this.state.boardArr;
-			let newBarr = barr.map(x=>base.isList(x)?x[0]:x);
+			let newBarr = barr.map(x => base.isList(x) ? x[0] : x);
 			this.state.boardArr = newBarr;
 		}
 
@@ -352,16 +379,66 @@ class GP2 {
 
 		this.safeEmitState(['settings']);
 	}
-	handleSyncBoardLayout(client, x) {
-		//return;
-		logReceive('syncBoardLayout', x);
-		//console.log('HANDLE BOARD', x)
-		if ('boardFilename' in x) { this.settings.boardFilename = x.boardFilename; }
-		if ('nFields' in x) { this.state.boardArr = new Array(x.nFields); }
-		if ('rows' in x) { this.settings.rows = x.rows; }
-		if ('cols' in x) { this.settings.cols = x.cols; }
-		if ('layout' in x) { this.settings.layout = x.layout; }
-		this.safeEmitState(['settings']);
+	handlePoolChange(client, x) {
+		logReceive('poolChange', client.id);
+		//x should have keys ... list of perlen keys
+		let keys = x.keys;
+		for (const key of keys) {
+			let p = base.firstCondDict(this.state.pool, x => x.key == key);
+			if (!p) {
+				base.addToPool(this.state.pool, this.state.poolArr, this.perlenDict[key], this.maxPoolIndex);
+				this.maxPoolIndex += 1;
+			}
+		}
+		console.log('poolChange!!!', Object.keys(this.state.pool).length)
+		this.safeEmitState(['pool']);
+
+	}
+	handleClearPoolarr(client, x) {
+		let newPoolIndices = this.state.boardArr.filter(x => x != null).map(x => base.isList(x) ? x[0] : x);
+		console.log('new pool#', newPoolIndices.length);
+		console.log('new pool keys:', newPoolIndices);
+		//remove all poolArr entries from pool
+		for (let p of this.state.poolArr) {
+			delete this.state.pool[p];
+		}
+		console.log('pool', this.state.pool);
+
+		//wieso kann ich nicht die indices preserven?
+		if (newPoolIndices.length > 0)
+			this.maxPoolIndex = base.arrMax(newPoolIndices) + 1;
+		else this.maxPoolIndex = 0;
+
+		this.state.poolArr = [];
+		this.safeEmitState(['pool']);
+	}
+	handleClearPool(client, x) {
+		let state = this.state;
+		state.poolArr = [];
+		state.boardArr = [];
+		state.pool = {};
+		this.maxPoolIndex = 0;
+		safeEmitState(['pool']);
+	}
+	handleReset(client, x) {
+		logReceive('reset', client.id);
+		//choice:
+		//1. clear boardArr, put alle perlen zurueck in stall
+		//==>2. clear boardArr, reset pool to new pool
+		let barr = this.state.boardArr;
+
+		if (base.isdef(barr)) { this.state.boardArr = new Array(barr.length); }
+
+		delete this.state.poolArr;
+		delete this.state.pool;
+
+		this.maxPoolIndex = base.initServerPool(this.settings, this.state, this.perlenDict);
+		logSend('gameState');
+		if (this.settings.poolSelection != 'random') {
+			this.safeEmitState(['perlenDict', 'settings', 'pool'], { instruction: 'pick your set of pearls!' });
+		} else {
+			this.safeEmitState(['perlenDict', 'settings', 'pool']);
+		}
 	}
 
 	sendMessage(username, msg) { this.io.emit('userMessage', { username: username, msg: msg }); }
