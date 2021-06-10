@@ -18,9 +18,10 @@ class GP2 {
 		this.io = io;
 		this.perlenDictFull = perlenDict;
 		this.db = DB;
-		this.settings = base.jsCopy(DB.games.gPerlen2);
+		this.randomIndices = [];
 
-		if (NO_LAST_STATE || base.nundef(lastState)) lastState = { settings: {}, state: {} };
+		this.settings = base.jsCopy(DB.games.gPerlen2);
+		if (NO_LAST_STATE || base.nundef(lastState)) lastState = this.emptyState();
 		this.lastState = lastState;
 		base.copyKeys(lastState.settings, this.settings);
 
@@ -37,6 +38,7 @@ class GP2 {
 					});
 			});
 	}
+	emptyState() { return { settings: {}, state: {}, randomIndices: [] }; }
 	ensureBoardFilename(filenames) {
 		let s = this.settings;
 		s.boardFilenames = filenames;
@@ -91,6 +93,7 @@ class GP2 {
 		let pool = this.lastState.state.pool;
 		let poolArr = this.lastState.state.poolArr;
 		let st = this.lastState.state;
+		let randomIndices = this.lastState.randomIndices;
 		if (base.nundef(pool)) return;
 		let di = {};
 		let newPool = {};
@@ -117,6 +120,7 @@ class GP2 {
 
 		st.poolArr = this.mapIndices(oldToNewIndex, st.poolArr);
 		st.boardArr = this.mapIndices(oldToNewIndex, st.boardArr);
+		this.randomIndices = this.mapIndices(oldToNewIndex, randomIndices);
 
 		console.log('pool ok:', Object.keys(newPool).length, ' - old pool', Object.keys(pool).length);
 		console.log('poolArr:', st.poolArr.join());
@@ -159,9 +163,10 @@ class GP2 {
 			console.log('state', Object.keys(state.pool).length);
 			this.maxPoolIndex = Object.keys(state.pool).length;
 		} else {
-
 			this.maxPoolIndex = base.initServerPool(this.settings, this.state, this.perlenDict);
 			this.state.boardArr = [];
+			this.randomIndices = Object.keys(this.state.pool).map(x => Number(x));
+
 		}
 	}
 	addPlayer(client, x) {
@@ -232,26 +237,6 @@ class GP2 {
 			this.safeEmitState(['perlenDict', 'settings', 'pool'], null, client);
 		}
 		this.sendMessage(pl.username, `user ${pl.username} joined! (players:${this.getPlayerNames().join()})`);
-	}
-	handleReset(client, x) {
-		logReceive('reset', client.id);
-		//choice:
-		//1. clear boardArr, put alle perlen zurueck in stall
-		//==>2. clear boardArr, reset pool to new pool
-		let barr = this.state.boardArr;
-
-		if (base.isdef(barr)) { this.state.boardArr = new Array(barr.length); }
-
-		delete this.state.poolArr;
-		delete this.state.pool;
-
-		this.maxPoolIndex = base.initServerPool(this.settings, this.state, this.perlenDict);
-		logSend('gameState');
-		if (this.settings.poolSelection != 'random') {
-			this.safeEmitState(['perlenDict', 'settings', 'pool'], { instruction: 'pick your set of pearls!' });
-		} else {
-			this.safeEmitState(['perlenDict', 'settings', 'pool']);
-		}
 	}
 	handleMoveField(client, x) {
 		let iField = x.iField;
@@ -331,7 +316,6 @@ class GP2 {
 		this.removePerle(iPerle, iFrom);
 		this.safeEmitState();
 	}
-
 	handleChooseBoard(client, x) {
 		this.settings.boardFilename = x.boardFilename;
 		this.safeEmitState(['settings']);
@@ -383,62 +367,80 @@ class GP2 {
 		logReceive('poolChange', client.id);
 		//x should have keys ... list of perlen keys
 		let keys = x.keys;
-		for (const key of keys) {
-			let p = base.firstCondDict(this.state.pool, x => x.key == key);
-			if (!p) {
+		if (base.isdef(keys)) {
+			for (const key of keys) {
+				let p = base.firstCondDict(this.state.pool, x => x.key == key);
+				if (!p) {
+					base.addToPool(this.state.pool, this.state.poolArr, this.perlenDict[key], this.maxPoolIndex);
+					this.maxPoolIndex += 1;
+				}
+			}
+		} else if (base.isdef(x.n)) {
+			let n = x.n;
+			let poolKeys = Object.values(this.state.pool).map(x => x.key);
+			let allKeys = Object.keys(this.perlenDict);
+			let availableKeys = base.arrMinus(allKeys, poolKeys);
+			let randomKeys = base.choose(availableKeys, n);
+
+			for (const key of randomKeys) {
 				base.addToPool(this.state.pool, this.state.poolArr, this.perlenDict[key], this.maxPoolIndex);
+				this.randomIndices.push(this.maxPoolIndex);
 				this.maxPoolIndex += 1;
 			}
 		}
+
 		console.log('poolChange!!!', Object.keys(this.state.pool).length)
 		this.safeEmitState(['pool']);
 
 	}
 	handleClearPoolarr(client, x) {
-		let newPoolIndices = this.state.boardArr.filter(x => x != null).map(x => base.isList(x) ? x[0] : x);
-		console.log('new pool#', newPoolIndices.length);
-		console.log('new pool keys:', newPoolIndices);
 		//remove all poolArr entries from pool
 		for (let p of this.state.poolArr) {
+			base.removeInPlace(this.randomIndices, p);
 			delete this.state.pool[p];
 		}
 		console.log('pool', this.state.pool);
-
-		//wieso kann ich nicht die indices preserven?
-		if (newPoolIndices.length > 0)
-			this.maxPoolIndex = base.arrMax(newPoolIndices) + 1;
+		let indices = Object.keys(this.state.pool);
+		if (indices.length > 0) this.maxPoolIndex = base.arrMax(indices) + 1;
 		else this.maxPoolIndex = 0;
-
 		this.state.poolArr = [];
 		this.safeEmitState(['pool']);
 	}
+	handleRemoveRandom(client, x) {
+		if (base.isdef(x.n)) {
+			let n = x.n;
+			let inter = base.intersection(this.state.poolArr, this.randomIndices);
+			let keys = base.choose(inter, n);
+			console.log('rr','n',n,'\ninter',inter,'\nkeys',keys)
+			for (let p of keys) {
+				console.log('removing',this.state.pool[p].key);
+				base.removeInPlace(this.randomIndices, p);
+				base.removeInPlace(this.state.poolArr, p);
+				delete this.state.pool[p];
+			}
+			console.log('pool#', Object.keys(this.state.pool).length);
+			this.safeEmitState(['pool']);
+		}
+	}
+
 	handleClearPool(client, x) {
 		let state = this.state;
 		state.poolArr = [];
 		state.boardArr = [];
 		state.pool = {};
+		this.randomKeys = [];
 		this.maxPoolIndex = 0;
 		safeEmitState(['pool']);
 	}
+
 	handleReset(client, x) {
 		logReceive('reset', client.id);
-		//choice:
-		//1. clear boardArr, put alle perlen zurueck in stall
-		//==>2. clear boardArr, reset pool to new pool
-		let barr = this.state.boardArr;
-
-		if (base.isdef(barr)) { this.state.boardArr = new Array(barr.length); }
-
-		delete this.state.poolArr;
-		delete this.state.pool;
-
+		this.lastState.state = this.state = {};
+		this.lastState.randomIndices = [];
 		this.maxPoolIndex = base.initServerPool(this.settings, this.state, this.perlenDict);
-		logSend('gameState');
-		if (this.settings.poolSelection != 'random') {
-			this.safeEmitState(['perlenDict', 'settings', 'pool'], { instruction: 'pick your set of pearls!' });
-		} else {
-			this.safeEmitState(['perlenDict', 'settings', 'pool']);
-		}
+		this.state.boardArr = [];
+		this.randomIndices = Object.keys(this.state.pool).map(x => Number(x));
+		this.safeEmitState(['pool'])
 	}
 
 	sendMessage(username, msg) { this.io.emit('userMessage', { username: username, msg: msg }); }
@@ -451,9 +453,9 @@ class GP2 {
 		if (keys.includes('perlenDict')) o.perlenDict = this.perlenDict;
 		if (base.isdef(eMore)) base.copyKeys(eMore, o);
 
-		let lastState = base.jsCopy(this.settings);
-		delete lastState.boardFilenames;
-		if (!NO_LAST_STATE) utils.toYamlFile({ settings: lastState, state: this.state }, path.join(__dirname, PerlenPath + 'lastState.yaml'));
+		let lastSettings = base.jsCopy(this.settings);
+		delete lastSettings.boardFilenames;
+		if (!NO_LAST_STATE) utils.toYamlFile({ randomIndices: this.randomIndices, settings: lastSettings, state: this.state }, path.join(__dirname, PerlenPath + 'lastState.yaml'));
 
 		if (base.isdef(client)) client.emit('gameState', o); else this.io.emit('gameState', o);
 

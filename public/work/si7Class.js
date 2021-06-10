@@ -251,7 +251,6 @@ class SimpleClass7 {
 		delete target.dxy;
 		if (isdef(target.item)) delete target.item.dxy;
 	}
-
 	processData(data) {
 		if (nundef(data)) data = createFakeState();
 		//console.log('got data:', jsCopy(data));
@@ -327,11 +326,7 @@ function sendStartOrJoinPerlenGame() {
 	Socket.emit('startOrJoinPerlen', data);
 	window.onkeydown = keyDownHandler;
 	window.onkeyup = keyUpHandler;
-	//mBy('sidebar').onmousedown = ()=>hide(dAux);
-	// mBy('table').onmousedown = ()=>hide(dAux);
-	// dAux.onmousedown = (ev)=>ev.stopPropagation();
-	// mBy('sidebar').ondblclick = togglePerlenEditor;
-	mBy('sidebar').ondblclick = () => { hide('sidebar') };
+	mBy('sidebar').ondblclick = () => { closeAux();hide('sidebar') };
 	G = VERSION == 7 ? new SimpleClass7() : new SimpleClass();
 	Settings = new PerlenSettingsClass(G.settings, U, mBy('dSettingsWindow'));
 	if (!USESOCKETS) G.presentGameState();

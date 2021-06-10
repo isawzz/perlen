@@ -1,8 +1,36 @@
 var ActiveButton = null;
 
 function openAux(title, button) {
-	show(dAux); clearElement(dAuxContent);
+	resetActiveButton();
+	show(dAux);
+	clearElement(dAuxContent);
 	dAuxTitle.innerHTML = title;
+	if (isdef(button)) setActiveButton(button);
+}
+function closeAux() {
+	resetActiveButton();
+	hide(dAux);
+}
+function resetActiveButton() {
+	if (ActiveButton != null) {
+		console.log(ActiveButton);
+		//cancel active thing
+		//console.log(ActiveButton, ActiveButton.id)
+		let ba = ActiveButton;
+		mStyleX(ba, { bg: 'white', fg: 'black' });
+		let caption = ba.id.substring(2);
+
+		caption = separateAtCapitals(caption);
+		ba.innerHTML = caption;
+		ActiveButton = null;
+	} else {
+		console.log('ActiveButton is null!!!')
+	}
+}
+function setActiveButton(button) {
+	ActiveButton = button;
+	mStyleX(button, { bg: 'dimgray', fg: 'white' });
+	button.innerHTML = 'submit command!';
 }
 
 function onClickToolbarButton() {
@@ -16,12 +44,13 @@ function onClickToolbarButton() {
 }
 function onClickUploadBoard(ev) {
 	//hier gib das zeug vom anderen hin!
+
 	openAux('upload board image');
 	let form1 = new FileUploadForm(dAuxContent, 'Upload Board Image', 'bretter',
 		filename => {
-			if (!filename) console.log('cancel!')
+			if (!filename) console.log('cancel!');
 			else console.log('file ' + filename + ' uploaded successfully!');
-			hide(dAux);
+			closeAux();
 		});
 }
 function onClickUploadPerlen() {
@@ -31,7 +60,7 @@ function onClickUploadPerlen() {
 		filename => {
 			if (!filename) console.log('cancel!')
 			else console.log('file ' + filename + ' uploaded successfully!');
-			hide(dAux);
+			closeAux();
 		});
 }
 function onClickChooseBoard() {
@@ -39,12 +68,12 @@ function onClickChooseBoard() {
 	let boards = G.settings.boardFilenames;
 	//console.log(boards);
 	for (const b of boards) {
-		let img = mImg(PERLENPATH_FRONT + 'bretter/' + b, dAuxContent, { h: 200, margin: 8, 'vertical-align': 'baseline' });
-		img.onclick = () => { hide(dAux); G.chooseBoard(b); }
+		let img = mImg(PERLENPATH_FRONT + 'bretter/' + b, dAuxContent, { cursor: 'pointer', h: 200, margin: 8, 'vertical-align': 'baseline' });
+		img.onclick = () => { closeAux(); G.chooseBoard(b); }
 	}
 	//add empty frame for empty
-	let img = mDiv(dAuxContent, { display: 'inline-block', border: 'black', w: 300, h: 200, margin: 8, box: true });
-	img.onclick = () => { hide(dAux); G.chooseBoard('none'); }
+	let img = mDiv(dAuxContent, { cursor: 'pointer', display: 'inline-block', border: 'black', w: 300, h: 200, margin: 8, box: true });
+	img.onclick = () => { closeAux(); G.chooseBoard('none'); }
 }
 function onClickPrefabGallery() {
 	openAux('choose board + layout');
@@ -52,7 +81,7 @@ function onClickPrefabGallery() {
 	let boardExamples = {};
 	for (const stdName in standards) {
 		let std = standards[stdName];
-		let d = mDiv(dAuxContent, { margin: 10 });
+		let d = mDiv(dAuxContent, { margin: 10, cursor: 'pointer' });
 		addKeys(G.settings, std);
 		//console.log('std',std,'\nG.settings',G.settings);
 		//break;
@@ -70,12 +99,114 @@ function onClickPrefabGallery() {
 		d.onclick = () => {
 			copyKeys(std, G.settings);
 			Socket.emit('settings', { settings: G.settings });
-			hide(dAux);
+			closeAux();
 		}
 	}
 	console.log(boardExamples);
 }
 
+function onClickActivateLayout() { closeAux(); Socket.emit('settings', { settings: G.settings }); }
+function onClickModifyLayout(ev) {
+
+	let button = ev.target;
+	if (ActiveButton == button) { onClickActivateLayout(); return; }
+
+	openAux('board settings', button);
+	let wWidget = 380;
+	let [s, b] = [G.settings, G.clientBoard];
+	let styles = { w: wWidget, align: 'center', margin: 6 };
+	let inpRows = mEditRange('rows: ', s.rows, 1, 20, 1, dAuxContent, (a) => { setApply('rows', a) }, styles);
+	let inpCols = mEditRange('cols: ', s.cols, 1, 20, 1, dAuxContent, (a) => { setApply('cols', a) }, styles);
+	let inpXOffset = mEditRange('x-offset: ', s.boardMarginLeft, -100, 100, 1, dAuxContent, (a) => { setApply('boardMarginLeft', a) }, styles);
+	let inpYOffset = mEditRange('y-offset: ', s.boardMarginTop, -100, 100, 1, dAuxContent, (a) => { setApply('boardMarginTop', a) }, styles);
+	let inpRot = mEditRange('rotation: ', s.boardRotation, 0, 90, 1, dAuxContent, (a) => { setApply('boardRotation', a) }, styles);
+
+	let inpFieldSize = mEditRange('field size: ', s.szField, 10, 200, 1, dAuxContent, (a) => { setApply('szField', a) }, styles);
+	let inpSzPerle = mEditRange('perle %: ', s.szPerle, 50, 100, 1, dAuxContent, (a) => { setApply('szPerle', a) }, styles);
+	let inpszPoolPerle = mEditRange('pool perle: ', s.szPoolPerle, 40, 140, 1, dAuxContent, (a) => { setApply('szPoolPerle', a) }, styles);
+	let inpWidth = mEditRange('center dx: ', s.dxCenter, 10, 200, 1, dAuxContent, (a) => { setApply('dxCenter', a) }, styles);
+	let inpHeight = mEditRange('center dy: ', s.dyCenter, 10, 200, 1, dAuxContent, (a) => { setApply('dyCenter', a) }, styles);
+
+	let inpFieldColor = mColorPickerControl('field color: ', s.fieldColor, b.img, dAuxContent, (a) => { setApply('fieldColor', a) }, styles);
+	let inpBaseColor = mColorPickerControl('background: ', s.baseColor, b.img, dAuxContent, setNewBackgroundColor, styles);
+	let inpFullCover = mCheckbox('complete rows: ', s.boardLayout == 'hex1' ? false : true, dAuxContent,
+		(a) => {
+			setApply('boardLayout', a ? 'hex' : 'hex1');
+			//console.log('a', a)
+		}, styles);
+	let inpfreeForm = mCheckbox('free drop: ', s.freeForm ? true : false, dAuxContent, (a) => { setApply('freeForm', a == 1 ? true : false) }, styles);
+}
+
+
+function onClickClearPerlenpool() {
+	//perlen im pool werden destroyed
+	//die am board bleiben
+	closeAux();
+	G.clearPoolUI();
+	Socket.emit('clearPoolarr');
+}
+function onClickClearBoard() {
+	closeAux();
+	G.clearBoard();
+}
+function onClickClearAllPerlen() {
+	closeAux();
+	G.clearBoardUI();
+	G.clearPoolUI();
+	Socket.emit('clearPool');
+
+	//perlen im pool werden destroyed
+	//die am board bleiben
+}
+function onClickAddToPool(ev) {
+
+	let button = ev.target;
+	if (ActiveButton == button) { //submit!
+		if (isdef(DA.selectedPerlen) && !isEmpty(DA.selectedPerlen)) {
+			let keys = DA.selectedPerlen.map(x => x.key);
+			//console.log('send poolChange!!!')
+			Socket.emit('poolChange', { keys: keys });
+			delete DA.selectedPerlen;
+		}
+		closeAux();
+		return;
+	}
+	openAux('pick perlen', button);
+	let d = mDiv(dAuxContent);
+	let items = [];
+	for (const k in G.perlenDict) {
+		let p = jsCopy(G.perlenDict[k]);
+		p.path = mPath(p);
+		let ui = createPerle(p, d, 64, 1.3, .4);
+		mStyleX(ui, { opacity: 1 });
+		iAdd(p, { div: ui });
+		items.push(p);
+	}
+	DA.selectedPerlen = [];
+	items.map(x => iDiv(x).onclick = ev => { toggleItemSelection(x, DA.selectedPerlen) });
+
+
+}
+function onClickAdd10Random() {
+	closeAux();
+	Socket.emit('poolChange', { n: 10 });
+}
+function onClickRemove10Random() {
+	closeAux();
+	Socket.emit('removeRandom', { n: 10 });
+}
+function onClickResetAll() {
+	Socket.emit('reset');
+}
+
+//#region helpers TODO => base
+//function addMagnifyOnHover(ui,)
+function mAddBehavior(ui, beh, params) {
+	switch (beh) {
+		case 'magnifyOnHover': addMagnifyOnHover(ui, ...params); break;
+		case 'selectOnClick': addSelectOnClick(ui, ...params); break;
+	}
+}
 function selectTextOrig(id) {
 	var sel, range;
 	var el = document.getElementById(id); //get element id
@@ -123,123 +254,4 @@ function separateAtCapitals(s) {
 	}
 	return sNew;
 }
-function resetActiveButton() {
-	//cancel active thing
-	//console.log(ActiveButton, ActiveButton.id)
-	let ba = ActiveButton;
-	mStyleX(ba, { bg: 'white', fg: 'black' });
-	let caption = ba.id.substring(2);
-
-	caption = separateAtCapitals(caption);
-	ba.innerHTML = caption;
-	ActiveButton = null;
-}
-function setActiveButton(button) {
-	ActiveButton = button;
-	mStyleX(button, { bg: 'dimgray', fg: 'white' });
-	button.innerHTML = 'submit command!';
-}
-function onClickModifyLayout(ev) {
-
-	let button = ev.target;
-	if (ActiveButton != null && ActiveButton != button) {
-	}
-	if (ActiveButton == button) {
-		//submit!!!
-		onClickActivateLayout();
-		resetActiveButton();
-		return;
-	}
-	setActiveButton(button);
-	openAux('board settings');
-	let wWidget = 380;
-	let [s, b] = [G.settings, G.clientBoard];
-	let styles = { w: wWidget, align: 'center', margin: 6 };
-	let inpRows = mEditRange('rows: ', s.rows, 1, 20, 1, dAuxContent, (a) => { setApply('rows', a) }, styles);
-	let inpCols = mEditRange('cols: ', s.cols, 1, 20, 1, dAuxContent, (a) => { setApply('cols', a) }, styles);
-	let inpXOffset = mEditRange('x-offset: ', s.boardMarginLeft, -100, 100, 1, dAuxContent, (a) => { setApply('boardMarginLeft', a) }, styles);
-	let inpYOffset = mEditRange('y-offset: ', s.boardMarginTop, -100, 100, 1, dAuxContent, (a) => { setApply('boardMarginTop', a) }, styles);
-	let inpRot = mEditRange('rotation: ', s.boardRotation, 0, 90, 1, dAuxContent, (a) => { setApply('boardRotation', a) }, styles);
-
-	let inpFieldSize = mEditRange('field size: ', s.szField, 10, 200, 1, dAuxContent, (a) => { setApply('szField', a) }, styles);
-	let inpSzPerle = mEditRange('perle %: ', s.szPerle, 50, 100, 1, dAuxContent, (a) => { setApply('szPerle', a) }, styles);
-	let inpszPoolPerle = mEditRange('pool perle: ', s.szPoolPerle, 40, 140, 1, dAuxContent, (a) => { setApply('szPoolPerle', a) }, styles);
-	let inpWidth = mEditRange('center dx: ', s.dxCenter, 10, 200, 1, dAuxContent, (a) => { setApply('dxCenter', a) }, styles);
-	let inpHeight = mEditRange('center dy: ', s.dyCenter, 10, 200, 1, dAuxContent, (a) => { setApply('dyCenter', a) }, styles);
-
-	let inpFieldColor = mColorPickerControl('field color: ', s.fieldColor, b.img, dAuxContent, (a) => { setApply('fieldColor', a) }, styles);
-	let inpBaseColor = mColorPickerControl('background: ', s.baseColor, b.img, dAuxContent, setNewBackgroundColor, styles);
-	let inpFullCover = mCheckbox('complete rows: ', s.boardLayout == 'hex1' ? false : true, dAuxContent,
-		(a) => {
-			setApply('boardLayout', a ? 'hex' : 'hex1');
-			//console.log('a', a)
-		}, styles);
-	let inpfreeForm = mCheckbox('free drop: ', s.freeForm ? true : false, dAuxContent, (a) => { setApply('freeForm', a == 1 ? true : false) }, styles);
-}
-
-function onClickActivateLayout() { hide(dAux); Socket.emit('settings', { settings: G.settings }); }
-
-function onClickClearPerlenpool() {
-	//perlen im pool werden destroyed
-	//die am board bleiben
-	G.clearPoolUI();
-	Socket.emit('clearPoolarr');
-}
-function onClickClearBoard() {
-	hide(dAux);
-	G.clearBoard();
-}
-function onClickClearAllPerlen() {
-	G.clearBoardUI();
-	G.clearPoolUI();
-	Socket.emit('clearPool');
-	
-	//perlen im pool werden destroyed
-	//die am board bleiben
-}
-function onClickAddToPool(ev) {
-
-	let button = ev.target;
-	if (ActiveButton != null && ActiveButton != button) {
-	}
-	if (ActiveButton == button) {
-		//submit!!!
-		if (isdef(DA.selectedPerlen) && !isEmpty(DA.selectedPerlen)) {
-			let keys = DA.selectedPerlen.map(x => x.key);
-			//console.log('send poolChange!!!')
-			Socket.emit('poolChange', { keys: keys });
-			delete DA.selectedPerlen;
-		}
-		hide(dAux);
-		resetActiveButton();
-		return;
-	}
-	setActiveButton(button);
-	openAux('pick perlen');
-	let d = mDiv(dAuxContent);
-	let items = [];
-	for (const k in G.perlenDict) {
-		let p = jsCopy(G.perlenDict[k]);
-		p.path = mPath(p);
-		let ui = createPerle(p, d, 64, 1.3, .4);
-		mStyleX(ui, { opacity: 1 });
-		iAdd(p, { div: ui });
-		items.push(p);
-	}
-	DA.selectedPerlen = [];
-	items.map(x => iDiv(x).onclick = ev => { toggleItemSelection(x, DA.selectedPerlen) });
-
-
-}
-//function addMagnifyOnHover(ui,)
-function mAddBehavior(ui, beh, params) {
-	switch (beh) {
-		case 'magnifyOnHover': addMagnifyOnHover(ui, ...params); break;
-		case 'selectOnClick': addSelectOnClick(ui, ...params); break;
-	}
-}
-function onClickReset() {
-	//sendReset(isdef(G) ? G.settings : DB.games.gPerlen2.settings);
-
-}
-
+//#endregion

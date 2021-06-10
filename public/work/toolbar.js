@@ -30,10 +30,13 @@ class ToolbarClass{
 		this.addButton('modifyLayout',onClickModifyLayout,'modify layout');
 		// this.addButton('activateLayout',onClickActivateLayout,'activate layout');
 		this.addButton('clearPerlenpool',onClickClearPerlenpool,'clear perlenpool');
-		this.addButton('clearAllPerlen',onClickClearAllPerlen,'clear all perlen');
+		// this.addButton('clearAllPerlen',onClickClearAllPerlen,'clear all perlen');
 		this.addButton('clearBoard',onClickClearBoard,'clear board');
 		this.addButton('addToPool',onClickAddToPool,'add to pool');
 		// this.addButton('addToPool',onClickAddToPool,'add to pool');
+		this.addButton('add10Random',onClickAdd10Random,'add 10 random');
+		this.addButton('remove10Random',onClickRemove10Random,'remove random');
+		this.addButton('resetAll',onClickResetAll,'reset all perlen');
 		
 	}
 }

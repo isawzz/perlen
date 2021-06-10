@@ -3078,11 +3078,13 @@ function coin(percent = 50) {
 function choose(arr, n, exceptIndices) {
 	var result = [];
 	var len = arr.length;
+	if (n>=arr.length) return arr;
+
 	var taken = new Array(len);
 	if (isdef(exceptIndices) && exceptIndices.length < len - n) {
 		for (const i of exceptIndices) if (i >= 0 && i <= len) taken[i] = true;
 	}
-	if (n > len) n = len - 1;
+	if (n > len) n = len;
 	while (result.length < n) {
 		var iRandom = Math.floor(Math.random() * len);
 		while (taken[iRandom]) { iRandom += 1; if (iRandom >= len) iRandom = 0; }
@@ -3829,12 +3831,12 @@ if (this && typeof module == "object" && module.exports && this === module.expor
 		initServerPool, addToPool,//initServerBoard,
 
 		//helpers:
-		allNumbers, arrTake, arrNoDuplicates, arrMin, arrMax,
+		allNumbers, arrTake, arrNoDuplicates, arrMin, arrMax, arrMinus,
 		capitalize, choose, chooseRandom, copyKeys,
 		dict2list,
 		firstCond, firstCondDict, firstCondDictKey, formatDate,
 		getFilename, getPublicPath,
-		isdef, isEmpty, jsCopy, isLiteral, isList,
+		intersection, isdef, isEmpty, jsCopy, isLiteral, isList,
 		nundef,
 		range, randomNumber, removeInPlace,
 		stringBefore, stringAfter, stringAfterLast,

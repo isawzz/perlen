@@ -1,20 +1,21 @@
+randomIndices: []
 settings:
-  rows: 9
+  rows: 5
   cols: 3
   boardMarginLeft: 0
   boardMarginTop: 0
   boardRotation: 0
-  dxCenter: 100
-  dyCenter: 92
+  dxCenter: 101
+  dyCenter: 116
   szField: 60
   szPerle: 100
   szPoolPerle: 50
-  fieldColor: "#ff000020"
-  baseColor: black
+  fieldColor: "#ffffff20"
+  baseColor: rgb(76, 127, 206)
   boardLayout: hex1
   freeForm: false
   uniformRows: false
-  boardFilename: shapeShifters768.png
+  boardFilename: brett19_09.png
   wGap: 15
   hGap: 13
   backgroundSize: initial
@@ -28,7 +29,7 @@ settings:
   bgBoard: silver
   fgBoard: black
   fzLabel: 16
-  nFields: 43
+  nFields: 19
   wBoard: 100%
   hBoard: 768
   boardStandard: none
@@ -41,22 +42,22 @@ settings:
   idealBg: rgb(76, 127, 206)
 state:
   pool:
-    "0":
-      key: collectivism
-      index: 0
-    "1":
-      key: endzeit
-      index: 1
-    "2":
+    "12":
       key: english
-      index: 2
-    "3":
-      key: erziehung
-      index: 3
+      index: 12
+    "13":
+      key: wasser
+      index: 13
+    "14":
+      key: wintersonne
+      index: 14
+    "15":
+      key: wissen
+      index: 15
   poolArr:
-    - 1
-    - 2
-    - 3
+    - 13
+    - 14
+    - 15
   boardArr:
     - null
     - null
@@ -67,31 +68,7 @@ state:
     - null
     - null
     - null
-    - null
-    - null
-    - null
-    - null
-    - null
-    - null
-    - null
-    - null
-    - null
-    - null
-    - null
-    - null
-    - 0
-    - null
-    - null
-    - null
-    - null
-    - null
-    - null
-    - null
-    - null
-    - null
-    - null
-    - null
-    - null
+    - 12
     - null
     - null
     - null

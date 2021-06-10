@@ -7,13 +7,12 @@ const PERLENPATH_FRONT = './PERLENDATA/';
 const NGROK = false; //'http://849aec381695.ngrok.io/'; // MUSS / am ende!!! 
 const HEROKU = true;
 const USERNAME_SELECTION = 'local'; // random | local | nil | gul | ma ...
-// const VERSION = 7; //hier immer last stable version!
-
 
 //*** testing */:
 // const NGROK = false; //'http://849aec381695.ngrok.io/'; // MUSS / am ende!!! 
 // const HEROKU = false;
 // const USERNAME_SELECTION = 'random'; // random | local | nil | gul | ma ...
+
 const VERSION = 7;
 const UITEST = false;
 

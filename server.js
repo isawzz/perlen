@@ -101,7 +101,10 @@ io.on('connection', client => {
 
 	client.on('chooseBoard', x => simple.handleChooseBoard(client, x));
 	client.on('settings', x => simple.handleSettings(client, x));
+	client.on('reset', x => simple.handleReset(client, x));
+
 	client.on('poolChange', x => simple.handlePoolChange(client, x));
+	client.on('removeRandom', x => simple.handleRemoveRandom(client, x));
 	client.on('clearPoolarr', x => simple.handleClearPoolarr(client, x));
 	client.on('clearPool', x => simple.handleClearPoolarr(client, x));
 
