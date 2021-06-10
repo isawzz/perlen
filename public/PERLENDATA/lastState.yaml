@@ -11,21 +11,21 @@ randomIndices:
   - 9
 settings:
   rows: 7
-  cols: 4
+  cols: 6
   boardMarginLeft: -4
   boardMarginTop: 0
-  boardRotation: 20
-  dxCenter: 90
-  dyCenter: 104
+  boardRotation: 0
+  dxCenter: 101
+  dyCenter: 117
   szField: 60
-  szPerle: 100
+  szPerle: 75
   szPoolPerle: 50
   fieldColor: "#ffffff80"
-  baseColor: "#1D1351FF"
+  baseColor: "#136EE9FF"
   boardLayout: hex1
   freeForm: false
   uniformRows: false
-  boardFilename: brett03.png
+  boardFilename: brett18_56.png
   wGap: 15
   hGap: 13
   backgroundSize: initial
@@ -39,7 +39,7 @@ settings:
   bgBoard: silver
   fgBoard: black
   fzLabel: 16
-  nFields: 37
+  nFields: 51
   wBoard: 100%
   hBoard: 768
   boardStandard: none
@@ -47,7 +47,7 @@ settings:
   numPool: 10
   labelPos: hover
   naturalImageSize:
-    w: 768
+    w: 1536
     h: 768
   idealBg: rgb(76, 127, 206)
 state:
@@ -123,6 +123,20 @@ state:
     - null
     - null
     - 5
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
     - null
     - null
     - null

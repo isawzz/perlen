@@ -1402,7 +1402,7 @@ standardSettings:
     cols: 6
     boardMarginLeft: -4
     boardMarginTop: 0
-    boardRotation: 20
+    boardRotation: 0
     dxCenter: 101
     dyCenter: 117
     szField: 60
