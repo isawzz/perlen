@@ -138,8 +138,12 @@ function onClickModifyLayout(ev) {
 	let inpRot = mEditRange('rotation: ', s.boardRotation, 0, 90, 1, dAuxContent, (a) => { setApply('boardRotation', a) }, styles);
 
 	let inpFieldSize = mEditRange('field size: ', s.szField, 10, 200, 1, dAuxContent, (a) => { setApply('szField', a) }, styles);
+
 	let inpSzPerle = mEditRange('perle %: ', s.szPerle, 50, 125, 1, dAuxContent, (a) => { setApply('szPerle', a) }, styles);
+
 	let inpszPoolPerle = mEditRange('pool perle: ', s.szPoolPerle, 40, 140, 1, dAuxContent, (a) => { setApply('szPoolPerle', a) }, styles);
+	let inpDimming = mEditRange('dimming %: ', s.dimming, 0, 100, 1, dAuxContent, (a) => { setApply('dimming', a) }, styles);
+
 	let inpWidth = mEditRange('center dx: ', s.dxCenter, 10, 200, 1, dAuxContent, (a) => { setApply('dxCenter', a) }, styles);
 	let inpHeight = mEditRange('center dy: ', s.dyCenter, 10, 200, 1, dAuxContent, (a) => { setApply('dyCenter', a) }, styles);
 

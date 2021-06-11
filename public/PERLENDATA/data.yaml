@@ -42,6 +42,7 @@ games:
     szField: 60
     szPerle: 100
     szPoolPerle: 50
+    dimming: 50
     fieldColor: "#282B9975"
     baseColor: "#BDAF89FF"
     boardLayout: hex
@@ -1271,6 +1272,7 @@ standardSettings:
     szField: 60
     szPerle: 100
     szPoolPerle: 50
+    dimming: 50
     fieldColor: "#ffffff80"
     idealBg: rgb(76, 127, 206)
     baseColor: rgb(76, 127, 206)
@@ -1286,15 +1288,50 @@ standardSettings:
     boardRotation: 0
     dxCenter: 100
     dyCenter: 92
-    szField: 60
+    szField: 83
     szPerle: 100
     szPoolPerle: 50
+    dimming: 50
     fieldColor: "#ff000020"
     baseColor: black
     boardLayout: hex1
     freeForm: false
     uniformRows: false
     boardFilename: shapeShifters768.png
+    wGap: 15
+    hGap: 13
+    backgroundSize: initial
+    sizeBoardHeightToImage: true
+    fieldShape: circle
+    boardLayoutFile: null
+    wFieldArea: 768
+    hFieldArea: 768
+    bgPool: transparent
+    fgPool: "#ffffffff"
+    bgBoard: silver
+    fgBoard: black
+    fzLabel: 16
+    nFields: 43
+    wBoard: 100%
+    hBoard: 768
+    boardStandard: none
+    poolSelection: random
+    numPool: 10
+    labelPos: hover
+    naturalImageSize:
+      w: 768
+      h: 768
+    idealBg: rgb(76, 127, 206)
+    boardFilenames:
+      - brett03.png
+      - brett10.png
+      - brett18_56.png
+      - brett19_02c.png
+      - brett19_09.png
+      - brett20_43.png
+      - dateTree.jpg
+      - majowka-nadmorzem.jpg
+      - shapeShifters768.png
   kleinSchwarz:
     rows: 5
     cols: 3
@@ -1306,6 +1343,7 @@ standardSettings:
     szField: 81
     szPerle: 100
     szPoolPerle: 50
+    dimming: 50
     fieldColor: "#ffffff20"
     baseColor: "#251C1CEB"
     boardLayout: hex1
@@ -1354,9 +1392,10 @@ standardSettings:
     boardRotation: 0
     dxCenter: 101
     dyCenter: 117
-    szField: 60
-    szPerle: 75
-    szPoolPerle: 50
+    szField: 98
+    szPerle: 108
+    szPoolPerle: 86
+    dimming: 50
     fieldColor: transparent
     baseColor: "#21211FFF"
     boardLayout: hex1
@@ -1398,20 +1437,21 @@ standardSettings:
       - majowka-nadmorzem.jpg
       - shapeShifters768.png
   derWeg:
-    rows: 7
-    cols: 6
+    rows: 9
+    cols: 20
     boardMarginLeft: -4
     boardMarginTop: 0
     boardRotation: 0
-    dxCenter: 101
-    dyCenter: 117
-    szField: 60
+    dxCenter: 75
+    dyCenter: 111
+    szField: 109
     szPerle: 75
     szPoolPerle: 50
-    fieldColor: "#ffffff80"
+    dimming: 50
+    fieldColor: "#FFFFFF00"
     baseColor: "#136EE9FF"
-    boardLayout: hex1
-    freeForm: false
+    boardLayout: hex
+    freeForm: true
     uniformRows: false
     boardFilename: brett18_56.png
     wGap: 15
@@ -1427,7 +1467,7 @@ standardSettings:
     bgBoard: silver
     fgBoard: black
     fzLabel: 16
-    nFields: 51
+    nFields: 176
     wBoard: 100%
     hBoard: 768
     boardStandard: none
@@ -1459,6 +1499,7 @@ standardSettings:
     szField: 60
     szPerle: 100
     szPoolPerle: 50
+    dimming: 50
     fieldColor: "#ffffff80"
     baseColor: "#1D1351FF"
     boardLayout: hex1
@@ -1510,6 +1551,7 @@ standardSettings:
     szField: 78
     szPerle: 100
     szPoolPerle: 50
+    dimming: 50
     fieldColor: "#ffffff80"
     baseColor: "#060A11FF"
     boardLayout: hex1
@@ -1561,6 +1603,7 @@ standardSettings:
     szField: 117
     szPerle: 83
     szPoolPerle: 73
+    dimming: 50
     fieldColor: "#042C283C"
     baseColor: "#040404FF"
     boardLayout: hex

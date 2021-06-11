@@ -483,7 +483,7 @@ function createPerle(perle, dParent, sz = 64, wf = 1.3, hf = 0.4, useNewImage = 
 	} else {
 		//styling for pool perle
 		let d = iDiv(perle);
-		mStyleX(d, { opacity: .6 });
+		mStyleX(d, { opacity: 1-G.settings.dimming/100 });
 		let sz = G.settings.szPoolPerle;
 		if (isdef(sz)){
 			mStyleX(d.firstChild,{w: sz,h:sz});
