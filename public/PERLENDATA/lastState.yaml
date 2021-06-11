@@ -10,22 +10,22 @@ randomIndices:
   - 8
   - 9
 settings:
-  rows: 7
-  cols: 6
+  rows: 9
+  cols: 3
   boardMarginLeft: 0
   boardMarginTop: 0
   boardRotation: 0
-  dxCenter: 101
-  dyCenter: 117
+  dxCenter: 100
+  dyCenter: 92
   szField: 60
   szPerle: 100
   szPoolPerle: 50
-  fieldColor: "#ffffff80"
-  baseColor: rgb(76, 127, 206)
+  fieldColor: "#ff000020"
+  baseColor: black
   boardLayout: hex1
   freeForm: false
   uniformRows: false
-  boardFilename: dateTree.jpg
+  boardFilename: shapeShifters768.png
   wGap: 15
   hGap: 13
   backgroundSize: initial
@@ -39,7 +39,7 @@ settings:
   bgBoard: silver
   fgBoard: black
   fzLabel: 16
-  nFields: 51
+  nFields: 43
   wBoard: 100%
   hBoard: 768
   boardStandard: none
@@ -47,7 +47,7 @@ settings:
   numPool: 10
   labelPos: hover
   naturalImageSize:
-    w: 1366
+    w: 768
     h: 768
   idealBg: rgb(76, 127, 206)
 state:
@@ -94,14 +94,6 @@ state:
     - 8
     - 9
   boardArr:
-    - null
-    - null
-    - null
-    - null
-    - null
-    - null
-    - null
-    - null
     - null
     - null
     - null

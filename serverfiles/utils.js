@@ -20,10 +20,10 @@ function makeid(length) {
 	}
 	return result;
 }
-function fromYamlFile(path) {
+function fromYamlFile(filePath) {
 	try {
-		//console.log('path',path)
-		let fileContents = fs.readFileSync(path, 'utf8');
+		//console.log('filePath',filePath)
+		let fileContents = fs.readFileSync(filePath, 'utf8');
 		//console.log(typeof fileContents);
 		//console.log(fileContents)
 		let data = yaml.parse(fileContents);
@@ -34,10 +34,10 @@ function fromYamlFile(path) {
 		return null;
 	}
 }
-function toYamlFile(data, path) {
+function toYamlFile(data, filePath) {
 	let yamlStr = yaml.stringify(data);
 	//console.log('?')
-	fs.writeFileSync(path, yamlStr, 'utf8');
+	fs.writeFileSync(filePath, yamlStr, 'utf8');
 }
 function getFilenames(dir, callback) {
 	let filenames = [];
@@ -81,7 +81,7 @@ function listFiles(perlen) {
 
 
 //#region ?
-function toPngFile(data, path) {
+function toPngFile(data, filePath) {
 	const fs = require('fs');
 	const fetch = require('node-fetch');
 
