@@ -1,5 +1,10 @@
 var ActiveButton = null;
 
+function onClickReset(){	Socket.emit('lastState',{u:username});}
+function handleLastState(data){
+	console.log('...lastState:',data);
+}
+
 function openAux(title, button) {
 	resetActiveButton();
 	show(dAux);

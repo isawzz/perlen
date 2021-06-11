@@ -67,10 +67,10 @@ var upload = multer({ storage: storage });
 
 app.post('/perlen', upload.array('perlen'), (req, res) => {
 	res.redirect('/');
-	console.log('#files',req.files.length);
+	console.log('#files', req.files.length);
 	//console.log(Object.keys(req.files[0]));
-	req.files.map(x => simple.addPerle(x.filename,false)); //console.log(x.filename));
-	console.log('perlen#',Object.keys(simple.perlenDict).length);
+	req.files.map(x => simple.addPerle(x.filename, false)); //console.log(x.filename));
+	console.log('perlen#', Object.keys(simple.perlenDict).length);
 });
 app.post('/bretter', upload.array('bretter'), (req, res) => {
 	res.redirect('/');
@@ -108,6 +108,10 @@ io.on('connection', client => {
 	client.on('removeRandom', x => simple.handleRemoveRandom(client, x));
 	client.on('clearPoolarr', x => simple.handleClearPoolarr(client, x));
 	client.on('clearPool', x => simple.handleClearPoolarr(client, x));
+
+	client.on('lastState', () => client.emit('lastState', {
+		data: utils.fromYamlFile(path.join(__dirname, PerlenPath + 'lastState.yaml'))
+	}));
 
 });
 
