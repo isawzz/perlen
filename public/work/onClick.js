@@ -1,8 +1,18 @@
 var ActiveButton = null;
 
-function onClickReset(){	Socket.emit('lastState',{u:username});}
+function onClickReset(){	Socket.emit('lastState',{u:U.username});}
 function handleLastState(data){
 	console.log('...lastState:',data);
+	data=data.data;
+	let [s,parr,barr,rand,pool]=[data.settings,data.state.poolArr,data.state.boardArr,data.randomIndices,data.state.pool];
+	console.log(
+		'settings',s,
+		'\nboardFilename',s.boardFilename,
+		'\npoolArr',parr,
+		'\nboard',barr.filter(x=>x),
+		'\nrandom',rand,
+		// '\n',
+	);
 }
 
 function openAux(title, button) {

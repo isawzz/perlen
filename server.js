@@ -110,7 +110,7 @@ io.on('connection', client => {
 	client.on('clearPool', x => simple.handleClearPoolarr(client, x));
 
 	client.on('lastState', () => client.emit('lastState', {
-		data: utils.fromYamlFile(path.join(__dirname, PerlenPath + 'lastState.yaml'))
+		data: utils.fromYamlFile(path.join(__dirname, PERLEN_DATA_PATH + 'lastState.yaml'))
 	}));
 
 });

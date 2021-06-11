@@ -10,22 +10,22 @@ randomIndices:
   - 8
   - 9
 settings:
-  rows: 9
-  cols: 3
+  rows: 7
+  cols: 6
   boardMarginLeft: 0
   boardMarginTop: 0
   boardRotation: 0
-  dxCenter: 100
-  dyCenter: 92
+  dxCenter: 101
+  dyCenter: 117
   szField: 60
   szPerle: 100
   szPoolPerle: 50
-  fieldColor: "#ff000020"
-  baseColor: black
+  fieldColor: "#ffffff80"
+  baseColor: rgb(76, 127, 206)
   boardLayout: hex1
   freeForm: false
   uniformRows: false
-  boardFilename: shapeShifters768.png
+  boardFilename: dateTree.jpg
   wGap: 15
   hGap: 13
   backgroundSize: initial
@@ -39,7 +39,7 @@ settings:
   bgBoard: silver
   fgBoard: black
   fzLabel: 16
-  nFields: 43
+  nFields: 51
   wBoard: 100%
   hBoard: 768
   boardStandard: none
@@ -47,48 +47,49 @@ settings:
   numPool: 10
   labelPos: hover
   naturalImageSize:
-    w: 768
+    w: 1366
     h: 768
   idealBg: rgb(76, 127, 206)
 state:
   pool:
     "0":
-      key: fe metaphysik
+      key: lone wolves
       index: 0
     "1":
-      key: wandel
+      key: mutter
       index: 1
     "2":
-      key: religion
+      key: seher
       index: 2
     "3":
-      key: rassismus 01
+      key: das leben ein film
       index: 3
     "4":
-      key: chillax2
+      key: rechts links
       index: 4
     "5":
-      key: rot
+      key: wissenswirtschaft
       index: 5
     "6":
-      key: why do you need to drag him in
+      key: jäger und sammler
       index: 6
     "7":
-      key: komplex
+      key: wut
       index: 7
     "8":
-      key: nazi
+      key: diskussion
       index: 8
     "9":
-      key: political correctness 02
+      key: blockchain
       index: 9
   poolArr:
-    - 6
-    - 3
     - 0
+    - 1
     - 2
+    - 3
     - 4
     - 5
+    - 6
     - 7
     - 8
     - 9
@@ -114,7 +115,15 @@ state:
     - null
     - null
     - null
-    - 1
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
+    - null
     - null
     - null
     - null
