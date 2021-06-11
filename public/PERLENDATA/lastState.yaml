@@ -10,22 +10,22 @@ randomIndices:
   - 8
   - 9
 settings:
-  rows: 7
-  cols: 6
-  boardMarginLeft: -4
+  rows: 9
+  cols: 3
+  boardMarginLeft: 0
   boardMarginTop: 0
   boardRotation: 0
-  dxCenter: 101
-  dyCenter: 117
-  szField: 100
+  dxCenter: 100
+  dyCenter: 92
+  szField: 60
   szPerle: 100
   szPoolPerle: 50
-  fieldColor: "#ffffff80"
-  baseColor: "#136EE9FF"
+  fieldColor: "#ff000020"
+  baseColor: black
   boardLayout: hex1
   freeForm: false
   uniformRows: false
-  boardFilename: brett18_56.png
+  boardFilename: shapeShifters768.png
   wGap: 15
   hGap: 13
   backgroundSize: initial
@@ -39,7 +39,7 @@ settings:
   bgBoard: silver
   fgBoard: black
   fzLabel: 16
-  nFields: 51
+  nFields: 43
   wBoard: 100%
   hBoard: 768
   boardStandard: none
@@ -47,58 +47,51 @@ settings:
   numPool: 10
   labelPos: hover
   naturalImageSize:
-    w: 1536
+    w: 768
     h: 768
   idealBg: rgb(76, 127, 206)
 state:
   pool:
     "0":
-      key: verschwörungstheorie
+      key: fe metaphysik
       index: 0
     "1":
-      key: überleben
+      key: wandel
       index: 1
     "2":
-      key: zart
+      key: religion
       index: 2
     "3":
-      key: vorurteil
+      key: rassismus 01
       index: 3
     "4":
-      key: violett
+      key: chillax2
       index: 4
     "5":
-      key: european theatre
+      key: rot
       index: 5
     "6":
-      key: culture wars
+      key: why do you need to drag him in
       index: 6
     "7":
-      key: das große rote megaphon
+      key: komplex
       index: 7
     "8":
-      key: cia
+      key: nazi
       index: 8
     "9":
-      key: wissenswirtschaft
+      key: political correctness 02
       index: 9
-    "10":
-      key: zeiträume
-      index: 10
-    "11":
-      key: böses will und gutes schafft
-      index: 11
-    "12":
-      key: zen
-      index: 12
   poolArr:
-    - 2
-    - 3
     - 6
+    - 3
+    - 0
+    - 2
+    - 4
+    - 5
+    - 7
+    - 8
     - 9
-    - 10
-    - 11
-    - 12
   boardArr:
     - null
     - null
@@ -111,18 +104,16 @@ state:
     - null
     - null
     - null
-    - 7
     - null
     - null
     - null
     - null
     - null
     - null
-    - 4
     - null
     - null
     - null
-    - 0
+    - null
     - 1
     - null
     - null
@@ -133,15 +124,9 @@ state:
     - null
     - null
     - null
-    - 5
     - null
     - null
     - null
-    - null
-    - null
-    - null
-    - null
-    - 8
     - null
     - null
     - null

@@ -59,7 +59,7 @@
 			<div id='dButtonsRight' style="position: absolute; right:0px; padding:10px; display:flex">
 				<!-- <div id='dResetButton'  onclick='onClickReset()' class='toolbarButtonClass'>♻️</div>	-->			
 				<!-- <div id='dHelpButton'  onclick='show("dHelpWindow");' class='toolbarButtonClass'>🪔</div>  -->
-				<div id='dColorButton' onclick='setNewBackgroundColor();' class='toolbarButtonClass'>🎨</div>
+				<div id='dColorButton' onclick='onClickPaletteButton();' class='toolbarButtonClass'>🎨</div>
 			</div>
 			<div class="flex-column flex-center">
 				<!-- <h2 id="hTitle" style='color:#ffffff40;text-shadow: 0px 2px 25px rgba(255, 255, 255, .5);'>Welcome to the Game</h2> -->
@@ -144,6 +144,10 @@
 				<button style="margin-top:10px;width:90px;padding:4px 14px" class="buttonClass" onclick="onClickCloseSettings()">close</button>
 			</div>
 		</div>
+		<!-- <div id='dSheet' style='z-index:1006;left:0;top:90px;position:fixed;width:1000px;height:1000px;'> -->
+		<!-- <canvas id='sheet' style='border:solid 2px blue;z-index:1006;position:fixed;' ></canvas> -->
+		<!-- </div> -->
+		
 
 		<!-- <script src='../alibs/socket.io.js'></script> -->
 		<script src='https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js'></script>
@@ -173,6 +177,7 @@
 		<script src="./work/done/users.js"></script>
 		<script src="./work/done/userAvatar.js"></script>
 
+		<script src="./work/canvas.js"></script>
 		<script src="./work/fake.js"></script>
 		<script src="./work/item.js"></script>
 		<script src="./work/onClick.js"></script>

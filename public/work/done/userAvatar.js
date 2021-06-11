@@ -22,13 +22,13 @@ function hideMouseAvatar(username) { hide(getAvatar(username)); }
 function handleMouse(data) {
 	//if (data.username == Username) return; 
 	let [x, y] = [data.x, data.y];
-	x += $('#dFieldArea').offset().left;
-	y += $('#dFieldArea').offset().top;
+	x += $('#dFieldArea').offset().left-$(window).scrollLeft();
+	y += $('#dFieldArea').offset().top- $(window).scrollTop();
 	//console.log('got:',x,y)
 	moveAvatar(data.username, x,y);
 }
-function handleShow(data) { if (data.username != Username) showMouseAvatar(data.username); }
-function handleHide(data) { if (data.username != Username) hideMouseAvatar(data.username); }
+function handleShow(data) { showMouseAvatar(data.username); }
+function handleHide(data) { hideMouseAvatar(data.username); }
 
 function sendMousePosition(ev) {
 	//console.log('username', Username, ev.pageX, ev.pageY)
@@ -37,7 +37,7 @@ function sendMousePosition(ev) {
 
 	//let elem = mBy;
 	let [x, y] = [ev.pageX, ev.pageY];
-	x = (ev.pageX - $('#dFieldArea').offset().left); //+ $(window).scrollLeft();
+	x = (ev.pageX - $('#dFieldArea').offset().left);// +$(window).scrollLeft();
 	y = (ev.pageY - $('#dFieldArea').offset().top);// + $(window).scrollTop();
 
 	//console.log('pos', x, y)

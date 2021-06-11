@@ -6,11 +6,16 @@ class SimpleClass7 {
 		this.initialPoolSelected = false;
 		this.settings = {};
 		openToolbar();
+
+		//this.sheet=new BlankSheet(Socket,mBy('sheet'));
 	}
 	presentGameState(data) {
 
 		//setTimeout(		onClickEditLayout,200		);
 		//console.log('kkkkkkk',1 !== true, isNumber(true),true===1);
+
+
+
 		console.log('_________________________gs', StepCounter); StepCounter += 1;
 
 		mStyleX(dTable, { h: window.innerHeight });
