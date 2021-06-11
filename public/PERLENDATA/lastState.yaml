@@ -17,8 +17,8 @@ settings:
   boardRotation: 0
   dxCenter: 101
   dyCenter: 117
-  szField: 60
-  szPerle: 75
+  szField: 100
+  szPerle: 100
   szPoolPerle: 50
   fieldColor: "#ffffff80"
   baseColor: "#136EE9FF"
@@ -82,12 +82,23 @@ state:
     "9":
       key: wissenswirtschaft
       index: 9
+    "10":
+      key: zeiträume
+      index: 10
+    "11":
+      key: böses will und gutes schafft
+      index: 11
+    "12":
+      key: zen
+      index: 12
   poolArr:
     - 2
     - 3
     - 6
-    - 8
     - 9
+    - 10
+    - 11
+    - 12
   boardArr:
     - null
     - null
@@ -130,7 +141,7 @@ state:
     - null
     - null
     - null
-    - null
+    - 8
     - null
     - null
     - null

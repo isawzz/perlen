@@ -114,10 +114,6 @@ traum:
   text: traum
   key: traum
   path: traum.png
-überleben:
-  text: überleben
-  key: überleben
-  path: überleben.png
 umgekehrt:
   text: umgekehrt
   key: umgekehrt
@@ -210,3 +206,495 @@ zukunftsszenarien:
   text: zukunftsszenarien
   key: zukunftsszenarien
   path: zukunftsszenarien.png
+überleben:
+  text: überleben
+  key: überleben
+  path: überleben.png
+alt-right:
+  text: alt-right
+  key: alt-right
+  path: alt-right.png
+angkor wat:
+  text: angkor wat
+  key: angkor wat
+  path: angkor wat.png
+archetyp:
+  text: archetyp
+  key: archetyp
+  path: archetyp.png
+argument:
+  text: argument
+  key: argument
+  path: argument.png
+ausbildung:
+  text: ausbildung
+  key: ausbildung
+  path: ausbildung.png
+bach:
+  text: bach
+  key: bach
+  path: bach.png
+beethoven:
+  text: beethoven
+  key: beethoven
+  path: beethoven.png
+bildung:
+  text: bildung
+  key: bildung
+  path: bildung.png
+blau:
+  text: blau
+  key: blau
+  path: blau.png
+blockchain:
+  text: blockchain
+  key: blockchain
+  path: blockchain.png
+böses will und gutes schafft:
+  text: böses will und gutes schafft
+  key: böses will und gutes schafft
+  path: böses will und gutes schafft.png
+buddhismus:
+  text: buddhismus
+  key: buddhismus
+  path: buddhismus.png
+cafehauskultur:
+  text: cafehauskultur
+  key: cafehauskultur
+  path: cafehauskultur.png
+cafehauskultur_alt:
+  text: cafehauskultur_alt
+  key: cafehauskultur_alt
+  path: cafehauskultur_alt.png
+carelessness:
+  text: carelessness
+  key: carelessness
+  path: carelessness.png
+chillax:
+  text: chillax
+  key: chillax
+  path: chillax.png
+chillax2:
+  text: chillax2
+  key: chillax2
+  path: chillax2.png
+christentum:
+  text: christentum
+  key: christentum
+  path: christentum.png
+ego:
+  text: ego
+  key: ego
+  path: ego.png
+egoless:
+  text: egoless
+  key: egoless
+  path: egoless.png
+einfach:
+  text: einfach
+  key: einfach
+  path: einfach.png
+emergence:
+  text: emergence
+  key: emergence
+  path: emergence.png
+faschismus:
+  text: faschismus
+  key: faschismus
+  path: faschismus.png
+fe metaphysik:
+  text: fe metaphysik
+  key: fe metaphysik
+  path: fe metaphysik.png
+fear:
+  text: fear
+  key: fear
+  path: fear.png
+flavors of joy:
+  text: flavors of joy
+  key: flavors of joy
+  path: flavors of joy.png
+fpö:
+  text: fpö
+  key: fpö
+  path: fpö.png
+gelb:
+  text: gelb
+  key: gelb
+  path: gelb.png
+geschichte:
+  text: geschichte
+  key: geschichte
+  path: geschichte.png
+gier:
+  text: gier
+  key: gier
+  path: gier.png
+grosse seuche:
+  text: grosse seuche
+  key: grosse seuche
+  path: grosse seuche.png
+grün:
+  text: grün
+  key: grün
+  path: grün.png
+gutes will und böses schafft:
+  text: gutes will und böses schafft
+  key: gutes will und böses schafft
+  path: gutes will und böses schafft.png
+handwerk:
+  text: handwerk
+  key: handwerk
+  path: handwerk.png
+hinduismus:
+  text: hinduismus
+  key: hinduismus
+  path: hinduismus.png
+historical time dilation:
+  text: historical time dilation
+  key: historical time dilation
+  path: historical time dilation.png
+hoffnung:
+  text: hoffnung
+  key: hoffnung
+  path: hoffnung.png
+idee:
+  text: idee
+  key: idee
+  path: idee.png
+immer bessere werkzeuge:
+  text: immer bessere werkzeuge
+  key: immer bessere werkzeuge
+  path: immer bessere werkzeuge.png
+immigration:
+  text: immigration
+  key: immigration
+  path: immigration.png
+impostor syndrom:
+  text: impostor syndrom
+  key: impostor syndrom
+  path: impostor syndrom.png
+individualismus:
+  text: individualismus
+  key: individualismus
+  path: individualismus.png
+industrie:
+  text: industrie
+  key: industrie
+  path: industrie.png
+introspektion:
+  text: introspektion
+  key: introspektion
+  path: introspektion.png
+investition:
+  text: investition
+  key: investition
+  path: investition.png
+islam:
+  text: islam
+  key: islam
+  path: islam.png
+jäger und sammler:
+  text: jäger und sammler
+  key: jäger und sammler
+  path: jäger und sammler.png
+joy:
+  text: joy
+  key: joy
+  path: joy.png
+kalter krieg:
+  text: kalter krieg
+  key: kalter krieg
+  path: kalter krieg.png
+kampfbegriff:
+  text: kampfbegriff
+  key: kampfbegriff
+  path: kampfbegriff.png
+katalysator weltsicht:
+  text: katalysator weltsicht
+  key: katalysator weltsicht
+  path: katalysator weltsicht.png
+kind:
+  text: kind
+  key: kind
+  path: kind.png
+klassisches chinesisch:
+  text: klassisches chinesisch
+  key: klassisches chinesisch
+  path: klassisches chinesisch.png
+kollektiventscheidung:
+  text: kollektiventscheidung
+  key: kollektiventscheidung
+  path: kollektiventscheidung.png
+komplex:
+  text: komplex
+  key: komplex
+  path: komplex.png
+koreanisch:
+  text: koreanisch
+  key: koreanisch
+  path: koreanisch.png
+kreativität:
+  text: kreativität
+  key: kreativität
+  path: kreativität.png
+krieg vater aller dinge:
+  text: krieg vater aller dinge
+  key: krieg vater aller dinge
+  path: krieg vater aller dinge.png
+kriegstote:
+  text: kriegstote
+  key: kriegstote
+  path: kriegstote.png
+kriegszerstörung:
+  text: kriegszerstörung
+  key: kriegszerstörung
+  path: kriegszerstörung.png
+kultur:
+  text: kultur
+  key: kultur
+  path: kultur.png
+kunst:
+  text: kunst
+  key: kunst
+  path: kunst.png
+landwirtschaft:
+  text: landwirtschaft
+  key: landwirtschaft
+  path: landwirtschaft.png
+langsam:
+  text: langsam
+  key: langsam
+  path: langsam.png
+living in a bubble:
+  text: living in a bubble
+  key: living in a bubble
+  path: living in a bubble.png
+lone wolves:
+  text: lone wolves
+  key: lone wolves
+  path: lone wolves.png
+machtspiel:
+  text: machtspiel
+  key: machtspiel
+  path: machtspiel.png
+maske:
+  text: maske
+  key: maske
+  path: maske.png
+maximize agency:
+  text: maximize agency
+  key: maximize agency
+  path: maximize agency.png
+mit blutigen augen in die welt schauen:
+  text: mit blutigen augen in die welt schauen
+  key: mit blutigen augen in die welt schauen
+  path: mit blutigen augen in die welt schauen.png
+moderne:
+  text: moderne
+  key: moderne
+  path: moderne.png
+monarchie:
+  text: monarchie
+  key: monarchie
+  path: monarchie.png
+mozart:
+  text: mozart
+  key: mozart
+  path: mozart.png
+mutter:
+  text: mutter
+  key: mutter
+  path: mutter.png
+natur:
+  text: natur
+  key: natur
+  path: natur.png
+nazi:
+  text: nazi
+  key: nazi
+  path: nazi.png
+neoliberalismus:
+  text: neoliberalismus
+  key: neoliberalismus
+  path: neoliberalismus.png
+neuer hut:
+  text: neuer hut
+  key: neuer hut
+  path: neuer hut.png
+neutraler begriff:
+  text: neutraler begriff
+  key: neutraler begriff
+  path: neutraler begriff.png
+nicht wissen:
+  text: nicht wissen
+  key: nicht wissen
+  path: nicht wissen.png
+nietzsche:
+  text: nietzsche
+  key: nietzsche
+  path: nietzsche.png
+noosphäre:
+  text: noosphäre
+  key: noosphäre
+  path: noosphäre.png
+not:
+  text: not
+  key: not
+  path: not.png
+observe act experiment:
+  text: observe act experiment
+  key: observe act experiment
+  path: observe act experiment.png
+ocean:
+  text: ocean
+  key: ocean
+  path: ocean.png
+ocean2:
+  text: ocean2
+  key: ocean2
+  path: ocean2.png
+oligarchie:
+  text: oligarchie
+  key: oligarchie
+  path: oligarchie.png
+optimismus:
+  text: optimismus
+  key: optimismus
+  path: optimismus.png
+orange:
+  text: orange
+  key: orange
+  path: orange.png
+pessimismus:
+  text: pessimismus
+  key: pessimismus
+  path: pessimismus.png
+pflanze:
+  text: pflanze
+  key: pflanze
+  path: pflanze.png
+planetarium:
+  text: planetarium
+  key: planetarium
+  path: planetarium.png
+playful:
+  text: playful
+  key: playful
+  path: playful.png
+political correctness 01:
+  text: political correctness 01
+  key: political correctness 01
+  path: political correctness 01.png
+political correctness 02:
+  text: political correctness 02
+  key: political correctness 02
+  path: political correctness 02.png
+power:
+  text: power
+  key: power
+  path: power.png
+projektion:
+  text: projektion
+  key: projektion
+  path: projektion.png
+rassismus 01:
+  text: rassismus 01
+  key: rassismus 01
+  path: rassismus 01.png
+rassismus 02:
+  text: rassismus 02
+  key: rassismus 02
+  path: rassismus 02.png
+rechts links:
+  text: rechts links
+  key: rechts links
+  path: rechts links.png
+religion:
+  text: religion
+  key: religion
+  path: religion.png
+rohstoff:
+  text: rohstoff
+  key: rohstoff
+  path: rohstoff.png
+rolle:
+  text: rolle
+  key: rolle
+  path: rolle.png
+rot:
+  text: rot
+  key: rot
+  path: rot.png
+schatten:
+  text: schatten
+  key: schatten
+  path: schatten.png
+schock:
+  text: schock
+  key: schock
+  path: schock.png
+schulen:
+  text: schulen
+  key: schulen
+  path: schulen.png
+schwarz:
+  text: schwarz
+  key: schwarz
+  path: schwarz.png
+seher:
+  text: seher
+  key: seher
+  path: seher.png
+spanisch:
+  text: spanisch
+  key: spanisch
+  path: spanisch.png
+spiel:
+  text: spiel
+  key: spiel
+  path: spiel.png
+spiritualität:
+  text: spiritualität
+  key: spiritualität
+  path: spiritualität.png
+sprache:
+  text: sprache
+  key: sprache
+  path: sprache.png
+stern:
+  text: stern
+  key: stern
+  path: stern.png
+struktur:
+  text: struktur
+  key: struktur
+  path: struktur.png
+taoismus:
+  text: taoismus
+  key: taoismus
+  path: taoismus.png
+the great reset:
+  text: the great reset
+  key: the great reset
+  path: the great reset.png
+weiss:
+  text: weiss
+  key: weiss
+  path: weiss.png
+weltkrieg I:
+  text: weltkrieg I
+  key: weltkrieg I
+  path: weltkrieg I.png
+weltkrieg II:
+  text: weltkrieg II
+  key: weltkrieg II
+  path: weltkrieg II.png
+werte:
+  text: werte
+  key: werte
+  path: werte.png
+why do you need to drag him in:
+  text: why do you need to drag him in
+  key: why do you need to drag him in
+  path: why do you need to drag him in.png
