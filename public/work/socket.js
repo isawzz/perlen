@@ -52,8 +52,10 @@ function handleUserMessage(data) {
 
 //sending
 function sendLogin(username) { logClientSend('login', username); Socket.emit('login', { data: username }); }
-function sendReset(settings) { logClientSend('reset', Username); Socket.emit('reset', { settings: settings, username: Username }); }
 function sendUserMessage(data) { logClientSend('userMessage', data.username); Socket.emit('userMessage', { data: data }); }
+
+//DEPRECATED:
+function sendReset(settings) { logClientSend('reset', Username); Socket.emit('reset', { settings: settings, username: Username }); }
 function sendFilename(msg) { logClientSend('filename', msg); Socket.emit('filename', { msg }); }
 function sendSettings(){
 	logClientSend('settings', G.settings);
