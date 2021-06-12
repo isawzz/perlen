@@ -279,6 +279,9 @@ class SimpleClass7 {
 				let key = p.key;
 				// console.log(p, key)
 				copyKeys(this.perlenDict[key], p);
+
+				console.log(p.key);
+
 				p.path = mPath(p);
 			}
 		}
@@ -501,5 +504,23 @@ function dragStartPreventionOnSidebarOpen() {
 	return true;
 }
 function isFarbPerle(perle) { return isGermanColorName(perle.key); }
-function mPath(p) { return PERLENPATH_FRONT + '/perlen/' + p.path; }
+function mPath(p) { 
+	console.log(p);
+	if (!(p.path.includes('.'))) p.path += '.png';
+
+	return PERLENPATH_FRONT + 'perlen/' + p.path; 
+
+}
+
+// function mPath(p) {
+// 	let pre = PERLENPATH_FRONT+'/perlen/';
+// 	let post = '.png';
+// 	if (isdef(p.path)) return p.path[0] == '.' ? p.path : pre + p.path + post;
+// 	let x = p.text.toLowerCase();
+// 	x = replaceAll(x, "'", "");
+// 	//x = replaceAll(x, " ", "_");
+// 	return pre + x + post;
+// }
+
+
 

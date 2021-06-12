@@ -162,7 +162,6 @@ function onClickSaveAsPrefab(){
 	closeAux();
 
 }
-
 function onClickClearPerlenpool() {
 	//perlen im pool werden destroyed
 	//die am board bleiben
@@ -202,6 +201,9 @@ function onClickAddToPool(ev) {
 	for (const k in G.perlenDict) {
 		let p = jsCopy(G.perlenDict[k]);
 		p.path = mPath(p);
+		console.log('path',p.path)
+		//if (!(p.path.includes('.'))) p.path +='.png';
+		//if (k=='adherent' || k=='fringe') console.log(p.path,p)
 		let ui = createPerle(p, d, 64, 1.3, .4);
 		mStyleX(ui, { opacity: 1 });
 		iAdd(p, { div: ui });

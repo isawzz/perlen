@@ -1,3 +1,11 @@
+100 schulen:
+  text: 100 schulen
+  key: 100 schulen
+  path: 100 schulen
+adherent:
+  text: adherent
+  key: adherent
+  path: adherent
 agent:
   key: agent
   path: agent.png
@@ -18,10 +26,86 @@ alles steigt aus der quelle:
   text: alles steigt aus der quelle
   key: alles steigt aus der quelle
   path: alles steigt aus der quelle.png
+alt-right:
+  text: alt-right
+  key: alt-right
+  path: alt-right.png
+angkor wat:
+  text: angkor wat
+  key: angkor wat
+  path: angkor wat.png
+archetyp:
+  text: archetyp
+  key: archetyp
+  path: archetyp.png
+argument:
+  text: argument
+  key: argument
+  path: argument.png
+ausbildung:
+  text: ausbildung
+  key: ausbildung
+  path: ausbildung.png
+bach:
+  text: bach
+  key: bach
+  path: bach.png
+beethoven:
+  text: beethoven
+  key: beethoven
+  path: beethoven.png
 begeisterung:
   text: begeisterung
   key: begeisterung
   path: begeisterung.png
+bildung:
+  text: bildung
+  key: bildung
+  path: bildung.png
+blau:
+  text: blau
+  key: blau
+  path: blau.png
+blockchain:
+  text: blockchain
+  key: blockchain
+  path: blockchain.png
+buddhismus:
+  text: buddhismus
+  key: buddhismus
+  path: buddhismus.png
+böses will und gutes schafft:
+  text: böses will und gutes schafft
+  key: böses will und gutes schafft
+  path: böses will und gutes schafft.png
+cafehauskultur:
+  text: cafehauskultur
+  key: cafehauskultur
+  path: cafehauskultur.png
+cafehauskultur_alt:
+  text: cafehauskultur_alt
+  key: cafehauskultur_alt
+  path: cafehauskultur_alt.png
+carelessness:
+  text: carelessness
+  key: carelessness
+  path: carelessness.png
+causality:
+  text: causality
+  key: causality
+  path: causality
+chillax:
+  text: chillax
+  key: chillax
+  path: chillax.png
+chillax2:
+  text: chillax2
+  key: chillax2
+  path: chillax2.png
+christentum:
+  text: christentum
+  key: christentum
+  path: christentum.png
 cia:
   text: cia
   key: cia
@@ -78,6 +162,26 @@ diskussion:
   text: diskussion
   key: diskussion
   path: diskussion.png
+double_pendulum:
+  text: double_pendulum
+  key: double_pendulum
+  path: double_pendulum
+ego:
+  text: ego
+  key: ego
+  path: ego.png
+egoless:
+  text: egoless
+  key: egoless
+  path: egoless.png
+einfach:
+  text: einfach
+  key: einfach
+  path: einfach.png
+emergence:
+  text: emergence
+  key: emergence
+  path: emergence.png
 endzeit:
   text: endzeit
   key: endzeit
@@ -98,206 +202,6 @@ evolution:
   text: evolution
   key: evolution
   path: evolution.png
-geld:
-  text: geld
-  key: geld
-  path: geld.png
-tier:
-  text: tier
-  key: tier
-  path: tier.png
-to be placed:
-  text: to be placed
-  key: to be placed
-  path: to be placed.png
-traum:
-  text: traum
-  key: traum
-  path: traum.png
-umgekehrt:
-  text: umgekehrt
-  key: umgekehrt
-  path: umgekehrt.png
-uncertainty:
-  text: uncertainty
-  key: uncertainty
-  path: uncertainty.png
-verschwörungstheorie:
-  text: verschwörungstheorie
-  key: verschwörungstheorie
-  path: verschwörungstheorie.png
-vertreibung aus dem paradies:
-  text: vertreibung aus dem paradies
-  key: vertreibung aus dem paradies
-  path: vertreibung aus dem paradies.png
-violett:
-  text: violett
-  key: violett
-  path: violett.png
-vorurteil:
-  text: vorurteil
-  key: vorurteil
-  path: vorurteil.png
-wald:
-  text: wald
-  key: wald
-  path: wald.png
-wandel:
-  text: wandel
-  key: wandel
-  path: wandel.png
-wasser:
-  text: wasser
-  key: wasser
-  path: wasser.png
-wintersonne:
-  text: wintersonne
-  key: wintersonne
-  path: wintersonne.png
-wissen:
-  text: wissen
-  key: wissen
-  path: wissen.png
-wissensverlust:
-  text: wissensverlust
-  key: wissensverlust
-  path: wissensverlust.png
-wissenswirtschaft:
-  text: wissenswirtschaft
-  key: wissenswirtschaft
-  path: wissenswirtschaft.png
-woke:
-  text: woke
-  key: woke
-  path: woke.png
-wut:
-  text: wut
-  key: wut
-  path: wut.png
-yang:
-  text: yang
-  key: yang
-  path: yang.png
-yin:
-  text: yin
-  key: yin
-  path: yin.png
-zart:
-  text: zart
-  key: zart
-  path: zart.png
-zeit:
-  text: zeit
-  key: zeit
-  path: zeit.png
-zeiträume:
-  text: zeiträume
-  key: zeiträume
-  path: zeiträume.png
-zeitzyklen:
-  text: zeitzyklen
-  key: zeitzyklen
-  path: zeitzyklen.png
-zen:
-  text: zen
-  key: zen
-  path: zen.png
-zukunftsszenarien:
-  text: zukunftsszenarien
-  key: zukunftsszenarien
-  path: zukunftsszenarien.png
-überleben:
-  text: überleben
-  key: überleben
-  path: überleben.png
-alt-right:
-  text: alt-right
-  key: alt-right
-  path: alt-right.png
-angkor wat:
-  text: angkor wat
-  key: angkor wat
-  path: angkor wat.png
-archetyp:
-  text: archetyp
-  key: archetyp
-  path: archetyp.png
-argument:
-  text: argument
-  key: argument
-  path: argument.png
-ausbildung:
-  text: ausbildung
-  key: ausbildung
-  path: ausbildung.png
-bach:
-  text: bach
-  key: bach
-  path: bach.png
-beethoven:
-  text: beethoven
-  key: beethoven
-  path: beethoven.png
-bildung:
-  text: bildung
-  key: bildung
-  path: bildung.png
-blau:
-  text: blau
-  key: blau
-  path: blau.png
-blockchain:
-  text: blockchain
-  key: blockchain
-  path: blockchain.png
-böses will und gutes schafft:
-  text: böses will und gutes schafft
-  key: böses will und gutes schafft
-  path: böses will und gutes schafft.png
-buddhismus:
-  text: buddhismus
-  key: buddhismus
-  path: buddhismus.png
-cafehauskultur:
-  text: cafehauskultur
-  key: cafehauskultur
-  path: cafehauskultur.png
-cafehauskultur_alt:
-  text: cafehauskultur_alt
-  key: cafehauskultur_alt
-  path: cafehauskultur_alt.png
-carelessness:
-  text: carelessness
-  key: carelessness
-  path: carelessness.png
-chillax:
-  text: chillax
-  key: chillax
-  path: chillax.png
-chillax2:
-  text: chillax2
-  key: chillax2
-  path: chillax2.png
-christentum:
-  text: christentum
-  key: christentum
-  path: christentum.png
-ego:
-  text: ego
-  key: ego
-  path: ego.png
-egoless:
-  text: egoless
-  key: egoless
-  path: egoless.png
-einfach:
-  text: einfach
-  key: einfach
-  path: einfach.png
-emergence:
-  text: emergence
-  key: emergence
-  path: emergence.png
 faschismus:
   text: faschismus
   key: faschismus
@@ -314,14 +218,30 @@ flavors of joy:
   text: flavors of joy
   key: flavors of joy
   path: flavors of joy.png
+foreigner:
+  text: foreigner
+  key: foreigner
+  path: foreigner
 fpö:
   text: fpö
   key: fpö
   path: fpö.png
+fringe:
+  text: fringe
+  key: fringe
+  path: fringe
 gelb:
   text: gelb
   key: gelb
   path: gelb.png
+geld:
+  text: geld
+  key: geld
+  path: geld.png
+genetic engineering:
+  text: genetic engineering
+  key: genetic engineering
+  path: genetic engineering
 geschichte:
   text: geschichte
   key: geschichte
@@ -334,6 +254,10 @@ grosse seuche:
   text: grosse seuche
   key: grosse seuche
   path: grosse seuche.png
+große seuche:
+  text: große seuche
+  key: große seuche
+  path: große seuche
 grün:
   text: grün
   key: grün
@@ -362,6 +286,10 @@ idee:
   text: idee
   key: idee
   path: idee.png
+immer bessere modelle:
+  text: immer bessere modelle
+  key: immer bessere modelle
+  path: immer bessere modelle
 immer bessere werkzeuge:
   text: immer bessere werkzeuge
   key: immer bessere werkzeuge
@@ -394,14 +322,18 @@ islam:
   text: islam
   key: islam
   path: islam.png
-jäger und sammler:
-  text: jäger und sammler
-  key: jäger und sammler
-  path: jäger und sammler.png
 joy:
   text: joy
   key: joy
   path: joy.png
+jäger und sammler:
+  text: jäger und sammler
+  key: jäger und sammler
+  path: jäger und sammler.png
+kairos:
+  text: kairos
+  key: kairos
+  path: kairos
 kalter krieg:
   text: kalter krieg
   key: kalter krieg
@@ -410,6 +342,10 @@ kampfbegriff:
   text: kampfbegriff
   key: kampfbegriff
   path: kampfbegriff.png
+karte rot:
+  text: karte rot
+  key: karte rot
+  path: karte rot
 katalysator weltsicht:
   text: katalysator weltsicht
   key: katalysator weltsicht
@@ -466,6 +402,10 @@ langsam:
   text: langsam
   key: langsam
   path: langsam.png
+liberation from slavery:
+  text: liberation from slavery
+  key: liberation from slavery
+  path: liberation from slavery
 living in a bubble:
   text: living in a bubble
   key: living in a bubble
@@ -482,10 +422,18 @@ maske:
   text: maske
   key: maske
   path: maske.png
+mathematik:
+  text: mathematik
+  key: mathematik
+  path: mathematik
 maximize agency:
   text: maximize agency
   key: maximize agency
   path: maximize agency.png
+milieu:
+  text: milieu
+  key: milieu
+  path: milieu
 mit blutigen augen in die welt schauen:
   text: mit blutigen augen in die welt schauen
   key: mit blutigen augen in die welt schauen
@@ -566,6 +514,14 @@ orange:
   text: orange
   key: orange
   path: orange.png
+organisation:
+  text: organisation
+  key: organisation
+  path: organisation
+perlenbrett:
+  text: perlenbrett
+  key: perlenbrett
+  path: perlenbrett
 pessimismus:
   text: pessimismus
   key: pessimismus
@@ -626,6 +582,10 @@ rot:
   text: rot
   key: rot
   path: rot.png
+sceptic:
+  text: sceptic
+  key: sceptic
+  path: sceptic
 schatten:
   text: schatten
   key: schatten
@@ -662,6 +622,10 @@ sprache:
   text: sprache
   key: sprache
   path: sprache.png
+stamm:
+  text: stamm
+  key: stamm
+  path: stamm
 stern:
   text: stern
   key: stern
@@ -678,6 +642,58 @@ the great reset:
   text: the great reset
   key: the great reset
   path: the great reset.png
+tier:
+  text: tier
+  key: tier
+  path: tier.png
+to be placed:
+  text: to be placed
+  key: to be placed
+  path: to be placed.png
+traum:
+  text: traum
+  key: traum
+  path: traum.png
+umgekehrt:
+  text: umgekehrt
+  key: umgekehrt
+  path: umgekehrt.png
+uncertainty:
+  text: uncertainty
+  key: uncertainty
+  path: uncertainty.png
+verschwörungstheorie:
+  text: verschwörungstheorie
+  key: verschwörungstheorie
+  path: verschwörungstheorie.png
+verschwörungstheorie_hell:
+  text: verschwörungstheorie_hell
+  key: verschwörungstheorie_hell
+  path: verschwörungstheorie_hell
+vertreibung aus dem paradies:
+  text: vertreibung aus dem paradies
+  key: vertreibung aus dem paradies
+  path: vertreibung aus dem paradies.png
+violett:
+  text: violett
+  key: violett
+  path: violett.png
+vorurteil:
+  text: vorurteil
+  key: vorurteil
+  path: vorurteil.png
+wald:
+  text: wald
+  key: wald
+  path: wald.png
+wandel:
+  text: wandel
+  key: wandel
+  path: wandel.png
+wasser:
+  text: wasser
+  key: wasser
+  path: wasser.png
 weiss:
   text: weiss
   key: weiss
@@ -690,6 +706,14 @@ weltkrieg II:
   text: weltkrieg II
   key: weltkrieg II
   path: weltkrieg II.png
+wer will spielen endzeit:
+  text: wer will spielen endzeit
+  key: wer will spielen endzeit
+  path: wer will spielen endzeit
+werbung:
+  text: werbung
+  key: werbung
+  path: werbung
 werte:
   text: werte
   key: werte
@@ -698,3 +722,63 @@ why do you need to drag him in:
   text: why do you need to drag him in
   key: why do you need to drag him in
   path: why do you need to drag him in.png
+wintersonne:
+  text: wintersonne
+  key: wintersonne
+  path: wintersonne.png
+wissen:
+  text: wissen
+  key: wissen
+  path: wissen.png
+wissensverlust:
+  text: wissensverlust
+  key: wissensverlust
+  path: wissensverlust.png
+wissenswirtschaft:
+  text: wissenswirtschaft
+  key: wissenswirtschaft
+  path: wissenswirtschaft.png
+woke:
+  text: woke
+  key: woke
+  path: woke.png
+wut:
+  text: wut
+  key: wut
+  path: wut.png
+yang:
+  text: yang
+  key: yang
+  path: yang.png
+yin:
+  text: yin
+  key: yin
+  path: yin.png
+zart:
+  text: zart
+  key: zart
+  path: zart.png
+zeit:
+  text: zeit
+  key: zeit
+  path: zeit.png
+zeiträume:
+  text: zeiträume
+  key: zeiträume
+  path: zeiträume.png
+zeitzyklen:
+  text: zeitzyklen
+  key: zeitzyklen
+  path: zeitzyklen.png
+zen:
+  text: zen
+  key: zen
+  path: zen.png
+zukunftsszenarien:
+  text: zukunftsszenarien
+  key: zukunftsszenarien
+  path: zukunftsszenarien.png
+überleben:
+  text: überleben
+  key: überleben
+  path: überleben.png
