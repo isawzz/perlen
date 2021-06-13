@@ -462,7 +462,7 @@ class GP2 {
 
 		let lastSettings = base.jsCopy(this.settings);
 		delete lastSettings.boardFilenames;
-		let pathState=path.join(__dirname, PerlenPath + 'lastState.yaml');
+		let pathState= './public/PERLENDATA/lastState.yaml';
 		if (!NO_LAST_STATE) utils.toYamlFile({ randomIndices: this.randomIndices, settings: lastSettings, state: this.state }, pathState);
 
 		if (base.isdef(client)) client.emit('gameState', o); else this.io.emit('gameState', o);
