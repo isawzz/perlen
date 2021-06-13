@@ -2,7 +2,7 @@ module.exports = {
 	makeid,
 	fromYamlFile,
 	getFilenames,
-	toYamlFile,
+	toYamlFile, toYamlString,
 	convertPerlen,
 	listFiles,
 }
@@ -34,6 +34,7 @@ function fromYamlFile(filePath) {
 		return null;
 	}
 }
+function toYamlString(data){return yaml.stringify(data);}
 function toYamlFile(data, filePath) {
 	let yamlStr = yaml.stringify(data);
 	//console.log('?')

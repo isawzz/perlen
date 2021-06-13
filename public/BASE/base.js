@@ -3836,7 +3836,7 @@ if (this && typeof module == "object" && module.exports && this === module.expor
 		dict2list,
 		firstCond, firstCondDict, firstCondDictKey, formatDate,
 		getFilename, getPublicPath,
-		intersection, isdef, isEmpty, jsCopy, isLiteral, isList,
+		intersection, isdef, isEmpty, jsCopy, isLiteral, isList, isString,
 		nundef,
 		range, randomNumber, removeInPlace,
 		stringBefore, stringAfter, stringAfterLast,

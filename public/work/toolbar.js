@@ -42,6 +42,7 @@ class ToolbarClass{
 		// this.addButton('addToPool',onClickAddToPool,'add to pool');
 		this.addButton('add10Random',onClickAdd10Random,'add 10 random');
 		mLinebreak(this.dParent)
+		this.addButton('uploadLastState',onClickUploadLastState,'upload lastState');
 		
 	}
 }

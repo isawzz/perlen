@@ -1,16 +1,16 @@
 var ActiveButton = null;
 
-function onClickReset(){	Socket.emit('lastState',{u:U.username});}
-function handleLastState(data){
-	console.log('...lastState:',data);
-	data=data.data;
-	let [s,parr,barr,rand,pool]=[data.settings,data.state.poolArr,data.state.boardArr,data.randomIndices,data.state.pool];
+function onClickReset() { Socket.emit('lastState', { u: U.username }); }
+function handleLastState(data) {
+	console.log('...lastState:', data);
+	data = data.data;
+	let [s, parr, barr, rand, pool] = [data.settings, data.state.poolArr, data.state.boardArr, data.randomIndices, data.state.pool];
 	console.log(
-		'settings',s,
-		'\nboardFilename',s.boardFilename,
-		'\npoolArr',parr,
-		'\nboard',barr.filter(x=>x),
-		'\nrandom',rand,
+		'settings', s,
+		'\nboardFilename', s.boardFilename,
+		'\npoolArr', parr,
+		'\nboard', barr.filter(x => x),
+		'\nrandom', rand,
 		// '\n',
 	);
 }
@@ -77,6 +77,18 @@ function onClickUploadPerlen() {
 			else console.log('file ' + filename + ' uploaded successfully!');
 			closeAux();
 		});
+}
+function onClickUploadLastState() {
+	let elem = createElementFromHTML(`
+		<form action="/lastState" method="post" enctype="multipart/form-data">
+		<input type="file" name="lastState" placeholder="Select file" />
+		<br />
+		<button>Upload</button>
+		</form>
+	`);
+	show(dAux);
+	clearElement(dAuxContent);
+	mAppend(dAuxContent, elem);
 }
 function onClickChooseBoard() {
 	openAux('click board to select');
@@ -156,9 +168,9 @@ function onClickModifyLayout(ev) {
 		}, styles);
 	let inpfreeForm = mCheckbox('free drop: ', s.freeForm ? true : false, dAuxContent, (a) => { setApply('freeForm', a == 1 ? true : false) }, styles);
 }
-function onClickSaveAsPrefab(){
+function onClickSaveAsPrefab() {
 	let prefabName = prompt('enter name: ', DA.lastPrefabName);
-	Socket.emit('prefab',{name:prefabName,settings:G.settings});
+	Socket.emit('prefab', { name: prefabName, settings: G.settings });
 	closeAux();
 
 }
@@ -201,7 +213,7 @@ function onClickAddToPool(ev) {
 	for (const k in G.perlenDict) {
 		let p = jsCopy(G.perlenDict[k]);
 		p.path = mPath(p);
-		console.log('path',p.path)
+		console.log('path', p.path)
 		//if (!(p.path.includes('.'))) p.path +='.png';
 		//if (k=='adherent' || k=='fringe') console.log(p.path,p)
 		let ui = createPerle(p, d, 64, 1.3, .4);

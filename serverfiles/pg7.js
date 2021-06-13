@@ -463,7 +463,15 @@ class GP2 {
 		let lastSettings = base.jsCopy(this.settings);
 		delete lastSettings.boardFilenames;
 		let pathState= './public/PERLENDATA/lastState.yaml';
-		if (!NO_LAST_STATE) utils.toYamlFile({ randomIndices: this.randomIndices, settings: lastSettings, state: this.state }, pathState);
+
+		let data={ randomIndices: this.randomIndices, settings: lastSettings, state: this.state };
+		let text = utils.toYamlString(data);
+		fs.writeFile(pathState, text, function (err) {
+			if (err) throw err;
+			console.log('Saved!');
+		});
+
+		//if (!NO_LAST_STATE) utils.toYamlFile({ randomIndices: this.randomIndices, settings: lastSettings, state: this.state }, pathState);
 
 		if (base.isdef(client)) client.emit('gameState', o); else this.io.emit('gameState', o);
 

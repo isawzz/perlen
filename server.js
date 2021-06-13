@@ -76,8 +76,31 @@ app.post('/bretter', upload.array('bretter'), (req, res) => {
 	res.redirect('/');
 	req.files.map(x => simple.addBoard(x.filename)); //console.log(x.filename));
 });
+//#endregion
+
+//#region lastState trial
+const storage1 = multer.diskStorage({
+	destination: function (req, file, cb) {
+		cb(null, PERLEN_DATA_PATH);
+	},
+	filename: function (req, file, cb) {
+		cb(null, file.originalname);
+	},
+});
+var upload1 = multer({ storage:storage1 });
+app.post('/lastState', upload1.single('lastState'), (req, res) => {
+	res.redirect('/');
+	//req.files.map(x => simple.updateLastState(req.filename)); //console.log(x.filename));
+});
+//app.post('/upload1', type, function (req, res) {});
 
 //#endregion
+
+
+
+
+
+
 
 io.on('connection', client => {
 

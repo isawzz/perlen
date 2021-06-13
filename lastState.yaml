@@ -87,6 +87,7 @@ state:
     - 8
     - 0
     - 1
+    - 2
     - 4
     - 5
     - 6
@@ -151,9 +152,7 @@ state:
     - null
     - null
     - null
-    - - 2
-      - 10.5
-      - -6
+    - null
     - null
     - null
     - null
