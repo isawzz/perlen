@@ -15,7 +15,7 @@ module.exports = {
 const utils = require('./utils.js');
 const base = require('../public/BASE/base.js');
 //const perlenGame = require('./perlenGame.js')
-var Verbose = false;
+var Verbose = true;
 var NumConnected = 0;
 var MaxId = 1;
 var io;
@@ -25,7 +25,7 @@ const Clients = {};
 function initUserManager(serverSocket, db) {
 	io = serverSocket;
 	DB = db;
-	log('users registered:', Object.keys(db.users));
+	log('___________init'); //users registered:', Object.keys(db.users));
 }
 function handleConnectionSendClientId(client) {
 	let id = client.id;

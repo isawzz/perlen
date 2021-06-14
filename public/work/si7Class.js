@@ -5,7 +5,9 @@ class SimpleClass7 {
 		this.dParent = dTable;
 		this.initialPoolSelected = false;
 		this.settings = {};
+		this.randomIndices = [];
 		openToolbar();
+		this.lastState = new LastStateClass(); //ganz am anfang: lastState darf NICHT gleich ueberschrieben werden!!!
 
 		//this.sheet=new BlankSheet(Socket,mBy('sheet'));
 	}
@@ -13,9 +15,6 @@ class SimpleClass7 {
 
 		//setTimeout(		onClickEditLayout,200		);
 		//console.log('kkkkkkk',1 !== true, isNumber(true),true===1);
-
-
-
 		console.log('_________________________gs', StepCounter); StepCounter += 1;
 
 		mStyleX(dTable, { h: window.innerHeight });
@@ -106,7 +105,7 @@ class SimpleClass7 {
 			if (nundef(perle)) {
 				//BUGBUGBUG
 
-				console.log('BUG!',perlenByIndex, perlenByIndex, 'perlenDict', this.perlenDict, '\nboardArr', boardArr, '\npoolArr', poolArr)
+				console.log('BUG!', perlenByIndex, perlenByIndex, 'perlenDict', this.perlenDict, '\nboardArr', boardArr, '\npoolArr', poolArr)
 			}
 			perle.field = null;
 			let ui = createPerle(perle, dParent, 64, 1.3, .4);
@@ -257,10 +256,10 @@ class SimpleClass7 {
 		if (isdef(target.item)) delete target.item.dxy;
 	}
 	processData(data) {
-		if (nundef(data)) data = createFakeState();
-		//console.log('got data:', jsCopy(data));
+		console.assert(isdef(data),'NO DATA IN PROCESSDATA!!!!!');
 
-		if (nundef(this.state)) this.state = {}; copyKeys(data.state, this.state);
+		if (nundef(this.state)) this.state = {}; 
+		copyKeys(data.state, this.state);
 
 		if (isdef(data.settings)) {
 			console.assert(isdef(this.settings), 'processData G.settings is NOT defined after constructor!!!!!')
@@ -272,24 +271,23 @@ class SimpleClass7 {
 		if (isdef(data.state.pool)) { //sent new pool!
 			//console.log('got POOL!')
 			this.perlenListeImSpiel = Object.values(this.state.pool);
+			this.randomIndices = data.randomIndices;
 			this.poolEnriched = this.state.pool;
-			//console.log('perlenDict', this.perlenDict)
 			for (const idx in this.state.pool) {
 				let p = this.state.pool[idx];
 				let key = p.key;
-				// console.log(p, key)
 				copyKeys(this.perlenDict[key], p);
-
-				console.log(p.key);
-
 				p.path = mPath(p);
 			}
 		}
+
+		//saving lastState on client!
+		if (isdef(data.settings)) this.lastState.saveSettings(this); else this.lastState.saveMove(this);
+
 		return [this.settings, this.state]; //, needToLoadBoard];
 	}
 	setInitialPoolSelected() { this.initialPoolSelected = true; setTitle('Glasperlenspiel'); }
 	inSyncWithServer() {
-
 		//return;
 		let [b, s, st] = [this.clientBoard, this.settings, this.state];
 		//console.log('sync:','\nboard',b,'\nsettings',s,'\nstate',st);
@@ -334,7 +332,7 @@ function sendStartOrJoinPerlenGame() {
 	Socket.emit('startOrJoinPerlen', data);
 	window.onkeydown = keyDownHandler;
 	window.onkeyup = keyUpHandler;
-	mBy('sidebar').ondblclick = () => { closeAux();hide('sidebar') };
+	mBy('sidebar').ondblclick = () => { closeAux(); hide('sidebar') };
 	G = VERSION == 7 ? new SimpleClass7() : new SimpleClass();
 	Settings = new PerlenSettingsClass(G.settings, U, mBy('dSettingsWindow'));
 	if (!USESOCKETS) G.presentGameState();
@@ -482,14 +480,14 @@ function createPerle(perle, dParent, sz = 64, wf = 1.3, hf = 0.4, useNewImage = 
 		//sz = Math.max(sz, 50);
 		if (isFarbPerle(perle)) mStyleX(img, { w: 1, h: 1 });
 		else mStyleX(img, { w: sz, h: sz });
-		mStyleX(d, { bg: 'transparent',w:sz,h:sz });
+		mStyleX(d, { bg: 'transparent', w: sz, h: sz });
 	} else {
 		//styling for pool perle
 		let d = iDiv(perle);
-		mStyleX(d, { opacity: 1-G.settings.dimming/100 });
+		mStyleX(d, { opacity: 1 - G.settings.dimming / 100 });
 		let sz = G.settings.szPoolPerle;
-		if (isdef(sz)){
-			mStyleX(d.firstChild,{w: sz,h:sz});
+		if (isdef(sz)) {
+			mStyleX(d.firstChild, { w: sz, h: sz });
 		}
 
 	}
@@ -504,11 +502,11 @@ function dragStartPreventionOnSidebarOpen() {
 	return true;
 }
 function isFarbPerle(perle) { return isGermanColorName(perle.key); }
-function mPath(p) { 
-	console.log(p);
+function mPath(p) {
+	//console.log(p);
 	if (!(p.path.includes('.'))) p.path += '.png';
 
-	return PERLENPATH_FRONT + 'perlen/' + p.path; 
+	return PERLENPATH_FRONT + 'perlen/' + p.path;
 
 }
 

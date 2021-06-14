@@ -1,6 +1,11 @@
 var ActiveButton = null;
 
-function onClickReset() { Socket.emit('lastState', { u: U.username }); }
+function onClickReset() { 
+	G.lastState.downloadHistory();
+	
+	let lastState = G.lastState.get();
+	Socket.emit('initLastState', { lastState: lastState, u: U.username,}); 
+}
 function handleLastState(data) {
 	console.log('...lastState:', data);
 	data = data.data;

@@ -7,7 +7,7 @@ var MessageCounter = 0;
 const PerlenPath = '../public/PERLENDATA/';
 
 //#endregion
-var Verbose = false;
+var Verbose = true;
 const NO_LAST_STATE = false;
 class GP2 {
 	constructor(io, perlenDict, DB, lastState) {
@@ -140,9 +140,9 @@ class GP2 {
 	weiter() {
 		let s = this.settings, lastState = this.lastState;
 		if (Verbose) {
-			console.log('boards', this.settings.boardFilenames);
-			console.log('perlen', Object.keys(this.perlenDict));
-			console.log('lastState pool', Object.keys(lastState.state.pool).length);
+			//console.log('boards', this.settings.boardFilenames);
+			//console.log('perlen', Object.keys(this.perlenDict));
+			//console.log('lastState pool', Object.keys(lastState.state.pool).length);
 
 		}
 		log('*** THE END ***');
@@ -456,7 +456,7 @@ class GP2 {
 		if (base.nundef(keys)) keys = [];
 		let o = { state: { boardArr: this.state.boardArr, poolArr: this.state.poolArr } };
 		if (keys.includes('settings')) o.settings = this.settings;
-		if (keys.includes('pool')) o.state.pool = this.state.pool;
+		if (keys.includes('pool')) {o.state.pool = this.state.pool;o.randomIndices = this.randomIndices; }
 		if (keys.includes('perlenDict')) o.perlenDict = this.perlenDict;
 		if (base.isdef(eMore)) base.copyKeys(eMore, o);
 
