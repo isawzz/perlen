@@ -7,12 +7,13 @@ class SimpleClass7 {
 		this.settings = {};
 		this.randomIndices = [];
 		openToolbar();
-		this.lastState = new LastStateClass(); //ganz am anfang: lastState darf NICHT gleich ueberschrieben werden!!!
+		this.lastStateman = new LastStateClass(); //ganz am anfang: _lastState darf NICHT gleich ueberschrieben werden!!!
 
 		//this.sheet=new BlankSheet(Socket,mBy('sheet'));
 	}
 	presentGameState(data) {
 
+		console.assert(nundef(data.lastState), 'HEY DER SENDET LASTSTATE!!!!')
 		//setTimeout(		onClickEditLayout,200		);
 		//console.log('kkkkkkk',1 !== true, isNumber(true),true===1);
 		console.log('_________________________gs', StepCounter); StepCounter += 1;
@@ -256,9 +257,9 @@ class SimpleClass7 {
 		if (isdef(target.item)) delete target.item.dxy;
 	}
 	processData(data) {
-		console.assert(isdef(data),'NO DATA IN PROCESSDATA!!!!!');
+		console.assert(isdef(data), 'NO DATA IN PROCESSDATA!!!!!');
 
-		if (nundef(this.state)) this.state = {}; 
+		if (nundef(this.state)) this.state = {};
 		copyKeys(data.state, this.state);
 
 		if (isdef(data.settings)) {
@@ -281,8 +282,8 @@ class SimpleClass7 {
 			}
 		}
 
-		//saving lastState on client!
-		if (isdef(data.settings)) this.lastState.saveSettings(this); else this.lastState.saveMove(this);
+		if (LastStateClass.SAVE_EACH_GAMESTATE) this.lastStateman.save(this, isdef(data.settings));
+		else (logg('processData: NOT saving lastState'))
 
 		return [this.settings, this.state]; //, needToLoadBoard];
 	}
@@ -321,11 +322,25 @@ function simplestPerlenGame() {
 	mStyleX(document.body, { opacity: 1 });
 	initTable(null, 2); initSidebar(); initAux(); initScore();
 	ColorThiefObject = new ColorThief();
-	if (PERLEN_EDITOR_OPEN_AT_START) createPerlenEditor();
+	//if (PERLEN_EDITOR_OPEN_AT_START) createPerlenEditor();
 	sendStartOrJoinPerlenGame();
 }
 function sendStartOrJoinPerlenGame() {
-	if (STARTED) { console.log('REENTRACE PROBLEM!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!'); return; }
+	if (STARTED) {
+		if (isdef(G)) {
+			console.log('haaaaaaaaaaaaaaalo')
+			//hier muss _lastState saved werden! denn er ist noch da!
+			//bei einem server restart passiert genau das dass die connection reset wird
+			//und dadurch das ganze neu started!
+			if (LastStateClass.SAVE_ON_F5) G.lastStateman.save(G, true);
+			else (logg('sendStartOrJoin: NOT saving lastState'));
+		}
+		//das passiert wenn server reset!
+		//muss message geben: please reload!
+		//muss zuerst
+		console.log('SERVER RESTART || REENTRACE PROBLEM!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!');
+		return;
+	}
 	STARTED = true;
 	let data = Username;
 	logClientSend('startOrJoinPerlen', data);
@@ -334,8 +349,8 @@ function sendStartOrJoinPerlenGame() {
 	window.onkeyup = keyUpHandler;
 	mBy('sidebar').ondblclick = () => { closeAux(); hide('sidebar') };
 	G = VERSION == 7 ? new SimpleClass7() : new SimpleClass();
-	Settings = new PerlenSettingsClass(G.settings, U, mBy('dSettingsWindow'));
-	if (!USESOCKETS) G.presentGameState();
+	//Settings = new PerlenSettingsClass(G.settings, U, mBy('dSettingsWindow'));
+	//if (!USESOCKETS) G.presentGameState();
 }
 //skip next 2 steps!
 function handleInitialPool(data) {

@@ -83,7 +83,16 @@ function onClickUploadPerlen() {
 			closeAux();
 		});
 }
-function onClickUploadLastState() {
+function onClickSaveLastState() {
+	G.lastStateman.save(G,true);
+	console.log('state saved');
+}
+function onClickRetrieveLastState(){
+	//das sollte reset sein!
+	let lastState = G.lastStateman.get();
+	console.log('retrieved lastState',lastState);
+	Socket.emit('initLastState',{lastState:lastState});
+	return;
 	let elem = createElementFromHTML(`
 		<form action="/lastState" method="post" enctype="multipart/form-data">
 		<input type="file" name="lastState" placeholder="Select file" />

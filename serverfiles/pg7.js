@@ -1,3 +1,7 @@
+var Verbose = false;
+const SAVE_LAST_STATE = false;
+const LOAD_LAST_STATE = true;
+
 //#region requires, const, var
 const base = require('../public/BASE/base.js');
 const fs = require('fs');
@@ -7,8 +11,6 @@ var MessageCounter = 0;
 const PerlenPath = '../public/PERLENDATA/';
 
 //#endregion
-var Verbose = true;
-const NO_LAST_STATE = false;
 class GP2 {
 	constructor(io, perlenDict, DB, lastState) {
 		if (Verbose) {
@@ -19,9 +21,12 @@ class GP2 {
 		this.perlenDictFull = perlenDict;
 		this.db = DB;
 		this.randomIndices = [];
+		this.initializing = true;
+
+		//lastState = null; //TEST!
 
 		this.settings = base.jsCopy(DB.games.gPerlen2);
-		if (NO_LAST_STATE || base.nundef(lastState)) lastState = this.emptyState();
+		if (!LOAD_LAST_STATE || base.nundef(lastState)) lastState = this.emptyState();
 		this.lastState = lastState;
 		base.copyKeys(lastState.settings, this.settings);
 
@@ -38,7 +43,10 @@ class GP2 {
 					});
 			});
 	}
-	emptyState() { return { settings: {}, state: {}, randomIndices: [] }; }
+	emptyState() {
+		console.log('load emptyState')
+		return { settings: {}, state: {}, randomIndices: [] };
+	}
 	ensureBoardFilename(filenames) {
 		let s = this.settings;
 		s.boardFilenames = filenames;
@@ -47,7 +55,7 @@ class GP2 {
 			//console.log('board file deleted!!!! =>replacing board!', s.boardFilename);
 			this.lastState.boardFilename = s.boardFilename = filenames[0];
 		}
-		log('boardFilename ok:', s.boardFilename);
+		logg('boardFilename ok:', s.boardFilename);
 	}
 	ensurePerlenDict(perlen) {
 		//let s = this.settings;
@@ -122,7 +130,7 @@ class GP2 {
 		st.boardArr = this.mapIndices(oldToNewIndex, st.boardArr);
 		this.randomIndices = this.mapIndices(oldToNewIndex, randomIndices);
 
-		console.log('pool ok:', Object.keys(newPool).length, ' - old pool', Object.keys(pool).length);
+		//console.log('pool ok:', Object.keys(newPool).length, ' - old pool', Object.keys(pool).length);
 		if (Verbose) console.log('poolArr:', st.poolArr.join());
 	}
 	mapIndices(di, oldArr) {
@@ -137,6 +145,12 @@ class GP2 {
 		}
 		return arr;
 	}
+	initLastState(l) {
+		console.log('iiiiiiiiiii', l.settings.boardFilename);
+		this.lastState = l; 
+		this.weiter();
+		this.safeEmitState(['settings','pool']);
+	}
 	weiter() {
 		let s = this.settings, lastState = this.lastState;
 		if (Verbose) {
@@ -145,34 +159,34 @@ class GP2 {
 			//console.log('lastState pool', Object.keys(lastState.state.pool).length);
 
 		}
-		log('*** THE END ***');
+		logg('*** THE END ***');
 		this.state = {};
 
-		this.initState(lastState.state, lastState.settings);
+		this.initState(lastState.state, lastState.settings, lastState.randomIndices);
 
 		this.players = {};
 
 		this.clients = {};
 	}
-	initState(state, settings) {
+	initState(state, settings, randomIndices) {
 		//console.log(state.pool)
 		base.copyKeys(state, this.state);
 		base.copyKeys(settings, this.settings);
 		// console.log('settings', this.settings);
 		if (base.isdef(state.pool)) {
-			console.log('state', Object.keys(state.pool).length);
+			logg('state', Object.keys(state.pool).length);
 			this.maxPoolIndex = Object.keys(state.pool).length;
+			this.randomIndices = randomIndices;
 		} else {
 			this.maxPoolIndex = base.initServerPool(this.settings, this.state, this.perlenDict);
 			this.state.boardArr = [];
 			this.randomIndices = Object.keys(this.state.pool).map(x => Number(x));
-
 		}
 	}
 	addPlayer(client, x) {
 		let username = x;
 		let id = client.id;
-		log('add player', username, id)
+		logg('add player', username, id)
 		this.clients[id] = client;
 		let pl = { id: id, username: username };
 		this.players[id] = pl;
@@ -389,7 +403,7 @@ class GP2 {
 			}
 		}
 
-		console.log('poolChange!!!', Object.keys(this.state.pool).length)
+		//console.log('poolChange!!!', Object.keys(this.state.pool).length)
 		this.safeEmitState(['pool']);
 
 	}
@@ -418,7 +432,7 @@ class GP2 {
 				base.removeInPlace(this.state.poolArr, p);
 				delete this.state.pool[p];
 			}
-			console.log('pool#', Object.keys(this.state.pool).length);
+			//console.log('pool#', Object.keys(this.state.pool).length);
 			this.safeEmitState(['pool']);
 		}
 	}
@@ -442,36 +456,44 @@ class GP2 {
 		this.randomIndices = Object.keys(this.state.pool).map(x => Number(x));
 		this.safeEmitState(['pool'])
 	}
-	handlePrefab(client,x){
+	handlePrefab(client, x) {
 		let name = x.name;
 		let settings = x.settings;
-		this.db.standardSettings[name]=settings;
-		utils.toYamlFile(this.db,path.join(__dirname, PerlenPath + 'data.yaml'));//PerlenPath+'data.yaml');
-		this.io.emit('dbUpdate',{standardSettings:this.db.standardSettings});
+		this.db.standardSettings[name] = settings;
+		utils.toYamlFile(this.db, path.join(__dirname, PerlenPath + 'data.yaml'));//PerlenPath+'data.yaml');
+		this.io.emit('dbUpdate', { standardSettings: this.db.standardSettings });
 	}
 
 	sendMessage(username, msg) { this.io.emit('userMessage', { username: username, msg: msg }); }
+	saveLastState() {
+		let isInit = this.initializing;
+		if (this.initializing) { console.log('first gameState emit!'); this.initializing = false; }
+		if (!SAVE_LAST_STATE && isInit) { console.log('not saving lastState!'); }
+		if (!SAVE_LAST_STATE) return;
+
+
+
+		let lastSettings = base.jsCopy(this.settings);
+		delete lastSettings.boardFilenames;
+		let pathState = './public/PERLENDATA/lastState.yaml';
+
+		let data = { randomIndices: this.randomIndices, settings: lastSettings, state: this.state };
+		let text = utils.toYamlString(data);
+		fs.writeFile(pathState, text, function (err) {
+			if (err) throw err;
+			logg('Saved!');
+		});
+	}
 	safeEmitState(keys, eMore, client) {
 
 		if (base.nundef(keys)) keys = [];
 		let o = { state: { boardArr: this.state.boardArr, poolArr: this.state.poolArr } };
 		if (keys.includes('settings')) o.settings = this.settings;
-		if (keys.includes('pool')) {o.state.pool = this.state.pool;o.randomIndices = this.randomIndices; }
+		if (keys.includes('pool')) { o.state.pool = this.state.pool; o.randomIndices = this.randomIndices; }
 		if (keys.includes('perlenDict')) o.perlenDict = this.perlenDict;
 		if (base.isdef(eMore)) base.copyKeys(eMore, o);
 
-		let lastSettings = base.jsCopy(this.settings);
-		delete lastSettings.boardFilenames;
-		let pathState= './public/PERLENDATA/lastState.yaml';
-
-		let data={ randomIndices: this.randomIndices, settings: lastSettings, state: this.state };
-		let text = utils.toYamlString(data);
-		fs.writeFile(pathState, text, function (err) {
-			if (err) throw err;
-			console.log('Saved!');
-		});
-
-		//if (!NO_LAST_STATE) utils.toYamlFile({ randomIndices: this.randomIndices, settings: lastSettings, state: this.state }, pathState);
+		this.saveLastState();
 
 		if (base.isdef(client)) client.emit('gameState', o); else this.io.emit('gameState', o);
 
@@ -483,25 +505,9 @@ class GP2 {
 
 //#region helpers
 
-function decodeBase64Image(dataString) {
-	var matches = dataString.match(/^data:([A-Za-z-+\/]+);base64,(.+)$/);
-	var response = {};
-
-	if (matches.length !== 3) {
-		return new Error('Invalid input string');
-	}
-
-	response.type = matches[1];
-	response.data = Buffer.from(matches[2], 'base64');
-
-	return response;
-}
-// function savePerlenDictToFile() {
-// 	utils.toYamlFile(PerlenDict, path.join(__dirname, PerlenPath + 'perlenDict.yaml'));
-// }
-function log() { if (Verbose) console.log('pg7: ', ...arguments); }
-function logReceive(type,) { MessageCounter++; log('#' + MessageCounter, 'receive', ...arguments); }
-function logSend(type) { MessageCounter++; log('#' + MessageCounter, 'send', ...arguments); }
+function logg() { if (Verbose) console.log('pg7: ', ...arguments); }
+function logReceive(type,) { MessageCounter++; logg('#' + MessageCounter, 'receive', ...arguments); }
+function logSend(type) { MessageCounter++; logg('#' + MessageCounter, 'send', ...arguments); }
 
 
 module.exports = {

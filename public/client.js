@@ -37,7 +37,8 @@ function openLogin() {
 function establishUsername(username) {
 	hide(dLogin);
 	Username = username;
-	if (USESOCKETS) { initSocket(); } else { fakeInitSocket(username); }
+	initSocket();
+	//if (USESOCKETS) { initSocket(); } else { fakeInitSocket(username); }
 }
 //1. server sends client id => client sends login/username
 function fakeInitSocket() { ClientId = '12345'; fakeLogin(Username);  }

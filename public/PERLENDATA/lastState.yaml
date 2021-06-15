@@ -9,6 +9,16 @@ randomIndices:
   - 7
   - 8
   - 9
+  - 10
+  - 11
+  - 12
+  - 13
+  - 14
+  - 15
+  - 16
+  - 17
+  - 18
+  - 19
 settings:
   rows: 9
   cols: 11
@@ -83,7 +93,38 @@ state:
     "9":
       key: uncertainty
       index: 9
+    "10":
+      key: wasser
+      index: 10
+    "11":
+      key: culture wars
+      index: 11
+    "12":
+      key: english
+      index: 12
+    "13":
+      key: carelessness
+      index: 13
+    "14":
+      key: european theatre
+      index: 14
+    "15":
+      key: genetic engineering
+      index: 15
+    "16":
+      key: rechts links
+      index: 16
+    "17":
+      key: mit blutigen augen in die welt schauen
+      index: 17
+    "18":
+      key: woke
+      index: 18
+    "19":
+      key: rassismus 02
+      index: 19
   poolArr:
+    - 2
     - 8
     - 0
     - 1
@@ -92,6 +133,16 @@ state:
     - 6
     - 7
     - 9
+    - 10
+    - 11
+    - 12
+    - 13
+    - 14
+    - 15
+    - 16
+    - 17
+    - 18
+    - 19
   boardArr:
     - null
     - null
@@ -151,9 +202,7 @@ state:
     - null
     - null
     - null
-    - - 2
-      - 10.5
-      - -6
+    - null
     - null
     - null
     - null

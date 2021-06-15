@@ -17,10 +17,9 @@ const perlenGame = require('./serverfiles/pg7.js');
 const DB = utils.fromYamlFile(path.join(__dirname, PERLEN_DATA_PATH + 'data.yaml'));
 var PerlenDict = utils.fromYamlFile(path.join(__dirname, PERLEN_DATA_PATH + 'perlenDict.yaml'));
 const lastState = utils.fromYamlFile(path.join(__dirname, PERLEN_DATA_PATH + 'lastState.yaml'));
-
 const io = require('socket.io')(http, {
 	cors: {
-		origins: ['http://localhost:' + PORT]
+		origins: '*',//['http://localhost:' + PORT]
 	}
 });
 //#endregion
@@ -78,21 +77,7 @@ app.post('/bretter', upload.array('bretter'), (req, res) => {
 });
 //#endregion
 
-//#region lastState trial
-// const storage1 = multer.diskStorage({
-// 	destination: function (req, file, cb) {
-// 		cb(null, PERLEN_DATA_PATH);
-// 	},
-// 	filename: function (req, file, cb) {
-// 		cb(null, file.originalname);
-// 	},
-// });
-// var upload1 = multer({ storage:storage1 });
-// app.post('/lastState', upload1.single('lastState'), (req, res) => {
-// 	res.redirect('/');
-// 	//req.files.map(x => simple.updateLastState(req.filename)); //console.log(x.filename));
-// });
-//app.post('/upload1', type, function (req, res) {});
+
 
 //#endregion
 
@@ -132,20 +117,9 @@ io.on('connection', client => {
 	client.on('clearPoolarr', x => simple.handleClearPoolarr(client, x));
 	client.on('clearPool', x => simple.handleClearPoolarr(client, x));
 
-	client.on('lastState', () => {
-		let pathLastState = path.join(__dirname, PERLEN_DATA_PATH + 'lastState.yaml');
-		console.log('retrieve lastState', pathLastState);
-		let data = utils.fromYamlFile(pathLastState);
-		console.log('BOARD', data.settings.boardFilename);
-		client.emit('lastState', { data: data });
-	});
 	client.on('initLastState', x => {
-		console.log('got last state:', x.lastState);
-		// let pathLastState = path.join(__dirname, PERLEN_DATA_PATH + 'lastState.yaml');
-		// console.log('retrieve lastState', pathLastState);
-		// let data = utils.fromYamlFile(pathLastState);
-		// console.log('BOARD', data.settings.boardFilename);
-		// client.emit('lastState', { data: data });
+		//console.log('***got last state: board:', x.lastState.settings.boardFilename);
+		simple.initLastState(x.lastState);
 	});
 
 });

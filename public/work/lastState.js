@@ -1,14 +1,19 @@
 class LastStateClass {
+	static Verbose = true;
+	static LOAD_LAST_STATE = false;
+	static SAVE_EACH_GAMESTATE = false;
+	static SAVE_ON_F5 = false;
 	constructor() {
 		let l = localStorage.getItem('lastState');
-		console.log('l',l)
-		if (isdef(l) && l!=='undefined') {
-			console.log(l)
+		logg('lastStateClass created!')
+		if (isdef(l) && l !== 'undefined') {
 			this.lastState = JSON.parse(l);
 			this.history = [this.lastState]; //stack of states
-		}else{
+			logg(':::lastState retrieved!', this.lastState.settings.boardFilename)
+		} else {
+			logg(':::lastState is empty!')
 			this.lastState = null;
-			this.history=[];
+			this.history = [];
 		}
 
 		this.isFirst = true;
@@ -16,27 +21,36 @@ class LastStateClass {
 	}
 	filterState(state) {
 		let o = { boardArr: state.boardArr, poolArr: state.poolArr, pool: {} };
-		copyKeys(state.pool, o.pool, {}, ['index', 'key']);
+		//console.log('filterState state.pool',state.pool)
+		for(const k in state.pool){
+			let oNew=o.pool[k]={};
+			copyKeys(state.pool[k], oNew, {}, ['index', 'key']);
+		}
+		
+		//console.log('result o.pool',o.pool);
 		return o;
 	}
 	filter(g) {
-		let lastState = this.lastState = {
+		return {
 			randomIndices: g.randomIndices,
 			settings: g.settings,
 			state: this.filterState(g.state),
 		};
+		//logg('filter', this.lastState.settings.boardFilename);
 	}
 	getFirst() { return this.history.length > 0 ? this.history[0] : this.lastState; }
 	get() { return this.lastState; }
-	saveSettings(g) {
-		//only save lastState if board contains at least 3!
+	save(g, hasSettings) {
+		//calc if condition met to warrant save to history!
 		let boardArr = g.state.boardArr.filter(x => x !== null);
-		console.log('boardArr', boardArr);
-		if (boardArr.length > 2) this.history.push(jsCopy(this.lastState));
-		this.saveMove(g)
+		hasSettings = hasSettings && boardArr.length > 2;
 
+		let lastState = this.lastState = this.filter(g);
+		if (hasSettings) this.history.push(jsCopy(this.lastState));
+		console.log('saving to localStorage.lastState:', this.lastState.settings.boardFilename);
+		localStorage.setItem('lastState', JSON.stringify(this.lastState));
 	}
-	saveMove(g) { localStorage.setItem('lastState', JSON.stringify(this.filter(g))); }
 	downloadHistory() { downloadAsYaml(this.history, 'perlenGames'); }
 
 }
+function logg() { if (LastStateClass.Verbose) console.log('lastState: ', ...arguments); }

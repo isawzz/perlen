@@ -1,21 +1,18 @@
+var Verbose = false;
+
+//#region prelims
 module.exports = {
 	initUserManager,
 	handleConnectionSendClientId,
 	handleLoginSendDB,
-
 	handleDisconnected,
-	handleMessage,
-	handleCreateGame,
-	handleJoinGame,
-	handleMove,
-	handleGameStateUpdate, handleGameStateRequest,
+	handleUserMessage,
 }
 
-//#region prelims
+
 const utils = require('./utils.js');
 const base = require('../public/BASE/base.js');
 //const perlenGame = require('./perlenGame.js')
-var Verbose = true;
 var NumConnected = 0;
 var MaxId = 1;
 var io;
@@ -73,54 +70,6 @@ function handleUserMessage(client, x) {
 
 }
 //#endregion
-
-
-function handleMessage(client, x) {
-	//someone logged in on server and entered the lobby
-	logReceive('userMessage');
-	logBroadcast('userMessage');
-	let id = client.id;
-	let user = Clients[id];
-	let name = user.username;
-	//console.log('message received from',name, x);
-	io.emit('userMessage', x);
-
-}
-function handleCreateGame(client, x) {
-	//someone logged in on server and entered the lobby
-	io.emit('userMessage', 'user ' + username + ' entered lobby!');
-
-}
-function handleJoinGame(client, x) {
-	//someone logged in on server and entered the lobby
-	io.emit('userMessage', 'user ' + username + ' entered lobby!');
-
-}
-function handleMove(client, x) {
-	//someone logged in on server and entered the lobby
-	io.emit('userMessage', 'user ' + username + ' entered lobby!');
-
-}
-
-
-const GameData = { history: [] };
-function handleGameStateUpdate(client, x) {
-	GameData.history.push(x.data);
-
-}
-function handleGameStateRequest(client, x) {
-	//someone logged in on server and entered the lobby
-	//console.log('position request from',x.msg);
-	logSend('gameState');
-	let len = GameState.history.length;
-	client.emit('gameState', { data: len == 0 ? null : GameState.history[len - 1] });
-
-}
-
-
-
-
-
 
 //#region helpers
 function getConnectedClientNames() {

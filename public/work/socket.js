@@ -1,7 +1,7 @@
 //#region prelim
 const messageTypes = { LEFT: 'left', RIGHT: 'right', LOGIN: 'login' };
 const messages = []; // { author, date, content, type }
-const VerboseSocket = true;
+const VerboseSocket = false;
 
 class FakeSocketClass{
 	constructor(){
@@ -11,7 +11,7 @@ class FakeSocketClass{
 }
 function initSocket() {
 
-	if (!USESOCKETS) {Socket=new FakeSocketClass();return;}
+	//if (!USESOCKETS) {Socket=new FakeSocketClass();return;}
 	//console.log('init socket!!!')
 	Socket = io(SERVERURL);
 	Socket.on('clientId', handleClientIdSendLogin);
@@ -47,7 +47,7 @@ function handleUserLeft(data) {
 	logClientReceive('userLeft', data.id)
 }
 function handleUserMessage(data) {
-	logClientReceive('userMessage', data.username)
+	logClientReceive('userMessage', data.username);
 }
 
 //sending
