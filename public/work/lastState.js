@@ -5,6 +5,9 @@ class LastStateClass {
 	static SAVE_ON_F5 = false;
 	constructor() {
 		let l = localStorage.getItem('lastState');
+
+		console.log('construct!!!',l)
+
 		logg('lastStateClass created!')
 		if (isdef(l) && l !== 'undefined') {
 			this.lastState = JSON.parse(l);
@@ -16,6 +19,7 @@ class LastStateClass {
 			this.history = [];
 		}
 
+		this.lastStateSaved = this.lastState;
 		this.isFirst = true;
 
 	}
@@ -40,15 +44,23 @@ class LastStateClass {
 	}
 	getFirst() { return this.history.length > 0 ? this.history[0] : this.lastState; }
 	get() { return this.lastState; }
+	getLastStateSaved(){return this.lastStateSaved;}
 	save(g, hasSettings) {
 		//calc if condition met to warrant save to history!
 		let boardArr = g.state.boardArr.filter(x => x !== null);
 		hasSettings = hasSettings && boardArr.length > 2;
 
-		let lastState = this.lastState = this.filter(g);
+		let lastState = this.lastStateSaved = this.lastState = this.filter(g);
 		if (hasSettings) this.history.push(jsCopy(this.lastState));
 		console.log('saving to localStorage.lastState:', this.lastState.settings.boardFilename);
 		localStorage.setItem('lastState', JSON.stringify(this.lastState));
+		return this.lastStateSaved;
+	}
+	localStorageTest(){
+		console.log('this.lastState',this.lastState);
+		console.log('this.lastStateSaved',this.lastStateSaved);
+		let lll=localStorage.getItem('lastState');
+		console.log('localStorage.lastState',lll)
 	}
 	downloadHistory() { downloadAsYaml(this.history, 'perlenGames'); }
 

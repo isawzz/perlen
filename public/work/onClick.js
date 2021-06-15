@@ -84,12 +84,12 @@ function onClickUploadPerlen() {
 		});
 }
 function onClickSaveLastState() {
-	G.lastStateman.save(G,true);
-	console.log('state saved');
+	let lastStateSaved = G.lastStateman.save(G,true);
+	console.log('state saved',lastStateSaved.settings.boardFilename,lastStateSaved.randomIndices.length);
 }
 function onClickRetrieveLastState(){
 	//das sollte reset sein!
-	let lastState = G.lastStateman.get();
+	let lastState = G.lastStateman.getLastStateSaved();
 	console.log('retrieved lastState',lastState);
 	Socket.emit('initLastState',{lastState:lastState});
 	return;

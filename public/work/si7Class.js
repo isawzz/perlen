@@ -13,6 +13,8 @@ class SimpleClass7 {
 	}
 	presentGameState(data) {
 
+		this.lastStateman.localStorageTest();
+
 		console.assert(nundef(data.lastState), 'HEY DER SENDET LASTSTATE!!!!')
 		//setTimeout(		onClickEditLayout,200		);
 		//console.log('kkkkkkk',1 !== true, isNumber(true),true===1);
