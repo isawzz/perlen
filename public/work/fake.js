@@ -1,3 +1,12 @@
+function calcFieldGaps(sz) {
+	sz = Number(sz);
+	let s = G.settings;
+	s.wGap = s.dxCenter - sz;
+	s.hGap = s.dyCenter - sz;
+	//clearElement(G.dParent);
+	G.clientBoard = applySettings(G.clientBoard, s);
+}
+
 function calcNFields(s) {
 	let [layout, wCell, hCell, rows, cols] = [s.boardLayout, s.dxCenter, s.dyCenter, s.rows, s.cols];
 	let boardSize = { w: s.wFieldArea, h: s.hFieldArea };

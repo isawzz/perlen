@@ -109,6 +109,7 @@ io.on('connection', client => {
 
 	client.on('chooseBoard', x => simple.handleChooseBoard(client, x));
 	client.on('settings', x => simple.handleSettings(client, x));
+	client.on('state',  x => simple.handleState(client, x));
 	client.on('prefab', x => simple.handlePrefab(client, x));
 	client.on('reset', x => simple.handleReset(client, x));
 
@@ -117,10 +118,10 @@ io.on('connection', client => {
 	client.on('clearPoolarr', x => simple.handleClearPoolarr(client, x));
 	client.on('clearPool', x => simple.handleClearPoolarr(client, x));
 
-	client.on('initLastState', x => {
-		//console.log('***got last state: board:', x.lastState.settings.boardFilename);
-		simple.initLastState(x.lastState);
-	});
+	// client.on('initLastState', x => {
+	// 	//console.log('***got last state: board:', x.lastState.settings.boardFilename);
+	// 	simple.initLastState(x.lastState);
+	// });
 
 });
 

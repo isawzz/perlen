@@ -7,13 +7,13 @@ class SimpleClass7 {
 		this.settings = {};
 		this.randomIndices = [];
 		openToolbar();
-		this.lastStateman = new LastStateClass(); //ganz am anfang: _lastState darf NICHT gleich ueberschrieben werden!!!
+		//this.lastStateman = new LastStateClass(); //ganz am anfang: _lastState darf NICHT gleich ueberschrieben werden!!!
 
 		//this.sheet=new BlankSheet(Socket,mBy('sheet'));
 	}
 	presentGameState(data) {
 
-		this.lastStateman.localStorageTest();
+		//this.lastStateman.localStorageTest();
 
 		console.assert(nundef(data.lastState), 'HEY DER SENDET LASTSTATE!!!!')
 		//setTimeout(		onClickEditLayout,200		);
@@ -33,8 +33,14 @@ class SimpleClass7 {
 
 		if (needToLoadBoard) {
 			clearElement(this.dParent); this.dPool = null;
+
 			this.clientBoard = applyStandard(this.dParent, this.settings);
 			if (!this.inSyncWithServer()) return; //else console.log('...sync ok!');
+		} //else if (isdef(data.settings)) { this.clientBoard = applySettings(this.clientBoard, this.settings); }
+		if (this.settings.baseColor != BaseColor) {
+			console.log('set baseColor',this.settings.baseColor);
+
+			setNewBackgroundColor(this.settings.baseColor)
 		}
 		if (nundef(this.dPool)) {
 			mLinebreak(this.dParent, 30);
@@ -284,8 +290,8 @@ class SimpleClass7 {
 			}
 		}
 
-		if (LastStateClass.SAVE_EACH_GAMESTATE) this.lastStateman.save(this, isdef(data.settings));
-		else (logg('processData: NOT saving lastState'))
+		//if (LastStateClass.SAVE_EACH_GAMESTATE) this.lastStateman.save(this, isdef(data.settings));
+		//else (logg('processData: NOT saving lastState'))
 
 		return [this.settings, this.state]; //, needToLoadBoard];
 	}
@@ -330,11 +336,11 @@ function simplestPerlenGame() {
 function sendStartOrJoinPerlenGame() {
 	if (STARTED) {
 		if (isdef(G)) {
-			console.log('haaaaaaaaaaaaaaalo')
+			//console.log('haaaaaaaaaaaaaaalo')
 			//hier muss _lastState saved werden! denn er ist noch da!
 			//bei einem server restart passiert genau das dass die connection reset wird
 			//und dadurch das ganze neu started!
-			if (LastStateClass.SAVE_ON_F5) G.lastStateman.save(G, true);
+			if (LastStateClass.SAVE_ON_F5) saveStateAndSettings();//G.lastStateman.save(G, true);
 			else (logg('sendStartOrJoin: NOT saving lastState'));
 		}
 		//das passiert wenn server reset!

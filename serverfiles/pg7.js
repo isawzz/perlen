@@ -145,12 +145,12 @@ class GP2 {
 		}
 		return arr;
 	}
-	initLastState(l) {
-		console.log('iiiiiiiiiii', l.settings.boardFilename);
-		this.lastState = l; 
-		this.weiter();
-		this.safeEmitState(['settings','pool']);
-	}
+	// initLastState(l) {
+	// 	console.log('iiiiiiiiiii', l.settings.boardFilename);
+	// 	this.lastState = l;
+	// 	this.weiter();
+	// 	this.safeEmitState(['settings', 'pool']);
+	// }
 	weiter() {
 		let s = this.settings, lastState = this.lastState;
 		if (Verbose) {
@@ -350,7 +350,12 @@ class GP2 {
 			this.state.boardArr = newBarr;
 		}
 
-		let barr = this.state.boardArr;
+		this.reduceBoardArrIfDoesntFit();
+		this.safeEmitState(['settings']);
+	}
+	reduceBoardArrIfDoesntFit() {
+		let [s, barr] = [this.settings, this.state.boardArr];
+		console.log('handleState/settings', barr.length, 's.nFields', s.nFields)
 		if (barr.length != s.nFields) {
 			if (base.isEmpty(barr) || !base.firstCond(barr, a => a != null)) this.state.boardArr = new Array(s.nFields);
 			else if (barr.length < s.nFields) {
@@ -375,7 +380,16 @@ class GP2 {
 		//console.log('board',this.state.boardArr.length);
 		//console.log('pool',this.state.poolArr.length);
 
-		this.safeEmitState(['settings']);
+	}
+	handleState(client, x) {
+		this.randomIndices = x.randomIndices;
+		let state = this.state = x.state;
+		this.reduceBoardArrIfDoesntFit();
+		console.log('state.pool', state.pool)
+		// let indices = Object.values(state.pool).map(x=>x.index);
+		// this.maxPoolIndex = base.arrMax(indices)+1;
+		// console.log('maxPoolIndex',this.maxPoolIndex);
+		this.safeEmitState(['pool']);
 	}
 	handlePoolChange(client, x) {
 		logReceive('poolChange', client.id);

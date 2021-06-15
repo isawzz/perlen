@@ -66,3 +66,15 @@ class LastStateClass {
 
 }
 function logg() { if (LastStateClass.Verbose) console.log('lastState: ', ...arguments); }
+function filterState(state) {
+	let o = { boardArr: state.boardArr, poolArr: state.poolArr, pool: {} };
+	//console.log('filterState state.pool',state.pool)
+	for (const k in state.pool) {
+		let oNew = o.pool[k] = {};
+		copyKeys(state.pool[k], oNew, {}, ['index', 'key']);
+	}
+
+	//console.log('result o.pool',o.pool);
+	return o;
+}
+

@@ -1,10 +1,10 @@
 var ActiveButton = null;
 
-function onClickReset() { 
+function onClickReset() {
 	G.lastState.downloadHistory();
-	
+
 	let lastState = G.lastState.get();
-	Socket.emit('initLastState', { lastState: lastState, u: U.username,}); 
+	Socket.emit('initLastState', { lastState: lastState, u: U.username, });
 }
 function handleLastState(data) {
 	console.log('...lastState:', data);
@@ -84,14 +84,21 @@ function onClickUploadPerlen() {
 		});
 }
 function onClickSaveLastState() {
-	let lastStateSaved = G.lastStateman.save(G,true);
-	console.log('state saved',lastStateSaved.settings.boardFilename,lastStateSaved.randomIndices.length);
+	let lastStateSaved = G.lastStateman.save(G, true);
+	let s = lastStateSaved.settings;
+	console.log('save baseColor', s.baseColor);
+	// console.log('saved lastState','board',s.boardFilename,'baseColor',s.baseColor,'field color',s.fieldColor);
+	// console.log('state saved',lastStateSaved.settings.boardFilename,lastStateSaved.randomIndices.length);
 }
-function onClickRetrieveLastState(){
+function onClickRetrieveLastState() {
 	//das sollte reset sein!
 	let lastState = G.lastStateman.getLastStateSaved();
-	console.log('retrieved lastState',lastState);
-	Socket.emit('initLastState',{lastState:lastState});
+	// console.log('retrieved lastState',lastState);
+	let s = lastState.settings;
+	console.log('retrieve baseColor', s.baseColor);
+	// console.log('retrieved lastState','board',s.boardFilename,'baseColor',s.baseColor,'field color',s.fieldColor);
+
+	Socket.emit('initLastState', { lastState: lastState });
 	return;
 	let elem = createElementFromHTML(`
 		<form action="/lastState" method="post" enctype="multipart/form-data">
@@ -104,8 +111,10 @@ function onClickRetrieveLastState(){
 	clearElement(dAuxContent);
 	mAppend(dAuxContent, elem);
 }
-function onClickSaveToHistory(){
-	console.log('save to history!')
+function onClickSaveToHistory() {
+	console.log('save to history!');
+	let l = G.lastStateman.lastState;
+	downloadAsYaml(l, 'lastState');
 }
 
 function onClickChooseBoard() {
@@ -166,19 +175,23 @@ function onClickModifyLayout(ev) {
 	let inpXOffset = mEditRange('x-offset: ', s.boardMarginLeft, -100, 100, 1, dAuxContent, (a) => { setApply('boardMarginLeft', a) }, styles);
 	let inpYOffset = mEditRange('y-offset: ', s.boardMarginTop, -100, 100, 1, dAuxContent, (a) => { setApply('boardMarginTop', a) }, styles);
 	let inpRot = mEditRange('rotation: ', s.boardRotation, 0, 90, 1, dAuxContent, (a) => { setApply('boardRotation', a) }, styles);
-
+	mLinebreak(dAuxContent);
+	let inpWidth = mEditRange('center dx: ', s.dxCenter, 10, 200, 1, dAuxContent, (a) => { setApply('dxCenter', a) }, styles);
+	let inpHeight = mEditRange('center dy: ', s.dyCenter, 10, 200, 1, dAuxContent, (a) => { setApply('dyCenter', a) }, styles);
 	let inpFieldSize = mEditRange('field size: ', s.szField, 10, 200, 1, dAuxContent, (a) => { setApply('szField', a) }, styles);
+	mLinebreak(dAuxContent);
 
 	let inpSzPerle = mEditRange('perle %: ', s.szPerle, 50, 125, 1, dAuxContent, (a) => { setApply('szPerle', a) }, styles);
 
 	let inpszPoolPerle = mEditRange('pool perle: ', s.szPoolPerle, 40, 140, 1, dAuxContent, (a) => { setApply('szPoolPerle', a) }, styles);
 	let inpDimming = mEditRange('dimming %: ', s.dimming, 0, 100, 1, dAuxContent, (a) => { setApply('dimming', a) }, styles);
 
-	let inpWidth = mEditRange('center dx: ', s.dxCenter, 10, 200, 1, dAuxContent, (a) => { setApply('dxCenter', a) }, styles);
-	let inpHeight = mEditRange('center dy: ', s.dyCenter, 10, 200, 1, dAuxContent, (a) => { setApply('dyCenter', a) }, styles);
+	mLinebreak(dAuxContent);
 
 	let inpFieldColor = mColorPickerControl('field color: ', s.fieldColor, b.img, dAuxContent, (a) => { setApply('fieldColor', a) }, styles);
-	let inpBaseColor = mColorPickerControl('background: ', s.baseColor, b.img, dAuxContent, setNewBackgroundColor, styles);
+	console.log('basecolor', s.baseColor);
+	let inpBaseColor = mColorPickerControl('background: ', s.baseColor, b.img, dAuxContent, (a) => { setApply('baseColor', a) }, styles);
+	// let inpBaseColor = mColorPickerControl('background: ', s.baseColor, b.img, dAuxContent, (a)=>{setNewBackgroundColor(a);s.baseColor = a;}, styles);
 	let inpFullCover = mCheckbox('complete rows: ', s.boardLayout == 'hex1' ? false : true, dAuxContent,
 		(a) => {
 			setApply('boardLayout', a ? 'hex' : 'hex1');
@@ -256,6 +269,86 @@ function onClickResetAll() {
 	Socket.emit('reset');
 }
 
+function onClickSaveColor() {
+	localStorage.setItem('background', G.settings.baseColor);
+	console.log('saved baseColor', G.settings.baseColor);
+}
+function onClickRetrieveColor() {
+	let color = localStorage.getItem('background');
+	console.log('retrieved baseColor', color);
+	G.settings.baseColor = color;
+	Socket.emit('settings', { settings: G.settings });
+}
+function onClickShowSavedColor() {
+	let color = localStorage.getItem('background');
+	console.log('saved background is', color);
+}
+
+function onClickSaveSettings() {
+	localStorage.setItem('settings', JSON.stringify(G.settings));
+	console.log('saved settings (baseColor)', G.settings.baseColor);
+}
+function onClickRetrieveSettings() {
+	let settings = localStorage.getItem('settings');
+	if (isdef(settings)) {
+		settings = JSON.parse(settings);
+		console.log('retrieved settings (baseColor)', settings.baseColor);
+		G.settings = settings;
+		Socket.emit('settings', { settings: G.settings });
+	} else {
+		console.log('no settings in localStorage!');
+	}
+}
+function onClickShowSavedSettings() {
+	let settings = localStorage.getItem('settings');
+	if (isdef(settings)) {
+		settings = JSON.parse(settings);
+		console.log('saved settings (baseColor)', settings.baseColor);
+	} else {
+		console.log('no settings in localStorage!');
+	}
+}
+function saveStateAndSettings(){
+	onClickSaveState();
+	onClickSaveSettings();
+}
+function onClickSaveState() {
+	let st=G.state;
+	let state = { boardArr: st.boardArr, poolArr: st.poolArr, pool: {} };
+	for (const k in st.pool) {
+		let oNew = state.pool[k] = {};
+		copyKeys(st.pool[k], oNew, {}, ['index', 'key']);
+	}
+	localStorage.setItem('state', JSON.stringify(state));
+	localStorage.setItem('randomIndices', JSON.stringify(G.randomIndices));
+	console.log('saved state (boardArr)', state.boardArr.filter(x=>x!==null));
+	console.log('saved state (pool)', Object.keys(state.pool));
+}
+function onClickRetrieveState() {
+	let state = localStorage.getItem('state');
+	let randomIndices = localStorage.getItem('randomIndices');
+	if (isdef(state) && isdef(randomIndices)) {
+		state = JSON.parse(state);
+		randomIndices = JSON.parse(randomIndices);
+		console.log('retrieved state (boardArr)', state.boardArr.filter(x=>x!==null));
+		Socket.emit('state', { state:state,randomIndices:randomIndices });
+	} else {
+		console.log('no state/randomIndices in localStorage!');
+	}
+}
+function onClickShowSavedState() {
+	let state = localStorage.getItem('state');
+	let randomIndices = localStorage.getItem('randomIndices');
+	if (isdef(state) && isdef(randomIndices)) {
+		state = JSON.parse(state);
+		randomIndices = JSON.parse(randomIndices);
+		console.log('retrieved state (boardArr)', state.boardArr.filter(x=>x!==null));
+		// Socket.emit('state', { state:state,randomIndices:randomIndices });
+	} else {
+		console.log('no state/randomIndices in localStorage!');
+	}
+}
+
 //#region helpers TODO => base
 //function addMagnifyOnHover(ui,)
 function mAddBehavior(ui, beh, params) {
@@ -290,14 +383,6 @@ function setApply(prop, val) {
 	let s = G.settings;
 	if (isNumber(val)) val = Number(val); //if (val === true || val === false)
 	s[prop] = val;
-	G.clientBoard = applySettings(G.clientBoard, s);
-}
-function calcFieldGaps(sz) {
-	sz = Number(sz);
-	let s = G.settings;
-	s.wGap = s.dxCenter - sz;
-	s.hGap = s.dyCenter - sz;
-	//clearElement(G.dParent);
 	G.clientBoard = applySettings(G.clientBoard, s);
 }
 function unCamelCase(s) { return separateAtCapitals(s); }

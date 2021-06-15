@@ -42,10 +42,21 @@ class ToolbarClass{
 		// this.addButton('addToPool',onClickAddToPool,'add to pool');
 		this.addButton('add10Random',onClickAdd10Random,'add 10 random');
 		mLinebreak(this.dParent)
-		this.addButton('saveLastState',onClickSaveLastState,'save gamestate');
-		this.addButton('retrieveLastState',onClickRetrieveLastState,'retrieve gamestate');
-		this.addButton('saveToHistory',onClickSaveToHistory,'save to history');
-		
+		// this.addButton('saveLastState',onClickSaveLastState,'save gamestate');
+		// this.addButton('retrieveLastState',onClickRetrieveLastState,'retrieve gamestate');
+		// this.addButton('saveToHistory',onClickSaveToHistory,'save to history');
+		// mLinebreak(this.dParent)
+		this.addButton('saveColor',onClickSaveColor,'save color');
+		this.addButton('retrieveColor',onClickRetrieveColor,'retrieve color');
+		this.addButton('showSavedColor',onClickShowSavedColor,'show color');
+		mLinebreak(this.dParent)
+		this.addButton('saveSettings',onClickSaveSettings,'save settings');
+		this.addButton('retrieveSettings',onClickRetrieveSettings,'retrieve settings');
+		this.addButton('showSavedSettings',onClickShowSavedSettings,'show settings');
+		mLinebreak(this.dParent);
+		this.addButton('saveState',onClickSaveState,'save gamestate');
+		this.addButton('retrieveState',onClickRetrieveState,'retrieve gamestate');
+		this.addButton('showSavedState',onClickShowSavedState,'show gamestate');
 	}
 }
 
