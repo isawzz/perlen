@@ -1657,7 +1657,7 @@ standardSettings:
     szPoolPerle: 50
     dimming: 50
     fieldColor: "#2BAFFF20"
-    baseColor: black
+    baseColor: "#071621F7"
     boardLayout: hex1
     freeForm: false
     uniformRows: false

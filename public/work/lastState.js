@@ -1,12 +1,12 @@
 class LastStateClass {
-	static Verbose = true;
+	static Verbose = false;
 	static LOAD_LAST_STATE = false;
 	static SAVE_EACH_GAMESTATE = false;
 	static SAVE_ON_F5 = false;
 	constructor() {
 		let l = localStorage.getItem('lastState');
 
-		console.log('construct!!!',l)
+		console.log('construct!!! isdef',isdef(l))
 
 		logg('lastStateClass created!')
 		if (isdef(l) && l !== 'undefined') {
@@ -57,10 +57,10 @@ class LastStateClass {
 		return this.lastStateSaved;
 	}
 	localStorageTest(){
-		console.log('this.lastState',this.lastState);
-		console.log('this.lastStateSaved',this.lastStateSaved);
+		//console.log('this.lastState',this.lastState);
+		//console.log('this.lastStateSaved',this.lastStateSaved);
 		let lll=localStorage.getItem('lastState');
-		console.log('localStorage.lastState',lll)
+		//console.log('localStorage.lastState',lll)
 	}
 	downloadHistory() { downloadAsYaml(this.history, 'perlenGames'); }
 
