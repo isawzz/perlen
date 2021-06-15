@@ -1,7 +1,7 @@
 class LastStateClass {
 	static Verbose = false;
 	static LOAD_LAST_STATE = false;
-	static SAVE_EACH_GAMESTATE = false;
+	static SAVE_EACH_GAMESTATE = true;
 	static SAVE_ON_F5 = false;
 	constructor() {
 		let l = localStorage.getItem('lastState');
