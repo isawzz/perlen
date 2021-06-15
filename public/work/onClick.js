@@ -104,6 +104,10 @@ function onClickRetrieveLastState(){
 	clearElement(dAuxContent);
 	mAppend(dAuxContent, elem);
 }
+function onClickSaveToHistory(){
+	console.log('save to history!')
+}
+
 function onClickChooseBoard() {
 	openAux('click board to select');
 	let boards = G.settings.boardFilenames;

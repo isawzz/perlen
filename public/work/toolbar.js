@@ -44,6 +44,7 @@ class ToolbarClass{
 		mLinebreak(this.dParent)
 		this.addButton('saveLastState',onClickSaveLastState,'save gamestate');
 		this.addButton('retrieveLastState',onClickRetrieveLastState,'retrieve gamestate');
+		this.addButton('saveToHistory',onClickSaveToHistory,'save to history');
 		
 	}
 }
