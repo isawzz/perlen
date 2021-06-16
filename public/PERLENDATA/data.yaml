@@ -1269,17 +1269,53 @@ standardSettings:
     boardRotation: 0
     dxCenter: 101
     dyCenter: 117
-    szField: 60
+    szField: 100
     szPerle: 100
     szPoolPerle: 50
     dimming: 50
-    fieldColor: "#ffffff80"
-    idealBg: rgb(76, 127, 206)
+    fieldColor: "#FFFFFF35"
     baseColor: rgb(76, 127, 206)
     boardLayout: hex1
     freeForm: false
     uniformRows: false
     boardFilename: dateTree.jpg
+    wGap: 15
+    hGap: 13
+    backgroundSize: initial
+    sizeBoardHeightToImage: true
+    fieldShape: circle
+    boardLayoutFile: null
+    wFieldArea: 768
+    hFieldArea: 768
+    bgPool: transparent
+    fgPool: "#ffffffff"
+    bgBoard: silver
+    fgBoard: black
+    fzLabel: 16
+    nFields: 51
+    wBoard: 100%
+    hBoard: 768
+    boardStandard: none
+    poolSelection: random
+    numPool: 10
+    labelPos: hover
+    naturalImageSize:
+      w: 1366
+      h: 768
+    idealBg: rgb(76, 127, 206)
+    boardFilenames:
+      - brett03.png
+      - brett10.png
+      - brett18_56.png
+      - brett19_02c.png
+      - brett19_09.png
+      - brett20_43.png
+      - dateTree.jpg
+      - fringe.png
+      - japanese spider.png
+      - majowka-nadmorzem.jpg
+      - mandel sammet bones.png
+      - shapeShifters768.png
   adversarial:
     rows: 9
     cols: 3

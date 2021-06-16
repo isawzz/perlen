@@ -57,7 +57,7 @@
 			</div>
 			<div id='dTempleLobby' style="display: none; position: absolute; margin: 10px; padding: 20px" onclick='onClickTempleLobby()'>🏛️</div>
 			<div id='dButtonsRight' style="position: absolute; right:0px; padding:10px; display:flex">
-				<div id='dResetButton'  onclick='onClickReset()' class='toolbarButtonClass'>♻️</div>				
+				<!-- <div id='dResetButton'  onclick='onClickReset()' class='toolbarButtonClass'>♻️</div>				 -->
 				<!-- <div id='dHelpButton'  onclick='show("dHelpWindow");' class='toolbarButtonClass'>🪔</div>  -->
 				<div id='dColorButton' onclick='onClickPaletteButton();' class='toolbarButtonClass'>🎨</div>
 			</div>
@@ -109,6 +109,11 @@
 			<button onclick='closeAux()' class='button' style="position:absolute;left:0;top:0;border:none;background:transparent;outline:none;color:white">&#10005;</button>
 			<h1 id='dAuxTitle' style="margin:20px 50px">Hallo</h1>
 			<div id='dAuxContent' style="margin:20px"></div>
+		</div>
+		<div id='dAuxRight' style='display:none;z-index:1002'>
+			<button onclick='closeAuxRight()' class='button' style="position:absolute;left:0;top:0;border:none;background:transparent;outline:none;color:white">&#10005;</button>
+			<h1 id='dAuxRightTitle' style="margin:20px 50px">Hallo</h1>
+			<div id='dAuxRightContent' style="margin:20px"></div>
 		</div>
 		<div id='dButtons'>
 			<div id='dGo' onclick='onClickGo()' style='display:none;'>PLAY!</div>
@@ -169,21 +174,17 @@
 		<script src="./work/done/assets.js"></script>
 		<script src="./work/done/board.js"></script>
 		<script src="./work/done/cardGame.js"></script>
-		<script src="./work/done/fileUpload.js"></script>
 		<script src="./work/done/lobby.js"></script>
 		<script src="./work/done/settings.js"></script>
 		<script src="./work/done/shapes.js"></script>
-		<script src="./work/done/si6Class.js"></script>
 		<script src="./work/done/users.js"></script>
 		<script src="./work/done/userAvatar.js"></script>
 
 		<script src="./work/canvas.js"></script>
 		<script src="./work/fake.js"></script>
 		<script src="./work/item.js"></script>
-		<script src="./work/lastState.js"></script>
 		<script src="./work/onClick.js"></script>
-		<!-- <script src="./work/si7.js"></script> -->
-		<script src="./work/si7Class.js"></script>
+		<script src="./work/si8Class.js"></script>
 		<script src="./work/socket.js"></script>
 		<script src="./work/standard.js"></script>
 		<script src="./work/testing.js"></script>

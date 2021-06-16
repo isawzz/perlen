@@ -1,23 +1,31 @@
 var ActiveButton = null;
 
-function onClickReset() {
-	G.lastState.downloadHistory();
+function onClickPerlenPool(ev){
+	let button = ev.target;
+	if (ActiveButton == button) { doPerlenPoolChanges(); return; }
 
-	let lastState = G.lastState.get();
-	Socket.emit('initLastState', { lastState: lastState, u: U.username, });
+	openAux('perlen pool', button);
+	let wWidget = 380;
+	let styles = { w: wWidget, align: 'center', margin: 6 };
+	let defOptions = {nAdd:5,nRemove:5,clearBoard:false,justRandom:true};
+	if (nundef(G.perlenOptions)) G.perlenOptions = {};
+	let s = G.perlenOptions;
+	copyKeys(defOptions,s);
+	let dp = mBy('dAuxContent');
+	let inpAddRandom = mEditRange('add: ', s.nAdd, 1, 20, 1, dp, (a) => { s.nAdd = a;  }, styles);
+	let inpRemove = mEditRange('remove: ', s.nRemove, 1, 20, 1, dp, (a) => { s.nRemove = a;  }, styles);
+	let inpClearBoard = mCheckbox('clear board: ', s.clearBoard, dp, (a) => { s.clearBoard = a; }, styles);
+	let inpClearPool = mCheckbox('clear pool: ', s.clearPool, dp, (a) => { s.clearPool = a; }, styles);
+	let inpOnlyRandom = mCheckbox('just random: ', s.justRandom, dp, (a) => { s.justRandom = a; }, styles);
+
 }
-function handleLastState(data) {
-	console.log('...lastState:', data);
-	data = data.data;
-	let [s, parr, barr, rand, pool] = [data.settings, data.state.poolArr, data.state.boardArr, data.randomIndices, data.state.pool];
-	console.log(
-		'settings', s,
-		'\nboardFilename', s.boardFilename,
-		'\npoolArr', parr,
-		'\nboard', barr.filter(x => x),
-		'\nrandom', rand,
-		// '\n',
-	);
+function doPerlenPoolChanges(){
+	//using G.perlenOptions
+	let s=G.perlenOptions;
+	// mit poolChange sollte alles auf einmal executed werden!!!
+	console.log('options:',s);
+	Socket.emit('perlenOptions',s);
+
 }
 
 function openAux(title, button) {
@@ -52,7 +60,6 @@ function setActiveButton(button) {
 	mStyleX(button, { bg: 'dimgray', fg: 'white' });
 	button.innerHTML = 'submit command!';
 }
-
 function onClickToolbarButton() {
 	if (isVisible('sidebar')) {
 		hide('sidebar');
@@ -62,6 +69,8 @@ function onClickToolbarButton() {
 		mStyleX(dTable, { w: '100%' });
 	}
 }
+
+//#region upload perlen or boards
 function onClickUploadBoard(ev) {
 	//hier gib das zeug vom anderen hin!
 
@@ -83,6 +92,9 @@ function onClickUploadPerlen() {
 			closeAux();
 		});
 }
+//#endregion
+
+//#lastState old code
 function onClickSaveLastState() {
 	let lastStateSaved = G.lastStateman.save(G, true);
 	let s = lastStateSaved.settings;
@@ -116,18 +128,25 @@ function onClickSaveToHistory() {
 	let l = G.lastStateman.lastState;
 	downloadAsYaml(l, 'lastState');
 }
+//#endregion
 
+//#region board options
+function onClickBoardInChooseBoard(boardFilename) {
+	if (boardFilename == G.settings.boardFilename) return;
+	G.settings.boardFilename = boardFilename;
+	Socket.emit('settings', { settings: G.settings });
+}
 function onClickChooseBoard() {
 	openAux('click board to select');
 	let boards = G.settings.boardFilenames;
 	//console.log(boards);
 	for (const b of boards) {
 		let img = mImg(PERLENPATH_FRONT + 'bretter/' + b, dAuxContent, { cursor: 'pointer', h: 200, margin: 8, 'vertical-align': 'baseline' });
-		img.onclick = () => { closeAux(); G.chooseBoard(b); }
+		img.onclick = () => { closeAux(); onClickBoardInChooseBoard(b); } //G.chooseBoard(b); }
 	}
 	//add empty frame for empty
 	let img = mDiv(dAuxContent, { cursor: 'pointer', display: 'inline-block', border: 'black', w: 300, h: 200, margin: 8, box: true });
-	img.onclick = () => { closeAux(); G.chooseBoard('none'); }
+	img.onclick = () => { closeAux(); onClickBoardInChooseBoard('none'); } //G.chooseBoard('none'); }
 }
 function onClickPrefabGallery() {
 	openAux('choose board + layout');
@@ -159,7 +178,6 @@ function onClickPrefabGallery() {
 	}
 	//console.log(boardExamples);
 }
-
 function onClickActivateLayout() { closeAux(); Socket.emit('settings', { settings: G.settings }); }
 function onClickModifyLayout(ev) {
 
@@ -205,17 +223,25 @@ function onClickSaveAsPrefab() {
 	closeAux();
 
 }
+//#endregion
+
 function onClickClearPerlenpool() {
-	//perlen im pool werden destroyed
-	//die am board bleiben
 	closeAux();
 	G.clearPoolUI();
 	Socket.emit('clearPoolarr');
 }
-function onClickClearBoard() {
-	closeAux();
-	G.clearBoard();
+
+//#region old code to be dep
+function onClickClearBoard() { 
+	closeAux(); 
+	let [plist, fields] = G.clearBoardUI();
+	console.log('sending remove all perlen command', plist, fields);
+	console.log('===> remove list', plist, fields);
+	let data = { iPerlen: plist.map(x => x.index), iFroms: fields.map(x => x.index), username: Username };
+	logClientSend('removePerlen', data);
+	Socket.emit('removePerlen', data);
 }
+
 function onClickClearAllPerlen() {
 	closeAux();
 	G.clearBoardUI();
@@ -257,18 +283,20 @@ function onClickAddToPool(ev) {
 
 
 }
-function onClickAdd10Random() {
+function onClickAdd5Random() {
 	closeAux();
-	Socket.emit('poolChange', { n: 10 });
+	Socket.emit('poolChange', { n: 5 });
 }
-function onClickRemove10Random() {
+function onClickRemove5Random() {
 	closeAux();
-	Socket.emit('removeRandom', { n: 10 });
+	Socket.emit('removeRandom', { n: 5 });
 }
 function onClickResetAll() {
 	Socket.emit('reset');
 }
+//#endregion
 
+//#region saveColor retrieveColor
 function onClickSaveColor() {
 	localStorage.setItem('background', G.settings.baseColor);
 	console.log('saved baseColor', G.settings.baseColor);
@@ -283,6 +311,7 @@ function onClickShowSavedColor() {
 	let color = localStorage.getItem('background');
 	console.log('saved background is', color);
 }
+//#endregion
 
 function onClickSaveSettings() {
 	localStorage.setItem('settings', JSON.stringify(G.settings));
@@ -308,12 +337,34 @@ function onClickShowSavedSettings() {
 		console.log('no settings in localStorage!');
 	}
 }
-function saveStateAndSettings(){
+function saveStateAndSettings() {
 	onClickSaveState();
+	console.assert(BaseColor == G.settings.baseColor, 'Colors do NOT match at saving state!!!')
 	onClickSaveSettings();
+	//onClickSaveColor();
+}
+function recoverStateAndSettings() {
+	//retrieve state,color and settings
+	onClickRetrieveState();
+	let settings = localStorage.getItem('settings');
+	if (isdef(settings)) {
+		settings = JSON.parse(settings);
+		console.log('retrieved settings (baseColor)', settings.baseColor);
+		G.settings = settings;
+		// let color = localStorage.getItem('background');
+		// console.log('got color',color)
+		// if (isdef(color)) {
+		// 	//color=JSON.parse(color);
+		// 	console.log('retrieved baseColor', color);
+		// 	G.settings.baseColor = color;
+		// }
+		Socket.emit('settings', { settings: G.settings });
+	} else {
+		console.log('no settings in localStorage!');
+	}
 }
 function onClickSaveState() {
-	let st=G.state;
+	let st = G.state;
 	let state = { boardArr: st.boardArr, poolArr: st.poolArr, pool: {} };
 	for (const k in st.pool) {
 		let oNew = state.pool[k] = {};
@@ -321,7 +372,7 @@ function onClickSaveState() {
 	}
 	localStorage.setItem('state', JSON.stringify(state));
 	localStorage.setItem('randomIndices', JSON.stringify(G.randomIndices));
-	console.log('saved state (boardArr)', state.boardArr.filter(x=>x!==null));
+	console.log('saved state (boardArr)', state.boardArr.filter(x => x !== null));
 	console.log('saved state (pool)', Object.keys(state.pool));
 }
 function onClickRetrieveState() {
@@ -330,8 +381,8 @@ function onClickRetrieveState() {
 	if (isdef(state) && isdef(randomIndices)) {
 		state = JSON.parse(state);
 		randomIndices = JSON.parse(randomIndices);
-		console.log('retrieved state (boardArr)', state.boardArr.filter(x=>x!==null));
-		Socket.emit('state', { state:state,randomIndices:randomIndices });
+		console.log('retrieved state (boardArr)', state.boardArr.filter(x => x !== null));
+		Socket.emit('state', { state: state, randomIndices: randomIndices });
 	} else {
 		console.log('no state/randomIndices in localStorage!');
 	}
@@ -342,13 +393,15 @@ function onClickShowSavedState() {
 	if (isdef(state) && isdef(randomIndices)) {
 		state = JSON.parse(state);
 		randomIndices = JSON.parse(randomIndices);
-		console.log('retrieved state (boardArr)', state.boardArr.filter(x=>x!==null));
+		console.log('retrieved state (boardArr)', state.boardArr.filter(x => x !== null));
 		// Socket.emit('state', { state:state,randomIndices:randomIndices });
 	} else {
 		console.log('no state/randomIndices in localStorage!');
 	}
 }
 
+function onClickRecovery() { recoverStateAndSettings(); }
+function onClickRecpoint() { saveStateAndSettings(); }
 //#region helpers TODO => base
 //function addMagnifyOnHover(ui,)
 function mAddBehavior(ui, beh, params) {
@@ -397,3 +450,4 @@ function separateAtCapitals(s) {
 	return sNew;
 }
 //#endregion
+

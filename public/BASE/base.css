@@ -155,8 +155,21 @@
 	text-align: left;
 	z-index: 100;
 }
-#dAux button,#dAux input{
+#dAux button,#dAux input,#dAuxRight button,#dAuxRight input {
 	margin:4px;
+}
+#dAuxRight {
+	position: absolute;
+	right: 20px;
+	top: 100px;
+	margin: 10px;
+	border-radius: 8px;
+	border: 1px solid white;
+	padding: 0;
+	box-sizing: border-box;
+	background: dimgray;
+	text-align: left;
+	z-index: 100;
 }
 
 

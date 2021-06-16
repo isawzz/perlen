@@ -9,8 +9,9 @@ function makeCanvas(d){
 }
 
 function onClickPaletteButton() {
-	if (HEROKU) { setNewBackgroundColor(); return; }
-	setNewBackgroundColor(); 
+	//if (HEROKU) { setNewBackgroundColor(); return; }
+	//setNewBackgroundColor(); 
+	alert('FUNCTION DISABLED!')
 	return;
 
 	IsCanvasActive = !IsCanvasActive;

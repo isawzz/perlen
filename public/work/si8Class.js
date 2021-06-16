@@ -1,5 +1,7 @@
 var StepCounter = 0;
-
+function startingSetup(){
+	//let ev = {target:mBy('b_perlenPool')};	onClickPerlenPool(ev);
+}
 class SimpleClass7 {
 	constructor() {
 		this.dParent = dTable;
@@ -7,17 +9,8 @@ class SimpleClass7 {
 		this.settings = {};
 		this.randomIndices = [];
 		openToolbar();
-		//this.lastStateman = new LastStateClass(); //ganz am anfang: _lastState darf NICHT gleich ueberschrieben werden!!!
-
-		//this.sheet=new BlankSheet(Socket,mBy('sheet'));
 	}
 	presentGameState(data) {
-
-		//this.lastStateman.localStorageTest();
-
-		console.assert(nundef(data.lastState), 'HEY DER SENDET LASTSTATE!!!!')
-		//setTimeout(		onClickEditLayout,200		);
-		//console.log('kkkkkkk',1 !== true, isNumber(true),true===1);
 		console.log('_________________________gs', StepCounter); StepCounter += 1;
 
 		mStyleX(dTable, { h: window.innerHeight });
@@ -26,22 +19,17 @@ class SimpleClass7 {
 
 		console.assert(state.poolArr.map(x => !isList(x)), 'BUGBUGBUGBUGBUGBUGBUG!!!')
 
-		//if (settings == Settings.o && Settings.o == this.settings) console.log('...settings ok'); else console.assert(settings == Settings && Settings == this.settings, 'hallo settings FALSCH!!!!!!!!!!!!!')
 		let needToLoadBoard = nundef(this.clientBoard) || this.clientBoard.boardFilename != settings.boardFilename;
-
 		// *** jetzt sind settings,state,perleDict,pool,needToLoadBoard up-to-date ***
 
 		if (needToLoadBoard) {
-			clearElement(this.dParent); this.dPool = null;
-
+			clearElement(this.dParent);
+			this.dPool = null;
 			this.clientBoard = applyStandard(this.dParent, this.settings);
 			if (!this.inSyncWithServer()) return; //else console.log('...sync ok!');
-		} //else if (isdef(data.settings)) { this.clientBoard = applySettings(this.clientBoard, this.settings); }
-		if (this.settings.baseColor != BaseColor) {
-			console.log('set baseColor',this.settings.baseColor);
-
-			setNewBackgroundColor(this.settings.baseColor)
 		}
+		else if (isdef(data.settings)) { this.clientBoard = applySettings(this.clientBoard, this.settings); }
+
 		if (nundef(this.dPool)) {
 			mLinebreak(this.dParent, 30);
 			let dPool = this.dPool = mDiv(this.dParent);
@@ -52,28 +40,6 @@ class SimpleClass7 {
 		}
 		this.presentPerlen();
 		this.activateDD();
-	}
-	chooseBoard(boardFilename) {
-		if (boardFilename == this.settings.boardFilename) return;
-		Socket.emit('chooseBoard', { boardFilename: boardFilename });
-	}
-	createFields() {
-		let [b, s] = [this.clientBoard, this.settings];
-		let dCells = b.dCells = mDiv(b.dOuter, { matop: s.boardMarginTop, maleft: s.boardMarginLeft, w: b.wNeeded, h: b.hNeeded, position: 'relative' }); //, bg: 'green' });
-
-		let [wCell, hCell, wGap, hGap] = [s.dxCenter, s.dyCenter, s.wGap, s.hGap];
-		//console.log(wCell, hCell);
-		let fields = b.fields = [], i = 0, dx = wCell / 2, dy = hCell / 2;
-		let bg = s.fieldColor;
-		for (const p of b.centers) {
-			let left = p.x - dx + wGap / 2;
-			let top = p.y - dy + hGap / 2;
-			let dItem = mDiv(dCells, { position: 'absolute', left: left, top: top, display: 'inline', w: wCell - wGap, h: hCell - hGap, rounding: '50%', bg: bg });
-			mCenterCenterFlex(dItem)
-			let f = { div: dItem, index: i, center: p }; i += 1;
-			fields.push(f);
-		}
-		if (s.boardRotation != 0) { dCells.style.transform = `rotate(${s.boardRotation}deg)`; }
 	}
 	clearBoardUI() {
 		let b = this.clientBoard;
@@ -96,11 +62,6 @@ class SimpleClass7 {
 			}
 		}
 		return [perlen, fields];
-	}
-	clearBoard() {
-		let [perlen, fields] = this.clearBoardUI();
-		console.log('sending remove all perlen command', perlen, fields);
-		sendRemovePerlen(perlen, fields);
 	}
 	clearPoolUI() { clearElement(this.dPool); }
 	presentPerlen() {
@@ -318,35 +279,19 @@ class SimpleClass7 {
 
 //#region perlen game start here!
 function simplestPerlenGame() {
-
-	// console.log('arrno',arrNoDuplicates([1,2,3,4,5,3,2,4,1]));
-
 	hide('dMainContent');
 	show('dGameScreen');
 	setTitle('Glasperlenspiel');
 	setSubtitle('logged in as ' + Username);
-	let color = USERNAME_SELECTION == 'local' ? localStorage.getItem('BaseColor') : null;
-	setNewBackgroundColor(color);
 	mStyleX(document.body, { opacity: 1 });
 	initTable(null, 2); initSidebar(); initAux(); initScore();
 	ColorThiefObject = new ColorThief();
-	//if (PERLEN_EDITOR_OPEN_AT_START) createPerlenEditor();
 	sendStartOrJoinPerlenGame();
 }
 function sendStartOrJoinPerlenGame() {
 	if (STARTED) {
-		if (isdef(G)) {
-			//console.log('haaaaaaaaaaaaaaalo')
-			//hier muss _lastState saved werden! denn er ist noch da!
-			//bei einem server restart passiert genau das dass die connection reset wird
-			//und dadurch das ganze neu started!
-			if (LastStateClass.SAVE_ON_F5) saveStateAndSettings();//G.lastStateman.save(G, true);
-			else (logg('sendStartOrJoin: NOT saving lastState'));
-		}
-		//das passiert wenn server reset!
-		//muss message geben: please reload!
-		//muss zuerst
-		console.log('SERVER RESTART || REENTRACE PROBLEM!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!');
+		if (isdef(G)) { saveStateAndSettings(); }
+		console.log('SERVER RESTART?!?!?!!!');
 		return;
 	}
 	STARTED = true;
@@ -356,37 +301,14 @@ function sendStartOrJoinPerlenGame() {
 	window.onkeydown = keyDownHandler;
 	window.onkeyup = keyUpHandler;
 	mBy('sidebar').ondblclick = () => { closeAux(); hide('sidebar') };
-	G = VERSION == 7 ? new SimpleClass7() : new SimpleClass();
-	//Settings = new PerlenSettingsClass(G.settings, U, mBy('dSettingsWindow'));
-	//if (!USESOCKETS) G.presentGameState();
-}
-//skip next 2 steps!
-function handleInitialPool(data) {
-	console.assert(isdef(G), 'G not defined!!!!!!!!!!!')
-	//if (nundef(G.settings) && isdef(data.settings)) 
-	if (isdef(data.settings) && isdef(G.settings)) copyKeys(data.settings, G.settings);
-	else if (isdef(data.settings)) copyKeys(data.settings, G.settings);
-	else if (isdef(G.settings)) G.settings.individualSelection = true;
-	else if (nundef(data.settings) && nundef(G.settings)) copyKeys({ individualSelection: true }, G.settings);
-	G.initialPoolSelected = false;
-	logClientReceive('initialPool', data);
-	setTitle(data.instruction);
-	G.presentGameState(data);
-	createPerlenEditor();
+	G = new SimpleClass7();
+	startingSetup();
 
 }
+
 //handling socket messages for perlen game
-
-function handleGameState(data) {
-	logClientReceive('gameState', data);
-	//console.log('data',data)
-	G.presentGameState(data);
-}
-function handleDbUpdate(data) {
-	logClientReceive('dbUpdate', data);
-	//console.log('data',data)
-	DB.standardSettings = data.standardSettings;
-}
+function handleGameState(data) { logClientReceive('gameState', data); G.presentGameState(data); }
+function handleDbUpdate(data) { logClientReceive('dbUpdate', data); DB.standardSettings = data.standardSettings; }
 
 function sendMovePerle(perle, fFrom, fTo, dis) {
 	//console.log('===> PLACE')
@@ -399,12 +321,6 @@ function sendMoveField(f) {
 	let data = { dxy: f.item.dxy, iField: f.index, username: Username };
 	logClientSend('moveField', data);
 	Socket.emit('moveField', data);
-}
-function sendRemovePerlen(plist, fields) {
-	console.log('===> remove list', plist, fields);
-	let data = { iPerlen: plist.map(x => x.index), iFroms: fields.map(x => x.index), username: Username };
-	logClientSend('removePerlen', data);
-	Socket.emit('removePerlen', data);
 }
 function sendRemovePerle(perle, fFrom) {
 	//console.log('===> PLACE')

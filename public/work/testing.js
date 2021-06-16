@@ -22,8 +22,8 @@ function runTest() {
 async function editLayoutTests() {
 	DB = await route_path_yaml_dict('./PERLENDATA/data.yaml');
 	lastState = await route_path_yaml_dict('./PERLENDATA/lastState.yaml');
-	G = { settings: lastState.settings, dParent: dTable, clientBoard:{} };
-	applyStandard(G.dParent,G.settings);
+	G = { settings: lastState.settings, dParent: dTable, clientBoard: {} };
+	applyStandard(G.dParent, G.settings);
 	onClickEditLayout();
 }
 

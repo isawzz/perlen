@@ -9,7 +9,7 @@ const base = require('./public/BASE/base.js');
 const { PORT, PERLEN_DATA_PATH } = require('./public/BASE/globals.js');
 const utils = require('./serverfiles/utils.js');
 const userman = require('./serverfiles/userManager.js');
-const perlenGame = require('./serverfiles/pg7.js');
+const perlenGame = require('./serverfiles/pg8.js');
 //const test = require('./serverfiles/serverTest.js');
 //#endregion
 
@@ -107,12 +107,14 @@ io.on('connection', client => {
 	client.on('removePerlen', x => simple.handleRemovePerlen(client, x));
 	client.on('startOrJoinPerlen', x => simple.handleStartOrJoin(client, x));
 
-	client.on('chooseBoard', x => simple.handleChooseBoard(client, x));
+	// client.on('chooseBoard', x => simple.handleChooseBoard(client, x));
 	client.on('settings', x => simple.handleSettings(client, x));
 	client.on('state',  x => simple.handleState(client, x));
 	client.on('prefab', x => simple.handlePrefab(client, x));
 	client.on('reset', x => simple.handleReset(client, x));
 
+	//perlenOptions should replace all the ones below!
+	client.on('perlenOptions', x => simple.handlePerlenOptions(client, x)); 
 	client.on('poolChange', x => simple.handlePoolChange(client, x));
 	client.on('removeRandom', x => simple.handleRemoveRandom(client, x));
 	client.on('clearPoolarr', x => simple.handleClearPoolarr(client, x));

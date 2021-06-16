@@ -28,7 +28,7 @@ function initSocket() {
 	Socket.on('hide', handleHide);
 
 	//debugging:
-	Socket.on('lastState', handleLastState);
+	//Socket.on('lastState', handleLastState);
 
 	//Socket.on('initialPool', handleInitialPool); //skip for now!
 

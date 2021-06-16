@@ -13,7 +13,6 @@ const USERNAME_SELECTION = 'local'; // random | local | nil | gul | ma ...
 // const HEROKU = false;
 // const USERNAME_SELECTION = 'random'; // random | local | nil | gul | ma ...
 
-const VERSION = 7;
 const UITEST = false;
 
 //var USESOCKETS = true; //false ist wahtscheinlich broken!

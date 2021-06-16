@@ -7,8 +7,8 @@ async function startClientTest() {
 	setTitle('*** Testing ***');
 	setSubtitle('logged in as ' + Username);
 
-	let color = USERNAME_SELECTION == 'local' ? localStorage.getItem('BaseColor') : null;
-	setNewBackgroundColor(color);
+	//let color = USERNAME_SELECTION == 'local' ? localStorage.getItem('BaseColor') : null;
+	//setNewBackgroundColor(color);
 	mStyleX(document.body, { opacity: 1 });
 	initTable(null, 2); initSidebar(); initAux(); initScore();
 	runClientTest();
