@@ -283,6 +283,38 @@ function onClickAddToPool(ev) {
 
 
 }
+function onClickChoosePerlen(ev) {
+
+	let button = ev.target;
+	if (ActiveButton == button) { //submit!
+		if (isdef(DA.selectedPerlen) && !isEmpty(DA.selectedPerlen)) {
+			let keys = DA.selectedPerlen.map(x => x.key);
+			//console.log('send poolChange!!!')
+			Socket.emit('poolChange', { keys: keys });
+			delete DA.selectedPerlen;
+		}
+		closeAux();
+		return;
+	}
+	openAux('pick perlen', button);
+	let d = mDiv(dAuxContent);
+	let items = [];
+	for (const k in G.perlenDict) {
+		let p = jsCopy(G.perlenDict[k]);
+		p.path = mPath(p);
+		console.log('path', p.path)
+		//if (!(p.path.includes('.'))) p.path +='.png';
+		//if (k=='adherent' || k=='fringe') console.log(p.path,p)
+		let ui = createPerle(p, d, 64, 1.3, .4);
+		mStyleX(ui, { opacity: 1 });
+		iAdd(p, { div: ui });
+		items.push(p);
+	}
+	DA.selectedPerlen = [];
+	items.map(x => iDiv(x).onclick = ev => { toggleItemSelection(x, DA.selectedPerlen) });
+
+
+}
 function onClickAdd5Random() {
 	closeAux();
 	Socket.emit('poolChange', { n: 5 });

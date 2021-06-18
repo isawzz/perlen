@@ -45,6 +45,7 @@ class ToolbarClass {
 			// this.addButton('addToPool',onClickAddToPool,'add to pool');
 			this.addButton('add5Random', onClickAdd5Random, 'add 5 random');
 		}else{
+			this.addButton('choosePerlen', onClickChoosePerlen, 'choose perlen');
 			this.addButton('perlenPool', onClickPerlenPool, 'perlen pool');
 		}
 

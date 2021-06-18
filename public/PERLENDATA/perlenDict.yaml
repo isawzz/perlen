@@ -782,3 +782,31 @@ zukunftsszenarien:
   text: überleben
   key: überleben
   path: überleben.png
+entscheidung:
+  text: entscheidung
+  key: entscheidung
+  path: entscheidung.png
+ziel:
+  text: ziel
+  key: ziel
+  path: ziel.png
+ulan ude:
+  text: ulan ude
+  key: ulan ude
+  path: ulan ude.png
+medizin:
+  text: medizin
+  key: medizin
+  path: medizin.png
+roter faden:
+  text: roter faden
+  key: roter faden
+  path: roter faden.png
+altmodisch:
+  text: altmodisch
+  key: altmodisch
+  path: altmodisch.png
+spinne:
+  text: spinne
+  key: spinne
+  path: spinne.png
