@@ -11,7 +11,7 @@ class SimpleClass7 {
 		openToolbar();
 	}
 	presentGameState(data) {
-		console.log('_________________________gs', StepCounter); StepCounter += 1;
+		//console.log('_________________________gs', StepCounter); StepCounter += 1;
 
 		mStyleX(dTable, { h: window.innerHeight });
 
@@ -267,7 +267,7 @@ class SimpleClass7 {
 		if (st.boardArr.length != b.nFields) { corr.nFields = s.nFields = b.nFields; }
 		if (s.rows != b.rows || s.cols != b.cols) { corr.rows = s.rows = b.rows; corr.cols = s.cols = b.cols; }
 		if (!isEmpty(Object.keys(corr))) {
-			console.log('sending syncBoardLayout!!! corr', corr)
+			//console.log('sending syncBoardLayout!!! corr', corr)
 			Socket.emit('settings', { settings: this.settings });
 			// Socket.emit('syncBoardLayout', { nFields: b.nFields, rows: b.rows, cols: b.cols, layout: b.layout, boardFilename: b.boardFilename });
 			return false;

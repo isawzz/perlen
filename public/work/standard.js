@@ -6,7 +6,7 @@ function applySettings(b, s, h=768, topFrame = 0) {
 	clearElement(b.dOuter);
 	b.fields = null;
 	createFields(s, b, scale);
-	console.log('applySettings: baseColor',s.baseColor);
+	//console.log('applySettings: baseColor',s.baseColor);
 	if (isRealBoard) setNewBackgroundColor(s.baseColor);
 	//console.log('b.fields',b.fields)
 	return b;
@@ -31,7 +31,7 @@ function applyStandard(dParent, s, h = 768, topFrame = 0) {
 	mCenterCenterFlex(dOuter);
 	loadBoardImage(dParent, s, b, scale, topFrame != 0);
 	// console.log('applyStandard: isRealBoard',isRealBoard,'board',s.boardFilename,'baseColor',s.baseColor,'field color',s.fieldColor);
-	console.log('applyStandard: baseColor',s.baseColor);
+	//console.log('applyStandard: baseColor',s.baseColor);
 	if (isRealBoard) setNewBackgroundColor(s.baseColor);
 	createFields(s, b, scale);
 	//console.log('b.fields',b.fields)

@@ -111,7 +111,7 @@ function onClickModifyLayout(ev) {
 	mLinebreak(dAuxContent);
 
 	let inpFieldColor = mColorPickerControl('field color: ', s.fieldColor, b.img, dAuxContent, (a) => { setApply('fieldColor', a) }, styles);
-	console.log('basecolor', s.baseColor);
+	//console.log('basecolor', s.baseColor);
 	let inpBaseColor = mColorPickerControl('background: ', s.baseColor, b.img, dAuxContent, (a) => { setApply('baseColor', a) }, styles);
 	// let inpBaseColor = mColorPickerControl('background: ', s.baseColor, b.img, dAuxContent, (a)=>{setNewBackgroundColor(a);s.baseColor = a;}, styles);
 	let inpFullCover = mCheckbox('complete rows: ', s.boardLayout == 'hex1' ? false : true, dAuxContent,
@@ -185,7 +185,7 @@ function doPerlenPoolChanges() {
 	//using G.perlenOptions
 	let s = G.perlenOptions;
 	// mit poolChange sollte alles auf einmal executed werden!!!
-	console.log('options:', s);
+	//console.log('options:', s);
 	Socket.emit('perlenOptions', s);
 
 }
@@ -208,13 +208,13 @@ function onClickLoadStateAndSettings() {
 }
 function saveStateAndSettings(prefix = '') {
 	onClickSaveState(prefix);
-	console.assert(BaseColor == G.settings.baseColor, 'Colors do NOT match at saving state!!!')
 	onClickSaveSettings(prefix);
-	//onClickSaveColor();
+	console.assert(BaseColor == G.settings.baseColor, 'Colors do NOT match at saving state!!!')
 }
 function recoverStateAndSettings(prefix = '') {
 	//retrieve state,color and settings
 	onClickRetrieveState(prefix);
+	onClickRetrieveSettings(prefix);
 }
 function onClickSaveSettings(prefix) {
 	localStorage.setItem(prefix + 'settings', JSON.stringify(G.settings));
@@ -241,8 +241,8 @@ function onClickSaveState(prefix) {
 	}
 	localStorage.setItem(prefix + 'state', JSON.stringify(state));
 	localStorage.setItem(prefix + 'randomIndices', JSON.stringify(G.randomIndices));
-	console.log('saved state (boardArr)', state.boardArr.filter(x => x !== null));
-	console.log('saved state (pool)', Object.keys(state.pool));
+	//console.log('saved state (boardArr)', state.boardArr.filter(x => x !== null));
+	//console.log('saved state (pool)', Object.keys(state.pool));
 }
 function onClickRetrieveState(prefix) {
 	let state = localStorage.getItem(prefix + 'state');
