@@ -14,9 +14,10 @@ class ToolbarClass {
 		this.populate();
 
 	}
-	addButton(key, handler, caption) {
+	addButton(key, handler, caption, gapTop=0) {
 		if (nundef(caption)) caption = key;
 		let styles = { w: 100 };
+		if (gapTop > 0) styles.matop=gapTop;
 		let b = this.buttons[key] = mButton(caption, handler, this.dParent, styles, null, 'b_' + key);
 	}
 	removeButton() { }
@@ -58,8 +59,10 @@ class ToolbarClass {
 		mLinebreak(this.dParent);
 		this.addButton('saveGamestate', onClickSaveStateAndSettings, 'save gamestate');
 		this.addButton('loadGamestate', onClickLoadStateAndSettings, 'load gamestate');
-		mLinebreak(this.dParent);
+		//mLinebreak(this.dParent,2);
 
+		this.addButton('downloadHistory', onClickDownloadHistory, 'download states',4);
+		mLinebreak(this.dParent);
 		// mLinebreak(this.dParent);
 		// this.addButton('saveColor', onClickSaveColor, '&nbsp;save&nbsp; color');
 		// this.addButton('retrieveColor', onClickRetrieveColor, 'retrieve color');

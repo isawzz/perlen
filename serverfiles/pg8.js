@@ -331,8 +331,7 @@ class GP2 {
 	//#endregion
 
 	//#region setting handlers
-	handleSettings(client, x) {
-		logReceive('settings', x.settings.nFields);
+	establishSettings(x){
 
 		let [s, sNew] = [this.settings, x.settings];
 		//let freeFormReset = s.freeForm && !sNew.freeForm;
@@ -348,6 +347,10 @@ class GP2 {
 		}
 
 		this.reduceBoardArrIfDoesntFit();
+	}
+	handleSettings(client, x) {
+		logReceive('settings', x.settings.nFields);
+		this.establishSettings(x);
 		this.safeEmitState(['settings']);
 	}
 	handlePrefab(client, x) {
@@ -358,14 +361,15 @@ class GP2 {
 		this.io.emit('dbUpdate', { standardSettings: this.db.standardSettings });
 	}
 	handleState(client, x) {
+		this.establishSettings(x);
 		this.randomIndices = x.randomIndices;
 		let state = this.state = x.state;
 		this.reduceBoardArrIfDoesntFit();
-		console.log('state.pool', state.pool)
-		// let indices = Object.values(state.pool).map(x=>x.index);
-		// this.maxPoolIndex = base.arrMax(indices)+1;
-		// console.log('maxPoolIndex',this.maxPoolIndex);
-		this.safeEmitState(['pool']);
+		//console.log('state.pool', state.pool)
+		let indices = Object.values(state.pool).map(x=>x.index);
+		this.maxPoolIndex = base.arrMax(indices)+1;
+		console.log('maxPoolIndex',this.maxPoolIndex);
+		this.safeEmitState(['pool','settings']);
 	}
 	handlePerlenOptions(client, x) {
 		if (x.clearBoard && x.clearPool) { this.clearAllPerlen(); }
@@ -437,6 +441,12 @@ class GP2 {
 
 		for (const key of randomKeys) {
 			base.addToPool(this.state.pool, this.state.poolArr, this.perlenDict[key], this.maxPoolIndex);
+
+			let rlist=this.randomIndices;
+			if (rlist.includes(this.maxPoolIndex)){
+				console.log('maxPoolIndex included!!!!',rlist,this.maxPoolIndex)
+			}
+
 			this.randomIndices.push(this.maxPoolIndex);
 			this.maxPoolIndex += 1;
 		}
@@ -472,7 +482,7 @@ class GP2 {
 	removeRandomFromPool(n) {
 		let inter = base.intersection(this.state.poolArr, this.randomIndices);
 		let keys = base.choose(inter, n);
-		//console.log('rr','n',n,'\ninter',inter,'\nkeys',keys)
+		console.log('rr','n',n,'\ninter',inter,'\nkeys',keys)
 		for (let p of keys) {
 			//console.log('removing',this.state.pool[p].key);
 			base.removeInPlace(this.randomIndices, p);
@@ -495,16 +505,16 @@ class GP2 {
 		state.poolArr = [];
 		state.boardArr = [];
 		state.pool = {};
-		this.randomKeys = [];
+		this.randomIndices = [];
 		this.maxPoolIndex = 0;
 	}
 	clearBoard() {
-		//add a		
 		//alle von boardArr muessen zu poolArr als erstes
-		for (let i = 0; i < boardArr.lengthh; i++) {
+		let boardArr = this.state.boardArr;
+		for (let i = 0; i < boardArr.length; i++) {
 			let iPerle = boardArr[i];
 			if (iPerle === null) { continue; }
-			removePerle(iPerle, i);
+			this.removePerle(iPerle, i);
 		}
 	}
 	clearPool() {

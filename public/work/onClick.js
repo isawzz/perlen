@@ -2,6 +2,7 @@ var ActiveButton = null;
 
 function onClickToolbarButton() {
 	if (isVisible('sidebar')) {
+		closeAux();
 		hide('sidebar');
 		mStyleX(dTable, { w: 'calc( 100% - 120 )' });
 	} else {
@@ -197,63 +198,47 @@ function onClickClearPerlenpool() {
 
 //#endregion
 
-//#region load and save state
+//#region load and save state NEW
+var HistoryOfStates = {};
 function onClickSaveStateAndSettings() {
 	let prefix = prompt('enter name: ');
-	if (!isEmpty(prefix)) saveStateAndSettings(prefix);
+	if (!isEmpty(prefix)) {
+		let pack = saveState(prefix);
+		HistoryOfStates[prefix] = pack;
+	}
 }
 function onClickLoadStateAndSettings() {
 	let prefix = prompt('enter name: ');
-	if (!isEmpty(prefix)) recoverStateAndSettings(prefix);
+	if (!isEmpty(prefix)) retrieveState(prefix);
 }
-function saveStateAndSettings(prefix = '') {
-	onClickSaveState(prefix);
-	onClickSaveSettings(prefix);
-	console.assert(BaseColor == G.settings.baseColor, 'Colors do NOT match at saving state!!!')
+function onClickDownloadHistory() {
+	let keys = Object.keys(HistoryOfStates);
+	console.log('history keys',keys);
+	
+	downloadAsYaml(HistoryOfStates, `history_`+Date.now());
 }
-function recoverStateAndSettings(prefix = '') {
-	//retrieve state,color and settings
-	onClickRetrieveState(prefix);
-	onClickRetrieveSettings(prefix);
-}
-function onClickSaveSettings(prefix) {
-	localStorage.setItem(prefix + 'settings', JSON.stringify(G.settings));
-	console.log('saved settings (baseColor)', G.settings.baseColor);
-}
-function onClickRetrieveSettings(prefix) {
-	let settings = localStorage.getItem(prefix + 'settings');
-	if (isdef(settings)) {
-		settings = JSON.parse(settings);
-		console.log('retrieved settings (baseColor)', settings.baseColor);
-		G.settings = settings;
-		Socket.emit('settings', { settings: G.settings });
-	} else {
-		console.log('no settings in localStorage!');
-	}
 
-}
-function onClickSaveState(prefix) {
+function saveState(prefix) {
 	let st = G.state;
 	let state = { boardArr: st.boardArr, poolArr: st.poolArr, pool: {} };
 	for (const k in st.pool) {
 		let oNew = state.pool[k] = {};
 		copyKeys(st.pool[k], oNew, {}, ['index', 'key']);
 	}
-	localStorage.setItem(prefix + 'state', JSON.stringify(state));
-	localStorage.setItem(prefix + 'randomIndices', JSON.stringify(G.randomIndices));
-	//console.log('saved state (boardArr)', state.boardArr.filter(x => x !== null));
-	//console.log('saved state (pool)', Object.keys(state.pool));
+	let pack = { settings: G.settings, state: state, randomIndices: G.randomIndices };
+	localStorage.setItem(prefix + '_pack', JSON.stringify(pack));
+	return pack;
 }
-function onClickRetrieveState(prefix) {
-	let state = localStorage.getItem(prefix + 'state');
-	let randomIndices = localStorage.getItem(prefix + 'randomIndices');
-	if (isdef(state) && isdef(randomIndices)) {
-		state = JSON.parse(state);
-		randomIndices = JSON.parse(randomIndices);
-		console.log('retrieved state (boardArr)', state.boardArr.filter(x => x !== null));
-		Socket.emit('state', { state: state, randomIndices: randomIndices });
+function retrieveState(prefix) {
+	let pack = localStorage.getItem(prefix + '_pack');
+	if (isdef(pack)) {
+		pack = JSON.parse(pack);
+		console.log('retrieved settings (baseColor)', pack.settings.baseColor);
+		G.settings = pack.settings;
+		Socket.emit('state', pack);
+		//Socket.emit('settings', { settings: G.settings });
 	} else {
-		console.log('no state/randomIndices in localStorage!');
+		alert(`no settings ${prefix} in localStorage!`);
 	}
 }
 //#endregion
@@ -342,42 +327,8 @@ function setActiveButton(button) {
 }
 //#endregion
 
-//#region lastState old code
-function onClickSaveLastState() {
-	let lastStateSaved = G.lastStateman.save(G, true);
-	let s = lastStateSaved.settings;
-	console.log('save baseColor', s.baseColor);
-	// console.log('saved lastState','board',s.boardFilename,'baseColor',s.baseColor,'field color',s.fieldColor);
-	// console.log('state saved',lastStateSaved.settings.boardFilename,lastStateSaved.randomIndices.length);
-}
-function onClickRetrieveLastState() {
-	//das sollte reset sein!
-	let lastState = G.lastStateman.getLastStateSaved();
-	// console.log('retrieved lastState',lastState);
-	let s = lastState.settings;
-	console.log('retrieve baseColor', s.baseColor);
-	// console.log('retrieved lastState','board',s.boardFilename,'baseColor',s.baseColor,'field color',s.fieldColor);
 
-	Socket.emit('initLastState', { lastState: lastState });
-	return;
-	let elem = createElementFromHTML(`
-		<form action="/lastState" method="post" enctype="multipart/form-data">
-		<input type="file" name="lastState" placeholder="Select file" />
-		<br />
-		<button>Upload</button>
-		</form>
-	`);
-	show(dAux);
-	clearElement(dAuxContent);
-	mAppend(dAuxContent, elem);
-}
-function onClickSaveToHistory() {
-	console.log('save to history!');
-	let l = G.lastStateman.lastState;
-	downloadAsYaml(l, 'lastState');
-}
-//#endregion
-
+//******************************************************** */
 //#region old code to be dep
 function onClickClearBoard() {
 	closeAux();
@@ -493,6 +444,103 @@ function onClickRecpoint() {
 	saveStateAndSettings();
 }
 
+//#endregion
+
+//#region load and save state old
+function onClickSaveStateAndSettings_dep() {
+	let prefix = prompt('enter name: ');
+	if (!isEmpty(prefix)) saveStateAndSettings(prefix);
+}
+function onClickLoadStateAndSettings_dep() {
+	let prefix = prompt('enter name: ');
+	if (!isEmpty(prefix)) recoverStateAndSettings(prefix);
+}
+function saveStateAndSettings(prefix = '') {
+	onClickSaveState(prefix);
+	onClickSaveSettings(prefix);
+	console.assert(BaseColor == G.settings.baseColor, 'Colors do NOT match at saving state!!!')
+}
+function recoverStateAndSettings(prefix = '') {
+	//retrieve state,color and settings
+	onClickRetrieveState(prefix);
+	onClickRetrieveSettings(prefix);
+}
+function onClickSaveSettings(prefix) {
+	localStorage.setItem(prefix + 'settings', JSON.stringify(G.settings));
+	console.log('saved settings (baseColor)', G.settings.baseColor);
+}
+function onClickSaveState(prefix) {
+	let st = G.state;
+	let state = { boardArr: st.boardArr, poolArr: st.poolArr, pool: {} };
+	for (const k in st.pool) {
+		let oNew = state.pool[k] = {};
+		copyKeys(st.pool[k], oNew, {}, ['index', 'key']);
+	}
+	localStorage.setItem(prefix + 'state', JSON.stringify(state));
+	localStorage.setItem(prefix + 'randomIndices', JSON.stringify(G.randomIndices));
+	//console.log('saved state (boardArr)', state.boardArr.filter(x => x !== null));
+	//console.log('saved state (pool)', Object.keys(state.pool));
+}
+function onClickRetrieveSettings(prefix) {
+	let settings = localStorage.getItem(prefix + 'settings');
+	if (isdef(settings)) {
+		settings = JSON.parse(settings);
+		console.log('retrieved settings (baseColor)', settings.baseColor);
+		G.settings = settings;
+		Socket.emit('settings', { settings: G.settings });
+	} else {
+		console.log('no settings in localStorage!');
+	}
+
+}
+function onClickRetrieveState(prefix) {
+	let state = localStorage.getItem(prefix + 'state');
+	let randomIndices = localStorage.getItem(prefix + 'randomIndices');
+	if (isdef(state) && isdef(randomIndices)) {
+		state = JSON.parse(state);
+		randomIndices = JSON.parse(randomIndices);
+		console.log('retrieved state (boardArr)', state.boardArr.filter(x => x !== null));
+		Socket.emit('state', { state: state, randomIndices: randomIndices });
+	} else {
+		console.log('no state/randomIndices in localStorage!');
+	}
+}
+//#endregion
+
+//#region lastState old code
+function onClickSaveLastState() {
+	let lastStateSaved = G.lastStateman.save(G, true);
+	let s = lastStateSaved.settings;
+	console.log('save baseColor', s.baseColor);
+	// console.log('saved lastState','board',s.boardFilename,'baseColor',s.baseColor,'field color',s.fieldColor);
+	// console.log('state saved',lastStateSaved.settings.boardFilename,lastStateSaved.randomIndices.length);
+}
+function onClickRetrieveLastState() {
+	//das sollte reset sein!
+	let lastState = G.lastStateman.getLastStateSaved();
+	// console.log('retrieved lastState',lastState);
+	let s = lastState.settings;
+	console.log('retrieve baseColor', s.baseColor);
+	// console.log('retrieved lastState','board',s.boardFilename,'baseColor',s.baseColor,'field color',s.fieldColor);
+
+	Socket.emit('initLastState', { lastState: lastState });
+	return;
+	let elem = createElementFromHTML(`
+		<form action="/lastState" method="post" enctype="multipart/form-data">
+		<input type="file" name="lastState" placeholder="Select file" />
+		<br />
+		<button>Upload</button>
+		</form>
+	`);
+	show(dAux);
+	clearElement(dAuxContent);
+	mAppend(dAuxContent, elem);
+}
+function onClickSaveToHistory() {
+	console.log('save to history!');
+	let l = G.lastStateman.lastState;
+	downloadAsYaml(l, 'lastState');
+}
 //#endregion
 
 
