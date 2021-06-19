@@ -47,6 +47,7 @@ class ToolbarClass {
 		}else{
 			this.addButton('choosePerlen', onClickChoosePerlen, 'choose perlen');
 			this.addButton('perlenPool', onClickPerlenPool, 'perlen pool');
+			this.addButton('clearPerlenpool', onClickClearPerlenpool, 'clear perlenpool');
 		}
 
 		// this.addButton('saveLastState',onClickSaveLastState,'save gamestate');
@@ -55,21 +56,21 @@ class ToolbarClass {
 		// mLinebreak(this.dParent)
 
 		mLinebreak(this.dParent);
-		this.addButton('recovery', onClickRecovery, 'recovery!!!');
-		this.addButton('recpoint', onClickRecpoint, 'recpoint!');
+		this.addButton('saveGamestate', onClickSaveStateAndSettings, 'save gamestate');
+		this.addButton('loadGamestate', onClickLoadStateAndSettings, 'load gamestate');
 		mLinebreak(this.dParent);
 
 		// mLinebreak(this.dParent);
 		// this.addButton('saveColor', onClickSaveColor, '&nbsp;save&nbsp; color');
 		// this.addButton('retrieveColor', onClickRetrieveColor, 'retrieve color');
 		// this.addButton('showSavedColor', onClickShowSavedColor, 'show color');
-		mLinebreak(this.dParent)
-		this.addButton('saveSettings', onClickSaveSettings, 'save settings');
-		this.addButton('retrieveSettings', onClickRetrieveSettings, 'retrieve settings');
-		// this.addButton('showSavedSettings', onClickShowSavedSettings, 'show settings');
-		mLinebreak(this.dParent);
-		this.addButton('saveState', onClickSaveState, 'save gamestate');
-		this.addButton('retrieveState', onClickRetrieveState, 'retrieve gamestate');
+		// mLinebreak(this.dParent)
+		// this.addButton('saveSettings', onClickSaveSettings, 'save settings');
+		// this.addButton('retrieveSettings', onClickRetrieveSettings, 'retrieve settings');
+		// // this.addButton('showSavedSettings', onClickShowSavedSettings, 'show settings');
+		// mLinebreak(this.dParent);
+		// this.addButton('saveState', onClickSaveState, 'save gamestate');
+		// this.addButton('retrieveState', onClickRetrieveState, 'retrieve gamestate');
 		// this.addButton('showSavedState', onClickShowSavedState, 'show gamestate');
 	}
 }

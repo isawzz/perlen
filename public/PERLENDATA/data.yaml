@@ -1303,19 +1303,6 @@ standardSettings:
       w: 1366
       h: 768
     idealBg: rgb(76, 127, 206)
-    boardFilenames:
-      - brett03.png
-      - brett10.png
-      - brett18_56.png
-      - brett19_02c.png
-      - brett19_09.png
-      - brett20_43.png
-      - dateTree.jpg
-      - fringe.png
-      - japanese spider.png
-      - majowka-nadmorzem.jpg
-      - mandel sammet bones.png
-      - shapeShifters768.png
   adversarial:
     rows: 9
     cols: 3
@@ -1358,16 +1345,6 @@ standardSettings:
       w: 768
       h: 768
     idealBg: rgb(76, 127, 206)
-    boardFilenames:
-      - brett03.png
-      - brett10.png
-      - brett18_56.png
-      - brett19_02c.png
-      - brett19_09.png
-      - brett20_43.png
-      - dateTree.jpg
-      - majowka-nadmorzem.jpg
-      - shapeShifters768.png
   kleinSchwarz:
     rows: 5
     cols: 3
@@ -1410,16 +1387,6 @@ standardSettings:
       w: 768
       h: 768
     idealBg: rgb(76, 127, 206)
-    boardFilenames:
-      - brett03.png
-      - brett10.png
-      - brett18_56.png
-      - brett19_02c.png
-      - brett19_09.png
-      - brett20_43.png
-      - dateTree.jpg
-      - majowka-nadmorzem.jpg
-      - shapeShifters768.png
   hex51:
     rows: 7
     cols: 6
@@ -1462,16 +1429,6 @@ standardSettings:
       w: 1536
       h: 768
     idealBg: rgb(76, 127, 206)
-    boardFilenames:
-      - brett03.png
-      - brett10.png
-      - brett18_56.png
-      - brett19_02c.png
-      - brett19_09.png
-      - brett20_43.png
-      - dateTree.jpg
-      - majowka-nadmorzem.jpg
-      - shapeShifters768.png
   derWeg:
     rows: 9
     cols: 20
@@ -1514,16 +1471,6 @@ standardSettings:
       w: 1536
       h: 768
     idealBg: rgb(76, 127, 206)
-    boardFilenames:
-      - brett03.png
-      - brett10.png
-      - brett18_56.png
-      - brett19_02c.png
-      - brett19_09.png
-      - brett20_43.png
-      - dateTree.jpg
-      - majowka-nadmorzem.jpg
-      - shapeShifters768.png
   verdreht:
     rows: 7
     cols: 4
@@ -1566,16 +1513,6 @@ standardSettings:
       w: 768
       h: 768
     idealBg: rgb(76, 127, 206)
-    boardFilenames:
-      - brett03.png
-      - brett10.png
-      - brett18_56.png
-      - brett19_02c.png
-      - brett19_09.png
-      - brett20_43.png
-      - dateTree.jpg
-      - majowka-nadmorzem.jpg
-      - shapeShifters768.png
   rund:
     rows: 7
     cols: 4
@@ -1618,16 +1555,6 @@ standardSettings:
       w: 768
       h: 768
     idealBg: rgb(76, 127, 206)
-    boardFilenames:
-      - brett03.png
-      - brett10.png
-      - brett18_56.png
-      - brett19_02c.png
-      - brett19_09.png
-      - brett20_43.png
-      - dateTree.jpg
-      - majowka-nadmorzem.jpg
-      - shapeShifters768.png
   dark01:
     rows: 9
     cols: 11
@@ -1670,16 +1597,6 @@ standardSettings:
       w: 768
       h: 768
     idealBg: rgb(76, 127, 206)
-    boardFilenames:
-      - brett03.png
-      - brett10.png
-      - brett18_56.png
-      - brett19_02c.png
-      - brett19_09.png
-      - brett20_43.png
-      - dateTree.jpg
-      - majowka-nadmorzem.jpg
-      - shapeShifters768.png
   meer:
     rows: 5
     cols: 3
@@ -1722,16 +1639,3 @@ standardSettings:
       w: 768
       h: 768
     idealBg: rgb(76, 127, 206)
-    boardFilenames:
-      - brett03.png
-      - brett10.png
-      - brett18_56.png
-      - brett19_02c.png
-      - brett19_09.png
-      - brett20_43.png
-      - dateTree.jpg
-      - fringe.png
-      - japanese spider.png
-      - majowka-nadmorzem.jpg
-      - mandel sammet bones.png
-      - shapeShifters768.png

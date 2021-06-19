@@ -236,6 +236,8 @@ class SimpleClass7 {
 			copyKeys(data.settings, this.settings);
 		}
 
+		if (isdef(data.boardFilenames)) this.boardFilenames = data.boardFilenames;
+		
 		if (isdef(data.perlenDict)) { PerlenDict = this.perlenDict = data.perlenDict; }
 
 		if (isdef(data.state.pool)) { //sent new pool!

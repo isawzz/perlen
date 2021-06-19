@@ -1,65 +1,5 @@
 var ActiveButton = null;
 
-function onClickPerlenPool(ev){
-	let button = ev.target;
-	if (ActiveButton == button) { doPerlenPoolChanges(); return; }
-
-	openAux('perlen pool', button);
-	let wWidget = 380;
-	let styles = { w: wWidget, align: 'center', margin: 6 };
-	let defOptions = {nAdd:5,nRemove:5,clearBoard:false,justRandom:true};
-	if (nundef(G.perlenOptions)) G.perlenOptions = {};
-	let s = G.perlenOptions;
-	copyKeys(defOptions,s);
-	let dp = mBy('dAuxContent');
-	let inpAddRandom = mEditRange('add: ', s.nAdd, 1, 20, 1, dp, (a) => { s.nAdd = a;  }, styles);
-	let inpRemove = mEditRange('remove: ', s.nRemove, 1, 20, 1, dp, (a) => { s.nRemove = a;  }, styles);
-	let inpClearBoard = mCheckbox('clear board: ', s.clearBoard, dp, (a) => { s.clearBoard = a; }, styles);
-	let inpClearPool = mCheckbox('clear pool: ', s.clearPool, dp, (a) => { s.clearPool = a; }, styles);
-	let inpOnlyRandom = mCheckbox('just random: ', s.justRandom, dp, (a) => { s.justRandom = a; }, styles);
-
-}
-function doPerlenPoolChanges(){
-	//using G.perlenOptions
-	let s=G.perlenOptions;
-	// mit poolChange sollte alles auf einmal executed werden!!!
-	console.log('options:',s);
-	Socket.emit('perlenOptions',s);
-
-}
-
-function openAux(title, button) {
-	resetActiveButton();
-	show(dAux);
-	clearElement(dAuxContent);
-	dAuxTitle.innerHTML = title;
-	if (isdef(button)) setActiveButton(button);
-}
-function closeAux() {
-	resetActiveButton();
-	hide(dAux);
-}
-function resetActiveButton() {
-	if (ActiveButton != null) {
-		//console.log(ActiveButton);
-		//cancel active thing
-		//console.log(ActiveButton, ActiveButton.id)
-		let ba = ActiveButton;
-		mStyleX(ba, { bg: 'white', fg: 'black' });
-		let caption = ba.id.substring(2);
-
-		caption = separateAtCapitals(caption);
-		ba.innerHTML = caption;
-		ActiveButton = null;
-	} else {
-		//console.log('ActiveButton is null!!!')
-	}
-}
-function setActiveButton(button) {
-	ActiveButton = button;
-	mStyleX(button, { bg: 'dimgray', fg: 'white' });
-	button.innerHTML = 'submit command!';
-}
 function onClickToolbarButton() {
 	if (isVisible('sidebar')) {
 		hide('sidebar');
@@ -94,42 +34,6 @@ function onClickUploadPerlen() {
 }
 //#endregion
 
-//#lastState old code
-function onClickSaveLastState() {
-	let lastStateSaved = G.lastStateman.save(G, true);
-	let s = lastStateSaved.settings;
-	console.log('save baseColor', s.baseColor);
-	// console.log('saved lastState','board',s.boardFilename,'baseColor',s.baseColor,'field color',s.fieldColor);
-	// console.log('state saved',lastStateSaved.settings.boardFilename,lastStateSaved.randomIndices.length);
-}
-function onClickRetrieveLastState() {
-	//das sollte reset sein!
-	let lastState = G.lastStateman.getLastStateSaved();
-	// console.log('retrieved lastState',lastState);
-	let s = lastState.settings;
-	console.log('retrieve baseColor', s.baseColor);
-	// console.log('retrieved lastState','board',s.boardFilename,'baseColor',s.baseColor,'field color',s.fieldColor);
-
-	Socket.emit('initLastState', { lastState: lastState });
-	return;
-	let elem = createElementFromHTML(`
-		<form action="/lastState" method="post" enctype="multipart/form-data">
-		<input type="file" name="lastState" placeholder="Select file" />
-		<br />
-		<button>Upload</button>
-		</form>
-	`);
-	show(dAux);
-	clearElement(dAuxContent);
-	mAppend(dAuxContent, elem);
-}
-function onClickSaveToHistory() {
-	console.log('save to history!');
-	let l = G.lastStateman.lastState;
-	downloadAsYaml(l, 'lastState');
-}
-//#endregion
-
 //#region board options
 function onClickBoardInChooseBoard(boardFilename) {
 	if (boardFilename == G.settings.boardFilename) return;
@@ -138,7 +42,7 @@ function onClickBoardInChooseBoard(boardFilename) {
 }
 function onClickChooseBoard() {
 	openAux('click board to select');
-	let boards = G.settings.boardFilenames;
+	let boards = G.boardFilenames;
 	//console.log(boards);
 	for (const b of boards) {
 		let img = mImg(PERLENPATH_FRONT + 'bretter/' + b, dAuxContent, { cursor: 'pointer', h: 200, margin: 8, 'vertical-align': 'baseline' });
@@ -225,64 +129,7 @@ function onClickSaveAsPrefab() {
 }
 //#endregion
 
-function onClickClearPerlenpool() {
-	closeAux();
-	G.clearPoolUI();
-	Socket.emit('clearPoolarr');
-}
-
-//#region old code to be dep
-function onClickClearBoard() { 
-	closeAux(); 
-	let [plist, fields] = G.clearBoardUI();
-	console.log('sending remove all perlen command', plist, fields);
-	console.log('===> remove list', plist, fields);
-	let data = { iPerlen: plist.map(x => x.index), iFroms: fields.map(x => x.index), username: Username };
-	logClientSend('removePerlen', data);
-	Socket.emit('removePerlen', data);
-}
-
-function onClickClearAllPerlen() {
-	closeAux();
-	G.clearBoardUI();
-	G.clearPoolUI();
-	Socket.emit('clearPool');
-
-	//perlen im pool werden destroyed
-	//die am board bleiben
-}
-function onClickAddToPool(ev) {
-
-	let button = ev.target;
-	if (ActiveButton == button) { //submit!
-		if (isdef(DA.selectedPerlen) && !isEmpty(DA.selectedPerlen)) {
-			let keys = DA.selectedPerlen.map(x => x.key);
-			//console.log('send poolChange!!!')
-			Socket.emit('poolChange', { keys: keys });
-			delete DA.selectedPerlen;
-		}
-		closeAux();
-		return;
-	}
-	openAux('pick perlen', button);
-	let d = mDiv(dAuxContent);
-	let items = [];
-	for (const k in G.perlenDict) {
-		let p = jsCopy(G.perlenDict[k]);
-		p.path = mPath(p);
-		console.log('path', p.path)
-		//if (!(p.path.includes('.'))) p.path +='.png';
-		//if (k=='adherent' || k=='fringe') console.log(p.path,p)
-		let ui = createPerle(p, d, 64, 1.3, .4);
-		mStyleX(ui, { opacity: 1 });
-		iAdd(p, { div: ui });
-		items.push(p);
-	}
-	DA.selectedPerlen = [];
-	items.map(x => iDiv(x).onclick = ev => { toggleItemSelection(x, DA.selectedPerlen) });
-
-
-}
+//#region perlen options
 function onClickChoosePerlen(ev) {
 
 	let button = ev.target;
@@ -315,101 +162,91 @@ function onClickChoosePerlen(ev) {
 
 
 }
-function onClickAdd5Random() {
+function onClickPerlenPool(ev) {
+	let button = ev.target;
+	if (ActiveButton == button) { doPerlenPoolChanges(); return; }
+
+	openAux('perlen pool', button);
+	let wWidget = 380;
+	let styles = { w: wWidget, align: 'center', margin: 6 };
+	let defOptions = { nAdd: 5, nRemove: 5, clearBoard: false, justRandom: true };
+	if (nundef(G.perlenOptions)) G.perlenOptions = {};
+	let s = G.perlenOptions;
+	addKeys(defOptions, s);
+	let dp = mBy('dAuxContent');
+	let inpAddRandom = mEditRange('add: ', s.nAdd, 0, 20, 1, dp, (a) => { s.nAdd = a; }, styles);
+	let inpRemove = mEditRange('remove: ', s.nRemove, 0, 20, 1, dp, (a) => { s.nRemove = a; }, styles);
+	let inpClearBoard = mCheckbox('clear board: ', s.clearBoard, dp, (a) => { s.clearBoard = a; }, styles);
+	let inpClearPool = mCheckbox('clear pool: ', s.clearPool, dp, (a) => { s.clearPool = a; }, styles);
+	let inpOnlyRandom = mCheckbox('just random: ', s.justRandom, dp, (a) => { s.justRandom = a; }, styles);
+
+}
+function doPerlenPoolChanges() {
+	//using G.perlenOptions
+	let s = G.perlenOptions;
+	// mit poolChange sollte alles auf einmal executed werden!!!
+	console.log('options:', s);
+	Socket.emit('perlenOptions', s);
+
+}
+function onClickClearPerlenpool() {
 	closeAux();
-	Socket.emit('poolChange', { n: 5 });
+	G.clearPoolUI();
+	Socket.emit('clearPoolarr');
 }
-function onClickRemove5Random() {
-	closeAux();
-	Socket.emit('removeRandom', { n: 5 });
-}
-function onClickResetAll() {
-	Socket.emit('reset');
-}
+
 //#endregion
 
-//#region saveColor retrieveColor
-function onClickSaveColor() {
-	localStorage.setItem('background', G.settings.baseColor);
-	console.log('saved baseColor', G.settings.baseColor);
+//#region load and save state
+function onClickSaveStateAndSettings() {
+	let prefix = prompt('enter name: ');
+	if (!isEmpty(prefix)) saveStateAndSettings(prefix);
 }
-function onClickRetrieveColor() {
-	let color = localStorage.getItem('background');
-	console.log('retrieved baseColor', color);
-	G.settings.baseColor = color;
-	Socket.emit('settings', { settings: G.settings });
+function onClickLoadStateAndSettings() {
+	let prefix = prompt('enter name: ');
+	if (!isEmpty(prefix)) recoverStateAndSettings(prefix);
 }
-function onClickShowSavedColor() {
-	let color = localStorage.getItem('background');
-	console.log('saved background is', color);
-}
-//#endregion
-
-function onClickSaveSettings() {
-	localStorage.setItem('settings', JSON.stringify(G.settings));
-	console.log('saved settings (baseColor)', G.settings.baseColor);
-}
-function onClickRetrieveSettings() {
-	let settings = localStorage.getItem('settings');
-	if (isdef(settings)) {
-		settings = JSON.parse(settings);
-		console.log('retrieved settings (baseColor)', settings.baseColor);
-		G.settings = settings;
-		Socket.emit('settings', { settings: G.settings });
-	} else {
-		console.log('no settings in localStorage!');
-	}
-}
-function onClickShowSavedSettings() {
-	let settings = localStorage.getItem('settings');
-	if (isdef(settings)) {
-		settings = JSON.parse(settings);
-		console.log('saved settings (baseColor)', settings.baseColor);
-	} else {
-		console.log('no settings in localStorage!');
-	}
-}
-function saveStateAndSettings() {
-	onClickSaveState();
+function saveStateAndSettings(prefix = '') {
+	onClickSaveState(prefix);
 	console.assert(BaseColor == G.settings.baseColor, 'Colors do NOT match at saving state!!!')
-	onClickSaveSettings();
+	onClickSaveSettings(prefix);
 	//onClickSaveColor();
 }
-function recoverStateAndSettings() {
+function recoverStateAndSettings(prefix = '') {
 	//retrieve state,color and settings
-	onClickRetrieveState();
-	let settings = localStorage.getItem('settings');
+	onClickRetrieveState(prefix);
+}
+function onClickSaveSettings(prefix) {
+	localStorage.setItem(prefix + 'settings', JSON.stringify(G.settings));
+	console.log('saved settings (baseColor)', G.settings.baseColor);
+}
+function onClickRetrieveSettings(prefix) {
+	let settings = localStorage.getItem(prefix + 'settings');
 	if (isdef(settings)) {
 		settings = JSON.parse(settings);
 		console.log('retrieved settings (baseColor)', settings.baseColor);
 		G.settings = settings;
-		// let color = localStorage.getItem('background');
-		// console.log('got color',color)
-		// if (isdef(color)) {
-		// 	//color=JSON.parse(color);
-		// 	console.log('retrieved baseColor', color);
-		// 	G.settings.baseColor = color;
-		// }
 		Socket.emit('settings', { settings: G.settings });
 	} else {
 		console.log('no settings in localStorage!');
 	}
+
 }
-function onClickSaveState() {
+function onClickSaveState(prefix) {
 	let st = G.state;
 	let state = { boardArr: st.boardArr, poolArr: st.poolArr, pool: {} };
 	for (const k in st.pool) {
 		let oNew = state.pool[k] = {};
 		copyKeys(st.pool[k], oNew, {}, ['index', 'key']);
 	}
-	localStorage.setItem('state', JSON.stringify(state));
-	localStorage.setItem('randomIndices', JSON.stringify(G.randomIndices));
+	localStorage.setItem(prefix + 'state', JSON.stringify(state));
+	localStorage.setItem(prefix + 'randomIndices', JSON.stringify(G.randomIndices));
 	console.log('saved state (boardArr)', state.boardArr.filter(x => x !== null));
 	console.log('saved state (pool)', Object.keys(state.pool));
 }
-function onClickRetrieveState() {
-	let state = localStorage.getItem('state');
-	let randomIndices = localStorage.getItem('randomIndices');
+function onClickRetrieveState(prefix) {
+	let state = localStorage.getItem(prefix + 'state');
+	let randomIndices = localStorage.getItem(prefix + 'randomIndices');
 	if (isdef(state) && isdef(randomIndices)) {
 		state = JSON.parse(state);
 		randomIndices = JSON.parse(randomIndices);
@@ -419,21 +256,8 @@ function onClickRetrieveState() {
 		console.log('no state/randomIndices in localStorage!');
 	}
 }
-function onClickShowSavedState() {
-	let state = localStorage.getItem('state');
-	let randomIndices = localStorage.getItem('randomIndices');
-	if (isdef(state) && isdef(randomIndices)) {
-		state = JSON.parse(state);
-		randomIndices = JSON.parse(randomIndices);
-		console.log('retrieved state (boardArr)', state.boardArr.filter(x => x !== null));
-		// Socket.emit('state', { state:state,randomIndices:randomIndices });
-	} else {
-		console.log('no state/randomIndices in localStorage!');
-	}
-}
+//#endregion
 
-function onClickRecovery() { recoverStateAndSettings(); }
-function onClickRecpoint() { saveStateAndSettings(); }
 //#region helpers TODO => base
 //function addMagnifyOnHover(ui,)
 function mAddBehavior(ui, beh, params) {
@@ -482,4 +306,199 @@ function separateAtCapitals(s) {
 	return sNew;
 }
 //#endregion
+
+//#region open and close aux
+function openAux(title, button) {
+	resetActiveButton();
+	show(dAux);
+	clearElement(dAuxContent);
+	dAuxTitle.innerHTML = title;
+	if (isdef(button)) setActiveButton(button);
+}
+function closeAux() {
+	resetActiveButton();
+	hide(dAux);
+}
+function resetActiveButton() {
+	if (ActiveButton != null) {
+		//console.log(ActiveButton);
+		//cancel active thing
+		//console.log(ActiveButton, ActiveButton.id)
+		let ba = ActiveButton;
+		mStyleX(ba, { bg: 'white', fg: 'black' });
+		let caption = ba.id.substring(2);
+
+		caption = separateAtCapitals(caption);
+		ba.innerHTML = caption;
+		ActiveButton = null;
+	} else {
+		//console.log('ActiveButton is null!!!')
+	}
+}
+function setActiveButton(button) {
+	ActiveButton = button;
+	mStyleX(button, { bg: 'dimgray', fg: 'white' });
+	button.innerHTML = 'submit command!';
+}
+//#endregion
+
+//#region lastState old code
+function onClickSaveLastState() {
+	let lastStateSaved = G.lastStateman.save(G, true);
+	let s = lastStateSaved.settings;
+	console.log('save baseColor', s.baseColor);
+	// console.log('saved lastState','board',s.boardFilename,'baseColor',s.baseColor,'field color',s.fieldColor);
+	// console.log('state saved',lastStateSaved.settings.boardFilename,lastStateSaved.randomIndices.length);
+}
+function onClickRetrieveLastState() {
+	//das sollte reset sein!
+	let lastState = G.lastStateman.getLastStateSaved();
+	// console.log('retrieved lastState',lastState);
+	let s = lastState.settings;
+	console.log('retrieve baseColor', s.baseColor);
+	// console.log('retrieved lastState','board',s.boardFilename,'baseColor',s.baseColor,'field color',s.fieldColor);
+
+	Socket.emit('initLastState', { lastState: lastState });
+	return;
+	let elem = createElementFromHTML(`
+		<form action="/lastState" method="post" enctype="multipart/form-data">
+		<input type="file" name="lastState" placeholder="Select file" />
+		<br />
+		<button>Upload</button>
+		</form>
+	`);
+	show(dAux);
+	clearElement(dAuxContent);
+	mAppend(dAuxContent, elem);
+}
+function onClickSaveToHistory() {
+	console.log('save to history!');
+	let l = G.lastStateman.lastState;
+	downloadAsYaml(l, 'lastState');
+}
+//#endregion
+
+//#region old code to be dep
+function onClickClearBoard() {
+	closeAux();
+	let [plist, fields] = G.clearBoardUI();
+	console.log('sending remove all perlen command', plist, fields);
+	console.log('===> remove list', plist, fields);
+	let data = { iPerlen: plist.map(x => x.index), iFroms: fields.map(x => x.index), username: Username };
+	logClientSend('removePerlen', data);
+	Socket.emit('removePerlen', data);
+}
+function onClickClearAllPerlen() {
+	closeAux();
+	G.clearBoardUI();
+	G.clearPoolUI();
+	Socket.emit('clearPool');
+
+	//perlen im pool werden destroyed
+	//die am board bleiben
+}
+function onClickAddToPool(ev) {
+
+	let button = ev.target;
+	if (ActiveButton == button) { //submit!
+		if (isdef(DA.selectedPerlen) && !isEmpty(DA.selectedPerlen)) {
+			let keys = DA.selectedPerlen.map(x => x.key);
+			//console.log('send poolChange!!!')
+			Socket.emit('poolChange', { keys: keys });
+			delete DA.selectedPerlen;
+		}
+		closeAux();
+		return;
+	}
+	openAux('pick perlen', button);
+	let d = mDiv(dAuxContent);
+	let items = [];
+	for (const k in G.perlenDict) {
+		let p = jsCopy(G.perlenDict[k]);
+		p.path = mPath(p);
+		console.log('path', p.path)
+		//if (!(p.path.includes('.'))) p.path +='.png';
+		//if (k=='adherent' || k=='fringe') console.log(p.path,p)
+		let ui = createPerle(p, d, 64, 1.3, .4);
+		mStyleX(ui, { opacity: 1 });
+		iAdd(p, { div: ui });
+		items.push(p);
+	}
+	DA.selectedPerlen = [];
+	items.map(x => iDiv(x).onclick = ev => { toggleItemSelection(x, DA.selectedPerlen) });
+
+
+}
+function onClickAdd5Random() {
+	closeAux();
+	Socket.emit('poolChange', { n: 5 });
+}
+function onClickRemove5Random() {
+	closeAux();
+	Socket.emit('removeRandom', { n: 5 });
+}
+function onClickResetAll() {
+	Socket.emit('reset');
+}
+function onClickSaveColor() {
+	localStorage.setItem('background', G.settings.baseColor);
+	console.log('saved baseColor', G.settings.baseColor);
+}
+function onClickRetrieveColor() {
+	let color = localStorage.getItem('background');
+	console.log('retrieved baseColor', color);
+	G.settings.baseColor = color;
+	Socket.emit('settings', { settings: G.settings });
+}
+function onClickShowSavedColor() {
+	let color = localStorage.getItem('background');
+	console.log('saved background is', color);
+}
+function onClickRetrieveSettings_dep() {
+	let settings = localStorage.getItem('settings');
+	if (isdef(settings)) {
+		settings = JSON.parse(settings);
+		console.log('retrieved settings (baseColor)', settings.baseColor);
+		G.settings = settings;
+		Socket.emit('settings', { settings: G.settings });
+	} else {
+		console.log('no settings in localStorage!');
+	}
+}
+function onClickShowSavedSettings() {
+	let settings = localStorage.getItem('settings');
+	if (isdef(settings)) {
+		settings = JSON.parse(settings);
+		console.log('saved settings (baseColor)', settings.baseColor);
+	} else {
+		console.log('no settings in localStorage!');
+	}
+}
+function onClickShowSavedState() {
+	let state = localStorage.getItem('state');
+	let randomIndices = localStorage.getItem('randomIndices');
+	if (isdef(state) && isdef(randomIndices)) {
+		state = JSON.parse(state);
+		randomIndices = JSON.parse(randomIndices);
+		console.log('retrieved state (boardArr)', state.boardArr.filter(x => x !== null));
+		// Socket.emit('state', { state:state,randomIndices:randomIndices });
+	} else {
+		console.log('no state/randomIndices in localStorage!');
+	}
+}
+function onClickRecovery() {
+	recoverStateAndSettings();
+}
+function onClickRecpoint() {
+	saveStateAndSettings();
+}
+
+//#endregion
+
+
+
+
+
+
+
 

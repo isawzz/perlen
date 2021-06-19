@@ -32,7 +32,7 @@ class GP2 {
 
 		this.ensureNoDuplicatesInLastState();
 
-		//initialize settings.boardFilenames from directory!
+		//initialize boardFilenames from directory!
 		utils.getFilenames(path.join(__dirname, PerlenPath + 'bretter'),
 			filenames => {
 				this.ensureBoardFilename(filenames);
@@ -50,7 +50,7 @@ class GP2 {
 	}
 	ensureBoardFilename(filenames) {
 		let s = this.settings;
-		s.boardFilenames = filenames;
+		this.boardFilenames = filenames;
 		if (s.boardFilename != 'none' && !(filenames.includes(s.boardFilename))) {
 			//eg., this file has been deleted!
 			//console.log('board file deleted!!!! =>replacing board!', s.boardFilename);
@@ -152,7 +152,7 @@ class GP2 {
 	weiter() {
 		let s = this.settings, lastState = this.lastState;
 		if (Verbose) {
-			//console.log('boards', this.settings.boardFilenames);
+			console.log('boards', this.boardFilenames);
 			//console.log('perlen', Object.keys(this.perlenDict));
 			//console.log('lastState pool', Object.keys(lastState.state.pool).length);
 
@@ -233,8 +233,8 @@ class GP2 {
 
 	}
 	addBoard(filename) {
-		this.settings.boardFilenames.push(filename);
-		this.safeEmitState(['settings']);
+		this.boardFilenames.push(filename);
+		this.safeEmitState(['settings','boardFilenames']);
 
 	}
 	//#endregion
@@ -253,9 +253,9 @@ class GP2 {
 		let pl = this.addPlayer(client, x);
 		logSend('gameState');
 		if (this.settings.poolSelection != 'random') {
-			this.safeEmitState(['perlenDict', 'settings', 'pool'], { instruction: 'pick your set of pearls!' }, client);
+			this.safeEmitState(['boardFilenames','perlenDict', 'settings', 'pool'], { instruction: 'pick your set of pearls!' }, client);
 		} else {
-			this.safeEmitState(['perlenDict', 'settings', 'pool'], null, client);
+			this.safeEmitState(['boardFilenames','perlenDict', 'settings', 'pool'], null, client);
 		}
 		this.sendMessage(pl.username, `user ${pl.username} joined! (players:${this.getPlayerNames().join()})`);
 	}
@@ -528,6 +528,7 @@ class GP2 {
 		if (keys.includes('settings')) o.settings = this.settings;
 		if (keys.includes('pool')) { o.state.pool = this.state.pool; o.randomIndices = this.randomIndices; }
 		if (keys.includes('perlenDict')) o.perlenDict = this.perlenDict;
+		if (keys.includes('boardFilenames')) o.boardFilenames = this.boardFilenames;
 		if (base.isdef(eMore)) base.copyKeys(eMore, o);
 
 		this.saveLastState();
@@ -544,7 +545,6 @@ class GP2 {
 		if (!SAVE_LAST_STATE) return;
 
 		let lastSettings = base.jsCopy(this.settings);
-		delete lastSettings.boardFilenames;
 		let pathState = './public/PERLENDATA/lastState.yaml';
 
 		let data = { randomIndices: this.randomIndices, settings: lastSettings, state: this.state };
