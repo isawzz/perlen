@@ -4,14 +4,14 @@ const PERLEN_DATA_PATH = './public/PERLENDATA/';
 const PERLENPATH_FRONT = './PERLENDATA/';
 
 // *** HEROKU *** deploy to HEROKU ***
-// const NGROK = false; //'http://849aec381695.ngrok.io/'; // MUSS / am ende!!! 
-// const HEROKU = true;
-// const USERNAME_SELECTION = 'local'; // random | local | nil | gul | ma ...
+const NGROK = false; //'http://849aec381695.ngrok.io/'; // MUSS / am ende!!! 
+const HEROKU = true;
+const USERNAME_SELECTION = 'local'; // random | local | nil | gul | ma ...
 
 //*** testing */:
-const NGROK = false; //'http://849aec381695.ngrok.io/'; // MUSS / am ende!!! 
-const HEROKU = false;
-const USERNAME_SELECTION = 'random'; // random | local | nil | gul | ma ...
+// const NGROK = false; //'http://849aec381695.ngrok.io/'; // MUSS / am ende!!! 
+// const HEROKU = false;
+// const USERNAME_SELECTION = 'random'; // random | local | nil | gul | ma ...
 
 const UITEST = false;
 
