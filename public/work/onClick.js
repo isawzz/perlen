@@ -200,25 +200,67 @@ function onClickClearPerlenpool() {
 
 //#region load and save state NEW
 var HistoryOfStates = {};
+function loadHistoryExp() {
+	let hist = localStorage.getItem('history');
+	if (isdef(hist)) {
+		HistoryOfStates = JSON.parse(hist);
+		console.log('history loaded successfully...', HistoryOfStates);
+	} else {
+		console.log('no history found!!!');
+	}
+}
 function onClickSaveStateAndSettings() {
 	let prefix = prompt('enter name: ');
-	if (!isEmpty(prefix)) {
-		let pack = saveState(prefix);
-		HistoryOfStates[prefix] = pack;
-	}
+	addStateToHistory(prefix);
 }
 function onClickLoadStateAndSettings() {
 	let prefix = prompt('enter name: ');
-	if (!isEmpty(prefix)) retrieveState(prefix);
+	//console.log('')
+	if (prefix in HistoryOfStates) {
+		let pack = HistoryOfStates[prefix];
+		console.log('loaded state', prefix, 'freeForm', pack.settings.freeForm, 'board', pack.settings.boardFilename)
+
+		Socket.emit('state', pack);
+	}
+	//if (!isEmpty(prefix)) retrieveState(prefix);
 }
 function onClickDownloadHistory() {
 	let keys = Object.keys(HistoryOfStates);
-	console.log('history keys',keys);
-	
-	downloadAsYaml(HistoryOfStates, `history_`+Date.now());
+	console.log('history keys', keys);
+	for (const k in HistoryOfStates) {
+		let pack = HistoryOfStates[k];
+		console.log('state', k, 'freeForm', pack.settings.freeForm, 'board', pack.settings.boardFilename)
+	}
+	downloadAsYaml(HistoryOfStates, `history_` + Date.now());
+}
+function addStateToHistory(prefix = 'auto') {
+	if (!isEmpty(prefix)) {
+		let pack = packageState();
+		HistoryOfStates[prefix] = pack;
+		localStorage.setItem('history', JSON.stringify(HistoryOfStates));
+		console.log('saved state', prefix, 'freeForm', pack.settings.freeForm, 'board', pack.settings.boardFilename)
+	}
+}
+function loadAutoState() {
+	if ('auto' in HistoryOfStates) Socket.emit('state', HistoryOfStates.auto);
+}
+function packageState() {
+	let st = G.state;
+	let state = { boardArr: st.boardArr, poolArr: st.poolArr, pool: {} };
+	for (const k in st.pool) {
+		let oNew = state.pool[k] = {};
+		copyKeys(st.pool[k], oNew, {}, ['index', 'key']);
+	}
+	let pack = { settings: jsCopy(G.settings), state: state, randomIndices: jsCopy(G.randomIndices) };
+	return pack;
 }
 
-function saveState(prefix) {
+
+
+
+
+//#region old code
+function saveState(prefix = '') {
 	let st = G.state;
 	let state = { boardArr: st.boardArr, poolArr: st.poolArr, pool: {} };
 	for (const k in st.pool) {
@@ -229,7 +271,7 @@ function saveState(prefix) {
 	localStorage.setItem(prefix + '_pack', JSON.stringify(pack));
 	return pack;
 }
-function retrieveState(prefix) {
+function retrieveState(prefix = '') {
 	let pack = localStorage.getItem(prefix + '_pack');
 	if (isdef(pack)) {
 		pack = JSON.parse(pack);

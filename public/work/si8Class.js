@@ -9,6 +9,7 @@ class SimpleClass7 {
 		this.settings = {};
 		this.randomIndices = [];
 		openToolbar();
+		loadHistoryExp();
 	}
 	presentGameState(data) {
 		//console.log('_________________________gs', StepCounter); StepCounter += 1;
@@ -292,7 +293,7 @@ function simplestPerlenGame() {
 }
 function sendStartOrJoinPerlenGame() {
 	if (STARTED) {
-		if (isdef(G)) { saveStateAndSettings(); }
+		if (isdef(G)) { addStateToHistory(); }
 		console.log('SERVER RESTART?!?!?!!!');
 		return;
 	}
