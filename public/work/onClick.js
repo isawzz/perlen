@@ -254,35 +254,6 @@ function packageState() {
 	let pack = { settings: jsCopy(G.settings), state: state, randomIndices: jsCopy(G.randomIndices) };
 	return pack;
 }
-
-
-
-
-
-//#region old code
-function saveState(prefix = '') {
-	let st = G.state;
-	let state = { boardArr: st.boardArr, poolArr: st.poolArr, pool: {} };
-	for (const k in st.pool) {
-		let oNew = state.pool[k] = {};
-		copyKeys(st.pool[k], oNew, {}, ['index', 'key']);
-	}
-	let pack = { settings: G.settings, state: state, randomIndices: G.randomIndices };
-	localStorage.setItem(prefix + '_pack', JSON.stringify(pack));
-	return pack;
-}
-function retrieveState(prefix = '') {
-	let pack = localStorage.getItem(prefix + '_pack');
-	if (isdef(pack)) {
-		pack = JSON.parse(pack);
-		console.log('retrieved settings (baseColor)', pack.settings.baseColor);
-		G.settings = pack.settings;
-		Socket.emit('state', pack);
-		//Socket.emit('settings', { settings: G.settings });
-	} else {
-		alert(`no settings ${prefix} in localStorage!`);
-	}
-}
 //#endregion
 
 //#region helpers TODO => base
@@ -582,6 +553,32 @@ function onClickSaveToHistory() {
 	console.log('save to history!');
 	let l = G.lastStateman.lastState;
 	downloadAsYaml(l, 'lastState');
+}
+//#endregion
+
+//#region old code
+function saveState(prefix = '') {
+	let st = G.state;
+	let state = { boardArr: st.boardArr, poolArr: st.poolArr, pool: {} };
+	for (const k in st.pool) {
+		let oNew = state.pool[k] = {};
+		copyKeys(st.pool[k], oNew, {}, ['index', 'key']);
+	}
+	let pack = { settings: G.settings, state: state, randomIndices: G.randomIndices };
+	localStorage.setItem(prefix + '_pack', JSON.stringify(pack));
+	return pack;
+}
+function retrieveState(prefix = '') {
+	let pack = localStorage.getItem(prefix + '_pack');
+	if (isdef(pack)) {
+		pack = JSON.parse(pack);
+		console.log('retrieved settings (baseColor)', pack.settings.baseColor);
+		G.settings = pack.settings;
+		Socket.emit('state', pack);
+		//Socket.emit('settings', { settings: G.settings });
+	} else {
+		alert(`no settings ${prefix} in localStorage!`);
+	}
 }
 //#endregion
 
