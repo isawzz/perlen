@@ -90,6 +90,7 @@ app.post('/bretter', upload.array('bretter'), (req, res) => {
 io.on('connection', client => {
 
 	//connection and login: userManager
+	console.log('connection',client.id)
 	userman.handleConnectionSendClientId(client); //just sends back client id to client: userManager
 	client.on('login', x => { userman.handleLoginSendDB(client, x); }); //returns DB to client, broadcast entered lobby: userManager
 	client.on('disconnect', x => { simple.handlePlayerLeft(client, x); userman.handleDisconnected(client, x); }); //broadcast user left: userManager

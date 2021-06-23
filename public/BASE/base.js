@@ -10,6 +10,7 @@ function mButton(caption, handler, dParent, styles, classes, id) {
 	if (isdef(styles)) mStyleX(x, styles);
 	if (isdef(classes)) {
 		//console.log('setting classes',classes,...classes)
+		if (!isList(classes)) classes=[classes];
 		mClass(x, ...classes);
 	}
 	if (isdef(id)) x.id = id;

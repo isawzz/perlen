@@ -1,5 +1,5 @@
 //#region server and client
-const PORT = 3344;
+const PORT = 2121;
 const PERLEN_DATA_PATH = './public/PERLENDATA/';
 const PERLENPATH_FRONT = './PERLENDATA/';
 
