@@ -63,6 +63,10 @@ class ToolbarClass {
 
 		this.addButton('downloadHistory', onClickDownloadHistory, 'download states',4);
 		mLinebreak(this.dParent);
+
+		this.addButton('remoteConnection', onClickRemoteConnection, 'remote connection',4);
+		mLinebreak(this.dParent);
+
 		// mLinebreak(this.dParent);
 		// this.addButton('saveColor', onClickSaveColor, '&nbsp;save&nbsp; color');
 		// this.addButton('retrieveColor', onClickRetrieveColor, 'retrieve color');
