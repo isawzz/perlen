@@ -1,4 +1,12 @@
 //#region m
+function mCellContent(dCell, styles, html) {
+	clearElement(dCell);
+	let d = mDiv(dCell, { w: '100%', h: '100%' });
+	mCenterCenterFlex(d);
+	let d1 = mDiv(d, styles, null, html);
+	mCenterCenterFlex(d1);
+	return d1;
+}
 function mAppend(d, child) { d.appendChild(child); return child; }
 function mBackground(bg, fg) { mStyleX(document.body, { bg: bg, fg: fg }); }
 
@@ -10,7 +18,7 @@ function mButton(caption, handler, dParent, styles, classes, id) {
 	if (isdef(styles)) mStyleX(x, styles);
 	if (isdef(classes)) {
 		//console.log('setting classes',classes,...classes)
-		if (!isList(classes)) classes=[classes];
+		if (!isList(classes)) classes = [classes];
 		mClass(x, ...classes);
 	}
 	if (isdef(id)) x.id = id;
@@ -26,22 +34,23 @@ function mCenterFlex(d, hCenter = true, vCenter = false, wrap = true) {
 	if (wrap) styles['flex-wrap'] = 'wrap';
 	mStyleX(d, styles);
 }
-// function mCheckbox(label, val, dParent, styles = {}, id) {
-// 	let d = mDiv(dParent, { display: 'inline-block', align: 'left' });
-// 	// let val = lookup(this.o, skeys);
-// 	// if (nundef(val)) val = init;
-// 	let inp = createElementFromHTML(
-// 		`<input type="checkbox" class="checkbox" ${(val === true ? 'checked=true' : '')} >`
-// 	);
-// 	if (isdef(id)) inp.id = id;
-// 	let labelui = createElementFromHTML(`<label>${label}</label>`);
-// 	mAppend(d, labelui);
-// 	mAppend(labelui, inp);
-// 	mStyleX(inp, styles);
-// 	mClass(inp, 'input');
-// 	return inp;
-// }
 function mClass(d) { for (let i = 1; i < arguments.length; i++) d.classList.add(arguments[i]); }
+//#region dep muell
+function mCheckbox_dep(label, val, dParent, styles = {}, id) {
+	let d = mDiv(dParent, { display: 'inline-block', align: 'left' });
+	// let val = lookup(this.o, skeys);
+	// if (nundef(val)) val = init;
+	let inp = createElementFromHTML(
+		`<input type="checkbox" class="checkbox" ${(val === true ? 'checked=true' : '')} >`
+	);
+	if (isdef(id)) inp.id = id;
+	let labelui = createElementFromHTML(`<label>${label}</label>`);
+	mAppend(d, labelui);
+	mAppend(labelui, inp);
+	mStyleX(inp, styles);
+	mClass(inp, 'input');
+	return inp;
+}
 function mContainer(d, styles = {}) {
 	let defOuterStyles = {
 		display: 'inline-flex', 'flex-direction': 'column',
@@ -134,6 +143,46 @@ function mColorPicker1(dParent, palette, onColor) {
 
 	return picker;
 }
+//#endregion
+function mCheckbox(label, val, dParent, handler, styles) {
+	styles.align = 'left';
+	let d = mDiv(dParent, styles);
+	let hpad = valf(styles.hpadding, 4);
+	let dLabel = mDiv(d, { w: '40%', align: 'right', hpadding: hpad, display: 'inline-block' }, null, label); //createElementFromHTML(`<label>${label}</label>`);
+	let d2 = mDiv(d, { display: 'inline', w: '50%', hpadding: hpad });
+	let inp = createElementFromHTML(
+		`<input type="checkbox" class="checkbox" ` + (val === true ? 'checked=true' : '') + ` >`);
+	mAppend(d2, inp);
+
+	inp.onchange = (ev) => { handler(inp.checked, ev); };
+	// inp.onchange = handler;
+	return inp;
+}
+function mColorPickerControl(label, value, targetImage, dParent, handler, styles) {
+	let d = mDiv(dParent, styles);
+	let hpad = valf(styles.hpadding, 6);
+	let dLabel = mDiv(d, { 'vertical-align': 'top', w: '35%', align: 'right', hpadding: hpad, display: 'inline-block' }, null, label);
+
+	let hues = arrTake(getHueWheel(value), 10);
+	let colorPalette = hues.map(x => anyColorToStandardString(colorHSLBuild(x)));
+	// console.log('targetImage',targetImage, 'value',value, getHueWheel(value),colorPalette);
+	// let palette = isdef(targetImage)? getPaletteFromImage(targetImage):getHueWheel(value);
+	let palette = isdef(targetImage) ? getPaletteFromImage(targetImage) : colorPalette;
+	// console.log('palette',palette);
+
+	// let inp = mColorPicker3(d, palette, handler, value);
+	// //let elem = mDiv(dParent,{w:50,h:50,display:'inline-block'});
+	let elem = mDiv(d, { w: '55%', hpadding: hpad, h: 24, rounding: hpad, display: 'inline-block' });
+	let inp = new JSColor(elem, {
+		alpha: 'ff',
+		closeButton: true,
+		value: value,
+		palette: palette,
+	});
+	//inp.onChange = ()=>{let c = inp.toHEXAString(); onColor(c);}
+	inp.onInput = () => { let c = inp.toHEXAString(); handler(c); }
+	return inp;
+}
 function mCreate(tag, styles, id) { let d = document.createElement(tag); if (isdef(id)) d.id = id; if (isdef(styles)) mStyleX(d, styles); return d; }
 function mDestroy(elem) { if (isString(elem)) elem = mById(elem); purge(elem); } // elem.parentNode.removeChild(elem); }
 function mDiv(dParent, styles, id, inner, classes) {
@@ -147,6 +196,7 @@ function mDiv(dParent, styles, id, inner, classes) {
 }
 function mDiv100(dParent, styles, id) { let d = mDiv(dParent, styles, id); mSize(d, 100, 100, '%'); return d; }
 function mDover(dParent) { let d = mDiv(dParent); mIfNotRelative(dParent); mStyleX(d, { position: 'absolute', w: '100%', h: '100%' }); return d; }
+//#region CLEANUP! edit inputs
 function unfocusOnEnter(ev) {
 	if (ev.key === 'Enter') {
 		ev.preventDefault();
@@ -180,45 +230,6 @@ function incInput(inp, n = 1) {
 	val += n;
 	inp.innerHTML = val;
 }
-function mCheckbox(label, val, dParent, handler, styles) {
-	styles.align = 'left';
-	let d = mDiv(dParent, styles);
-	let hpad = valf(styles.hpadding, 4);
-	let dLabel = mDiv(d, { w: '40%', align: 'right', hpadding: hpad, display: 'inline-block' }, null, label); //createElementFromHTML(`<label>${label}</label>`);
-	let d2 = mDiv(d, { display: 'inline', w: '50%', hpadding: hpad });
-	let inp = createElementFromHTML(
-		`<input type="checkbox" class="checkbox" ` + (val === true ? 'checked=true' : '') + ` >`);
-	mAppend(d2, inp);
-
-	inp.onchange = (ev) => { handler(inp.checked, ev); };
-	// inp.onchange = handler;
-	return inp;
-}
-function mColorPickerControl(label, value, targetImage, dParent, handler, styles) {
-	let d = mDiv(dParent, styles);
-	let hpad = valf(styles.hpadding, 6);
-	let dLabel = mDiv(d, { 'vertical-align': 'top', w: '35%', align: 'right', hpadding: hpad, display: 'inline-block' }, null, label);
-	
-	let hues = arrTake(getHueWheel(value),10);
-	let colorPalette = hues.map(x=>anyColorToStandardString(colorHSLBuild(x)));
-	// console.log('targetImage',targetImage, 'value',value, getHueWheel(value),colorPalette);
-	// let palette = isdef(targetImage)? getPaletteFromImage(targetImage):getHueWheel(value);
-	let palette = isdef(targetImage)? getPaletteFromImage(targetImage):colorPalette;
-	// console.log('palette',palette);
-
-	// let inp = mColorPicker3(d, palette, handler, value);
-	// //let elem = mDiv(dParent,{w:50,h:50,display:'inline-block'});
-	let elem = mDiv(d, { w: '55%', hpadding: hpad, h: 24, rounding: hpad, display: 'inline-block' });
-	let inp = new JSColor(elem, {
-		alpha: 'ff',
-		closeButton: true,
-		value: value,
-		palette: palette,
-	});
-	//inp.onChange = ()=>{let c = inp.toHEXAString(); onColor(c);}
-	inp.onInput = () => { let c = inp.toHEXAString(); handler(c); }
-	return inp;
-}
 function mEditRange(label, value, min, max, step, dParent, handler, styles, classes, id, triggerOnChange = true) {
 	let d = mDiv(dParent, styles);
 	let hpad = valf(styles.hpadding, 4);
@@ -241,7 +252,6 @@ function mEditRange(label, value, min, max, step, dParent, handler, styles, clas
 	if (isdef(id)) inp.id = id;
 	return inpText;
 }
-
 function mEditNumber(label, value, dParent, handler, styles, classes, id, triggerOnChange = true) {
 	let d = mDiv(dParent, styles);
 	let hpad = valf(styles.hpadding, 4);
@@ -260,7 +270,6 @@ function mEditNumber(label, value, dParent, handler, styles, classes, id, trigge
 	if (isdef(id)) inp.id = id;
 	return inp;
 }
-
 function mEdit(label, value, dParent, handler, styles, classes, id) {
 
 	let d = mDiv(dParent, styles);
@@ -340,6 +349,7 @@ function mEditableInput(dParent, label, val, styles, classes, id) {
 
 	return elem;
 }
+//#endregion
 function mFlexWrap(d) { mFlex(d, 'w'); }
 function mFlex(d, or = 'h') {
 	d.style.display = 'flex';
@@ -449,7 +459,72 @@ function mRemoveClass(d) { for (let i = 1; i < arguments.length; i++) d.classLis
 function mRemoveStyle(d, styles) { for (const k of styles) d.style[k] = null; }
 function mReveal(d) { d.style.opacity = 1; }
 function mScreen(dParent, styles) { let d = mDover(dParent); if (isdef(styles)) mStyleX(d, styles); return d; }
+function mSidebar(title, dParent, styles, id, inner) {
+
+	let elem = createElementFromHtml(`
+	<div id="${id}" class="w3sidebar">
+		<h1>${title}</h1>
+	  <a href="javascript:void(0)" class="closebtn">×</a>
+	</div>	
+	`);
+	function openNav() {
+		elem.style.width = "250px";
+		dParent.style.marginLeft = "250px";
+	}
+
+	function closeNav() {
+		elem.style.width = "0";
+		dParent.style.marginLeft = "0";
+	}
+
+	elem.children[1].onclick = closeNav;
+	mClass(dParent, 'w3sidebarParent');
+	let dContent = mDiv(elem);
+	mInsert(dParent.parentNode, elem);
+	return { div: elem, dContent: dContent, fOpen: openNav, fClose: closeNav };
+}
 function mSize(d, w, h, unit = 'px') { mStyleX(d, { width: w, height: h }, unit); }
+function mStyleTranslate(prop,val,convertNumbers=true){
+	const paramDict = {
+		align: 'text-align',
+		bg: 'background-color',
+		fg: 'color',
+		hgap: 'column-gap',
+		vgap: 'row-gap',
+		matop: 'margin-top',
+		maleft: 'margin-left',
+		mabottom: 'margin-bottom',
+		maright: 'margin-right',
+		patop: 'padding-top',
+		paleft: 'padding-left',
+		pabottom: 'padding-bottom',
+		paright: 'padding-right',
+		rounding: 'border-radius',
+		w: 'width',
+		h: 'height',
+		wmin: 'min-width',
+		hmin: 'min-height',
+		wmax: 'max-width',
+		hmax: 'max-height',
+		fontSize: 'font-size',
+		fz: 'font-size',
+		family: 'font-family',
+		weight: 'font-weight',
+		z: 'z-index'
+	};
+	let valDict = {
+		random: randomColor(),
+
+	};
+	let propName = isdef(paramDict[prop])?paramDict[prop]:prop;
+	let newVal = isdef(valDict[val])?valdict[val]:val;
+	if (convertNumbers && isNumber(newVal))  newVal=''+newVal+'px';
+	return [propName,newVal];
+
+}
+function translateToCssStyle(prop,val){return mStyleTranslate(prop,val);}
+function getBorderPropertyForDirection(dir){	return {0:'border-top',1:'border-right',2:'border-bottom',3:'border-left'}[dir];}
+
 function mStyleX(elem, styles, unit = 'px') {
 	const paramDict = {
 		align: 'text-align',
@@ -478,6 +553,7 @@ function mStyleX(elem, styles, unit = 'px') {
 		weight: 'font-weight',
 		z: 'z-index'
 	};
+
 	//console.log(':::::::::styles',styles)
 	let bg, fg;
 	if (isdef(styles.bg) || isdef(styles.fg)) {
@@ -683,7 +759,10 @@ function iAdd(item, props) {
 	else if (nundef(item.id)) {
 		id = item.id = iRegister(item);
 		//console.log('id of item is',id, item)
-	} else id = item.id;
+	} else {
+		id = item.id;
+		if (nundef(Items[id])) Items[id] = item;
+	}
 	if (nundef(item.live)) item.live = {}; l = item.live;
 	for (const k in props) {
 		let val = props[k];
@@ -730,7 +809,7 @@ function iGrid(rows, cols, dParent, styles) {
 	for (let i = 0; i < rows; i++) {
 		for (let j = 0; j < cols; j++) {
 			let d = mDiv(dParent, styles);
-			let item = { row: i, col: j, index: index }; //, id:getUID() };
+			let item = { row: i, col: j, index: index }; 
 			index += 1;
 			iAdd(item, { div: d });
 			items.push(item);
@@ -1161,6 +1240,18 @@ function helleFarbe(contrastTo, minDiff = 25, mod = 30, start = 0) {
 	let hsl = colorHSLBuild(hue, 100, 50);
 	return hsl;
 }
+function getColorWheel(contrastTo, n) {
+	let hc = colorHue(contrastTo);
+	let wheel = [];
+	let start = hc;
+	let inc = Math.round(360 / (n + 1));
+	start += inc;
+	for (let i = 0; i < n; i++) {
+		wheel.push(start % 360);
+		start += inc;
+	}
+	return wheel.map(x => colorHSLBuild(x));
+}
 function getHueWheel(contrastTo, minDiff = 25, mod = 30, start = 0) {
 	let hc = colorHue(contrastTo);
 	let wheel = [];
@@ -1231,7 +1322,7 @@ function colorHSL(cAny, asObject = false) {
 		return shsl;
 	}
 } //ok
-function colorHSLBuild(hue, sat=100, lum=50) { let result = "hsl(" + hue + ',' + sat + '%,' + lum + '%)'; return result; }
+function colorHSLBuild(hue, sat = 100, lum = 50) { let result = "hsl(" + hue + ',' + sat + '%,' + lum + '%)'; return result; }
 function colorBlend(zero1, c0, c1, log = true) {
 	c0 = anyColorToStandardString(c0);
 	c1 = anyColorToStandardString(c1);
@@ -2638,7 +2729,6 @@ function getFunctionsNameThatCalledThisFunction() {
 //#endregion
 
 //#region geo helpers
-function toRadian(deg) { return deg * 2 * Math.PI / 360; }
 function correctPolys(polys, approx = 10) {
 	//console.log('citySize', citySize, 'approx', approx);
 	let clusters = [];
@@ -2712,33 +2802,7 @@ function dSquare(pos1, pos2) {
 	return dx + dy;
 }
 function distance(x1, y1, x2, y2) { return Math.sqrt(dSquare({ x: x1, y: y1 }, { x: x2, y: y2 })); }
-function size2hex(w = 100, h = 0, x = 0, y = 0) {
-	//returns sPoints for polygon svg
-	//from center of poly and w (possibly h), calculate hex poly points and return as string!
-	//TODO: add options to return as point list!
-	//if h is omitted, a regular hex of width w is produced
-	//starting from N:
-	let hexPoints = [{ X: 0.5, Y: 0 }, { X: 1, Y: 0.25 }, { X: 1, Y: 0.75 }, { X: 0.5, Y: 1 }, { X: 0, Y: 0.75 }, { X: 0, Y: 0.25 }];
-
-	if (h == 0) {
-		h = (2 * w) / 1.73;
-	}
-	return polyPointsFrom(w, h, x, y, hexPoints);
-}
-function size2triup(w = 100, h = 0, x = 0, y = 0) {
-	//returns sPoints for polygon svg starting from N:
-	let triPoints = [{ X: 0.5, Y: 0 }, { X: 1, Y: 1 }, { X: 0, Y: 1 }];
-	if (h == 0) { h = w; }
-	return polyPointsFrom(w, h, x, y, triPoints);
-
-}
-function size2tridown(w = 100, h = 0, x = 0, y = 0) {
-	//returns sPoints for polygon svg starting from N:
-	let triPoints = [{ X: 1, Y: 0 }, { X: 0.5, Y: 1 }, { X: 0, Y: 0 }];
-	if (h == 0) { h = w; }
-	return polyPointsFrom(w, h, x, y, triPoints);
-
-}
+function isCloseTo(n, m, acc = 10) { return Math.abs(n - m) <= acc + 1; }
 function getCirclePoints(rad, n, disp = 0) {
 	let pts = [];
 	let i = 0;
@@ -2766,23 +2830,6 @@ function getEllipsePoints(radx, rady, n, disp = 0) {
 		i++;
 	}
 	return pts;
-}
-
-function polyPointsFrom(w, h, x, y, pointArr) {
-
-	x -= w / 2;
-	y -= h / 2;
-
-	let pts = pointArr.map(p => [p.X * w + x, p.Y * h + y]);
-	let newpts = [];
-	for (const p of pts) {
-		newp = { X: p[0], Y: Math.round(p[1]) };
-		newpts.push(newp);
-	}
-	pts = newpts;
-	let sPoints = pts.map(p => '' + p.X + ',' + p.Y).join(' '); //'0,0 100,0 50,80',
-	//testHexgrid(x, y, pts, sPoints);
-	return sPoints;
 }
 function getPoly(offsets, x, y, w, h) {
 	//, modulo) {
@@ -2818,67 +2865,77 @@ function getTriangleDownPoly(x, y, w, h) {
 	let tridown = [[-0.5, 0.5], [0.5, 0.5], [-0.5, 0.5]];
 	return getPoly(tridown, x, y, w, h);
 }
+function polyPointsFrom(w, h, x, y, pointArr) {
+
+	x -= w / 2;
+	y -= h / 2;
+
+	let pts = pointArr.map(p => [p.X * w + x, p.Y * h + y]);
+	let newpts = [];
+	for (const p of pts) {
+		newp = { X: p[0], Y: Math.round(p[1]) };
+		newpts.push(newp);
+	}
+	pts = newpts;
+	let sPoints = pts.map(p => '' + p.X + ',' + p.Y).join(' '); //'0,0 100,0 50,80',
+	//testHexgrid(x, y, pts, sPoints);
+	return sPoints;
+}
+function size2hex(w = 100, h = 0, x = 0, y = 0) {
+	//returns sPoints for polygon svg
+	//from center of poly and w (possibly h), calculate hex poly points and return as string!
+	//TODO: add options to return as point list!
+	//if h is omitted, a regular hex of width w is produced
+	//starting from N:
+	let hexPoints = [{ X: 0.5, Y: 0 }, { X: 1, Y: 0.25 }, { X: 1, Y: 0.75 }, { X: 0.5, Y: 1 }, { X: 0, Y: 0.75 }, { X: 0, Y: 0.25 }];
+
+	if (h == 0) {
+		h = (2 * w) / 1.73;
+	}
+	return polyPointsFrom(w, h, x, y, hexPoints);
+}
+function size2triup(w = 100, h = 0, x = 0, y = 0) {
+	//returns sPoints for polygon svg starting from N:
+	let triPoints = [{ X: 0.5, Y: 0 }, { X: 1, Y: 1 }, { X: 0, Y: 1 }];
+	if (h == 0) { h = w; }
+	return polyPointsFrom(w, h, x, y, triPoints);
+
+}
+function size2tridown(w = 100, h = 0, x = 0, y = 0) {
+	//returns sPoints for polygon svg starting from N:
+	let triPoints = [{ X: 1, Y: 0 }, { X: 0.5, Y: 1 }, { X: 0, Y: 0 }];
+	if (h == 0) { h = w; }
+	return polyPointsFrom(w, h, x, y, triPoints);
+
+}
+function toRadian(deg) { return deg * 2 * Math.PI / 360; }
 
 //#endregion
 
-//#region loading DB, yaml, json, text
-async function dbInit(appName, dir = '../DATA/') {
-	let users = await route_path_yaml_dict(dir + 'users.yaml');
-	let settings = await route_path_yaml_dict(dir + 'settings.yaml');
-	let addons = await route_path_yaml_dict(dir + 'addons.yaml');
-	let games = await route_path_yaml_dict(dir + 'games.yaml');
-	//let speechGames = await route_path_yaml_dict(dir + '_speechGames.yaml');
-	let tables = await route_path_yaml_dict(dir + 'tables.yaml');
-
-	DB = {
-		id: appName,
-		users: users,
-		settings: settings,
-		games: games,
-		tables: tables,
-		//speechGames: speechGames,
-		addons: addons,
-	};
-
-	dbSave(appName);
-}
-async function dbLoad(appName, callback) {
-	let url = SERVERURL;
-	fetch(url, {
-		method: 'GET',
+// Example POST method implementation:
+async function postData(url = '', data = {}) {
+	// Default options are marked with *
+	//usage:
+	// postData('https://example.com/answer', { answer: 42 })
+	// .then(data => {
+	//   console.log(data); // JSON data parsed by `data.json()` call
+	// });	
+	//console.log('url',url,JSON.stringify(data));
+	const response = await fetch(url, {
+		method: 'POST', // *GET, POST, PUT, DELETE, etc.
+		mode: 'cors', // no-cors, *cors, same-origin
+		cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+		credentials: 'omit', // include, *same-origin, omit
 		headers: {
-			'Accept': 'application/json',
 			'Content-Type': 'application/json'
+			// 'Content-Type': 'application/x-www-form-urlencoded',
 		},
-	}).then(async data => {
-		let sData = await data.json();
-
-		DB = firstCond(sData, x => x.id == appName);
-		//console.log('...loaded DB', DB);
-
-		if (isdef(callback)) callback();
+		redirect: 'follow', // manual, *follow, error
+		referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
+		body: JSON.stringify(data) // body data type must match "Content-Type" header
 	});
+	return 'hallo';// response.json(); // parses JSON response into native JavaScript objects
 }
-
-var BlockServerSend = false;
-function dbSave(appName, callback) {
-	if (BlockServerSend) { setTimeout(() => dbSave(appName, callback), 1000); }
-	else {
-		//console.log('saving DB:',appName,DB);
-		let url = SERVERURL + appName;
-		BlockServerSend = true;
-		//console.log('blocked...');
-		fetch(url, {
-			method: 'PUT',
-			headers: {
-				'Accept': 'application/json',
-				'Content-Type': 'application/json'
-			},
-			body: JSON.stringify(DB)
-		}).then(() => { BlockServerSend = false; console.log('unblocked...'); if (callback) callback(); }); //console.log('unblocked...'); });
-	}
-}
-
 async function fetch_wrapper(url) { return await fetch(url); }
 async function route_path_yaml_dict(url) {
 	let data = await fetch_wrapper(url);
@@ -2911,7 +2968,32 @@ async function localOrRoute(key, url) {
 //#endregion
 
 //#region measure size and pos ARITHMETIC
-function getCenter(elem) { let r = getRect(elem); return { x: (r.w) / 2, y: (r.h) / 2 }; }
+function getCenter(elem) { let r = isdef(elem.x) ? elem : getRect(elem); return { x: (r.w) / 2, y: (r.h) / 2 }; }
+function getRectInt(elem, relto) {
+
+	if (isString(elem)) elem = document.getElementById(elem);
+
+	let res = elem.getBoundingClientRect();
+	//console.log(res)
+	if (isdef(relto)) {
+		//console.log(relto)
+		let b2 = relto.getBoundingClientRect();
+		let b1 = res;
+		res = {
+			x: b1.x - b2.x,
+			y: b1.y - b2.y,
+			left: b1.left - b2.left,
+			top: b1.top - b2.top,
+			right: b1.right - b2.right,
+			bottom: b1.bottom - b2.bottom,
+			width: b1.width,
+			height: b1.height
+		};
+	}
+	let r4 = { x: Math.round(res.left), y: Math.round(res.top), w: Math.round(res.width), h: Math.round(res.height) };
+	extendRect(r4); //r4.l = r4.x; r4.t = r4.y; r4.r = r4.x + r4.w; r4.b = r4.t + r4.h;
+	return r4;
+}
 function getRect(elem, relto) {
 
 	if (isString(elem)) elem = document.getElementById(elem);
@@ -2933,8 +3015,12 @@ function getRect(elem, relto) {
 			height: b1.height
 		};
 	}
-	return { x: Math.round(res.left), y: Math.round(res.top), w: Math.round(res.width), h: Math.round(res.height) };
+	let r4 = { x: res.left, y: res.top, w: res.width, h: res.height };
+	extendRect(r4); //r4.l = r4.x; r4.t = r4.y; r4.r = r4.x + r4.w; r4.b = r4.t + r4.h;
+	return r4;
 }
+function getSize(elem) { let r = getRectInt(elem); return { w: r.w, h: r.h, sz: Math.min(r.w, r.h) }; }
+function extendRect(r4) { r4.l = r4.x; r4.t = r4.y; r4.r = r4.x + r4.w; r4.b = r4.t + r4.h; }
 function getSizeWithStyles(text, styles) {
 	var d = document.createElement("div");
 	document.body.appendChild(d);
@@ -3086,6 +3172,7 @@ function addByKey(oNew, oOld, except) {
 function addKeys(ofrom, oto) { for (const k in ofrom) if (nundef(oto[k])) oto[k] = ofrom[k]; }
 function addSimpleProps(ofrom, oto = {}) { for (const k in ofrom) { if (nundef(oto[k]) && isLiteral(k)) oto[k] = ofrom[k]; } return oto; }
 function addIfDict(key, val, dict) { if (!(key in dict)) { dict[key] = [val]; } }
+function allCond(arr, cond) { return forAll(arr, cond); }
 function any(arr, cond) { return !isEmpty(arr.filter(cond)); }
 function anyStartsWith(arr, prefix) { return any(arr, el => startsWith(el, prefix)); }
 function arrAdd(arr, elist) { for (const el of elist) arr.push(el); return arr; }
@@ -3168,6 +3255,7 @@ function arrRotate(arr, count) {
 	unshift.apply(arr1, splice.call(arr1, count % len, len));
 	return arr1;
 }
+function arrReverse(arr) { return arr.reverse(); }
 function arrString(arr, func) {
 	if (isEmpty(arr)) return '[]';
 	let s = '[';
@@ -3187,7 +3275,17 @@ function arrTakeFromEnd(arr, n) {
 	if (arr.length <= n) return arr.map(x => x); else return arr.slice(arr.length - n);
 }
 function arrWithout(a, b) { return arrMinus(a, b); }
+function cartesian(...a) { return a.reduce((a, b) => a.flatMap(d => b.map(e => [d, e].flat()))); }
+function arrPairs(a) {
+	let res = [];
+	for (let i = 0; i < a.length; i++) {
+		for (let j = i + 1; j < a.length; j++) {
+			res.push([a[i], a[j]]);
+		}
 
+	}
+	return res;
+}
 function classByName(name) { return eval(name); }
 function copyKeys(ofrom, oto, except = {}, only) {
 	//console.log(ofrom)
@@ -3274,6 +3372,7 @@ function firstNCond(n, arr, func) {
 	}
 	return result;
 }
+function forAll(arr, func) { for (const a of arr) if (!func(a)) return false; return true; }
 function getIndicesCondi(arr, func) {
 	let res = [];
 	for (let i = 0; i < arr.length; i++) {
@@ -3299,6 +3398,26 @@ function getObjectsWithSame(olist, props, o, up = true, breakWhenDifferent = tru
 	}
 	//console.log('res', res)
 	return res;
+}
+function getRandomLetterMapping(s) {
+	//returns a dictionary mapping each letter of s to a different letter in s
+	//replace each letter by a different letter
+	if (nundef(s)) s = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+	let alphabet = filterDistinctLetters(s);
+	let alphabet2 = shuffle(jsCopy(alphabet));
+	let di = {};
+	for (let i = 0; i < alphabet.length; i++) {
+		di[alphabet[i]] = alphabet2[i];
+	}
+	return di;
+}
+function getLetterSwapEncoding(s) {
+	let di = getRandomLetterMapping(s);
+	let result = '';
+	for (let i = 0; i < s.length; i++) {
+		result += s[i] in di ? di[s[i]] : s[i];
+	}
+	return result;
 }
 function intersection(arr1, arr2) {
 	//each el in result will be unique
@@ -3515,6 +3634,9 @@ function takeFromTo(ad, from, to) {
 		return keys.slice(from, to).map(x => (ad[x]));
 	} else return ad.slice(from, to);
 }
+function union(lst1, lst2) {
+	return [...new Set([...lst1, ...lst2])];
+}
 //#endregion
 
 //#region random
@@ -3527,7 +3649,7 @@ function coin(percent = 50) {
 function choose(arr, n, exceptIndices) {
 	var result = [];
 	var len = arr.length;
-	if (n>=arr.length) return arr;
+	if (n >= arr.length) return arr;
 
 	var taken = new Array(len);
 	if (isdef(exceptIndices) && exceptIndices.length < len - n) {
@@ -3627,6 +3749,14 @@ function capitalize(s) {
 function endsWith(s, sSub) { let i = s.indexOf(sSub); return i >= 0 && i == s.length - sSub.length; }
 function extendWidth(w) { return replaceEvery(w, 'w', 2); }
 function filterByLength(w, min, max, allowSpaces = false) { return w.length <= max && w.length >= min && (allowSpaces || !w.includes(' ')); }
+function filterDistinctLetters(s) {
+	let arr = [];
+	for (let i = 0; i < s.length; i++) {
+		let ch = s[i];
+		if (isLetter(ch) && !arr.includes(ch)) arr.push(ch);
+	}
+	return arr;
+}
 function findCommonPrefix(s1, s2) {
 	let i = 0;
 	let res = '';
@@ -3678,7 +3808,8 @@ function fromUmlaut(w) {
 		w = replaceAll(w, 'Ö', 'OE');
 		return w;
 	}
-} function getCorrectPrefix(label, text) {
+}
+function getCorrectPrefix(label, text) {
 
 	// let txt = this.input.value;
 	// console.log('input value',txt);
@@ -3799,6 +3930,8 @@ function substringOfMinLength(s, minStartIndex, minLength) {
 	while (res1.trim().length < minLength && i < res.length) { res1 += res[i]; i += 1; }
 	return res1.trim();
 }
+function lettersToArray(s) { return toLetterList(s); }
+function toLetterArray(s) { return toLetterList(s); }
 function toLetterList(s) {
 	return [...s];
 }
@@ -3895,9 +4028,6 @@ class TimeIt {
 }
 //#endregion
 
-//#region type checking / checking
-//#endregion
-
 //#region asset helpers
 function buildNewSyms() {
 	let newSyms = {};
@@ -3971,6 +4101,7 @@ function createElementFromHTML(htmlString) {
 	return div.firstChild;
 }
 function divInt(a, b) { return Math.trunc(a / b); }
+function errlog() { console.log('ERROR!', ...arguments); }
 function evToClosestId(ev) {
 	//returns first ancestor that has an id
 	let elem = findParentWithId(ev.target);
@@ -4113,10 +4244,11 @@ function isEmpty(arr) {
 		|| (Array.isArray(arr) && arr.length == 0)
 		|| Object.entries(arr).length === 0;
 }
+function isEmptyOrWhiteSpace(s) { return isEmpty(s.trim()); }
 function isLetter(s) { return /^[a-zA-Z]$/i.test(s); }
 function isList(arr) { return Array.isArray(arr); }
 function isLiteral(x) { return isString(x) || isNumber(x); }
-function isNumber(x) { return x!==true && x!==false && isdef(x) && (x == 0 || x != ' ' && !isNaN(+x)); }
+function isNumber(x) { return x !== true && x !== false && isdef(x) && (x == 0 || x != ' ' && !isNaN(+x)); }
 function isSingleDigit(s) { return /^[0-9]$/i.test(s); }
 function isString(param) { return typeof param == 'string'; }
 function isSvg(elem) { return startsWith(elem.constructor.name, 'SVG'); }
@@ -4130,6 +4262,7 @@ function isWhiteSpace2(ch) {
 	const alphanum = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ_';
 	return !alphanum.includes(ch);
 }
+function isWhiteSpaceString(s) { return isEmptyOrWhiteSpace(s); }
 function isOverflown(element) {
 	return element.scrollHeight > element.clientHeight || element.scrollWidth > element.clientWidth;
 }
@@ -4173,6 +4306,11 @@ function purge(elem) {
 	}
 	elem.remove(); //elem.parentNode.removeChild(elem);
 }
+function setCSSVariable(varName, val) {
+	let root = document.documentElement;
+	root.style.setProperty(varName, val);
+}
+
 function show(elem, isInline = false) {
 	if (isString(elem)) elem = document.getElementById(elem);
 	if (isSvg(elem)) {
@@ -4191,7 +4329,15 @@ function getUID(pref = '') {
 	UIDCounter += 1;
 	return pref + '_' + UIDCounter;
 }
-function resetUIDs() { UIDCounter = 0; }
+var FRUIDCounter = -1;
+function getFruid(pref = '') {
+	const alpha = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+	FRUIDCounter += 1;
+	if (FRUIDCounter < alpha.length) return pref + alpha[FRUIDCounter];
+	return pref + FRUIDCounter - alpha.length;
+}
+function resetUIDs() { UIDCounter = 0; FRUIDCounter = -1; }
+
 //#endregion
 
 //#region PerlenGame common code!

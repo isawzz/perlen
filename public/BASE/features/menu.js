@@ -1,10 +1,10 @@
 function createMenuUi(dParent) {
-	//console.log('base.features.menu: dParent', dParent)
+	//console.log('BASE.features.menu: dParent', dParent)
 	clearElement(dParent);
 	mCenterFlex(dParent);
 	mAppend(dParent, createElementFromHTML(`<h1>Choose Game:</h1>`));
 	mLinebreak(dParent);
-	let dMenuItems = mDiv(dParent, { w: 900, h: 600 });
+	let dMenuItems = mDiv(dParent, { w: '90%', h: 600 });
 	// mCenterFlex(dMenuItems);
 
 	let games = jsCopy(U.avGames); if (!navigator.onLine) { removeInPlace(games, 'gSayPic'); }

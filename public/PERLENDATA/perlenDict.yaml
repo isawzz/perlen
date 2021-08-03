@@ -30,6 +30,10 @@ alt-right:
   text: alt-right
   key: alt-right
   path: alt-right.png
+altmodisch:
+  text: altmodisch
+  key: altmodisch
+  path: altmodisch.png
 angkor wat:
   text: angkor wat
   key: angkor wat
@@ -70,6 +74,10 @@ blockchain:
   text: blockchain
   key: blockchain
   path: blockchain.png
+brainwashing:
+  text: brainwashing
+  key: brainwashing
+  path: brainwashing
 buddhismus:
   text: buddhismus
   key: buddhismus
@@ -118,6 +126,10 @@ consensus building:
   text: consensus building
   key: consensus building
   path: consensus building.png
+conservativism:
+  text: conservativism
+  key: conservativism
+  path: conservativism
 culture wars:
   text: culture wars
   key: culture wars
@@ -190,10 +202,22 @@ english:
   text: english
   key: english
   path: english.png
+entscheidung:
+  text: entscheidung
+  key: entscheidung
+  path: entscheidung.png
+entwicklung:
+  text: entwicklung
+  key: entwicklung
+  path: entwicklung
 erziehung:
   text: erziehung
   key: erziehung
   path: erziehung.png
+ethik:
+  text: ethik
+  key: ethik
+  path: ethik
 european theatre:
   text: european theatre
   key: european theatre
@@ -402,6 +426,10 @@ langsam:
   text: langsam
   key: langsam
   path: langsam.png
+lebewesen:
+  text: lebewesen
+  key: lebewesen
+  path: lebewesen
 liberation from slavery:
   text: liberation from slavery
   key: liberation from slavery
@@ -430,6 +458,14 @@ maximize agency:
   text: maximize agency
   key: maximize agency
   path: maximize agency.png
+medizin:
+  text: medizin
+  key: medizin
+  path: medizin.png
+mentally ill:
+  text: mentally ill
+  key: mentally ill
+  path: mentally ill
 milieu:
   text: milieu
   key: milieu
@@ -462,6 +498,10 @@ nazi:
   text: nazi
   key: nazi
   path: nazi.png
+negativ positiv:
+  text: negativ positiv
+  key: negativ positiv
+  path: negativ positiv
 neoliberalismus:
   text: neoliberalismus
   key: neoliberalismus
@@ -522,6 +562,10 @@ perlenbrett:
   text: perlenbrett
   key: perlenbrett
   path: perlenbrett
+perlenkreuz:
+  text: perlenkreuz
+  key: perlenkreuz
+  path: perlenkreuz
 pessimismus:
   text: pessimismus
   key: pessimismus
@@ -582,6 +626,10 @@ rot:
   text: rot
   key: rot
   path: rot.png
+roter faden:
+  text: roter faden
+  key: roter faden
+  path: roter faden.png
 sceptic:
   text: sceptic
   key: sceptic
@@ -606,6 +654,10 @@ seher:
   text: seher
   key: seher
   path: seher.png
+sinn:
+  text: sinn
+  key: sinn
+  path: sinn
 spanisch:
   text: spanisch
   key: spanisch
@@ -614,6 +666,10 @@ spiel:
   text: spiel
   key: spiel
   path: spiel.png
+spinne:
+  text: spinne
+  key: spinne
+  path: spinne.png
 spiritualität:
   text: spiritualität
   key: spiritualität
@@ -622,6 +678,10 @@ sprache:
   text: sprache
   key: sprache
   path: sprache.png
+st petersburg:
+  text: st petersburg
+  key: st petersburg
+  path: st petersburg
 stamm:
   text: stamm
   key: stamm
@@ -654,6 +714,14 @@ traum:
   text: traum
   key: traum
   path: traum.png
+töten:
+  text: töten
+  key: töten
+  path: töten
+ulan ude:
+  text: ulan ude
+  key: ulan ude
+  path: ulan ude.png
 umgekehrt:
   text: umgekehrt
   key: umgekehrt
@@ -678,6 +746,10 @@ violett:
   text: violett
   key: violett
   path: violett.png
+vogel leid:
+  text: vogel leid
+  key: vogel leid
+  path: vogel leid
 vorurteil:
   text: vorurteil
   key: vorurteil
@@ -774,6 +846,10 @@ zen:
   text: zen
   key: zen
   path: zen.png
+ziel:
+  text: ziel
+  key: ziel
+  path: ziel.png
 zukunftsszenarien:
   text: zukunftsszenarien
   key: zukunftsszenarien
@@ -782,31 +858,3 @@ zukunftsszenarien:
   text: überleben
   key: überleben
   path: überleben.png
-entscheidung:
-  text: entscheidung
-  key: entscheidung
-  path: entscheidung.png
-ziel:
-  text: ziel
-  key: ziel
-  path: ziel.png
-ulan ude:
-  text: ulan ude
-  key: ulan ude
-  path: ulan ude.png
-medizin:
-  text: medizin
-  key: medizin
-  path: medizin.png
-roter faden:
-  text: roter faden
-  key: roter faden
-  path: roter faden.png
-altmodisch:
-  text: altmodisch
-  key: altmodisch
-  path: altmodisch.png
-spinne:
-  text: spinne
-  key: spinne
-  path: spinne.png
