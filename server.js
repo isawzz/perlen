@@ -79,7 +79,7 @@ app.post('/bretter', upload.array('bretter'), (req, res) => {
 
 
 
-//#endregion
+
 
 
 
@@ -90,7 +90,7 @@ app.post('/bretter', upload.array('bretter'), (req, res) => {
 io.on('connection', client => {
 
 	//connection and login: userManager
-	console.log('connection',client.id)
+	console.log('connection', client.id)
 	userman.handleConnectionSendClientId(client); //just sends back client id to client: userManager
 	client.on('login', x => { userman.handleLoginSendDB(client, x); }); //returns DB to client, broadcast entered lobby: userManager
 	client.on('disconnect', x => { simple.handlePlayerLeft(client, x); userman.handleDisconnected(client, x); }); //broadcast user left: userManager
@@ -110,12 +110,12 @@ io.on('connection', client => {
 
 	// client.on('chooseBoard', x => simple.handleChooseBoard(client, x));
 	client.on('settings', x => simple.handleSettings(client, x));
-	client.on('state',  x => simple.handleState(client, x));
+	client.on('state', x => simple.handleState(client, x));
 	client.on('prefab', x => simple.handlePrefab(client, x));
 	client.on('reset', x => simple.handleReset(client, x));
 
 	//perlenOptions should replace all the ones below!
-	client.on('perlenOptions', x => simple.handlePerlenOptions(client, x)); 
+	client.on('perlenOptions', x => simple.handlePerlenOptions(client, x));
 	client.on('poolChange', x => simple.handlePoolChange(client, x));
 	client.on('removeRandom', x => simple.handleRemoveRandom(client, x));
 	client.on('clearPoolarr', x => simple.handleClearPoolarr(client, x));
