@@ -1,4 +1,4 @@
-function applySettings(b, s, h=768, topFrame = 0) {
+function applySettings(b, s, h = 768, topFrame = 0) {
 	let isRealBoard = topFrame == 0;
 	let hBoard = h, wBoard = 2 * h;
 	let scale = hBoard / valf(s.hBoard, 768);
@@ -11,7 +11,7 @@ function applySettings(b, s, h=768, topFrame = 0) {
 	//console.log('b.fields',b.fields)
 	return b;
 }
-function isField(x){return x.isField == true;}
+function isField(x) { return x.isField == true; }
 function applyStandard(dParent, s, h = 768, topFrame = 0) {
 	let isRealBoard = topFrame == 0;
 	let b = { boardFilename: s.boardFilename };
@@ -19,12 +19,12 @@ function applyStandard(dParent, s, h = 768, topFrame = 0) {
 	let scale = hBoard / valf(s.hBoard, 768);
 	calcLayoutParameters(s, b, scale);
 	let d0;
-	if (isRealBoard){
+	if (isRealBoard) {
 		//console.log('hallo!!!!!!!')
-		d0 = b.d0 = mDiv(dParent, { h: hBoard }); 
-	}else{
+		d0 = b.d0 = mDiv(dParent, { h: hBoard });
+	} else {
 		//console.log('NEIN!!!!!!!!!!')
-		d0 = b.d0 = mDiv(dParent, { w: wBoard + 100, h: hBoard + topFrame }, 'd0_' + b.boardFilename); 
+		d0 = b.d0 = mDiv(dParent, { w: wBoard + 100, h: hBoard + topFrame }, 'd0_' + b.boardFilename);
 	}
 	mCenterCenterFlex(d0);
 	let dOuter = b.dOuter = mDiv(d0, {}, 'dOuter_' + b.boardFilename);
@@ -75,16 +75,16 @@ function calcLayoutParameters(s, b, scale = 1) {
 	return s.nFields;
 }
 function createFields(s, b, scale) {
-	let dCells = b.dCells = mDiv(b.dOuter, { matop: s.boardMarginTop * scale, maleft: s.boardMarginLeft * scale, w: b.wNeeded, h: b.hNeeded, position: 'relative' },'dFieldArea'); //, bg: 'green' });
+	let dCells = b.dCells = mDiv(b.dOuter, { matop: s.boardMarginTop * scale, maleft: s.boardMarginLeft * scale, w: b.wNeeded, h: b.hNeeded, position: 'relative' }, 'dFieldArea'); //, bg: 'green' });
 
 	// if (!HEROKU && scale == 1) {makeCanvas(dCells);s.fieldColor = 'transparent';}
 
-	let [horDist, vertDist, szField] = [b.dxCenter, b.dyCenter, s.szField*scale];
+	let [horDist, vertDist, szField] = [b.dxCenter, b.dyCenter, s.szField * scale];
 	let fields = b.fields = [], i = 0, dx = horDist / 2, dy = vertDist / 2;
 	let bg = s.fieldColor;
 	for (const p of b.centers) {
-		let left = p.x - szField/2;
-		let top = p.y - szField/2;
+		let left = p.x - szField / 2;
+		let top = p.y - szField / 2;
 		let dItem = mDiv(dCells, { position: 'absolute', left: left, top: top, display: 'inline', w: szField, h: szField, rounding: '50%', bg: bg });
 		mCenterCenterFlex(dItem)
 		let f = { div: dItem, index: i, center: p, isField: true }; i += 1;
@@ -166,16 +166,13 @@ function getBoardBackgroundPicker(b) {
 
 
 }
-function loadBoardImage(dOneBoard, s, b, scale, useCornerColor=false) {
+function loadBoardImage(dOneBoard, s, b, scale, useCornerColor = false) {
 	let boardFilename = s.boardFilename;
 	if (boardFilename == 'none') { return; }
-
 	let path = getBoardImagePath(boardFilename);
 	var img = mCreate('img');
 	img.onload = ev => {
-
-//		let cornerColor = isdef(s.idealBg) ? s.idealBg : getCornerPixelColor(img);
-
+		// let cornerColor = isdef(s.idealBg) ? s.idealBg : getCornerPixelColor(img);
 		let sz = s.naturalImageSize = b.imgSize = { w: img.naturalWidth, h: img.naturalHeight };
 		let szi = s.backgroundSize;
 		if (szi == 'initial' && scale != 1) szi = getScaledSizeCss(sz, scale);

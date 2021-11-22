@@ -340,12 +340,13 @@ function setActiveButton(button) {
 }
 //#endregion
 
-function onClickRemoteConnection(){
+function onClickRemoteConnection() {
 	if (isdef(DA.remoteSocket)) DA.remoteSocket.disconnect();
-	let socket = DA.remoteSocket = io('https://simplesimpleserver.herokuapp.com'); 
-	socket.on('fromServer',x=>console.log('msg from remote:',x.msg));
-	socket.on('ping',x=>console.log('got pinged from remote!'));
+	let socket = DA.remoteSocket = io('https://simplesimpleserver.herokuapp.com');
+	socket.on('fromServer', x => console.log('msg from remote:', x.msg));
+	socket.on('ping', x => console.log('got pinged from remote!'));
 	socket.emit('ping');
+
 }
 
 //******************************************************** */

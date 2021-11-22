@@ -1639,3 +1639,45 @@ standardSettings:
       w: 768
       h: 768
     idealBg: rgb(76, 127, 206)
+  "null":
+    rows: 5
+    cols: 3
+    boardMarginLeft: 0
+    boardMarginTop: 0
+    boardRotation: 0
+    dxCenter: 100
+    dyCenter: 117
+    szField: 100
+    szPerle: 100
+    szPoolPerle: 50
+    dimming: 50
+    fieldColor: "#2BAFFF20"
+    baseColor: "#071621F7"
+    boardLayout: hex1
+    freeForm: false
+    uniformRows: false
+    boardFilename: brett20_43.png
+    wGap: 15
+    hGap: 13
+    backgroundSize: initial
+    sizeBoardHeightToImage: true
+    fieldShape: circle
+    boardLayoutFile: null
+    wFieldArea: 768
+    hFieldArea: 768
+    bgPool: transparent
+    fgPool: "#ffffffff"
+    bgBoard: silver
+    fgBoard: black
+    fzLabel: 16
+    nFields: 19
+    wBoard: 100%
+    hBoard: 768
+    boardStandard: none
+    poolSelection: random
+    numPool: 10
+    labelPos: hover
+    naturalImageSize:
+      w: 768
+      h: 768
+    idealBg: rgb(76, 127, 206)
