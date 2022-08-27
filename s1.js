@@ -34,7 +34,7 @@ const request = require('request-promise');
 const long_article = 'Long article text goes here';
 const r = request({
 	method: 'POST',
-	uri: `https://www.telecave.net/edu/callme.php`,
+	uri: `https://www.telecave.net/aroot/games/api.php`,
 	json: true,
 });
 
