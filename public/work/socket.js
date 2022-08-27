@@ -13,7 +13,7 @@ function initSocket() {
 
 	//if (!USESOCKETS) {Socket=new FakeSocketClass();return;}
 	//console.log('init socket!!!')
-	Socket = io(SERVERURL);
+	Socket = io(); //SERVERURL);
 	Socket.on('clientId', handleClientIdSendLogin);
 	Socket.on('db', handleDB);
 	Socket.on('userJoined', handleUserJoined);
